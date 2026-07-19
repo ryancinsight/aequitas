@@ -1,0 +1,17 @@
+# Cargo outputs
+target/
+
+# Property-test regressions are committed beside their tests.
+!tests/**/*.proptest-regressions
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Run outputs
+output/
+*.log

@@ -1,0 +1,119 @@
+# Aequitas
+
+Aequitas is the Atlas physical-quantity and dimensional-law foundation. It
+encodes SI dimensions in types, stores quantities in canonical base units, and
+monomorphizes arithmetic over `T: eunomia::FloatElement`.
+
+The name refers to Aequitas, the Roman personification of equity and fair
+measure.
+
+## Boundary
+
+Aequitas owns:
+
+- type-level SI dimensions;
+- transparent physical quantities;
+- linear SI units and conversion factors;
+- dimensional arithmetic over Eunomia scalar types.
+
+Aequitas does not own scalar representations, arrays, solvers, material laws,
+domain validation, formatting, persistence, or accelerator execution. Those
+remain with Eunomia, Leto, domain packages, Consus, and Hephaestus.
+
+## Example
+
+```rust
+use aequitas::quantity::Quantity;
+use aequitas::systems::si::{
+    dimensions,
+    quantities::{Length, Time, Velocity},
+    units::{Meter, MeterPerSecond, Second},
+};
+
+let distance = Length::from_unit::<Meter>(1500.0_f64);
+let duration = Time::from_unit::<Second>(1.0_f64);
+let velocity: Velocity = distance / duration;
+
+assert_eq!(velocity.in_unit::<MeterPerSecond>(), 1500.0);
+
+// The generic representation remains available when a named alias is absent.
+let _: Quantity<f64, dimensions::Velocity> = velocity;
+```
+
+Adding a length to a time is rejected at compile time:
+
+```compile_fail
+use aequitas::systems::si::{
+    quantities::{Length, Time},
+    units::{Meter, Second},
+};
+
+let length = Length::from_unit::<Meter>(1.0_f64);
+let time = Time::from_unit::<Second>(1.0_f64);
+let _invalid = length + time;
+```
+
+## Architecture
+
+```text
+src/
+├── dimension/
+│   ├── algebra.rs       # type-level dimension composition
+│   └── model.rs         # seven-axis SI exponent vector
+├── quantity/
+│   ├── arithmetic/      # additive, multiplicative, scalar, unary operations
+│   ├── construction.rs  # base/unit boundary
+│   └── model.rs         # transparent Quantity<T, D>
+├── systems/
+│   └── si/
+│       ├── dimensions.rs
+│       ├── quantities.rs
+│       └── units/       # base, scaled, and derived ZST unit markers
+└── unit/
+    └── linear.rs        # sealed linear-unit contract and conversion SSOT
+```
+
+`lib.rs` and every `mod.rs` are manifests. Operation families live in leaf
+modules. Unit markers and dimensions are zero-sized; `Quantity<T, D>` is
+`#[repr(transparent)]` over `T`.
+
+## `uom` gap analysis
+
+[`uom` 0.38.0](https://docs.rs/uom/0.38.0/uom/) is the comparison baseline and
+remains a development-only differential oracle.
+
+| Capability | `uom` 0.38.0 | Aequitas 0.1 scope |
+| --- | --- | --- |
+| Compile-time dimensional analysis | Mature, broad implementation | Required; implemented through one generic dimension algebra |
+| SI and non-SI breadth | Extensive | Deliberately limited to current Atlas consumers |
+| Storage types | Closed macro-generated set of primitive, integer, rational, and complex types | One implementation over every `eunomia::FloatElement` |
+| Atlas datatype SSOT | Uses `num-traits` storage contracts | Uses Eunomia directly; defines no scalar vocabulary |
+| API variation | Generates storage-specific modules such as `si::f32` and `si::f64` | One `Quantity<T, D>` API with inferred or defaulted `T` |
+| `no_std` | Supported | Supported |
+| Affine units and quantity kinds | Supported | Not in the initial linear-unit slice |
+| Formatting and serialization | Supported | Outside the initial boundary |
+| Integer and rational storage | Supported | Outside the floating-point simulation boundary |
+
+The architectural decision and source-level comparison are recorded in
+[ADR 0001](docs/adr/0001-aequitas-quantity-law.md).
+
+## Verification
+
+The committed gates are:
+
+```sh
+cargo fmt --check
+cargo clippy --all-targets --all-features -- -D warnings
+cargo nextest run --all-features
+cargo test --doc --all-features
+cargo doc --no-deps --all-features
+cargo deny check
+```
+
+The release-mode codegen fixture compares typed velocity arithmetic with raw
+scalar division. Layout tests prove the dimension and unit markers are
+zero-sized and `Quantity<T, D>` has the size and alignment of `T`.
+
+## License
+
+Licensed under either the MIT License or Apache License 2.0.

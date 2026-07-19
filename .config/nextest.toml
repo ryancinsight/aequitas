@@ -1,0 +1,3 @@
+# Ordinary native tests are slow at 30 seconds and terminate at 60 seconds.
+[profile.default]
+slow-timeout = { period = "30s", terminate-after = 2 }

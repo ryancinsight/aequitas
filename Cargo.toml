@@ -1,0 +1,49 @@
+[package]
+name = "aequitas"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+authors = ["Ryan Clanton <ryanclanton@outlook.com>"]
+description = "Atlas physical-quantity and dimensional-law foundation"
+repository = "https://github.com/ryancinsight/aequitas"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+keywords = ["units", "dimensional-analysis", "simulation", "no-std"]
+categories = ["no-std", "science"]
+publish = false
+
+[dependencies]
+eunomia = { version = "0.6.0", git = "https://github.com/ryancinsight/eunomia", rev = "2a6cb2ce381d3ddffc8f6f5542c5f3383329012a", default-features = false }
+typenum = "1.20.1"
+
+[dev-dependencies]
+proptest = "1.11.0"
+uom = { version = "0.38.0", default-features = false, features = ["f32", "f64", "si", "std"] }
+
+[features]
+default = ["std"]
+std = ["eunomia/std"]
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+unwrap_used = "deny"
+
+[profile.dev]
+debug = "line-tables-only"
+overflow-checks = true
+
+[profile.dev.package."*"]
+debug = false
+
+[profile.test]
+debug = "line-tables-only"
+overflow-checks = true
+
+[profile.release]
+debug = false
+strip = "symbols"
+overflow-checks = true
