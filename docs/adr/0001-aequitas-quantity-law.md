@@ -56,6 +56,9 @@ The initial package is one `no_std` crate:
 - Eunomia owns scalar representations and numeric laws;
 - `uom` is a development-only differential oracle and is absent from the
   runtime dependency graph.
+- First-party manifests use Eunomia's canonical repository source without a
+  revision qualifier. Consumer lock files pin the exact commit so Aequitas and
+  the consumer cannot instantiate distinct Eunomia source identities.
 
 The first consumer slice replaces the direct `uom` dependency in Kwavers
 bubble-energy code. This supplies real pressure, power, energy, heat capacity,
