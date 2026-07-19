@@ -6,8 +6,8 @@ mod scaled;
 
 pub use base::{Ampere, Candela, Kelvin, Kilogram, Meter, Mole, Second};
 pub use derived::{
-    CubicMeter, Hertz, Joule, JoulePerKelvin, KilogramPerCubicMeter, MeterPerSecond, Pascal,
-    SquareMeter, Watt, WattPerMeterKelvin,
+    CubicMeter, Hertz, Joule, JoulePerKelvin, JoulePerKilogramKelvin, KilogramPerCubicMeter,
+    MeterPerSecond, Pascal, SquareMeter, Watt, WattPerMeterKelvin,
 };
 pub use scaled::{
     Centimeter, CubicMillimeter, ElectronVolt, Gram, GramPerCubicCentimeter, Kilohertz, Kilometer,

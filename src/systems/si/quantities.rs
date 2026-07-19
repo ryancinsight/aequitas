@@ -36,6 +36,8 @@ pub type Energy<T = f64> = Quantity<T, dimensions::Energy>;
 pub type Power<T = f64> = Quantity<T, dimensions::Power>;
 /// Heat-capacity quantity.
 pub type HeatCapacity<T = f64> = Quantity<T, dimensions::HeatCapacity>;
+/// Specific-heat-capacity quantity.
+pub type SpecificHeatCapacity<T = f64> = Quantity<T, dimensions::SpecificHeatCapacity>;
 /// Thermal-conductivity quantity.
 pub type ThermalConductivity<T = f64> = Quantity<T, dimensions::ThermalConductivity>;
 /// Mass-density quantity.

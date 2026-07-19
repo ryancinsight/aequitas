@@ -75,6 +75,15 @@ impl LinearUnit<dimensions::HeatCapacity> for JoulePerKelvin {
     const SCALE: f64 = 1.0;
 }
 
+/// Joule per kilogram-kelvin, the coherent SI unit of specific heat capacity.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct JoulePerKilogramKelvin;
+impl Sealed for JoulePerKilogramKelvin {}
+impl LinearUnit<dimensions::SpecificHeatCapacity> for JoulePerKilogramKelvin {
+    const SYMBOL: &'static str = "J/(kg·K)";
+    const SCALE: f64 = 1.0;
+}
+
 /// Watt per metre-kelvin, the coherent SI unit of thermal conductivity.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct WattPerMeterKelvin;
