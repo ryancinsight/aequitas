@@ -4,6 +4,12 @@ All externally observable changes are recorded here.
 
 ## Unreleased
 
+### Changed
+
+- Removed the revision qualifier from the Eunomia manifest dependency.
+  Consumer workspaces now resolve one Eunomia source identity while their lock
+  files retain the exact reproducibility pin.
+
 ### Added
 
 - Generic `Quantity<T, D>` representation over Eunomia scalar types.
