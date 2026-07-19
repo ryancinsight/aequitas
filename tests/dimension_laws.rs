@@ -1,8 +1,11 @@
 //! Compile-time dimensional identities with exact binary values.
 
 use aequitas::systems::si::{
-    quantities::{Area, Energy, Length, Power, Pressure, Time, Velocity, Volume},
-    units::{Meter, Pascal, Second, SquareMeter, Watt},
+    quantities::{
+        Area, Energy, Length, Mass, Power, Pressure, SpecificHeatCapacity,
+        ThermodynamicTemperature, Time, Velocity, Volume,
+    },
+    units::{JoulePerKilogramKelvin, Kelvin, Kilogram, Meter, Pascal, Second, SquareMeter, Watt},
 };
 
 #[test]
@@ -32,4 +35,14 @@ fn power_times_time_is_energy() {
     let energy: Energy = power * time;
 
     assert_eq!(energy.into_base().to_bits(), 35.0_f64.to_bits());
+}
+
+#[test]
+fn mass_times_specific_heat_and_temperature_is_energy() {
+    let mass = Mass::from_unit::<Kilogram>(2.0_f64);
+    let specific_heat = SpecificHeatCapacity::from_unit::<JoulePerKilogramKelvin>(4_200.0_f64);
+    let temperature = ThermodynamicTemperature::from_unit::<Kelvin>(3.0_f64);
+    let energy: Energy = mass * specific_heat * temperature;
+
+    assert_eq!(energy.into_base().to_bits(), 25_200.0_f64.to_bits());
 }

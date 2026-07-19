@@ -36,6 +36,8 @@ pub type Energy = Dimension<P2, P1, N2, Z0, Z0, Z0, Z0>;
 pub type Power = Dimension<P2, P1, N3, Z0, Z0, Z0, Z0>;
 /// Heat capacity.
 pub type HeatCapacity = Dimension<P2, P1, N2, Z0, N1, Z0, Z0>;
+/// Specific heat capacity.
+pub type SpecificHeatCapacity = Dimension<P2, Z0, N2, Z0, N1, Z0, Z0>;
 /// Thermal conductivity.
 pub type ThermalConductivity = Dimension<P1, P1, N3, Z0, N1, Z0, Z0>;
 /// Mass density.
