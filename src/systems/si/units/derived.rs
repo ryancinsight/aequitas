@@ -110,3 +110,21 @@ impl LinearUnit<dimensions::MassDensity> for KilogramPerCubicMeter {
     const SYMBOL: &'static str = "kg/m³";
     const SCALE: f64 = 1.0;
 }
+
+/// Per kelvin, the coherent SI unit of reciprocal temperature.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct PerKelvin;
+impl Sealed for PerKelvin {}
+impl LinearUnit<dimensions::ReciprocalTemperature> for PerKelvin {
+    const SYMBOL: &'static str = "K⁻¹";
+    const SCALE: f64 = 1.0;
+}
+
+/// Per square kelvin, the coherent SI unit of reciprocal squared temperature.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct PerSquareKelvin;
+impl Sealed for PerSquareKelvin {}
+impl LinearUnit<dimensions::ReciprocalTemperatureSquared> for PerSquareKelvin {
+    const SYMBOL: &'static str = "K⁻²";
+    const SCALE: f64 = 1.0;
+}
