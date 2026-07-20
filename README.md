@@ -20,6 +20,22 @@ Aequitas does not own scalar representations, arrays, solvers, material laws,
 domain validation, formatting, persistence, or accelerator execution. Those
 remain with Eunomia, Leto, domain packages, Consus, and Hephaestus.
 
+The SI surface includes thermophysical dimensions needed by material
+providers. Thermal diffusivity is derived without a raw-scalar escape:
+
+```rust
+use aequitas::systems::si::quantities::{
+    MassDensity, SpecificHeatCapacity, ThermalConductivity, ThermalDiffusivity,
+};
+
+let density = MassDensity::from_base(1_000.0_f64);
+let heat_capacity = SpecificHeatCapacity::from_base(4_000.0_f64);
+let conductivity = ThermalConductivity::from_base(0.6_f64);
+let diffusivity: ThermalDiffusivity = conductivity / (density * heat_capacity);
+
+assert_eq!(diffusivity.into_base(), 1.5e-7);
+```
+
 ## Example
 
 ```rust

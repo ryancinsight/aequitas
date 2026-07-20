@@ -93,6 +93,15 @@ impl LinearUnit<dimensions::ThermalConductivity> for WattPerMeterKelvin {
     const SCALE: f64 = 1.0;
 }
 
+/// Square metre per second, the coherent SI unit of thermal diffusivity.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct SquareMeterPerSecond;
+impl Sealed for SquareMeterPerSecond {}
+impl LinearUnit<dimensions::ThermalDiffusivity> for SquareMeterPerSecond {
+    const SYMBOL: &'static str = "m²/s";
+    const SCALE: f64 = 1.0;
+}
+
 /// Kilogram per cubic metre, the coherent SI unit of mass density.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct KilogramPerCubicMeter;

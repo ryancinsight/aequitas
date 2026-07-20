@@ -3,12 +3,17 @@
 use aequitas::systems::si::{
     quantities::{
         Energy as AequitasEnergy, Length as AequitasLength, Pressure as AequitasPressure,
+        ThermalDiffusivity as AequitasThermalDiffusivity,
     },
-    units::{Joule, Kilometer, Megapascal},
+    units::{Joule, Kilometer, Megapascal, SquareMeterPerSecond},
 };
 use uom::si::{
+    diffusion_coefficient::square_meter_per_second,
     energy::joule,
-    f64::{Energy as UomEnergy, Length as UomLength, Pressure as UomPressure},
+    f64::{
+        DiffusionCoefficient as UomDiffusionCoefficient, Energy as UomEnergy, Length as UomLength,
+        Pressure as UomPressure,
+    },
     length::kilometer,
     pressure::megapascal,
 };
@@ -30,6 +35,13 @@ fn linear_conversions_match_uom() {
     let aequitas_energy = AequitasEnergy::from_unit::<Joule>(energy).into_base();
     let uom_energy = UomEnergy::new::<joule>(energy).get::<joule>();
     assert_eq!(aequitas_energy.to_bits(), uom_energy.to_bits());
+
+    let diffusivity = 1.43e-7_f64;
+    let aequitas_diffusivity =
+        AequitasThermalDiffusivity::from_unit::<SquareMeterPerSecond>(diffusivity).into_base();
+    let uom_diffusivity = UomDiffusionCoefficient::new::<square_meter_per_second>(diffusivity)
+        .get::<square_meter_per_second>();
+    assert_eq!(aequitas_diffusivity.to_bits(), uom_diffusivity.to_bits());
 }
 
 #[test]
