@@ -5,7 +5,10 @@ use core::mem::{align_of, size_of};
 use aequitas::systems::si::{
     dimensions,
     quantities::Length,
-    units::{Joule, Meter, Millimeter, Pascal, SquareMeterPerSecond},
+    units::{
+        Gray, Joule, JoulePerMole, JoulePerMoleKelvin, Meter, Millimeter, Pascal, PerSecond,
+        SquareMeterPerSecond,
+    },
 };
 use eunomia::{Bf16, F16, F32, F64};
 
@@ -29,9 +32,16 @@ fn dimension_and_unit_markers_occupy_no_storage() {
     assert_eq!(size_of::<dimensions::Length>(), 0);
     assert_eq!(size_of::<dimensions::Pressure>(), 0);
     assert_eq!(size_of::<dimensions::ThermalDiffusivity>(), 0);
+    assert_eq!(size_of::<dimensions::AbsorbedDose>(), 0);
+    assert_eq!(size_of::<dimensions::MolarEnergy>(), 0);
+    assert_eq!(size_of::<dimensions::MolarHeatCapacity>(), 0);
     assert_eq!(size_of::<Meter>(), 0);
     assert_eq!(size_of::<Millimeter>(), 0);
     assert_eq!(size_of::<Pascal>(), 0);
     assert_eq!(size_of::<Joule>(), 0);
     assert_eq!(size_of::<SquareMeterPerSecond>(), 0);
+    assert_eq!(size_of::<Gray>(), 0);
+    assert_eq!(size_of::<JoulePerMole>(), 0);
+    assert_eq!(size_of::<JoulePerMoleKelvin>(), 0);
+    assert_eq!(size_of::<PerSecond>(), 0);
 }

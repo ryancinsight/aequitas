@@ -2,19 +2,26 @@
 
 use aequitas::systems::si::{
     quantities::{
-        Energy as AequitasEnergy, Length as AequitasLength, Pressure as AequitasPressure,
-        ThermalDiffusivity as AequitasThermalDiffusivity,
+        AbsorbedDose as AequitasAbsorbedDose, Energy as AequitasEnergy, Length as AequitasLength,
+        MolarEnergy as AequitasMolarEnergy, MolarHeatCapacity as AequitasMolarHeatCapacity,
+        Pressure as AequitasPressure, ThermalDiffusivity as AequitasThermalDiffusivity,
     },
-    units::{Joule, Kilometer, Megapascal, SquareMeterPerSecond},
+    units::{
+        Gray, Joule, JoulePerMole, JoulePerMoleKelvin, Kilometer, Megapascal, SquareMeterPerSecond,
+    },
 };
 use uom::si::{
+    available_energy::joule_per_kilogram,
     diffusion_coefficient::square_meter_per_second,
     energy::joule,
     f64::{
-        DiffusionCoefficient as UomDiffusionCoefficient, Energy as UomEnergy, Length as UomLength,
-        Pressure as UomPressure,
+        AvailableEnergy as UomAvailableEnergy, DiffusionCoefficient as UomDiffusionCoefficient,
+        Energy as UomEnergy, Length as UomLength, MolarEnergy as UomMolarEnergy,
+        MolarHeatCapacity as UomMolarHeatCapacity, Pressure as UomPressure,
     },
     length::kilometer,
+    molar_energy::joule_per_mole,
+    molar_heat_capacity::joule_per_kelvin_mole,
     pressure::megapascal,
 };
 
@@ -35,6 +42,33 @@ fn linear_conversions_match_uom() {
     let aequitas_energy = AequitasEnergy::from_unit::<Joule>(energy).into_base();
     let uom_energy = UomEnergy::new::<joule>(energy).get::<joule>();
     assert_eq!(aequitas_energy.to_bits(), uom_energy.to_bits());
+
+    let absorbed_dose = 2.75_f64;
+    let aequitas_absorbed_dose = AequitasAbsorbedDose::from_unit::<Gray>(absorbed_dose).into_base();
+    let uom_specific_energy =
+        UomAvailableEnergy::new::<joule_per_kilogram>(absorbed_dose).get::<joule_per_kilogram>();
+    assert_eq!(
+        aequitas_absorbed_dose.to_bits(),
+        uom_specific_energy.to_bits()
+    );
+
+    let molar_energy = 284_000.0_f64;
+    let aequitas_molar_energy =
+        AequitasMolarEnergy::from_unit::<JoulePerMole>(molar_energy).into_base();
+    let uom_molar_energy =
+        UomMolarEnergy::new::<joule_per_mole>(molar_energy).get::<joule_per_mole>();
+    assert_eq!(aequitas_molar_energy.to_bits(), uom_molar_energy.to_bits());
+
+    let molar_heat_capacity = 8.314_462_618_153_24_f64;
+    let aequitas_molar_heat_capacity =
+        AequitasMolarHeatCapacity::from_unit::<JoulePerMoleKelvin>(molar_heat_capacity).into_base();
+    let uom_molar_heat_capacity =
+        UomMolarHeatCapacity::new::<joule_per_kelvin_mole>(molar_heat_capacity)
+            .get::<joule_per_kelvin_mole>();
+    assert_eq!(
+        aequitas_molar_heat_capacity.to_bits(),
+        uom_molar_heat_capacity.to_bits()
+    );
 
     let diffusivity = 1.43e-7_f64;
     let aequitas_diffusivity =
