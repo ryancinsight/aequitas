@@ -36,6 +36,21 @@ let diffusivity: ThermalDiffusivity = conductivity / (density * heat_capacity);
 assert_eq!(diffusivity.into_base(), 1.5e-7);
 ```
 
+Temperature-response coefficients retain their inverse-temperature dimensions:
+
+```rust
+use aequitas::systems::si::{
+    quantities::{Dimensionless, ReciprocalTemperature, ThermodynamicTemperature},
+    units::{Kelvin, PerKelvin},
+};
+
+let slope = ReciprocalTemperature::from_unit::<PerKelvin>(0.01_f64);
+let delta = ThermodynamicTemperature::from_unit::<Kelvin>(5.0_f64);
+let response: Dimensionless = slope * delta;
+
+assert_eq!(response.into_base(), 0.05);
+```
+
 ## Example
 
 ```rust

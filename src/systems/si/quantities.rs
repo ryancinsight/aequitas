@@ -16,6 +16,11 @@ pub type Time<T = f64> = Quantity<T, dimensions::Time>;
 pub type ElectricCurrent<T = f64> = Quantity<T, dimensions::ElectricCurrent>;
 /// Thermodynamic-temperature quantity.
 pub type ThermodynamicTemperature<T = f64> = Quantity<T, dimensions::ThermodynamicTemperature>;
+/// Reciprocal-temperature quantity.
+pub type ReciprocalTemperature<T = f64> = Quantity<T, dimensions::ReciprocalTemperature>;
+/// Reciprocal-squared-temperature quantity.
+pub type ReciprocalTemperatureSquared<T = f64> =
+    Quantity<T, dimensions::ReciprocalTemperatureSquared>;
 /// Amount-of-substance quantity.
 pub type AmountOfSubstance<T = f64> = Quantity<T, dimensions::AmountOfSubstance>;
 /// Luminous-intensity quantity.

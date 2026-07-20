@@ -12,6 +12,9 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Reciprocal-temperature and reciprocal-squared-temperature dimensions,
+  quantities, and coherent `K⁻¹`/`K⁻²` units for typed constitutive response
+  coefficients.
 - Generic `Quantity<T, D>` representation over Eunomia scalar types.
 - Type-level SI dimensional algebra and linear unit conversion.
 - Initial SI quantities and units required by Atlas multiphysics consumers.

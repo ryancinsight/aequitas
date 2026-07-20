@@ -2,10 +2,14 @@
 
 use aequitas::systems::si::{
     quantities::{
-        Area, Energy, Length, Mass, MassDensity, Power, Pressure, SpecificHeatCapacity,
+        Area, Dimensionless, Energy, Length, Mass, MassDensity, Power, Pressure,
+        ReciprocalTemperature, ReciprocalTemperatureSquared, SpecificHeatCapacity,
         ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume,
     },
-    units::{JoulePerKilogramKelvin, Kelvin, Kilogram, Meter, Pascal, Second, SquareMeter, Watt},
+    units::{
+        JoulePerKilogramKelvin, Kelvin, Kilogram, Meter, Pascal, PerKelvin, PerSquareKelvin,
+        Second, SquareMeter, Watt,
+    },
 };
 
 #[test]
@@ -56,4 +60,17 @@ fn conductivity_over_density_and_specific_heat_is_thermal_diffusivity() {
     let diffusivity: ThermalDiffusivity = conductivity / (density * specific_heat);
 
     assert_eq!(diffusivity.into_base().to_bits(), 1.5e-7_f64.to_bits());
+}
+
+#[test]
+fn temperature_response_coefficients_reduce_to_dimensionless_factors() {
+    let delta = ThermodynamicTemperature::from_unit::<Kelvin>(2.0_f64);
+    let slope = ReciprocalTemperature::from_unit::<PerKelvin>(0.25_f64);
+    let curvature = ReciprocalTemperatureSquared::from_unit::<PerSquareKelvin>(0.125_f64);
+
+    let linear: Dimensionless = slope * delta;
+    let quadratic: Dimensionless = curvature * delta * delta;
+
+    assert_eq!(linear.into_base().to_bits(), 0.5_f64.to_bits());
+    assert_eq!(quadratic.into_base().to_bits(), 0.5_f64.to_bits());
 }
