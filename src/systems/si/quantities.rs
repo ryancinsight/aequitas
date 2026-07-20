@@ -40,5 +40,7 @@ pub type HeatCapacity<T = f64> = Quantity<T, dimensions::HeatCapacity>;
 pub type SpecificHeatCapacity<T = f64> = Quantity<T, dimensions::SpecificHeatCapacity>;
 /// Thermal-conductivity quantity.
 pub type ThermalConductivity<T = f64> = Quantity<T, dimensions::ThermalConductivity>;
+/// Thermal-diffusivity quantity.
+pub type ThermalDiffusivity<T = f64> = Quantity<T, dimensions::ThermalDiffusivity>;
 /// Mass-density quantity.
 pub type MassDensity<T = f64> = Quantity<T, dimensions::MassDensity>;

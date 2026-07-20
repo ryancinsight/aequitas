@@ -2,8 +2,8 @@
 
 use aequitas::systems::si::{
     quantities::{
-        Area, Energy, Length, Mass, Power, Pressure, SpecificHeatCapacity,
-        ThermodynamicTemperature, Time, Velocity, Volume,
+        Area, Energy, Length, Mass, MassDensity, Power, Pressure, SpecificHeatCapacity,
+        ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume,
     },
     units::{JoulePerKilogramKelvin, Kelvin, Kilogram, Meter, Pascal, Second, SquareMeter, Watt},
 };
@@ -45,4 +45,15 @@ fn mass_times_specific_heat_and_temperature_is_energy() {
     let energy: Energy = mass * specific_heat * temperature;
 
     assert_eq!(energy.into_base().to_bits(), 25_200.0_f64.to_bits());
+}
+
+#[test]
+fn conductivity_over_density_and_specific_heat_is_thermal_diffusivity() {
+    let conductivity = ThermalConductivity::from_base(0.6_f64);
+    let density = MassDensity::from_base(1_000.0_f64);
+    let specific_heat = SpecificHeatCapacity::from_base(4_000.0_f64);
+
+    let diffusivity: ThermalDiffusivity = conductivity / (density * specific_heat);
+
+    assert_eq!(diffusivity.into_base().to_bits(), 1.5e-7_f64.to_bits());
 }
