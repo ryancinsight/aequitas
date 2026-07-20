@@ -51,6 +51,27 @@ let response: Dimensionless = slope * delta;
 assert_eq!(response.into_base(), 0.05);
 ```
 
+Biological-response models can state dose and kinetic parameters without raw
+unit conventions:
+
+```rust
+use aequitas::systems::si::{
+    quantities::{AbsorbedDose, MolarEnergy, MolarHeatCapacity, ReciprocalTime},
+    units::{Gray, JoulePerMole, JoulePerMoleKelvin, PerSecond},
+};
+
+let dose = AbsorbedDose::from_unit::<Gray>(2.0_f64);
+let activation = MolarEnergy::from_unit::<JoulePerMole>(284_000.0_f64);
+let gas_constant =
+    MolarHeatCapacity::from_unit::<JoulePerMoleKelvin>(8.314_462_618_153_24_f64);
+let frequency_factor = ReciprocalTime::from_unit::<PerSecond>(1.0e44_f64);
+
+assert_eq!(dose.into_base(), 2.0);
+assert_eq!(activation.into_base(), 284_000.0);
+assert_eq!(gas_constant.into_base(), 8.314_462_618_153_24);
+assert_eq!(frequency_factor.into_base(), 1.0e44);
+```
+
 ## Example
 
 ```rust

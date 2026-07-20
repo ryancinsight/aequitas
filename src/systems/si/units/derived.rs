@@ -39,6 +39,15 @@ impl LinearUnit<dimensions::Frequency> for Hertz {
     const SCALE: f64 = 1.0;
 }
 
+/// Per second, the coherent SI unit of reciprocal time.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct PerSecond;
+impl Sealed for PerSecond {}
+impl LinearUnit<dimensions::ReciprocalTime> for PerSecond {
+    const SYMBOL: &'static str = "s⁻¹";
+    const SCALE: f64 = 1.0;
+}
+
 /// Pascal, the coherent SI unit of pressure.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Pascal;
@@ -54,6 +63,33 @@ pub struct Joule;
 impl Sealed for Joule {}
 impl LinearUnit<dimensions::Energy> for Joule {
     const SYMBOL: &'static str = "J";
+    const SCALE: f64 = 1.0;
+}
+
+/// Gray, the coherent SI unit of absorbed dose.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Gray;
+impl Sealed for Gray {}
+impl LinearUnit<dimensions::AbsorbedDose> for Gray {
+    const SYMBOL: &'static str = "Gy";
+    const SCALE: f64 = 1.0;
+}
+
+/// Joule per mole, the coherent SI unit of molar energy.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct JoulePerMole;
+impl Sealed for JoulePerMole {}
+impl LinearUnit<dimensions::MolarEnergy> for JoulePerMole {
+    const SYMBOL: &'static str = "J/mol";
+    const SCALE: f64 = 1.0;
+}
+
+/// Joule per mole-kelvin, the coherent SI unit of molar heat capacity.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct JoulePerMoleKelvin;
+impl Sealed for JoulePerMoleKelvin {}
+impl LinearUnit<dimensions::MolarHeatCapacity> for JoulePerMoleKelvin {
+    const SYMBOL: &'static str = "J/(mol·K)";
     const SCALE: f64 = 1.0;
 }
 

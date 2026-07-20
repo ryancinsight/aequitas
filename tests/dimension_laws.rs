@@ -2,13 +2,14 @@
 
 use aequitas::systems::si::{
     quantities::{
-        Area, Dimensionless, Energy, Length, Mass, MassDensity, Power, Pressure,
-        ReciprocalTemperature, ReciprocalTemperatureSquared, SpecificHeatCapacity,
-        ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume,
+        AbsorbedDose, Area, Dimensionless, Energy, Length, Mass, MassDensity, MolarEnergy,
+        MolarHeatCapacity, Power, Pressure, ReciprocalTemperature, ReciprocalTemperatureSquared,
+        ReciprocalTime, SpecificHeatCapacity, ThermalConductivity, ThermalDiffusivity,
+        ThermodynamicTemperature, Time, Velocity, Volume,
     },
     units::{
-        JoulePerKilogramKelvin, Kelvin, Kilogram, Meter, Pascal, PerKelvin, PerSquareKelvin,
-        Second, SquareMeter, Watt,
+        Gray, JoulePerKilogramKelvin, JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram, Meter,
+        Pascal, PerKelvin, PerSecond, PerSquareKelvin, Second, SquareMeter, Watt,
     },
 };
 
@@ -73,4 +74,25 @@ fn temperature_response_coefficients_reduce_to_dimensionless_factors() {
 
     assert_eq!(linear.into_base().to_bits(), 0.5_f64.to_bits());
     assert_eq!(quadratic.into_base().to_bits(), 0.5_f64.to_bits());
+}
+
+#[test]
+fn biological_response_dimensions_close() {
+    let energy = Energy::from_base(12.0_f64);
+    let mass = Mass::from_unit::<Kilogram>(3.0_f64);
+    let dose: AbsorbedDose = energy / mass;
+    assert_eq!(dose.in_unit::<Gray>().to_bits(), 4.0_f64.to_bits());
+
+    let activation = MolarEnergy::from_unit::<JoulePerMole>(8_314.0_f64);
+    let temperature = ThermodynamicTemperature::from_unit::<Kelvin>(1_000.0_f64);
+    let gas_constant: MolarHeatCapacity = activation / temperature;
+    assert_eq!(
+        gas_constant.in_unit::<JoulePerMoleKelvin>().to_bits(),
+        8.314_f64.to_bits()
+    );
+
+    let rate = ReciprocalTime::from_unit::<PerSecond>(2.0_f64);
+    let duration = Time::from_unit::<Second>(0.5_f64);
+    let events: Dimensionless = rate * duration;
+    assert_eq!(events.into_base().to_bits(), 1.0_f64.to_bits());
 }

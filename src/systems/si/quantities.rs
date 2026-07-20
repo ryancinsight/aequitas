@@ -33,10 +33,18 @@ pub type Volume<T = f64> = Quantity<T, dimensions::Volume>;
 pub type Velocity<T = f64> = Quantity<T, dimensions::Velocity>;
 /// Frequency quantity.
 pub type Frequency<T = f64> = Quantity<T, dimensions::Frequency>;
+/// Reciprocal-time quantity.
+pub type ReciprocalTime<T = f64> = Quantity<T, dimensions::ReciprocalTime>;
 /// Pressure quantity.
 pub type Pressure<T = f64> = Quantity<T, dimensions::Pressure>;
 /// Energy quantity.
 pub type Energy<T = f64> = Quantity<T, dimensions::Energy>;
+/// Absorbed-dose quantity.
+pub type AbsorbedDose<T = f64> = Quantity<T, dimensions::AbsorbedDose>;
+/// Molar-energy quantity.
+pub type MolarEnergy<T = f64> = Quantity<T, dimensions::MolarEnergy>;
+/// Molar-heat-capacity quantity.
+pub type MolarHeatCapacity<T = f64> = Quantity<T, dimensions::MolarHeatCapacity>;
 /// Power quantity.
 pub type Power<T = f64> = Quantity<T, dimensions::Power>;
 /// Heat-capacity quantity.

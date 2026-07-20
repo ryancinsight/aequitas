@@ -32,10 +32,18 @@ pub type Volume = Dimension<P3, Z0, Z0, Z0, Z0, Z0, Z0>;
 pub type Velocity = Dimension<P1, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Frequency.
 pub type Frequency = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
+/// Reciprocal time.
+pub type ReciprocalTime = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Pressure.
 pub type Pressure = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
 /// Energy.
 pub type Energy = Dimension<P2, P1, N2, Z0, Z0, Z0, Z0>;
+/// Absorbed dose or specific energy.
+pub type AbsorbedDose = Dimension<P2, Z0, N2, Z0, Z0, Z0, Z0>;
+/// Energy per amount of substance.
+pub type MolarEnergy = Dimension<P2, P1, N2, Z0, Z0, N1, Z0>;
+/// Heat capacity per amount of substance.
+pub type MolarHeatCapacity = Dimension<P2, P1, N2, Z0, N1, N1, Z0>;
 /// Power.
 pub type Power = Dimension<P2, P1, N3, Z0, Z0, Z0, Z0>;
 /// Heat capacity.
