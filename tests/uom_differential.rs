@@ -2,12 +2,15 @@
 
 use aequitas::systems::si::{
     quantities::{
-        AbsorbedDose as AequitasAbsorbedDose, Energy as AequitasEnergy, Length as AequitasLength,
+        AbsorbedDose as AequitasAbsorbedDose, AreaPerMass as AequitasAreaPerMass,
+        Energy as AequitasEnergy, EnergyPerArea as AequitasEnergyPerArea, Length as AequitasLength,
         MolarEnergy as AequitasMolarEnergy, MolarHeatCapacity as AequitasMolarHeatCapacity,
-        Pressure as AequitasPressure, ThermalDiffusivity as AequitasThermalDiffusivity,
+        Pressure as AequitasPressure, ReciprocalLength as AequitasReciprocalLength,
+        ThermalDiffusivity as AequitasThermalDiffusivity,
     },
     units::{
-        Gray, Joule, JoulePerMole, JoulePerMoleKelvin, Kilometer, Megapascal, SquareMeterPerSecond,
+        Gray, Joule, JoulePerMole, JoulePerMoleKelvin, JoulePerSquareMeter, Kilometer, Megapascal,
+        PerCentimeter, SquareCentimeterPerGram, SquareMeterPerSecond,
     },
 };
 use uom::si::{
@@ -18,11 +21,16 @@ use uom::si::{
         AvailableEnergy as UomAvailableEnergy, DiffusionCoefficient as UomDiffusionCoefficient,
         Energy as UomEnergy, Length as UomLength, MolarEnergy as UomMolarEnergy,
         MolarHeatCapacity as UomMolarHeatCapacity, Pressure as UomPressure,
+        RadiantExposure as UomRadiantExposure, ReciprocalLength as UomReciprocalLength,
+        SpecificArea as UomSpecificArea,
     },
     length::kilometer,
     molar_energy::joule_per_mole,
     molar_heat_capacity::joule_per_kelvin_mole,
     pressure::megapascal,
+    radiant_exposure::joule_per_square_meter,
+    reciprocal_length::reciprocal_centimeter,
+    specific_area::square_centimeter_per_gram,
 };
 
 #[test]
@@ -76,6 +84,37 @@ fn linear_conversions_match_uom() {
     let uom_diffusivity = UomDiffusionCoefficient::new::<square_meter_per_second>(diffusivity)
         .get::<square_meter_per_second>();
     assert_eq!(aequitas_diffusivity.to_bits(), uom_diffusivity.to_bits());
+
+    let reciprocal_length = 0.75_f64;
+    let aequitas_reciprocal_length =
+        AequitasReciprocalLength::from_unit::<PerCentimeter>(reciprocal_length).into_base();
+    let uom_reciprocal_length =
+        UomReciprocalLength::new::<reciprocal_centimeter>(reciprocal_length)
+            .get::<uom::si::reciprocal_length::reciprocal_meter>();
+    assert_eq!(
+        aequitas_reciprocal_length.to_bits(),
+        uom_reciprocal_length.to_bits()
+    );
+
+    let area_per_mass = 1.25_f64;
+    let aequitas_area_per_mass =
+        AequitasAreaPerMass::from_unit::<SquareCentimeterPerGram>(area_per_mass).into_base();
+    let uom_area_per_mass = UomSpecificArea::new::<square_centimeter_per_gram>(area_per_mass)
+        .get::<uom::si::specific_area::square_meter_per_kilogram>();
+    assert_eq!(
+        aequitas_area_per_mass.to_bits(),
+        uom_area_per_mass.to_bits()
+    );
+
+    let energy_per_area = 5.5_f64;
+    let aequitas_energy_per_area =
+        AequitasEnergyPerArea::from_unit::<JoulePerSquareMeter>(energy_per_area).into_base();
+    let uom_radiant_exposure = UomRadiantExposure::new::<joule_per_square_meter>(energy_per_area)
+        .get::<joule_per_square_meter>();
+    assert_eq!(
+        aequitas_energy_per_area.to_bits(),
+        uom_radiant_exposure.to_bits()
+    );
 }
 
 #[test]

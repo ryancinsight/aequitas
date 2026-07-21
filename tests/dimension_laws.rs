@@ -2,10 +2,10 @@
 
 use aequitas::systems::si::{
     quantities::{
-        AbsorbedDose, Area, Dimensionless, Energy, Length, Mass, MassDensity, MolarEnergy,
-        MolarHeatCapacity, Power, Pressure, ReciprocalTemperature, ReciprocalTemperatureSquared,
-        ReciprocalTime, SpecificHeatCapacity, ThermalConductivity, ThermalDiffusivity,
-        ThermodynamicTemperature, Time, Velocity, Volume,
+        AbsorbedDose, Area, AreaPerMass, Dimensionless, Energy, EnergyPerArea, Length, Mass,
+        MassDensity, MolarEnergy, MolarHeatCapacity, Power, Pressure, ReciprocalLength,
+        ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime, SpecificHeatCapacity,
+        ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume,
     },
     units::{
         Gray, JoulePerKilogramKelvin, JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram, Meter,
@@ -95,4 +95,22 @@ fn biological_response_dimensions_close() {
     let duration = Time::from_unit::<Second>(0.5_f64);
     let events: Dimensionless = rate * duration;
     assert_eq!(events.into_base().to_bits(), 1.0_f64.to_bits());
+}
+
+#[test]
+fn photon_interaction_dimensions_close() {
+    let area = Area::from_unit::<SquareMeter>(2.0_f64);
+    let mass = Mass::from_unit::<Kilogram>(4.0_f64);
+    let specific_area: AreaPerMass = area / mass;
+    let density = MassDensity::from_base(6.0_f64);
+    let attenuation: ReciprocalLength = specific_area * density;
+    let path = Length::from_unit::<Meter>(3.0_f64);
+    let optical_depth: Dimensionless = attenuation * path;
+    let energy = Energy::from_base(8.0_f64);
+    let exposure: EnergyPerArea = energy / area;
+
+    assert_eq!(specific_area.into_base().to_bits(), 0.5_f64.to_bits());
+    assert_eq!(attenuation.into_base().to_bits(), 3.0_f64.to_bits());
+    assert_eq!(optical_depth.into_base().to_bits(), 9.0_f64.to_bits());
+    assert_eq!(exposure.into_base().to_bits(), 4.0_f64.to_bits());
 }

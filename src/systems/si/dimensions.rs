@@ -8,6 +8,8 @@ use crate::dimension::Dimension;
 pub type Dimensionless = Dimension<Z0, Z0, Z0, Z0, Z0, Z0, Z0>;
 /// Length.
 pub type Length = Dimension<P1, Z0, Z0, Z0, Z0, Z0, Z0>;
+/// Reciprocal length.
+pub type ReciprocalLength = Dimension<N1, Z0, Z0, Z0, Z0, Z0, Z0>;
 /// Mass.
 pub type Mass = Dimension<Z0, P1, Z0, Z0, Z0, Z0, Z0>;
 /// Time.
@@ -26,6 +28,8 @@ pub type AmountOfSubstance = Dimension<Z0, Z0, Z0, Z0, Z0, P1, Z0>;
 pub type LuminousIntensity = Dimension<Z0, Z0, Z0, Z0, Z0, Z0, P1>;
 /// Area.
 pub type Area = Dimension<P2, Z0, Z0, Z0, Z0, Z0, Z0>;
+/// Area per mass.
+pub type AreaPerMass = Dimension<P2, N1, Z0, Z0, Z0, Z0, Z0>;
 /// Volume.
 pub type Volume = Dimension<P3, Z0, Z0, Z0, Z0, Z0, Z0>;
 /// Velocity.
@@ -38,6 +42,8 @@ pub type ReciprocalTime = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
 pub type Pressure = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
 /// Energy.
 pub type Energy = Dimension<P2, P1, N2, Z0, Z0, Z0, Z0>;
+/// Energy per area.
+pub type EnergyPerArea = Dimension<Z0, P1, N2, Z0, Z0, Z0, Z0>;
 /// Absorbed dose or specific energy.
 pub type AbsorbedDose = Dimension<P2, Z0, N2, Z0, Z0, Z0, Z0>;
 /// Energy per amount of substance.

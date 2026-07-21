@@ -1,8 +1,10 @@
 //! Property checks for bounded linear-unit round trips.
 
 use aequitas::systems::si::{
-    quantities::{Energy, Length, MassDensity},
-    units::{GramPerCubicCentimeter, Kilometer, MegaElectronVolt},
+    quantities::{AreaPerMass, Energy, Length, MassDensity, ReciprocalLength},
+    units::{
+        GramPerCubicCentimeter, Kilometer, MegaElectronVolt, PerCentimeter, SquareCentimeterPerGram,
+    },
 };
 use proptest::prelude::*;
 
@@ -40,6 +42,26 @@ proptest! {
     ) {
         let quantity = Energy::from_unit::<MegaElectronVolt>(value);
         let recovered = quantity.in_unit::<MegaElectronVolt>();
+
+        prop_assert!((recovered - value).abs() <= round_trip_bound(value));
+    }
+
+    #[test]
+    fn reciprocal_centimeter_round_trip_respects_floating_point_bound(
+        value in -1.0e9_f64..1.0e9_f64
+    ) {
+        let quantity = ReciprocalLength::from_unit::<PerCentimeter>(value);
+        let recovered = quantity.in_unit::<PerCentimeter>();
+
+        prop_assert!((recovered - value).abs() <= round_trip_bound(value));
+    }
+
+    #[test]
+    fn square_centimeter_per_gram_round_trip_respects_floating_point_bound(
+        value in -1.0e9_f64..1.0e9_f64
+    ) {
+        let quantity = AreaPerMass::from_unit::<SquareCentimeterPerGram>(value);
+        let recovered = quantity.in_unit::<SquareCentimeterPerGram>();
 
         prop_assert!((recovered - value).abs() <= round_trip_bound(value));
     }

@@ -12,6 +12,9 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Reciprocal-length, area-per-mass, and energy-per-area dimensions with
+  `m⁻¹`, `cm⁻¹`, `m²/kg`, `cm²/g`, and `J/m²` units for typed photon and
+  optical interaction contracts.
 - Absorbed-dose, molar-energy, molar-heat-capacity, and reciprocal-time
   dimensions with coherent `Gy`, `J/mol`, `J/(mol·K)`, and `s⁻¹` units for
   biological-response and kinetic-law contracts.

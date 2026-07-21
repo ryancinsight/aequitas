@@ -1,7 +1,7 @@
 //! Generic-instantiation and scalar special-value contracts.
 
 use aequitas::systems::si::{
-    quantities::{Length, Time, Velocity},
+    quantities::{Dimensionless, Length, ReciprocalLength, Time, Velocity},
     units::{Meter, MeterPerSecond, Second},
 };
 use eunomia::{Bf4, Bf8, Bf16, F4, F8, F16, F32, F64, FloatElement};
@@ -16,6 +16,14 @@ fn assert_velocity_law<T: FloatElement>() {
     assert_eq!(velocity.in_unit::<MeterPerSecond>(), T::from_f64(2.0));
 }
 
+fn assert_optical_depth_law<T: FloatElement>() {
+    let attenuation = ReciprocalLength::from_base(T::from_f64(2.0));
+    let path = Length::from_unit::<Meter>(T::from_f64(1.0));
+    let optical_depth: Dimensionless<T> = attenuation * path;
+
+    assert_eq!(optical_depth.into_base(), T::from_f64(2.0));
+}
+
 #[test]
 fn dimension_law_monomorphizes_for_every_eunomia_float() {
     assert_velocity_law::<f32>();
@@ -28,6 +36,17 @@ fn dimension_law_monomorphizes_for_every_eunomia_float() {
     assert_velocity_law::<Bf4>();
     assert_velocity_law::<F8>();
     assert_velocity_law::<F4>();
+
+    assert_optical_depth_law::<f32>();
+    assert_optical_depth_law::<f64>();
+    assert_optical_depth_law::<F16>();
+    assert_optical_depth_law::<F32>();
+    assert_optical_depth_law::<F64>();
+    assert_optical_depth_law::<Bf16>();
+    assert_optical_depth_law::<Bf8>();
+    assert_optical_depth_law::<Bf4>();
+    assert_optical_depth_law::<F8>();
+    assert_optical_depth_law::<F4>();
 }
 
 #[test]

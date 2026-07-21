@@ -8,6 +8,8 @@ use super::dimensions;
 pub type Dimensionless<T = f64> = Quantity<T, dimensions::Dimensionless>;
 /// Length quantity.
 pub type Length<T = f64> = Quantity<T, dimensions::Length>;
+/// Reciprocal-length quantity.
+pub type ReciprocalLength<T = f64> = Quantity<T, dimensions::ReciprocalLength>;
 /// Mass quantity.
 pub type Mass<T = f64> = Quantity<T, dimensions::Mass>;
 /// Time quantity.
@@ -27,6 +29,8 @@ pub type AmountOfSubstance<T = f64> = Quantity<T, dimensions::AmountOfSubstance>
 pub type LuminousIntensity<T = f64> = Quantity<T, dimensions::LuminousIntensity>;
 /// Area quantity.
 pub type Area<T = f64> = Quantity<T, dimensions::Area>;
+/// Area-per-mass quantity.
+pub type AreaPerMass<T = f64> = Quantity<T, dimensions::AreaPerMass>;
 /// Volume quantity.
 pub type Volume<T = f64> = Quantity<T, dimensions::Volume>;
 /// Velocity quantity.
@@ -39,6 +43,8 @@ pub type ReciprocalTime<T = f64> = Quantity<T, dimensions::ReciprocalTime>;
 pub type Pressure<T = f64> = Quantity<T, dimensions::Pressure>;
 /// Energy quantity.
 pub type Energy<T = f64> = Quantity<T, dimensions::Energy>;
+/// Energy-per-area quantity.
+pub type EnergyPerArea<T = f64> = Quantity<T, dimensions::EnergyPerArea>;
 /// Absorbed-dose quantity.
 pub type AbsorbedDose<T = f64> = Quantity<T, dimensions::AbsorbedDose>;
 /// Molar-energy quantity.

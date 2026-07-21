@@ -12,6 +12,24 @@ impl LinearUnit<dimensions::Area> for SquareMeter {
     const SCALE: f64 = 1.0;
 }
 
+/// Per metre, the coherent SI unit of reciprocal length.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct PerMeter;
+impl Sealed for PerMeter {}
+impl LinearUnit<dimensions::ReciprocalLength> for PerMeter {
+    const SYMBOL: &'static str = "m⁻¹";
+    const SCALE: f64 = 1.0;
+}
+
+/// Square metre per kilogram, the coherent SI unit of area per mass.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct SquareMeterPerKilogram;
+impl Sealed for SquareMeterPerKilogram {}
+impl LinearUnit<dimensions::AreaPerMass> for SquareMeterPerKilogram {
+    const SYMBOL: &'static str = "m²/kg";
+    const SCALE: f64 = 1.0;
+}
+
 /// Cubic metre, the coherent SI unit of volume.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct CubicMeter;
@@ -63,6 +81,15 @@ pub struct Joule;
 impl Sealed for Joule {}
 impl LinearUnit<dimensions::Energy> for Joule {
     const SYMBOL: &'static str = "J";
+    const SCALE: f64 = 1.0;
+}
+
+/// Joule per square metre, the coherent SI unit of energy per area.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct JoulePerSquareMeter;
+impl Sealed for JoulePerSquareMeter {}
+impl LinearUnit<dimensions::EnergyPerArea> for JoulePerSquareMeter {
+    const SYMBOL: &'static str = "J/m²";
     const SCALE: f64 = 1.0;
 }
 

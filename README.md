@@ -72,6 +72,28 @@ assert_eq!(gas_constant.into_base(), 8.314_462_618_153_24);
 assert_eq!(frequency_factor.into_base(), 1.0e44);
 ```
 
+Photon-interaction contracts compose attenuation, material density, and path
+length without raw unit conventions:
+
+```rust
+use aequitas::systems::si::{
+    quantities::{AreaPerMass, Dimensionless, Length, MassDensity, ReciprocalLength},
+    units::{GramPerCubicCentimeter, Meter, SquareCentimeterPerGram},
+};
+
+let mass_attenuation =
+    AreaPerMass::from_unit::<SquareCentimeterPerGram>(0.06_f64);
+let density = MassDensity::from_unit::<GramPerCubicCentimeter>(1.0_f64);
+let attenuation: ReciprocalLength = mass_attenuation * density;
+let path = Length::from_unit::<Meter>(0.1_f64);
+let optical_depth: Dimensionless = attenuation * path;
+
+assert_eq!(attenuation.into_base(), 6.0);
+// Three multiplicative conversions contribute at most gamma_3; 4ε is a
+// conservative first-order bound because 3ε / (1 - 3ε) < 4ε.
+assert!((optical_depth.into_base() - 0.6).abs() <= 4.0 * f64::EPSILON * 0.6);
+```
+
 ## Example
 
 ```rust
@@ -154,11 +176,12 @@ The architectural decision and source-level comparison are recorded in
 The committed gates are:
 
 ```sh
-cargo fmt --check
-cargo clippy --all-targets --all-features -- -D warnings
-cargo nextest run --all-features
-cargo test --doc --all-features
-cargo doc --no-deps --all-features
+cargo fmt --all -- --check
+cargo check --locked --no-default-features
+cargo clippy --locked --all-targets --all-features -- -D warnings
+cargo nextest run --locked --all-features
+cargo test --locked --doc --all-features
+RUSTDOCFLAGS="-D warnings" cargo doc --locked --no-deps --all-features
 cargo deny check
 ```
 

@@ -65,6 +65,13 @@ bubble-energy code. This supplies real pressure, power, energy, heat capacity,
 temperature, time, length, area, mass, velocity, and thermal-conductivity
 operations rather than an empty package shell.
 
+The Hyperion photon/optical provider supplies the next concrete extension
+trigger. Reciprocal length, area per mass, and energy per area remain Aequitas
+dimensions because they compose exactly from length, area, mass, and energy.
+Hyperion wraps these quantities with attenuation, scattering, optical-depth,
+and fluence validity contracts instead of re-owning SI exponent or conversion
+laws.
+
 ## Rejected alternatives
 
 ### Adopt `uom` as the Atlas provider

@@ -21,6 +21,15 @@ impl LinearUnit<dimensions::Length> for Centimeter {
     const SCALE: f64 = 1.0e-2;
 }
 
+/// Per centimetre.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct PerCentimeter;
+impl Sealed for PerCentimeter {}
+impl LinearUnit<dimensions::ReciprocalLength> for PerCentimeter {
+    const SYMBOL: &'static str = "cm⁻¹";
+    const SCALE: f64 = 1.0e2;
+}
+
 /// Kilometre.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Kilometer;
@@ -64,6 +73,15 @@ impl Sealed for SquareCentimeter {}
 impl LinearUnit<dimensions::Area> for SquareCentimeter {
     const SYMBOL: &'static str = "cm²";
     const SCALE: f64 = 1.0e-4;
+}
+
+/// Square centimetre per gram.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct SquareCentimeterPerGram;
+impl Sealed for SquareCentimeterPerGram {}
+impl LinearUnit<dimensions::AreaPerMass> for SquareCentimeterPerGram {
+    const SYMBOL: &'static str = "cm²/g";
+    const SCALE: f64 = 1.0e-1;
 }
 
 /// Cubic millimetre.
