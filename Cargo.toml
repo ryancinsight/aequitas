@@ -13,7 +13,7 @@ categories = ["no-std", "science"]
 publish = false
 
 [dependencies]
-eunomia = { version = "0.7.0", git = "https://github.com/ryancinsight/eunomia", rev = "7021628fe8eb3637c297105f626ee5df78abda84", default-features = false }
+eunomia = { version = "0.7.0", git = "https://github.com/ryancinsight/eunomia", default-features = false }
 typenum = "1.20.1"
 
 [dev-dependencies]
