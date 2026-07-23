@@ -155,3 +155,12 @@ impl LinearUnit<dimensions::MassDensity> for GramPerCubicCentimeter {
     const SYMBOL: &'static str = "g/cm³";
     const SCALE: f64 = 1.0e3;
 }
+
+/// Millipascal second, a common dynamic-viscosity unit.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct MillipascalSecond;
+impl Sealed for MillipascalSecond {}
+impl LinearUnit<dimensions::DynamicViscosity> for MillipascalSecond {
+    const SYMBOL: &'static str = "mPa·s";
+    const SCALE: f64 = 1.0e-3;
+}

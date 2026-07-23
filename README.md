@@ -36,6 +36,38 @@ let diffusivity: ThermalDiffusivity = conductivity / (density * heat_capacity);
 assert_eq!(diffusivity.into_base(), 1.5e-7);
 ```
 
+Fluid and acoustic transport laws retain their dimensions through the same
+arithmetic. Dynamic viscosity divided by density yields kinematic viscosity,
+volumetric flow divided by area yields velocity, and absorption times
+intensity yields volumetric power density:
+
+```rust
+use aequitas::systems::si::{
+    quantities::{
+        Area, DynamicViscosity, Intensity, KinematicViscosity, MassDensity,
+        ReciprocalLength, Velocity, VolumetricFlowRate, VolumetricPowerDensity,
+    },
+    units::{
+        CubicMeterPerSecond, KilogramPerCubicMeter, PascalSecond, SquareMeter,
+        WattPerSquareMeter,
+    },
+};
+
+let dynamic = DynamicViscosity::from_unit::<PascalSecond>(0.004_f64);
+let density = MassDensity::from_unit::<KilogramPerCubicMeter>(1_000.0_f64);
+let kinematic: KinematicViscosity = dynamic / density;
+let flow = VolumetricFlowRate::from_unit::<CubicMeterPerSecond>(0.002_f64);
+let area = Area::from_unit::<SquareMeter>(0.01_f64);
+let velocity: Velocity = flow / area;
+let intensity = Intensity::from_unit::<WattPerSquareMeter>(12.0_f64);
+let absorption = ReciprocalLength::from_base(2.0_f64);
+let power_density: VolumetricPowerDensity = absorption * intensity;
+
+assert_eq!(kinematic.into_base(), 4.0e-6);
+assert_eq!(velocity.into_base(), 0.2);
+assert_eq!(power_density.into_base(), 24.0);
+```
+
 Temperature-response coefficients retain their inverse-temperature dimensions:
 
 ```rust
