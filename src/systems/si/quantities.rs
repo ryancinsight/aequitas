@@ -18,6 +18,8 @@ pub type Time<T = f64> = Quantity<T, dimensions::Time>;
 pub type ElectricCurrent<T = f64> = Quantity<T, dimensions::ElectricCurrent>;
 /// Thermodynamic-temperature quantity.
 pub type ThermodynamicTemperature<T = f64> = Quantity<T, dimensions::ThermodynamicTemperature>;
+/// Temperature-difference quantity.
+pub type TemperatureDifference<T = f64> = Quantity<T, dimensions::TemperatureDifference>;
 /// Reciprocal-temperature quantity.
 pub type ReciprocalTemperature<T = f64> = Quantity<T, dimensions::ReciprocalTemperature>;
 /// Reciprocal-squared-temperature quantity.
@@ -75,3 +77,5 @@ pub type AcousticImpedance<T = f64> = Quantity<T, dimensions::AcousticImpedance>
 pub type Intensity<T = f64> = Quantity<T, dimensions::Intensity>;
 /// Volumetric-power-density quantity.
 pub type VolumetricPowerDensity<T = f64> = Quantity<T, dimensions::VolumetricPowerDensity>;
+/// Energy-per-volume quantity.
+pub type EnergyPerVolume<T = f64> = Quantity<T, dimensions::EnergyPerVolume>;

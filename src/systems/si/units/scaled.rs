@@ -3,6 +3,15 @@ use crate::{
     unit::{LinearUnit, private::Sealed},
 };
 
+/// Joule per millilitre, a scaled energy-per-volume unit.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct JoulePerMilliliter;
+impl Sealed for JoulePerMilliliter {}
+impl LinearUnit<dimensions::EnergyPerVolume> for JoulePerMilliliter {
+    const SYMBOL: &'static str = "J/ml";
+    const SCALE: f64 = 1.0e6;
+}
+
 /// Millimetre.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Millimeter;

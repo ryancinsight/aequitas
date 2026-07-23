@@ -12,6 +12,8 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Energy-per-volume and temperature-difference quantities with `J/m³`,
+  `J/ml`, and affine temperature arithmetic for consumer metric contracts.
 - Dynamic and kinematic viscosity, volumetric flow rate, acoustic impedance,
   intensity, and volumetric power-density dimensions with coherent SI units.
 - Reciprocal-length, area-per-mass, and energy-per-area dimensions with

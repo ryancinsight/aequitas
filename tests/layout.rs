@@ -6,9 +6,9 @@ use aequitas::systems::si::{
     dimensions,
     quantities::Length,
     units::{
-        Gray, Joule, JoulePerMole, JoulePerMoleKelvin, JoulePerSquareMeter, Meter, Millimeter,
-        Pascal, PerCentimeter, PerMeter, PerSecond, SquareCentimeterPerGram,
-        SquareMeterPerKilogram, SquareMeterPerSecond,
+        Gray, Joule, JoulePerCubicMeter, JoulePerMilliliter, JoulePerMole, JoulePerMoleKelvin,
+        JoulePerSquareMeter, Meter, Millimeter, Pascal, PerCentimeter, PerMeter, PerSecond,
+        SquareCentimeterPerGram, SquareMeterPerKilogram, SquareMeterPerSecond,
     },
 };
 use eunomia::{Bf16, F16, F32, F64};
@@ -39,6 +39,8 @@ fn dimension_and_unit_markers_occupy_no_storage() {
     assert_eq!(size_of::<dimensions::ReciprocalLength>(), 0);
     assert_eq!(size_of::<dimensions::AreaPerMass>(), 0);
     assert_eq!(size_of::<dimensions::EnergyPerArea>(), 0);
+    assert_eq!(size_of::<dimensions::EnergyPerVolume>(), 0);
+    assert_eq!(size_of::<dimensions::TemperatureDifference>(), 0);
     assert_eq!(size_of::<Meter>(), 0);
     assert_eq!(size_of::<Millimeter>(), 0);
     assert_eq!(size_of::<Pascal>(), 0);
@@ -53,4 +55,6 @@ fn dimension_and_unit_markers_occupy_no_storage() {
     assert_eq!(size_of::<SquareMeterPerKilogram>(), 0);
     assert_eq!(size_of::<SquareCentimeterPerGram>(), 0);
     assert_eq!(size_of::<JoulePerSquareMeter>(), 0);
+    assert_eq!(size_of::<JoulePerCubicMeter>(), 0);
+    assert_eq!(size_of::<JoulePerMilliliter>(), 0);
 }
