@@ -62,3 +62,15 @@ pub type ThermalConductivity = Dimension<P1, P1, N3, Z0, N1, Z0, Z0>;
 pub type ThermalDiffusivity = Dimension<P2, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Mass density.
 pub type MassDensity = Dimension<N3, P1, Z0, Z0, Z0, Z0, Z0>;
+/// Dynamic viscosity.
+pub type DynamicViscosity = Dimension<N1, P1, N1, Z0, Z0, Z0, Z0>;
+/// Kinematic viscosity, dimensionally identical to thermal diffusivity.
+pub type KinematicViscosity = ThermalDiffusivity;
+/// Volumetric flow rate.
+pub type VolumetricFlowRate = Dimension<P3, Z0, N1, Z0, Z0, Z0, Z0>;
+/// Acoustic impedance.
+pub type AcousticImpedance = Dimension<N2, P1, N1, Z0, Z0, Z0, Z0>;
+/// Power per area, also called intensity.
+pub type Intensity = Dimension<Z0, P1, N3, Z0, Z0, Z0, Z0>;
+/// Power per volume.
+pub type VolumetricPowerDensity = Dimension<N1, P1, N3, Z0, Z0, Z0, Z0>;

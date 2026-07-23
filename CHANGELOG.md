@@ -12,6 +12,8 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Dynamic and kinematic viscosity, volumetric flow rate, acoustic impedance,
+  intensity, and volumetric power-density dimensions with coherent SI units.
 - Reciprocal-length, area-per-mass, and energy-per-area dimensions with
   `m⁻¹`, `cm⁻¹`, `m²/kg`, `cm²/g`, and `J/m²` units for typed photon and
   optical interaction contracts.

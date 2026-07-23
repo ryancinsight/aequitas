@@ -1,9 +1,10 @@
 //! Property checks for bounded linear-unit round trips.
 
 use aequitas::systems::si::{
-    quantities::{AreaPerMass, Energy, Length, MassDensity, ReciprocalLength},
+    quantities::{AreaPerMass, DynamicViscosity, Energy, Length, MassDensity, ReciprocalLength},
     units::{
-        GramPerCubicCentimeter, Kilometer, MegaElectronVolt, PerCentimeter, SquareCentimeterPerGram,
+        GramPerCubicCentimeter, Kilometer, MegaElectronVolt, MillipascalSecond, PascalSecond,
+        PerCentimeter, SquareCentimeterPerGram,
     },
 };
 use proptest::prelude::*;
@@ -64,5 +65,18 @@ proptest! {
         let recovered = quantity.in_unit::<SquareCentimeterPerGram>();
 
         prop_assert!((recovered - value).abs() <= round_trip_bound(value));
+    }
+
+    #[test]
+    fn millipascal_second_round_trip_respects_floating_point_bound(
+        value in 0.0_f64..1.0e6_f64
+    ) {
+        let quantity = DynamicViscosity::from_unit::<MillipascalSecond>(value);
+        let recovered = quantity.in_unit::<MillipascalSecond>();
+
+        prop_assert!((recovered - value).abs() <= round_trip_bound(value));
+        let expected_base =
+            DynamicViscosity::from_unit::<PascalSecond>(value * 1.0e-3).into_base();
+        prop_assert!((expected_base - quantity.into_base()).abs() <= round_trip_bound(expected_base));
     }
 }

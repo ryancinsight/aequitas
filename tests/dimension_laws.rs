@@ -2,14 +2,18 @@
 
 use aequitas::systems::si::{
     quantities::{
-        AbsorbedDose, Area, AreaPerMass, Dimensionless, Energy, EnergyPerArea, Length, Mass,
-        MassDensity, MolarEnergy, MolarHeatCapacity, Power, Pressure, ReciprocalLength,
-        ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime, SpecificHeatCapacity,
-        ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume,
+        AbsorbedDose, AcousticImpedance, Area, AreaPerMass, Dimensionless, DynamicViscosity,
+        Energy, EnergyPerArea, Intensity, KinematicViscosity, Length, Mass, MassDensity,
+        MolarEnergy, MolarHeatCapacity, Power, Pressure, ReciprocalLength, ReciprocalTemperature,
+        ReciprocalTemperatureSquared, ReciprocalTime, SpecificHeatCapacity, ThermalConductivity,
+        ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume, VolumetricFlowRate,
+        VolumetricPowerDensity,
     },
     units::{
-        Gray, JoulePerKilogramKelvin, JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram, Meter,
-        Pascal, PerKelvin, PerSecond, PerSquareKelvin, Second, SquareMeter, Watt,
+        CubicMeterPerSecond, Gray, JoulePerKilogramKelvin, JoulePerMole, JoulePerMoleKelvin,
+        Kelvin, Kilogram, KilogramPerCubicMeter, Meter, MeterPerSecond, Pascal, PascalSecond,
+        PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Rayl, Second, SquareMeter,
+        SquareMeterPerSecond, Watt, WattPerCubicMeter, WattPerSquareMeter,
     },
 };
 
@@ -113,4 +117,32 @@ fn photon_interaction_dimensions_close() {
     assert_eq!(attenuation.into_base().to_bits(), 3.0_f64.to_bits());
     assert_eq!(optical_depth.into_base().to_bits(), 9.0_f64.to_bits());
     assert_eq!(exposure.into_base().to_bits(), 4.0_f64.to_bits());
+}
+
+#[test]
+fn fluid_and_acoustic_dimensions_close() {
+    let dynamic = DynamicViscosity::from_unit::<PascalSecond>(0.004_f64);
+    let density = MassDensity::from_unit::<KilogramPerCubicMeter>(1_000.0_f64);
+    let kinematic: KinematicViscosity = dynamic / density;
+    let flow = VolumetricFlowRate::from_unit::<CubicMeterPerSecond>(0.002_f64);
+    let area = Area::from_unit::<SquareMeter>(0.01_f64);
+    let velocity: Velocity = flow / area;
+    let impedance: AcousticImpedance = density * velocity;
+    let intensity = Intensity::from_unit::<WattPerSquareMeter>(12.0_f64);
+    let absorption = ReciprocalLength::from_unit::<PerMeter>(2.0_f64);
+    let power_density: VolumetricPowerDensity = absorption * intensity;
+
+    assert_eq!(
+        kinematic.in_unit::<SquareMeterPerSecond>().to_bits(),
+        4.0e-6_f64.to_bits()
+    );
+    assert_eq!(
+        velocity.in_unit::<MeterPerSecond>().to_bits(),
+        0.2_f64.to_bits()
+    );
+    assert_eq!(impedance.in_unit::<Rayl>().to_bits(), 200.0_f64.to_bits());
+    assert_eq!(
+        power_density.in_unit::<WattPerCubicMeter>().to_bits(),
+        24.0_f64.to_bits()
+    );
 }
