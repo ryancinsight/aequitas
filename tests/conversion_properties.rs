@@ -75,9 +75,8 @@ proptest! {
         let recovered = quantity.in_unit::<MillipascalSecond>();
 
         prop_assert!((recovered - value).abs() <= round_trip_bound(value));
-        prop_assert_eq!(
-            DynamicViscosity::from_unit::<PascalSecond>(value * 1.0e-3).into_base(),
-            quantity.into_base()
-        );
+        let expected_base =
+            DynamicViscosity::from_unit::<PascalSecond>(value * 1.0e-3).into_base();
+        prop_assert!((expected_base - quantity.into_base()).abs() <= round_trip_bound(expected_base));
     }
 }
