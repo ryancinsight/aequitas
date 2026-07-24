@@ -32,6 +32,10 @@ fn quantity_layout_matches_scalar_layout() {
 fn dimension_and_unit_markers_occupy_no_storage() {
     assert_eq!(size_of::<dimensions::Length>(), 0);
     assert_eq!(size_of::<dimensions::Pressure>(), 0);
+    assert_eq!(size_of::<dimensions::PressureGradient>(), 0);
+    assert_eq!(size_of::<dimensions::HydraulicResistance>(), 0);
+    assert_eq!(size_of::<dimensions::HydraulicInertance>(), 0);
+    assert_eq!(size_of::<dimensions::Compliance>(), 0);
     assert_eq!(size_of::<dimensions::ThermalDiffusivity>(), 0);
     assert_eq!(size_of::<dimensions::AbsorbedDose>(), 0);
     assert_eq!(size_of::<dimensions::MolarEnergy>(), 0);

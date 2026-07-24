@@ -2,9 +2,10 @@
 
 use aequitas::systems::si::{
     quantities::{
-        AbsorbedDose, AcousticImpedance, Angle, Area, AreaPerMass, Dimensionless, DynamicViscosity,
-        Energy, EnergyPerArea, EnergyPerVolume, Intensity, KinematicViscosity, Length, Mass,
-        MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, Power, Pressure,
+        AbsorbedDose, AcousticImpedance, Angle, Area, AreaPerMass, Compliance, Dimensionless,
+        DynamicViscosity, Energy, EnergyPerArea, EnergyPerVolume, HydraulicInertance,
+        HydraulicResistance, Intensity, KinematicViscosity, Length, Mass, MassDensity,
+        MassDensityRate, MolarEnergy, MolarHeatCapacity, Power, Pressure, PressureGradient,
         ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
         SpecificHeatCapacity, SurfaceTension, TemperatureDifference, ThermalConductivity,
         ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume, VolumetricFlowRate,
@@ -124,6 +125,24 @@ fn biological_response_dimensions_close() {
     let duration = Time::from_unit::<Second>(0.5_f64);
     let events: Dimensionless = rate * duration;
     assert_eq!(events.into_base().to_bits(), 1.0_f64.to_bits());
+}
+
+#[test]
+fn vascular_result_dimensions_are_named() {
+    let pressure = Pressure::from_base(1.0_f64);
+    let length = Length::from_base(2.0_f64);
+    let flow = VolumetricFlowRate::from_base(3.0_f64);
+    let time = Time::from_base(4.0_f64);
+
+    let gradient: PressureGradient = pressure / length;
+    let resistance: HydraulicResistance = pressure / flow;
+    let inertance: HydraulicInertance = resistance * time;
+    let compliance: Compliance = Volume::from_base(5.0_f64) / pressure;
+
+    assert_eq!(gradient.into_base(), 0.5);
+    assert_eq!(resistance.into_base(), 1.0 / 3.0);
+    assert_eq!(inertance.into_base(), 4.0 / 3.0);
+    assert_eq!(compliance.into_base(), 5.0);
 }
 
 #[test]
