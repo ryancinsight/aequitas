@@ -4,4 +4,6 @@ mod algebra;
 mod model;
 
 pub use algebra::{DivideDimension, MultiplyDimension};
-pub use model::Dimension;
+pub use model::{
+    AbsoluteTemperatureSemantics, BaseSemantics, Dimension, TemperatureDifferenceSemantics,
+};

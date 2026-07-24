@@ -2,7 +2,7 @@
 
 use typenum::{N1, N2, N3, P1, P2, P3, Z0};
 
-use crate::dimension::Dimension;
+use crate::dimension::{AbsoluteTemperatureSemantics, Dimension, TemperatureDifferenceSemantics};
 
 /// Dimensionless quantity.
 pub type Dimensionless = Dimension<Z0, Z0, Z0, Z0, Z0, Z0, Z0>;
@@ -16,8 +16,12 @@ pub type Mass = Dimension<Z0, P1, Z0, Z0, Z0, Z0, Z0>;
 pub type Time = Dimension<Z0, Z0, P1, Z0, Z0, Z0, Z0>;
 /// Electric current.
 pub type ElectricCurrent = Dimension<Z0, Z0, Z0, P1, Z0, Z0, Z0>;
-/// Thermodynamic temperature.
-pub type ThermodynamicTemperature = Dimension<Z0, Z0, Z0, Z0, P1, Z0, Z0>;
+/// Absolute thermodynamic temperature.
+pub type ThermodynamicTemperature =
+    Dimension<Z0, Z0, Z0, Z0, P1, Z0, Z0, AbsoluteTemperatureSemantics>;
+/// Temperature difference, distinct from absolute thermodynamic temperature.
+pub type TemperatureDifference =
+    Dimension<Z0, Z0, Z0, Z0, P1, Z0, Z0, TemperatureDifferenceSemantics>;
 /// Reciprocal thermodynamic temperature.
 pub type ReciprocalTemperature = Dimension<Z0, Z0, Z0, Z0, N1, Z0, Z0>;
 /// Reciprocal squared thermodynamic temperature.
@@ -74,3 +78,5 @@ pub type AcousticImpedance = Dimension<N2, P1, N1, Z0, Z0, Z0, Z0>;
 pub type Intensity = Dimension<Z0, P1, N3, Z0, Z0, Z0, Z0>;
 /// Power per volume.
 pub type VolumetricPowerDensity = Dimension<N1, P1, N3, Z0, Z0, Z0, Z0>;
+/// Energy per volume.
+pub type EnergyPerVolume = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;

@@ -93,6 +93,15 @@ impl LinearUnit<dimensions::EnergyPerArea> for JoulePerSquareMeter {
     const SCALE: f64 = 1.0;
 }
 
+/// Joule per cubic metre, the coherent SI unit of energy per volume.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct JoulePerCubicMeter;
+impl Sealed for JoulePerCubicMeter {}
+impl LinearUnit<dimensions::EnergyPerVolume> for JoulePerCubicMeter {
+    const SYMBOL: &'static str = "J/m³";
+    const SCALE: f64 = 1.0;
+}
+
 /// Gray, the coherent SI unit of absorbed dose.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Gray;

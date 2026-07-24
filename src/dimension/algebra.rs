@@ -1,7 +1,7 @@
 use core::ops::{Add, Sub};
 use typenum::{Diff, Integer, Sum};
 
-use super::Dimension;
+use super::{BaseSemantics, Dimension};
 
 /// Type-level multiplication of physical dimensions.
 ///
@@ -28,9 +28,9 @@ pub trait DivideDimension<Rhs> {
     type Output;
 }
 
-impl<Ll, Ml, Tl, Il, Thl, Nl, Jl, Lr, Mr, Tr, Ir, Thr, Nr, Jr>
-    MultiplyDimension<Dimension<Lr, Mr, Tr, Ir, Thr, Nr, Jr>>
-    for Dimension<Ll, Ml, Tl, Il, Thl, Nl, Jl>
+impl<Ll, Ml, Tl, Il, Thl, Nl, Jl, LhsSemantics, Lr, Mr, Tr, Ir, Thr, Nr, Jr, RhsSemantics>
+    MultiplyDimension<Dimension<Lr, Mr, Tr, Ir, Thr, Nr, Jr, RhsSemantics>>
+    for Dimension<Ll, Ml, Tl, Il, Thl, Nl, Jl, LhsSemantics>
 where
     Ll: Integer + Add<Lr>,
     Ml: Integer + Add<Mr>,
@@ -62,12 +62,13 @@ where
         Sum<Thl, Thr>,
         Sum<Nl, Nr>,
         Sum<Jl, Jr>,
+        BaseSemantics,
     >;
 }
 
-impl<Ll, Ml, Tl, Il, Thl, Nl, Jl, Lr, Mr, Tr, Ir, Thr, Nr, Jr>
-    DivideDimension<Dimension<Lr, Mr, Tr, Ir, Thr, Nr, Jr>>
-    for Dimension<Ll, Ml, Tl, Il, Thl, Nl, Jl>
+impl<Ll, Ml, Tl, Il, Thl, Nl, Jl, LhsSemantics, Lr, Mr, Tr, Ir, Thr, Nr, Jr, RhsSemantics>
+    DivideDimension<Dimension<Lr, Mr, Tr, Ir, Thr, Nr, Jr, RhsSemantics>>
+    for Dimension<Ll, Ml, Tl, Il, Thl, Nl, Jl, LhsSemantics>
 where
     Ll: Integer + Sub<Lr>,
     Ml: Integer + Sub<Mr>,
@@ -99,5 +100,6 @@ where
         Diff<Thl, Thr>,
         Diff<Nl, Nr>,
         Diff<Jl, Jr>,
+        BaseSemantics,
     >;
 }

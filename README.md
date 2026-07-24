@@ -72,15 +72,50 @@ Temperature-response coefficients retain their inverse-temperature dimensions:
 
 ```rust
 use aequitas::systems::si::{
-    quantities::{Dimensionless, ReciprocalTemperature, ThermodynamicTemperature},
+    quantities::{Dimensionless, ReciprocalTemperature, TemperatureDifference},
     units::{Kelvin, PerKelvin},
 };
 
 let slope = ReciprocalTemperature::from_unit::<PerKelvin>(0.01_f64);
-let delta = ThermodynamicTemperature::from_unit::<Kelvin>(5.0_f64);
+let delta = TemperatureDifference::from_unit::<Kelvin>(5.0_f64);
 let response: Dimensionless = slope * delta;
 
 assert_eq!(response.into_base(), 0.05);
+```
+
+Absolute temperature and temperature difference use distinct semantic markers.
+Subtracting two absolute temperatures produces a difference; adding a
+difference to an absolute temperature produces an absolute temperature:
+
+```rust
+use aequitas::systems::si::{
+    quantities::{TemperatureDifference, ThermodynamicTemperature},
+    units::Kelvin,
+};
+
+let lower = ThermodynamicTemperature::from_unit::<Kelvin>(290.0_f64);
+let upper = ThermodynamicTemperature::from_unit::<Kelvin>(300.0_f64);
+let delta: TemperatureDifference = upper - lower;
+let restored = lower + delta;
+
+assert_eq!(delta.in_unit::<Kelvin>(), 10.0);
+assert_eq!(restored.in_unit::<Kelvin>(), 300.0);
+```
+
+Energy density is available as a first-class quantity for acoustic, thermal,
+and cavitation metrics:
+
+```rust
+use aequitas::systems::si::{
+    quantities::{Energy, EnergyPerVolume, Volume},
+    units::{CubicMeter, Joule, JoulePerCubicMeter},
+};
+
+let energy = Energy::from_unit::<Joule>(12.0_f64);
+let volume = Volume::from_unit::<CubicMeter>(3.0_f64);
+let density: EnergyPerVolume = energy / volume;
+
+assert_eq!(density.in_unit::<JoulePerCubicMeter>(), 4.0);
 ```
 
 Biological-response models can state dose and kinetic parameters without raw
@@ -165,7 +200,7 @@ let _invalid = length + time;
 src/
 ├── dimension/
 │   ├── algebra.rs       # type-level dimension composition
-│   └── model.rs         # seven-axis SI exponent vector
+│   └── model.rs         # seven-axis SI exponent vector and semantics
 ├── quantity/
 │   ├── arithmetic/      # additive, multiplicative, scalar, unary operations
 │   ├── construction.rs  # base/unit boundary

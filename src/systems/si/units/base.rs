@@ -48,6 +48,11 @@ impl LinearUnit<dimensions::ThermodynamicTemperature> for Kelvin {
     const SCALE: f64 = 1.0;
 }
 
+impl LinearUnit<dimensions::TemperatureDifference> for Kelvin {
+    const SYMBOL: &'static str = "K";
+    const SCALE: f64 = 1.0;
+}
+
 /// Mole, the SI base unit of amount of substance.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Mole;
