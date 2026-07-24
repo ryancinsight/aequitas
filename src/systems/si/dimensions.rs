@@ -66,6 +66,8 @@ pub type ThermalConductivity = Dimension<P1, P1, N3, Z0, N1, Z0, Z0>;
 pub type ThermalDiffusivity = Dimension<P2, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Mass density.
 pub type MassDensity = Dimension<N3, P1, Z0, Z0, Z0, Z0, Z0>;
+/// Mass-density rate, mass per volume per time.
+pub type MassDensityRate = Dimension<N3, P1, N1, Z0, Z0, Z0, Z0>;
 /// Dynamic viscosity.
 pub type DynamicViscosity = Dimension<N1, P1, N1, Z0, Z0, Z0, Z0>;
 /// Kinematic viscosity, dimensionally identical to thermal diffusivity.

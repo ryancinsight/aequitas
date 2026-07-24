@@ -4,17 +4,18 @@ use aequitas::systems::si::{
     quantities::{
         AbsorbedDose, AcousticImpedance, Area, AreaPerMass, Dimensionless, DynamicViscosity,
         Energy, EnergyPerArea, EnergyPerVolume, Intensity, KinematicViscosity, Length, Mass,
-        MassDensity, MolarEnergy, MolarHeatCapacity, Power, Pressure, ReciprocalLength,
-        ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime, SpecificHeatCapacity,
-        TemperatureDifference, ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature,
-        Time, Velocity, Volume, VolumetricFlowRate, VolumetricPowerDensity,
+        MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, Power, Pressure,
+        ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
+        SpecificHeatCapacity, TemperatureDifference, ThermalConductivity, ThermalDiffusivity,
+        ThermodynamicTemperature, Time, Velocity, Volume, VolumetricFlowRate,
+        VolumetricPowerDensity,
     },
     units::{
         CubicMeterPerSecond, Gray, JoulePerCubicMeter, JoulePerKilogramKelvin, JoulePerMilliliter,
-        JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter, Meter,
-        MeterPerSecond, Pascal, PascalSecond, PerKelvin, PerMeter, PerSecond, PerSquareKelvin,
-        Rayl, Second, SquareMeter, SquareMeterPerSecond, Watt, WattPerCubicMeter,
-        WattPerSquareMeter,
+        JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter,
+        KilogramPerCubicMeterSecond, Meter, MeterPerSecond, Pascal, PascalSecond, PerKelvin,
+        PerMeter, PerSecond, PerSquareKelvin, Rayl, Second, SquareMeter, SquareMeterPerSecond,
+        Watt, WattPerCubicMeter, WattPerSquareMeter,
     },
 };
 
@@ -146,6 +147,21 @@ fn fluid_and_acoustic_dimensions_close() {
         power_density.in_unit::<WattPerCubicMeter>().to_bits(),
         24.0_f64.to_bits()
     );
+}
+
+#[test]
+fn mass_density_rate_has_pennes_dimensions() {
+    let blood_perfusion = MassDensityRate::from_unit::<KilogramPerCubicMeterSecond>(0.5_f64);
+    let duration = Time::from_unit::<Second>(2.0_f64);
+    let exchanged_density: MassDensity = blood_perfusion * duration;
+
+    assert_eq!(
+        blood_perfusion
+            .in_unit::<KilogramPerCubicMeterSecond>()
+            .to_bits(),
+        0.5_f64.to_bits()
+    );
+    assert_eq!(exchanged_density.into_base().to_bits(), 1.0_f64.to_bits());
 }
 
 #[test]

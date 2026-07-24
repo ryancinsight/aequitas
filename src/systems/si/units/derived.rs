@@ -183,6 +183,15 @@ impl LinearUnit<dimensions::MassDensity> for KilogramPerCubicMeter {
     const SCALE: f64 = 1.0;
 }
 
+/// Kilogram per cubic metre-second, the coherent SI unit of mass-density rate.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct KilogramPerCubicMeterSecond;
+impl Sealed for KilogramPerCubicMeterSecond {}
+impl LinearUnit<dimensions::MassDensityRate> for KilogramPerCubicMeterSecond {
+    const SYMBOL: &'static str = "kg/(m³·s)";
+    const SCALE: f64 = 1.0;
+}
+
 /// Pascal second, the coherent SI unit of dynamic viscosity.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct PascalSecond;

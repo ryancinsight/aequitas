@@ -12,6 +12,8 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Mass-density-rate quantity with the coherent `kg/(m³·s)` unit for typed
+  perfusion and mass-transfer contracts.
 - Energy-per-volume and temperature-difference quantities with `J/m³`,
   `J/ml`, and affine temperature arithmetic for consumer metric contracts.
 - Dynamic and kinematic viscosity, volumetric flow rate, acoustic impedance,
