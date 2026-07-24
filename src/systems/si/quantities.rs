@@ -6,6 +6,8 @@ use super::dimensions;
 
 /// Dimensionless quantity.
 pub type Dimensionless<T = f64> = Quantity<T, dimensions::Dimensionless>;
+/// Plane or rotational angle quantity, stored in radians.
+pub type Angle<T = f64> = Quantity<T, dimensions::Angle>;
 /// Length quantity.
 pub type Length<T = f64> = Quantity<T, dimensions::Length>;
 /// Reciprocal-length quantity.

@@ -3,12 +3,14 @@
 use typenum::{N1, N2, N3, P1, P2, P3, Z0};
 
 use crate::dimension::{
-    AbsoluteTemperatureSemantics, Dimension, SurfaceTensionSemantics,
+    AbsoluteTemperatureSemantics, AngleSemantics, Dimension, SurfaceTensionSemantics,
     TemperatureDifferenceSemantics,
 };
 
 /// Dimensionless quantity.
 pub type Dimensionless = Dimension<Z0, Z0, Z0, Z0, Z0, Z0, Z0>;
+/// Plane or rotational angle, stored in radians.
+pub type Angle = Dimension<Z0, Z0, Z0, Z0, Z0, Z0, Z0, AngleSemantics>;
 /// Length.
 pub type Length = Dimension<P1, Z0, Z0, Z0, Z0, Z0, Z0>;
 /// Reciprocal length.

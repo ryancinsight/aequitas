@@ -12,6 +12,8 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Angle quantity with a distinct radian semantic contract for typed rotational
+  and plane-wave geometry.
 - Optional `serde` support serializes quantities as their canonical scalar
   values while retaining compile-time dimensions in Rust APIs.
 - Surface-tension quantity with a distinct semantic dimension and coherent

@@ -4,7 +4,7 @@ mod base;
 mod derived;
 mod scaled;
 
-pub use base::{Ampere, Candela, Kelvin, Kilogram, Meter, Mole, Second};
+pub use base::{Ampere, Candela, Kelvin, Kilogram, Meter, Mole, Radian, Second};
 pub use derived::{
     CubicMeter, CubicMeterPerSecond, Gray, Hertz, Joule, JoulePerCubicMeter, JoulePerKelvin,
     JoulePerKilogramKelvin, JoulePerMole, JoulePerMoleKelvin, JoulePerSquareMeter,

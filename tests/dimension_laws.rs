@@ -2,7 +2,7 @@
 
 use aequitas::systems::si::{
     quantities::{
-        AbsorbedDose, AcousticImpedance, Area, AreaPerMass, Dimensionless, DynamicViscosity,
+        AbsorbedDose, AcousticImpedance, Angle, Area, AreaPerMass, Dimensionless, DynamicViscosity,
         Energy, EnergyPerArea, EnergyPerVolume, Intensity, KinematicViscosity, Length, Mass,
         MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, Power, Pressure,
         ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
@@ -14,10 +14,20 @@ use aequitas::systems::si::{
         CubicMeterPerSecond, Gray, JoulePerCubicMeter, JoulePerKilogramKelvin, JoulePerMilliliter,
         JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter,
         KilogramPerCubicMeterSecond, Meter, MeterPerSecond, NewtonPerMeter, Pascal, PascalSecond,
-        PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Rayl, Second, SquareMeter,
+        PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Radian, Rayl, Second, SquareMeter,
         SquareMeterPerSecond, Watt, WattPerCubicMeter, WattPerSquareMeter,
     },
 };
+
+#[test]
+fn angle_has_a_distinct_radian_semantic_contract() {
+    let angle = Angle::from_unit::<Radian>(core::f64::consts::FRAC_PI_2);
+
+    assert_eq!(
+        angle.in_unit::<Radian>().to_bits(),
+        core::f64::consts::FRAC_PI_2.to_bits()
+    );
+}
 
 #[test]
 fn length_divided_by_time_is_velocity() {

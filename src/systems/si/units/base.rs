@@ -3,6 +3,15 @@ use crate::{
     unit::{LinearUnit, private::Sealed},
 };
 
+/// Radian, the coherent SI unit for plane and rotational angles.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Radian;
+impl Sealed for Radian {}
+impl LinearUnit<dimensions::Angle> for Radian {
+    const SYMBOL: &'static str = "rad";
+    const SCALE: f64 = 1.0;
+}
+
 /// Metre, the SI base unit of length.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Meter;

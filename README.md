@@ -100,6 +100,16 @@ let pressure: Pressure = tension / radius;
 assert_eq!(pressure.in_unit::<Pascal>(), 36.0);
 ```
 
+Angles are represented as a distinct dimensionless semantic quantity and are
+stored in radians:
+
+```rust
+use aequitas::systems::si::{quantities::Angle, units::Radian};
+
+let quarter_turn = Angle::from_unit::<Radian>(core::f64::consts::FRAC_PI_2);
+assert_eq!(quarter_turn.in_unit::<Radian>(), core::f64::consts::FRAC_PI_2);
+```
+
 Absolute temperature and temperature difference use distinct semantic markers.
 Subtracting two absolute temperatures produces a difference; adding a
 difference to an absolute temperature produces an absolute temperature:

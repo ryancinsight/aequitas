@@ -16,6 +16,10 @@ pub struct TemperatureDifferenceSemantics;
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct SurfaceTensionSemantics;
 
+/// Semantic marker for plane and rotational angles measured in radians.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct AngleSemantics;
+
 /// Seven-axis SI dimension vector with an optional semantic marker.
 ///
 /// The type parameters are type-level integer exponents in this order:
