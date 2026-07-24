@@ -12,6 +12,10 @@ pub struct AbsoluteTemperatureSemantics;
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct TemperatureDifferenceSemantics;
 
+/// Semantic marker for interfacial or surface tension.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct SurfaceTensionSemantics;
+
 /// Seven-axis SI dimension vector with an optional semantic marker.
 ///
 /// The type parameters are type-level integer exponents in this order:

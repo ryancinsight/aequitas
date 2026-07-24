@@ -47,6 +47,8 @@ pub type Pressure<T = f64> = Quantity<T, dimensions::Pressure>;
 pub type Energy<T = f64> = Quantity<T, dimensions::Energy>;
 /// Energy-per-area quantity.
 pub type EnergyPerArea<T = f64> = Quantity<T, dimensions::EnergyPerArea>;
+/// Surface or interfacial tension quantity.
+pub type SurfaceTension<T = f64> = Quantity<T, dimensions::SurfaceTension>;
 /// Absorbed-dose quantity.
 pub type AbsorbedDose<T = f64> = Quantity<T, dimensions::AbsorbedDose>;
 /// Molar-energy quantity.

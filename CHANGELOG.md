@@ -12,6 +12,8 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Surface-tension quantity with a distinct semantic dimension and coherent
+  `N/m` unit for interfacial and cavitation contracts.
 - Mass-density-rate quantity with the coherent `kg/(m³·s)` unit for typed
   perfusion and mass-transfer contracts.
 - Energy-per-volume and temperature-difference quantities with `J/m³`,

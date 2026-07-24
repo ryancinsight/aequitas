@@ -93,6 +93,15 @@ impl LinearUnit<dimensions::EnergyPerArea> for JoulePerSquareMeter {
     const SCALE: f64 = 1.0;
 }
 
+/// Newton per metre, the coherent SI unit of surface tension.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct NewtonPerMeter;
+impl Sealed for NewtonPerMeter {}
+impl LinearUnit<dimensions::SurfaceTension> for NewtonPerMeter {
+    const SYMBOL: &'static str = "N/m";
+    const SCALE: f64 = 1.0;
+}
+
 /// Joule per cubic metre, the coherent SI unit of energy per volume.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct JoulePerCubicMeter;

@@ -2,7 +2,10 @@
 
 use typenum::{N1, N2, N3, P1, P2, P3, Z0};
 
-use crate::dimension::{AbsoluteTemperatureSemantics, Dimension, TemperatureDifferenceSemantics};
+use crate::dimension::{
+    AbsoluteTemperatureSemantics, Dimension, SurfaceTensionSemantics,
+    TemperatureDifferenceSemantics,
+};
 
 /// Dimensionless quantity.
 pub type Dimensionless = Dimension<Z0, Z0, Z0, Z0, Z0, Z0, Z0>;
@@ -48,6 +51,8 @@ pub type Pressure = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
 pub type Energy = Dimension<P2, P1, N2, Z0, Z0, Z0, Z0>;
 /// Energy per area.
 pub type EnergyPerArea = Dimension<Z0, P1, N2, Z0, Z0, Z0, Z0>;
+/// Surface or interfacial tension, force per length.
+pub type SurfaceTension = Dimension<Z0, P1, N2, Z0, Z0, Z0, Z0, SurfaceTensionSemantics>;
 /// Absorbed dose or specific energy.
 pub type AbsorbedDose = Dimension<P2, Z0, N2, Z0, Z0, Z0, Z0>;
 /// Energy per amount of substance.

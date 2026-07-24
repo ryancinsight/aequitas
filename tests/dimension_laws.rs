@@ -6,16 +6,16 @@ use aequitas::systems::si::{
         Energy, EnergyPerArea, EnergyPerVolume, Intensity, KinematicViscosity, Length, Mass,
         MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, Power, Pressure,
         ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
-        SpecificHeatCapacity, TemperatureDifference, ThermalConductivity, ThermalDiffusivity,
-        ThermodynamicTemperature, Time, Velocity, Volume, VolumetricFlowRate,
+        SpecificHeatCapacity, SurfaceTension, TemperatureDifference, ThermalConductivity,
+        ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume, VolumetricFlowRate,
         VolumetricPowerDensity,
     },
     units::{
         CubicMeterPerSecond, Gray, JoulePerCubicMeter, JoulePerKilogramKelvin, JoulePerMilliliter,
         JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter,
-        KilogramPerCubicMeterSecond, Meter, MeterPerSecond, Pascal, PascalSecond, PerKelvin,
-        PerMeter, PerSecond, PerSquareKelvin, Rayl, Second, SquareMeter, SquareMeterPerSecond,
-        Watt, WattPerCubicMeter, WattPerSquareMeter,
+        KilogramPerCubicMeterSecond, Meter, MeterPerSecond, NewtonPerMeter, Pascal, PascalSecond,
+        PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Rayl, Second, SquareMeter,
+        SquareMeterPerSecond, Watt, WattPerCubicMeter, WattPerSquareMeter,
     },
 };
 
@@ -37,6 +37,19 @@ fn pressure_times_volume_is_energy() {
     let energy: Energy = pressure * volume;
 
     assert_eq!(energy.into_base().to_bits(), 48.0_f64.to_bits());
+}
+
+#[test]
+fn surface_tension_is_a_distinct_force_per_length_quantity() {
+    let tension = SurfaceTension::from_unit::<NewtonPerMeter>(0.072_f64);
+    let radius = Length::from_unit::<Meter>(2.0e-3_f64);
+    let pressure: Pressure = tension / radius;
+
+    assert_eq!(
+        tension.in_unit::<NewtonPerMeter>().to_bits(),
+        0.072_f64.to_bits()
+    );
+    assert_eq!(pressure.in_unit::<Pascal>().to_bits(), 36.0_f64.to_bits());
 }
 
 #[test]

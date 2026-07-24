@@ -83,6 +83,23 @@ let response: Dimensionless = slope * delta;
 assert_eq!(response.into_base(), 0.05);
 ```
 
+Interfacial tension is distinct from energy per area even though the SI base
+exponents coincide. This prevents a surface-tension input from being confused
+with an areal energy while retaining dimensional pressure recovery:
+
+```rust
+use aequitas::systems::si::{
+    quantities::{Length, Pressure, SurfaceTension},
+    units::{Meter, NewtonPerMeter, Pascal},
+};
+
+let tension = SurfaceTension::from_unit::<NewtonPerMeter>(0.072_f64);
+let radius = Length::from_unit::<Meter>(2.0e-3_f64);
+let pressure: Pressure = tension / radius;
+
+assert_eq!(pressure.in_unit::<Pascal>(), 36.0);
+```
+
 Absolute temperature and temperature difference use distinct semantic markers.
 Subtracting two absolute temperatures produces a difference; adding a
 difference to an absolute temperature produces an absolute temperature:
