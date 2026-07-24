@@ -65,6 +65,8 @@ pub type ThermalConductivity<T = f64> = Quantity<T, dimensions::ThermalConductiv
 pub type ThermalDiffusivity<T = f64> = Quantity<T, dimensions::ThermalDiffusivity>;
 /// Mass-density quantity.
 pub type MassDensity<T = f64> = Quantity<T, dimensions::MassDensity>;
+/// Mass-density-rate quantity.
+pub type MassDensityRate<T = f64> = Quantity<T, dimensions::MassDensityRate>;
 /// Dynamic-viscosity quantity.
 pub type DynamicViscosity<T = f64> = Quantity<T, dimensions::DynamicViscosity>;
 /// Kinematic-viscosity quantity.
