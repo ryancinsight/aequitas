@@ -12,6 +12,8 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Optional `serde` support serializes quantities as their canonical scalar
+  values while retaining compile-time dimensions in Rust APIs.
 - Surface-tension quantity with a distinct semantic dimension and coherent
   `N/m` unit for interfacial and cavitation contracts.
 - Mass-density-rate quantity with the coherent `kg/(m³·s)` unit for typed
