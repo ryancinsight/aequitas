@@ -45,6 +45,8 @@ pub type Frequency<T = f64> = Quantity<T, dimensions::Frequency>;
 pub type ReciprocalTime<T = f64> = Quantity<T, dimensions::ReciprocalTime>;
 /// Pressure quantity.
 pub type Pressure<T = f64> = Quantity<T, dimensions::Pressure>;
+/// Pressure-per-electric-current quantity.
+pub type PressurePerElectricCurrent<T = f64> = Quantity<T, dimensions::PressurePerElectricCurrent>;
 /// Pressure-gradient quantity.
 pub type PressureGradient<T = f64> = Quantity<T, dimensions::PressureGradient>;
 /// Hydraulic-resistance quantity.
@@ -53,6 +55,11 @@ pub type HydraulicResistance<T = f64> = Quantity<T, dimensions::HydraulicResista
 pub type HydraulicInertance<T = f64> = Quantity<T, dimensions::HydraulicInertance>;
 /// Hydraulic-compliance quantity.
 pub type Compliance<T = f64> = Quantity<T, dimensions::Compliance>;
+/// Quadratic-hydraulic-resistance quantity.
+pub type QuadraticHydraulicResistance<T = f64> =
+    Quantity<T, dimensions::QuadraticHydraulicResistance>;
+/// Hydraulic-conductance quantity.
+pub type HydraulicConductance<T = f64> = Quantity<T, dimensions::HydraulicConductance>;
 /// Energy quantity.
 pub type Energy<T = f64> = Quantity<T, dimensions::Energy>;
 /// Energy-per-area quantity.

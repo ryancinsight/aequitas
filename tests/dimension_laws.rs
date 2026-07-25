@@ -3,9 +3,10 @@
 use aequitas::systems::si::{
     quantities::{
         AbsorbedDose, AcousticImpedance, Angle, Area, AreaPerMass, Compliance, Dimensionless,
-        DynamicViscosity, Energy, EnergyPerArea, EnergyPerVolume, HydraulicInertance,
-        HydraulicResistance, Intensity, KinematicViscosity, Length, Mass, MassDensity,
-        MassDensityRate, MolarEnergy, MolarHeatCapacity, Power, Pressure, PressureGradient,
+        DynamicViscosity, ElectricCurrent, Energy, EnergyPerArea, EnergyPerVolume,
+        HydraulicInertance, HydraulicResistance, Intensity, KinematicViscosity, Length, Mass,
+        MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, Power, Pressure,
+        PressureGradient, PressurePerElectricCurrent, QuadraticHydraulicResistance,
         ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
         SpecificHeatCapacity, SurfaceTension, TemperatureDifference, ThermalConductivity,
         ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume, VolumetricFlowRate,
@@ -143,6 +144,18 @@ fn vascular_result_dimensions_are_named() {
     assert_eq!(resistance.into_base(), 1.0 / 3.0);
     assert_eq!(inertance.into_base(), 4.0 / 3.0);
     assert_eq!(compliance.into_base(), 5.0);
+}
+
+#[test]
+fn transducer_and_quadratic_flow_dimensions_are_named() {
+    let pressure = Pressure::from_base(8.0_f64);
+    let current = ElectricCurrent::from_base(2.0_f64);
+    let gain: PressurePerElectricCurrent = pressure / current;
+    let flow = VolumetricFlowRate::from_base(3.0_f64);
+    let quadratic_resistance: QuadraticHydraulicResistance = pressure / (flow * flow);
+
+    assert_eq!(gain.into_base(), 4.0);
+    assert_eq!(quadratic_resistance.into_base(), 8.0 / 9.0);
 }
 
 #[test]

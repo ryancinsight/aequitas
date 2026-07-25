@@ -1,6 +1,6 @@
 //! Canonical SI dimension aliases.
 
-use typenum::{N1, N2, N3, N4, P1, P2, P3, P4, Z0};
+use typenum::{N1, N2, N3, N4, N7, P1, P2, P3, P4, Z0};
 
 use crate::dimension::{
     AbsoluteTemperatureSemantics, AngleSemantics, Dimension, SurfaceTensionSemantics,
@@ -49,6 +49,8 @@ pub type Frequency = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
 pub type ReciprocalTime = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Pressure.
 pub type Pressure = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
+/// Pressure per electric current, used for pressure transducer gain.
+pub type PressurePerElectricCurrent = Dimension<N1, P1, N2, N1, Z0, Z0, Z0>;
 /// Pressure gradient, pressure per length.
 pub type PressureGradient = Dimension<N2, P1, N2, Z0, Z0, Z0, Z0>;
 /// Hydraulic resistance, pressure per volumetric flow rate.
@@ -57,6 +59,10 @@ pub type HydraulicResistance = Dimension<N4, P1, N1, Z0, Z0, Z0, Z0>;
 pub type HydraulicInertance = Dimension<N4, P1, Z0, Z0, Z0, Z0, Z0>;
 /// Hydraulic compliance, volume per pressure.
 pub type Compliance = Dimension<P4, N1, P2, Z0, Z0, Z0, Z0>;
+/// Quadratic hydraulic resistance, pressure per squared volumetric flow rate.
+pub type QuadraticHydraulicResistance = Dimension<N7, P1, Z0, Z0, Z0, Z0, Z0>;
+/// Hydraulic conductance, volumetric flow rate per pressure.
+pub type HydraulicConductance = Dimension<P4, N1, P1, Z0, Z0, Z0, Z0>;
 /// Energy.
 pub type Energy = Dimension<P2, P1, N2, Z0, Z0, Z0, Z0>;
 /// Energy per area.
