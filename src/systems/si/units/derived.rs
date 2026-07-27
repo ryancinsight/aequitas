@@ -75,6 +75,15 @@ impl LinearUnit<dimensions::Pressure> for Pascal {
     const SCALE: f64 = 1.0;
 }
 
+/// Newton, the coherent SI unit of force.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Newton;
+impl Sealed for Newton {}
+impl LinearUnit<dimensions::Force> for Newton {
+    const SYMBOL: &'static str = "N";
+    const SCALE: f64 = 1.0;
+}
+
 /// Joule, the coherent SI unit of energy.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Joule;

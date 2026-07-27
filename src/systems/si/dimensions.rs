@@ -49,6 +49,8 @@ pub type Frequency = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
 pub type ReciprocalTime = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Pressure.
 pub type Pressure = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
+/// Force.
+pub type Force = Dimension<P1, P1, N2, Z0, Z0, Z0, Z0>;
 /// Pressure per electric current, used for pressure transducer gain.
 pub type PressurePerElectricCurrent = Dimension<N1, P1, N2, N1, Z0, Z0, Z0>;
 /// Pressure gradient, pressure per length.

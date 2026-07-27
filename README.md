@@ -39,7 +39,8 @@ assert_eq!(diffusivity.into_base(), 1.5e-7);
 Fluid and acoustic transport laws retain their dimensions through the same
 arithmetic. Dynamic viscosity divided by density yields kinematic viscosity,
 volumetric flow divided by area yields velocity, and absorption times
-intensity yields volumetric power density. Pressure-per-current transducer
+intensity yields volumetric power density; pressure times area yields force.
+Pressure-per-current transducer
 gain, quadratic hydraulic resistance, and hydraulic conductance are named
 dimensions as well, so nonlinear flow and device-response coefficients cannot
 be substituted across contracts:

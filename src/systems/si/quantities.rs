@@ -45,6 +45,8 @@ pub type Frequency<T = f64> = Quantity<T, dimensions::Frequency>;
 pub type ReciprocalTime<T = f64> = Quantity<T, dimensions::ReciprocalTime>;
 /// Pressure quantity.
 pub type Pressure<T = f64> = Quantity<T, dimensions::Pressure>;
+/// Force quantity.
+pub type Force<T = f64> = Quantity<T, dimensions::Force>;
 /// Pressure-per-electric-current quantity.
 pub type PressurePerElectricCurrent<T = f64> = Quantity<T, dimensions::PressurePerElectricCurrent>;
 /// Pressure-gradient quantity.

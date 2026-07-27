@@ -7,7 +7,7 @@ use aequitas::systems::si::{
     quantities::Length,
     units::{
         Gray, Joule, JoulePerCubicMeter, JoulePerMilliliter, JoulePerMole, JoulePerMoleKelvin,
-        JoulePerSquareMeter, Meter, Millimeter, Pascal, PerCentimeter, PerMeter, PerSecond,
+        JoulePerSquareMeter, Meter, Millimeter, Newton, Pascal, PerCentimeter, PerMeter, PerSecond,
         SquareCentimeterPerGram, SquareMeterPerKilogram, SquareMeterPerSecond,
     },
 };
@@ -32,6 +32,7 @@ fn quantity_layout_matches_scalar_layout() {
 fn dimension_and_unit_markers_occupy_no_storage() {
     assert_eq!(size_of::<dimensions::Length>(), 0);
     assert_eq!(size_of::<dimensions::Pressure>(), 0);
+    assert_eq!(size_of::<dimensions::Force>(), 0);
     assert_eq!(size_of::<dimensions::PressureGradient>(), 0);
     assert_eq!(size_of::<dimensions::HydraulicResistance>(), 0);
     assert_eq!(size_of::<dimensions::HydraulicInertance>(), 0);
@@ -49,6 +50,7 @@ fn dimension_and_unit_markers_occupy_no_storage() {
     assert_eq!(size_of::<Meter>(), 0);
     assert_eq!(size_of::<Millimeter>(), 0);
     assert_eq!(size_of::<Pascal>(), 0);
+    assert_eq!(size_of::<Newton>(), 0);
     assert_eq!(size_of::<Joule>(), 0);
     assert_eq!(size_of::<SquareMeterPerSecond>(), 0);
     assert_eq!(size_of::<Gray>(), 0);

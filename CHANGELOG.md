@@ -12,6 +12,8 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Force quantity with the coherent Newton unit for typed force-balance and
+  mechanical-result contracts.
 - Absorbed-dose-rate dimension with the coherent `Gy/s` and `W/kg` units, plus
   the `SpecificAbsorptionRate` alias. Radiofrequency dosimetry and radiation
   dosimetry name the same coherent SI dimension, so both spellings resolve to

@@ -4,8 +4,8 @@ use aequitas::systems::si::{
     quantities::{
         AbsorbedDose, AbsorbedDoseRate, AcousticImpedance, Angle, Area, AreaPerMass, Compliance,
         Dimensionless, DynamicViscosity, ElectricCurrent, Energy, EnergyPerArea, EnergyPerVolume,
-        HydraulicInertance, HydraulicResistance, Intensity, KinematicViscosity, Length, Mass,
-        MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, Power, Pressure,
+        Force, HydraulicInertance, HydraulicResistance, Intensity, KinematicViscosity, Length,
+        Mass, MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, Power, Pressure,
         PressureGradient, PressurePerElectricCurrent, QuadraticHydraulicResistance,
         ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
         SpecificAbsorptionRate, SpecificHeatCapacity, SurfaceTension, TemperatureDifference,
@@ -15,10 +15,10 @@ use aequitas::systems::si::{
     units::{
         CubicMeterPerSecond, Gray, GrayPerSecond, JoulePerCubicMeter, JoulePerKilogramKelvin,
         JoulePerMilliliter, JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram,
-        KilogramPerCubicMeter, KilogramPerCubicMeterSecond, Meter, MeterPerSecond, NewtonPerMeter,
-        Pascal, PascalSecond, PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Radian, Rayl,
-        Second, SquareMeter, SquareMeterPerSecond, Watt, WattPerCubicMeter, WattPerKilogram,
-        WattPerSquareMeter,
+        KilogramPerCubicMeter, KilogramPerCubicMeterSecond, Meter, MeterPerSecond, Newton,
+        NewtonPerMeter, Pascal, PascalSecond, PerKelvin, PerMeter, PerSecond, PerSquareKelvin,
+        Radian, Rayl, Second, SquareMeter, SquareMeterPerSecond, Watt, WattPerCubicMeter,
+        WattPerKilogram, WattPerSquareMeter,
     },
 };
 
@@ -50,6 +50,15 @@ fn pressure_times_volume_is_energy() {
     let energy: Energy = pressure * volume;
 
     assert_eq!(energy.into_base().to_bits(), 48.0_f64.to_bits());
+}
+
+#[test]
+fn pressure_times_area_is_force() {
+    let pressure = Pressure::from_unit::<Pascal>(6.0_f64);
+    let area = Area::from_unit::<SquareMeter>(2.0_f64);
+    let force: Force = pressure * area;
+
+    assert_eq!(force.in_unit::<Newton>().to_bits(), 12.0_f64.to_bits());
 }
 
 #[test]
