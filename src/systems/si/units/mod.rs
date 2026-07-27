@@ -6,12 +6,12 @@ mod scaled;
 
 pub use base::{Ampere, Candela, Kelvin, Kilogram, Meter, Mole, Radian, Second};
 pub use derived::{
-    CubicMeter, CubicMeterPerSecond, Gray, Hertz, Joule, JoulePerCubicMeter, JoulePerKelvin,
-    JoulePerKilogramKelvin, JoulePerMole, JoulePerMoleKelvin, JoulePerSquareMeter,
+    CubicMeter, CubicMeterPerSecond, Gray, GrayPerSecond, Hertz, Joule, JoulePerCubicMeter,
+    JoulePerKelvin, JoulePerKilogramKelvin, JoulePerMole, JoulePerMoleKelvin, JoulePerSquareMeter,
     KilogramPerCubicMeter, KilogramPerCubicMeterSecond, MeterPerSecond, NewtonPerMeter, Pascal,
     PascalSecond, PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Rayl, SquareMeter,
-    SquareMeterPerKilogram, SquareMeterPerSecond, Watt, WattPerCubicMeter, WattPerMeterKelvin,
-    WattPerSquareMeter,
+    SquareMeterPerKilogram, SquareMeterPerSecond, Watt, WattPerCubicMeter, WattPerKilogram,
+    WattPerMeterKelvin, WattPerSquareMeter,
 };
 pub use scaled::{
     Centimeter, CubicMillimeter, ElectronVolt, Gram, GramPerCubicCentimeter, JoulePerMilliliter,

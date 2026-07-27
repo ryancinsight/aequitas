@@ -71,6 +71,27 @@ assert_eq!(velocity.into_base(), 0.2);
 assert_eq!(power_density.into_base(), 24.0);
 ```
 
+Volumetric power density divided by mass density yields specific absorption
+rate, which is the same coherent dimension as absorbed dose rate. `W/kg` and
+`Gy/s` therefore name one axis, so radiofrequency and radiation dosimetry share
+a deposition vocabulary without a conversion:
+
+```rust
+use aequitas::systems::si::{
+    quantities::{AbsorbedDose, MassDensity, SpecificAbsorptionRate, Time, VolumetricPowerDensity},
+    units::{GrayPerSecond, KilogramPerCubicMeter, Second, WattPerCubicMeter, WattPerKilogram},
+};
+
+let deposition = VolumetricPowerDensity::from_unit::<WattPerCubicMeter>(2_000.0_f64);
+let density = MassDensity::from_unit::<KilogramPerCubicMeter>(1_000.0_f64);
+let rate: SpecificAbsorptionRate = deposition / density;
+let dose: AbsorbedDose = rate * Time::from_unit::<Second>(60.0_f64);
+
+assert_eq!(rate.in_unit::<WattPerKilogram>(), 2.0);
+assert_eq!(rate.in_unit::<GrayPerSecond>(), 2.0);
+assert_eq!(dose.into_base(), 120.0);
+```
+
 Temperature-response coefficients retain their inverse-temperature dimensions:
 
 ```rust

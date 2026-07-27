@@ -2,22 +2,23 @@
 
 use aequitas::systems::si::{
     quantities::{
-        AbsorbedDose, AcousticImpedance, Angle, Area, AreaPerMass, Compliance, Dimensionless,
-        DynamicViscosity, ElectricCurrent, Energy, EnergyPerArea, EnergyPerVolume,
+        AbsorbedDose, AbsorbedDoseRate, AcousticImpedance, Angle, Area, AreaPerMass, Compliance,
+        Dimensionless, DynamicViscosity, ElectricCurrent, Energy, EnergyPerArea, EnergyPerVolume,
         HydraulicInertance, HydraulicResistance, Intensity, KinematicViscosity, Length, Mass,
         MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, Power, Pressure,
         PressureGradient, PressurePerElectricCurrent, QuadraticHydraulicResistance,
         ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
-        SpecificHeatCapacity, SurfaceTension, TemperatureDifference, ThermalConductivity,
-        ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume, VolumetricFlowRate,
-        VolumetricPowerDensity,
+        SpecificAbsorptionRate, SpecificHeatCapacity, SurfaceTension, TemperatureDifference,
+        ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume,
+        VolumetricFlowRate, VolumetricPowerDensity,
     },
     units::{
-        CubicMeterPerSecond, Gray, JoulePerCubicMeter, JoulePerKilogramKelvin, JoulePerMilliliter,
-        JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter,
-        KilogramPerCubicMeterSecond, Meter, MeterPerSecond, NewtonPerMeter, Pascal, PascalSecond,
-        PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Radian, Rayl, Second, SquareMeter,
-        SquareMeterPerSecond, Watt, WattPerCubicMeter, WattPerSquareMeter,
+        CubicMeterPerSecond, Gray, GrayPerSecond, JoulePerCubicMeter, JoulePerKilogramKelvin,
+        JoulePerMilliliter, JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram,
+        KilogramPerCubicMeter, KilogramPerCubicMeterSecond, Meter, MeterPerSecond, NewtonPerMeter,
+        Pascal, PascalSecond, PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Radian, Rayl,
+        Second, SquareMeter, SquareMeterPerSecond, Watt, WattPerCubicMeter, WattPerKilogram,
+        WattPerSquareMeter,
     },
 };
 
@@ -140,10 +141,10 @@ fn vascular_result_dimensions_are_named() {
     let inertance: HydraulicInertance = resistance * time;
     let compliance: Compliance = Volume::from_base(5.0_f64) / pressure;
 
-    assert_eq!(gradient.into_base(), 0.5);
-    assert_eq!(resistance.into_base(), 1.0 / 3.0);
-    assert_eq!(inertance.into_base(), 4.0 / 3.0);
-    assert_eq!(compliance.into_base(), 5.0);
+    assert_eq!(gradient.into_base().to_bits(), 0.5_f64.to_bits());
+    assert_eq!(resistance.into_base().to_bits(), (1.0_f64 / 3.0).to_bits());
+    assert_eq!(inertance.into_base().to_bits(), (4.0_f64 / 3.0).to_bits());
+    assert_eq!(compliance.into_base().to_bits(), 5.0_f64.to_bits());
 }
 
 #[test]
@@ -154,8 +155,11 @@ fn transducer_and_quadratic_flow_dimensions_are_named() {
     let flow = VolumetricFlowRate::from_base(3.0_f64);
     let quadratic_resistance: QuadraticHydraulicResistance = pressure / (flow * flow);
 
-    assert_eq!(gain.into_base(), 4.0);
-    assert_eq!(quadratic_resistance.into_base(), 8.0 / 9.0);
+    assert_eq!(gain.into_base().to_bits(), 4.0_f64.to_bits());
+    assert_eq!(
+        quadratic_resistance.into_base().to_bits(),
+        (8.0_f64 / 9.0).to_bits()
+    );
 }
 
 #[test]
@@ -274,5 +278,55 @@ fn absolute_temperature_arithmetic_preserves_affine_semantics() {
     assert_eq!(
         (upper - delta).in_unit::<Kelvin>().to_bits(),
         290.0_f64.to_bits()
+    );
+}
+
+#[test]
+fn power_divided_by_mass_is_specific_absorption_rate() {
+    let power = Power::from_unit::<Watt>(12.0_f64);
+    let mass = Mass::from_unit::<Kilogram>(3.0_f64);
+    let sar: SpecificAbsorptionRate = power / mass;
+
+    assert_eq!(
+        sar.in_unit::<WattPerKilogram>().to_bits(),
+        4.0_f64.to_bits()
+    );
+}
+
+#[test]
+fn absorbed_dose_divided_by_time_is_absorbed_dose_rate() {
+    let dose = AbsorbedDose::from_unit::<Gray>(8.0_f64);
+    let time = Time::from_unit::<Second>(2.0_f64);
+    let rate: AbsorbedDoseRate = dose / time;
+
+    assert_eq!(rate.in_unit::<GrayPerSecond>().to_bits(), 4.0_f64.to_bits());
+}
+
+#[test]
+fn absorbed_dose_rate_times_time_is_absorbed_dose() {
+    let rate = AbsorbedDoseRate::from_unit::<GrayPerSecond>(2.5_f64);
+    let time = Time::from_unit::<Second>(4.0_f64);
+    let dose: AbsorbedDose = rate * time;
+
+    assert_eq!(dose.in_unit::<Gray>().to_bits(), 10.0_f64.to_bits());
+}
+
+#[test]
+fn watt_per_kilogram_and_gray_per_second_are_one_coherent_unit() {
+    let sar = SpecificAbsorptionRate::from_unit::<WattPerKilogram>(7.5_f64);
+
+    assert_eq!(sar.in_unit::<GrayPerSecond>().to_bits(), 7.5_f64.to_bits());
+    assert_eq!(sar.into_base().to_bits(), 7.5_f64.to_bits());
+}
+
+#[test]
+fn volumetric_power_density_divided_by_mass_density_is_specific_absorption_rate() {
+    let deposition = VolumetricPowerDensity::from_unit::<WattPerCubicMeter>(2_000.0_f64);
+    let density = MassDensity::from_unit::<KilogramPerCubicMeter>(1_000.0_f64);
+    let sar: SpecificAbsorptionRate = deposition / density;
+
+    assert_eq!(
+        sar.in_unit::<WattPerKilogram>().to_bits(),
+        2.0_f64.to_bits()
     );
 }

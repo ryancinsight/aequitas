@@ -68,6 +68,11 @@ pub type EnergyPerArea<T = f64> = Quantity<T, dimensions::EnergyPerArea>;
 pub type SurfaceTension<T = f64> = Quantity<T, dimensions::SurfaceTension>;
 /// Absorbed-dose quantity.
 pub type AbsorbedDose<T = f64> = Quantity<T, dimensions::AbsorbedDose>;
+/// Absorbed-dose-rate quantity, equivalently power per mass.
+pub type AbsorbedDoseRate<T = f64> = Quantity<T, dimensions::AbsorbedDoseRate>;
+/// Specific-absorption-rate quantity, the radiofrequency-dosimetry name for
+/// absorbed dose rate.
+pub type SpecificAbsorptionRate<T = f64> = Quantity<T, dimensions::SpecificAbsorptionRate>;
 /// Molar-energy quantity.
 pub type MolarEnergy<T = f64> = Quantity<T, dimensions::MolarEnergy>;
 /// Molar-heat-capacity quantity.

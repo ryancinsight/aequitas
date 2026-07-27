@@ -71,6 +71,12 @@ pub type EnergyPerArea = Dimension<Z0, P1, N2, Z0, Z0, Z0, Z0>;
 pub type SurfaceTension = Dimension<Z0, P1, N2, Z0, Z0, Z0, Z0, SurfaceTensionSemantics>;
 /// Absorbed dose or specific energy.
 pub type AbsorbedDose = Dimension<P2, Z0, N2, Z0, Z0, Z0, Z0>;
+/// Absorbed dose rate, equivalently power per mass.
+pub type AbsorbedDoseRate = Dimension<P2, Z0, N3, Z0, Z0, Z0, Z0>;
+/// Specific absorption rate, the radiofrequency-dosimetry name for absorbed
+/// dose rate. `W/kg` and `Gy/s` are the same coherent SI dimension, so this is
+/// an alias rather than a distinct axis.
+pub type SpecificAbsorptionRate = AbsorbedDoseRate;
 /// Energy per amount of substance.
 pub type MolarEnergy = Dimension<P2, P1, N2, Z0, Z0, N1, Z0>;
 /// Heat capacity per amount of substance.

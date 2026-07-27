@@ -12,6 +12,13 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Absorbed-dose-rate dimension with the coherent `Gy/s` and `W/kg` units, plus
+  the `SpecificAbsorptionRate` alias. Radiofrequency dosimetry and radiation
+  dosimetry name the same coherent SI dimension, so both spellings resolve to
+  one axis and convert without a scale factor. Completes the interface
+  vocabulary for the Atlas deposition spine, whose remaining quantities
+  (`Intensity`, `VolumetricPowerDensity`, `EnergyPerArea`, `AbsorbedDose`, and
+  the bioheat coefficient set) were already present.
 - Angle quantity with a distinct radian semantic contract for typed rotational
   and plane-wave geometry.
 - Pressure-per-electric-current, quadratic hydraulic-resistance, and hydraulic
