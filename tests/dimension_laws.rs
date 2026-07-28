@@ -2,10 +2,11 @@
 
 use aequitas::systems::si::{
     quantities::{
-        AbsorbedDose, AbsorbedDoseRate, AcousticImpedance, Angle, Area, AreaPerMass, Compliance,
-        Dimensionless, DynamicViscosity, ElectricCurrent, Energy, EnergyPerArea, EnergyPerVolume,
-        Force, HydraulicInertance, HydraulicResistance, Intensity, KinematicViscosity, Length,
-        Mass, MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, NumberDensity, Power,
+        AbsorbedDose, AbsorbedDoseRate, AcousticImpedance, Angle, Area, AreaPerMass, Capacitance,
+        Compliance, Dimensionless, DynamicViscosity, ElectricCharge, ElectricConductance,
+        ElectricCurrent, ElectricPotential, Energy, EnergyPerArea, EnergyPerVolume, Force,
+        HydraulicInertance, HydraulicResistance, Intensity, KinematicViscosity, Length, Mass,
+        MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, NumberDensity, Power,
         Pressure, PressureGradient, PressurePerElectricCurrent, QuadraticHydraulicResistance,
         ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
         SpecificAbsorptionRate, SpecificHeatCapacity, SurfaceTension, TemperatureDifference,
@@ -13,12 +14,12 @@ use aequitas::systems::si::{
         VolumetricFlowRate, VolumetricPowerDensity,
     },
     units::{
-        CubicMeterPerSecond, Gray, GrayPerSecond, JoulePerCubicMeter, JoulePerKilogramKelvin,
-        JoulePerMilliliter, JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram,
-        KilogramPerCubicMeter, KilogramPerCubicMeterSecond, Meter, MeterPerSecond, Newton,
-        NewtonPerMeter, Pascal, PascalSecond, PerCubicMeter, PerKelvin, PerMeter, PerSecond,
-        PerSquareKelvin, Radian, Rayl, Second, SquareMeter, SquareMeterPerSecond, Watt,
-        WattPerCubicMeter, WattPerKilogram, WattPerSquareMeter,
+        Ampere, Coulomb, CubicMeterPerSecond, Farad, Gray, GrayPerSecond, JoulePerCubicMeter,
+        JoulePerKilogramKelvin, JoulePerMilliliter, JoulePerMole, JoulePerMoleKelvin, Kelvin,
+        Kilogram, KilogramPerCubicMeter, KilogramPerCubicMeterSecond, Meter, MeterPerSecond,
+        Newton, NewtonPerMeter, Pascal, PascalSecond, PerCubicMeter, PerKelvin, PerMeter,
+        PerSecond, PerSquareKelvin, Radian, Rayl, Second, Siemens, SquareMeter,
+        SquareMeterPerSecond, Volt, Watt, WattPerCubicMeter, WattPerKilogram, WattPerSquareMeter,
     },
 };
 
@@ -175,6 +176,23 @@ fn transducer_and_quadratic_flow_dimensions_are_named() {
     assert_eq!(
         quadratic_resistance.into_base().to_bits(),
         (8.0_f64 / 9.0).to_bits()
+    );
+}
+
+#[test]
+fn electrical_dimensions_compose_from_base_quantities() {
+    let current = ElectricCurrent::from_unit::<Ampere>(2.0_f64);
+    let duration = Time::from_unit::<Second>(3.0_f64);
+    let charge: ElectricCharge = current * duration;
+    let potential = ElectricPotential::from_unit::<Volt>(5.0_f64);
+    let capacitance: Capacitance = charge / potential;
+    let conductance: ElectricConductance = current / potential;
+
+    assert_eq!(charge.in_unit::<Coulomb>().to_bits(), 6.0_f64.to_bits());
+    assert_eq!(capacitance.in_unit::<Farad>().to_bits(), 1.2_f64.to_bits());
+    assert_eq!(
+        conductance.in_unit::<Siemens>().to_bits(),
+        0.4_f64.to_bits()
     );
 }
 

@@ -18,6 +18,14 @@ pub type Mass<T = f64> = Quantity<T, dimensions::Mass>;
 pub type Time<T = f64> = Quantity<T, dimensions::Time>;
 /// Electric-current quantity.
 pub type ElectricCurrent<T = f64> = Quantity<T, dimensions::ElectricCurrent>;
+/// Electric-charge quantity.
+pub type ElectricCharge<T = f64> = Quantity<T, dimensions::ElectricCharge>;
+/// Electric-potential quantity.
+pub type ElectricPotential<T = f64> = Quantity<T, dimensions::ElectricPotential>;
+/// Electric-conductance quantity.
+pub type ElectricConductance<T = f64> = Quantity<T, dimensions::ElectricConductance>;
+/// Capacitance quantity.
+pub type Capacitance<T = f64> = Quantity<T, dimensions::Capacitance>;
 /// Thermodynamic-temperature quantity.
 pub type ThermodynamicTemperature<T = f64> = Quantity<T, dimensions::ThermodynamicTemperature>;
 /// Temperature-difference quantity.

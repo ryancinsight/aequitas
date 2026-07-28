@@ -6,9 +6,10 @@ use aequitas::systems::si::{
     dimensions,
     quantities::Length,
     units::{
-        Gray, Joule, JoulePerCubicMeter, JoulePerMilliliter, JoulePerMole, JoulePerMoleKelvin,
-        JoulePerSquareMeter, Meter, Millimeter, Newton, Pascal, PerCentimeter, PerMeter, PerSecond,
-        SquareCentimeterPerGram, SquareMeterPerKilogram, SquareMeterPerSecond,
+        Coulomb, Farad, Gray, Joule, JoulePerCubicMeter, JoulePerMilliliter, JoulePerMole,
+        JoulePerMoleKelvin, JoulePerSquareMeter, Meter, Millimeter, Newton, Pascal, PerCentimeter,
+        PerMeter, PerSecond, Siemens, SquareCentimeterPerGram, SquareMeterPerKilogram,
+        SquareMeterPerSecond, Volt,
     },
 };
 use eunomia::{Bf16, F16, F32, F64};
@@ -46,12 +47,20 @@ fn dimension_and_unit_markers_occupy_no_storage() {
     assert_eq!(size_of::<dimensions::EnergyPerArea>(), 0);
     assert_eq!(size_of::<dimensions::EnergyPerVolume>(), 0);
     assert_eq!(size_of::<dimensions::NumberDensity>(), 0);
+    assert_eq!(size_of::<dimensions::ElectricCharge>(), 0);
+    assert_eq!(size_of::<dimensions::ElectricPotential>(), 0);
+    assert_eq!(size_of::<dimensions::ElectricConductance>(), 0);
+    assert_eq!(size_of::<dimensions::Capacitance>(), 0);
     assert_eq!(size_of::<dimensions::MassDensityRate>(), 0);
     assert_eq!(size_of::<dimensions::TemperatureDifference>(), 0);
     assert_eq!(size_of::<Meter>(), 0);
     assert_eq!(size_of::<Millimeter>(), 0);
     assert_eq!(size_of::<Pascal>(), 0);
     assert_eq!(size_of::<Newton>(), 0);
+    assert_eq!(size_of::<Coulomb>(), 0);
+    assert_eq!(size_of::<Volt>(), 0);
+    assert_eq!(size_of::<Siemens>(), 0);
+    assert_eq!(size_of::<Farad>(), 0);
     assert_eq!(size_of::<Joule>(), 0);
     assert_eq!(size_of::<SquareMeterPerSecond>(), 0);
     assert_eq!(size_of::<Gray>(), 0);

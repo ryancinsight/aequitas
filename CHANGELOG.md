@@ -12,6 +12,9 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Electrical charge, potential, conductance, and capacitance quantities with
+  coherent Coulomb, Volt, Siemens, and Farad units for typed biophysical and
+  sonogenetics contracts.
 - Number-density quantity with the coherent `m⁻³` unit for typed population and
   concentration contracts.
 - Force quantity with the coherent Newton unit for typed force-balance and

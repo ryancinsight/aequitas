@@ -21,6 +21,14 @@ pub type Mass = Dimension<Z0, P1, Z0, Z0, Z0, Z0, Z0>;
 pub type Time = Dimension<Z0, Z0, P1, Z0, Z0, Z0, Z0>;
 /// Electric current.
 pub type ElectricCurrent = Dimension<Z0, Z0, Z0, P1, Z0, Z0, Z0>;
+/// Electric charge, current multiplied by time.
+pub type ElectricCharge = Dimension<Z0, Z0, P1, P1, Z0, Z0, Z0>;
+/// Electric potential, energy per electric charge.
+pub type ElectricPotential = Dimension<P2, P1, N3, N1, Z0, Z0, Z0>;
+/// Electric conductance, electric current per electric potential.
+pub type ElectricConductance = Dimension<N2, N1, P3, P2, Z0, Z0, Z0>;
+/// Capacitance, electric charge per electric potential.
+pub type Capacitance = Dimension<N2, N1, P4, P2, Z0, Z0, Z0>;
 /// Absolute thermodynamic temperature.
 pub type ThermodynamicTemperature =
     Dimension<Z0, Z0, Z0, Z0, P1, Z0, Z0, AbsoluteTemperatureSemantics>;

@@ -93,6 +93,42 @@ impl LinearUnit<dimensions::Force> for Newton {
     const SCALE: f64 = 1.0;
 }
 
+/// Coulomb, the coherent SI unit of electric charge.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Coulomb;
+impl Sealed for Coulomb {}
+impl LinearUnit<dimensions::ElectricCharge> for Coulomb {
+    const SYMBOL: &'static str = "C";
+    const SCALE: f64 = 1.0;
+}
+
+/// Volt, the coherent SI unit of electric potential.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Volt;
+impl Sealed for Volt {}
+impl LinearUnit<dimensions::ElectricPotential> for Volt {
+    const SYMBOL: &'static str = "V";
+    const SCALE: f64 = 1.0;
+}
+
+/// Siemens, the coherent SI unit of electric conductance.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Siemens;
+impl Sealed for Siemens {}
+impl LinearUnit<dimensions::ElectricConductance> for Siemens {
+    const SYMBOL: &'static str = "S";
+    const SCALE: f64 = 1.0;
+}
+
+/// Farad, the coherent SI unit of capacitance.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Farad;
+impl Sealed for Farad {}
+impl LinearUnit<dimensions::Capacitance> for Farad {
+    const SYMBOL: &'static str = "F";
+    const SCALE: f64 = 1.0;
+}
+
 /// Joule, the coherent SI unit of energy.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Joule;

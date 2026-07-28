@@ -148,6 +148,24 @@ let quarter_turn = Angle::from_unit::<Radian>(core::f64::consts::FRAC_PI_2);
 assert_eq!(quarter_turn.in_unit::<Radian>(), core::f64::consts::FRAC_PI_2);
 ```
 
+Electrical contracts compose current, time, and potential without raw unit
+conventions:
+
+```rust
+use aequitas::systems::si::{
+    quantities::{Capacitance, ElectricCharge, ElectricCurrent, ElectricPotential, Time},
+    units::{Ampere, Coulomb, Farad, Second, Volt},
+};
+
+let current = ElectricCurrent::from_unit::<Ampere>(2.0_f64);
+let charge: ElectricCharge = current * Time::from_unit::<Second>(3.0_f64);
+let potential = ElectricPotential::from_unit::<Volt>(5.0_f64);
+let capacitance: Capacitance = charge / potential;
+
+assert_eq!(charge.in_unit::<Coulomb>(), 6.0);
+assert_eq!(capacitance.in_unit::<Farad>(), 1.2);
+```
+
 Absolute temperature and temperature difference use distinct semantic markers.
 Subtracting two absolute temperatures produces a difference; adding a
 difference to an absolute temperature produces an absolute temperature:
