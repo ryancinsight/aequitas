@@ -41,6 +41,8 @@ pub type Area = Dimension<P2, Z0, Z0, Z0, Z0, Z0, Z0>;
 pub type AreaPerMass = Dimension<P2, N1, Z0, Z0, Z0, Z0, Z0>;
 /// Volume.
 pub type Volume = Dimension<P3, Z0, Z0, Z0, Z0, Z0, Z0>;
+/// Number density, expressed as entities per volume.
+pub type NumberDensity = Dimension<N3, Z0, Z0, Z0, Z0, Z0, Z0>;
 /// Velocity.
 pub type Velocity = Dimension<P1, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Frequency.

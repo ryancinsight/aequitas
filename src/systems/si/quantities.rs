@@ -37,6 +37,8 @@ pub type Area<T = f64> = Quantity<T, dimensions::Area>;
 pub type AreaPerMass<T = f64> = Quantity<T, dimensions::AreaPerMass>;
 /// Volume quantity.
 pub type Volume<T = f64> = Quantity<T, dimensions::Volume>;
+/// Number-density quantity, expressed as entities per volume.
+pub type NumberDensity<T = f64> = Quantity<T, dimensions::NumberDensity>;
 /// Velocity quantity.
 pub type Velocity<T = f64> = Quantity<T, dimensions::Velocity>;
 /// Frequency quantity.

@@ -45,6 +45,7 @@ fn dimension_and_unit_markers_occupy_no_storage() {
     assert_eq!(size_of::<dimensions::AreaPerMass>(), 0);
     assert_eq!(size_of::<dimensions::EnergyPerArea>(), 0);
     assert_eq!(size_of::<dimensions::EnergyPerVolume>(), 0);
+    assert_eq!(size_of::<dimensions::NumberDensity>(), 0);
     assert_eq!(size_of::<dimensions::MassDensityRate>(), 0);
     assert_eq!(size_of::<dimensions::TemperatureDifference>(), 0);
     assert_eq!(size_of::<Meter>(), 0);
@@ -64,6 +65,7 @@ fn dimension_and_unit_markers_occupy_no_storage() {
     assert_eq!(size_of::<JoulePerSquareMeter>(), 0);
     assert_eq!(size_of::<JoulePerCubicMeter>(), 0);
     assert_eq!(size_of::<JoulePerMilliliter>(), 0);
+    assert_eq!(size_of::<aequitas::systems::si::units::PerCubicMeter>(), 0);
     assert_eq!(
         size_of::<aequitas::systems::si::units::KilogramPerCubicMeterSecond>(),
         0

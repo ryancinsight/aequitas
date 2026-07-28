@@ -72,6 +72,19 @@ assert_eq!(velocity.into_base(), 0.2);
 assert_eq!(power_density.into_base(), 24.0);
 ```
 
+Entity concentration has its own number-density contract, so population
+models do not pass a raw scalar where a mass density is expected:
+
+```rust
+use aequitas::systems::si::{
+    quantities::NumberDensity,
+    units::PerCubicMeter,
+};
+
+let concentration = NumberDensity::from_unit::<PerCubicMeter>(1.0e12_f64);
+assert_eq!(concentration.into_base(), 1.0e12);
+```
+
 Volumetric power density divided by mass density yields specific absorption
 rate, which is the same coherent dimension as absorbed dose rate. `W/kg` and
 `Gy/s` therefore name one axis, so radiofrequency and radiation dosimetry share

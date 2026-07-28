@@ -39,6 +39,15 @@ impl LinearUnit<dimensions::Volume> for CubicMeter {
     const SCALE: f64 = 1.0;
 }
 
+/// Per cubic metre, the coherent SI unit of number density.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct PerCubicMeter;
+impl Sealed for PerCubicMeter {}
+impl LinearUnit<dimensions::NumberDensity> for PerCubicMeter {
+    const SYMBOL: &'static str = "m⁻³";
+    const SCALE: f64 = 1.0;
+}
+
 /// Metre per second, the coherent SI unit of velocity.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MeterPerSecond;

@@ -12,6 +12,8 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Number-density quantity with the coherent `m⁻³` unit for typed population and
+  concentration contracts.
 - Force quantity with the coherent Newton unit for typed force-balance and
   mechanical-result contracts.
 - Absorbed-dose-rate dimension with the coherent `Gy/s` and `W/kg` units, plus

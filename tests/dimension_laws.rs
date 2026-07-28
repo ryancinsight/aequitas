@@ -5,8 +5,8 @@ use aequitas::systems::si::{
         AbsorbedDose, AbsorbedDoseRate, AcousticImpedance, Angle, Area, AreaPerMass, Compliance,
         Dimensionless, DynamicViscosity, ElectricCurrent, Energy, EnergyPerArea, EnergyPerVolume,
         Force, HydraulicInertance, HydraulicResistance, Intensity, KinematicViscosity, Length,
-        Mass, MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, Power, Pressure,
-        PressureGradient, PressurePerElectricCurrent, QuadraticHydraulicResistance,
+        Mass, MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, NumberDensity, Power,
+        Pressure, PressureGradient, PressurePerElectricCurrent, QuadraticHydraulicResistance,
         ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
         SpecificAbsorptionRate, SpecificHeatCapacity, SurfaceTension, TemperatureDifference,
         ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume,
@@ -16,9 +16,9 @@ use aequitas::systems::si::{
         CubicMeterPerSecond, Gray, GrayPerSecond, JoulePerCubicMeter, JoulePerKilogramKelvin,
         JoulePerMilliliter, JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram,
         KilogramPerCubicMeter, KilogramPerCubicMeterSecond, Meter, MeterPerSecond, Newton,
-        NewtonPerMeter, Pascal, PascalSecond, PerKelvin, PerMeter, PerSecond, PerSquareKelvin,
-        Radian, Rayl, Second, SquareMeter, SquareMeterPerSecond, Watt, WattPerCubicMeter,
-        WattPerKilogram, WattPerSquareMeter,
+        NewtonPerMeter, Pascal, PascalSecond, PerCubicMeter, PerKelvin, PerMeter, PerSecond,
+        PerSquareKelvin, Radian, Rayl, Second, SquareMeter, SquareMeterPerSecond, Watt,
+        WattPerCubicMeter, WattPerKilogram, WattPerSquareMeter,
     },
 };
 
@@ -30,6 +30,13 @@ fn angle_has_a_distinct_radian_semantic_contract() {
         angle.in_unit::<Radian>().to_bits(),
         core::f64::consts::FRAC_PI_2.to_bits()
     );
+}
+
+#[test]
+fn number_density_uses_the_entity_per_volume_contract() {
+    let concentration = NumberDensity::from_unit::<PerCubicMeter>(1.0e12_f64);
+
+    assert_eq!(concentration.into_base().to_bits(), 1.0e12_f64.to_bits());
 }
 
 #[test]

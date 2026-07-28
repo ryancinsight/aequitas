@@ -9,9 +9,9 @@ pub use derived::{
     CubicMeter, CubicMeterPerSecond, Gray, GrayPerSecond, Hertz, Joule, JoulePerCubicMeter,
     JoulePerKelvin, JoulePerKilogramKelvin, JoulePerMole, JoulePerMoleKelvin, JoulePerSquareMeter,
     KilogramPerCubicMeter, KilogramPerCubicMeterSecond, MeterPerSecond, Newton, NewtonPerMeter,
-    Pascal, PascalSecond, PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Rayl, SquareMeter,
-    SquareMeterPerKilogram, SquareMeterPerSecond, Watt, WattPerCubicMeter, WattPerKilogram,
-    WattPerMeterKelvin, WattPerSquareMeter,
+    Pascal, PascalSecond, PerCubicMeter, PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Rayl,
+    SquareMeter, SquareMeterPerKilogram, SquareMeterPerSecond, Watt, WattPerCubicMeter,
+    WattPerKilogram, WattPerMeterKelvin, WattPerSquareMeter,
 };
 pub use scaled::{
     Centimeter, CubicMillimeter, ElectronVolt, Gram, GramPerCubicCentimeter, JoulePerMilliliter,
