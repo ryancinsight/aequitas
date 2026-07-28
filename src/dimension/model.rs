@@ -16,6 +16,10 @@ pub struct TemperatureDifferenceSemantics;
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct SurfaceTensionSemantics;
 
+/// Semantic marker for mechanical spring stiffness.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct SpringStiffnessSemantics;
+
 /// Semantic marker for plane and rotational angles measured in radians.
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct AngleSemantics;

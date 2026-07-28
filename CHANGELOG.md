@@ -12,6 +12,12 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Mechanical and voltage-transducer dimensions for MEMS consumers: spring
+  stiffness, damping coefficient, pressure-per-potential, potential-per-pressure,
+  length-per-potential, and surface charge density, with coherent SI unit
+  markers. These dimensions keep CMUT/PMUT and sensitivity contracts on the
+  provider-owned quantity surface.
+
 - Complex phasor unit conversion through Eunomia's provider-owned
   `UnitScalar` seam, plus the electrical-impedance `Ω` dimension and unit.
   Real and imaginary components share one physical unit; no imaginary unit is

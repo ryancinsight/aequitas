@@ -61,6 +61,20 @@ pub type Pressure<T = f64> = Quantity<T, dimensions::Pressure>;
 pub type Force<T = f64> = Quantity<T, dimensions::Force>;
 /// Pressure-per-electric-current quantity.
 pub type PressurePerElectricCurrent<T = f64> = Quantity<T, dimensions::PressurePerElectricCurrent>;
+/// Pressure-per-electric-potential quantity.
+pub type PressurePerElectricPotential<T = f64> =
+    Quantity<T, dimensions::PressurePerElectricPotential>;
+/// Electric-potential-per-pressure quantity.
+pub type ElectricPotentialPerPressure<T = f64> =
+    Quantity<T, dimensions::ElectricPotentialPerPressure>;
+/// Length-per-electric-potential quantity.
+pub type LengthPerElectricPotential<T = f64> = Quantity<T, dimensions::LengthPerElectricPotential>;
+/// Surface electric-charge density quantity.
+pub type SurfaceChargeDensity<T = f64> = Quantity<T, dimensions::SurfaceChargeDensity>;
+/// Mechanical spring-stiffness quantity.
+pub type SpringStiffness<T = f64> = Quantity<T, dimensions::SpringStiffness>;
+/// Mechanical damping-coefficient quantity.
+pub type DampingCoefficient<T = f64> = Quantity<T, dimensions::DampingCoefficient>;
 /// Pressure-gradient quantity.
 pub type PressureGradient<T = f64> = Quantity<T, dimensions::PressureGradient>;
 /// Hydraulic-resistance quantity.

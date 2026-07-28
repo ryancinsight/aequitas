@@ -165,6 +165,56 @@ impl LinearUnit<dimensions::SurfaceTension> for NewtonPerMeter {
     const SCALE: f64 = 1.0;
 }
 
+impl LinearUnit<dimensions::SpringStiffness> for NewtonPerMeter {
+    const SYMBOL: &'static str = "N/m";
+    const SCALE: f64 = 1.0;
+}
+
+/// Kilogram per second, the coherent SI unit of mechanical damping coefficient.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct KilogramPerSecond;
+impl Sealed for KilogramPerSecond {}
+impl LinearUnit<dimensions::DampingCoefficient> for KilogramPerSecond {
+    const SYMBOL: &'static str = "kg/s";
+    const SCALE: f64 = 1.0;
+}
+
+/// Pascal per volt, the coherent SI unit of voltage-driven pressure gain.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct PascalPerVolt;
+impl Sealed for PascalPerVolt {}
+impl LinearUnit<dimensions::PressurePerElectricPotential> for PascalPerVolt {
+    const SYMBOL: &'static str = "Pa/V";
+    const SCALE: f64 = 1.0;
+}
+
+/// Volt per pascal, the coherent SI unit of pressure-to-voltage sensitivity.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct VoltPerPascal;
+impl Sealed for VoltPerPascal {}
+impl LinearUnit<dimensions::ElectricPotentialPerPressure> for VoltPerPascal {
+    const SYMBOL: &'static str = "V/Pa";
+    const SCALE: f64 = 1.0;
+}
+
+/// Metre per volt, the coherent SI unit of voltage-driven displacement.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct MeterPerVolt;
+impl Sealed for MeterPerVolt {}
+impl LinearUnit<dimensions::LengthPerElectricPotential> for MeterPerVolt {
+    const SYMBOL: &'static str = "m/V";
+    const SCALE: f64 = 1.0;
+}
+
+/// Coulomb per square metre, the coherent SI unit of surface charge density.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct CoulombPerSquareMeter;
+impl Sealed for CoulombPerSquareMeter {}
+impl LinearUnit<dimensions::SurfaceChargeDensity> for CoulombPerSquareMeter {
+    const SYMBOL: &'static str = "C/m²";
+    const SCALE: f64 = 1.0;
+}
+
 /// Joule per cubic metre, the coherent SI unit of energy per volume.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct JoulePerCubicMeter;

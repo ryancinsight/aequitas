@@ -3,8 +3,8 @@
 use typenum::{N1, N2, N3, N4, N7, P1, P2, P3, P4, Z0};
 
 use crate::dimension::{
-    AbsoluteTemperatureSemantics, AngleSemantics, Dimension, SurfaceTensionSemantics,
-    TemperatureDifferenceSemantics,
+    AbsoluteTemperatureSemantics, AngleSemantics, Dimension, SpringStiffnessSemantics,
+    SurfaceTensionSemantics, TemperatureDifferenceSemantics,
 };
 
 /// Dimensionless quantity.
@@ -65,6 +65,18 @@ pub type Pressure = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
 pub type Force = Dimension<P1, P1, N2, Z0, Z0, Z0, Z0>;
 /// Pressure per electric current, used for pressure transducer gain.
 pub type PressurePerElectricCurrent = Dimension<N1, P1, N2, N1, Z0, Z0, Z0>;
+/// Pressure per electric potential, used for voltage-driven transducer gain.
+pub type PressurePerElectricPotential = Dimension<N3, Z0, P1, P1, Z0, Z0, Z0>;
+/// Electric potential per pressure, the reciprocal receive sensitivity.
+pub type ElectricPotentialPerPressure = Dimension<P3, Z0, N1, N1, Z0, Z0, Z0>;
+/// Length per electric potential, used for piezoelectric deflection.
+pub type LengthPerElectricPotential = Dimension<N1, N1, P3, P1, Z0, Z0, Z0>;
+/// Surface electric-charge density.
+pub type SurfaceChargeDensity = Dimension<N2, Z0, P1, P1, Z0, Z0, Z0>;
+/// Mechanical spring stiffness, force per length.
+pub type SpringStiffness = Dimension<Z0, P1, N2, Z0, Z0, Z0, Z0, SpringStiffnessSemantics>;
+/// Mechanical damping coefficient, force times time per length.
+pub type DampingCoefficient = Dimension<Z0, P1, N1, Z0, Z0, Z0, Z0>;
 /// Pressure gradient, pressure per length.
 pub type PressureGradient = Dimension<N2, P1, N2, Z0, Z0, Z0, Z0>;
 /// Hydraulic resistance, pressure per volumetric flow rate.
