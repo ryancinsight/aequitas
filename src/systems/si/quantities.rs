@@ -24,6 +24,8 @@ pub type ElectricCharge<T = f64> = Quantity<T, dimensions::ElectricCharge>;
 pub type ElectricPotential<T = f64> = Quantity<T, dimensions::ElectricPotential>;
 /// Electric-conductance quantity.
 pub type ElectricConductance<T = f64> = Quantity<T, dimensions::ElectricConductance>;
+/// Electrical-impedance quantity, including complex impedance phasors.
+pub type ElectricalImpedance<T = f64> = Quantity<T, dimensions::ElectricalImpedance>;
 /// Capacitance quantity.
 pub type Capacitance<T = f64> = Quantity<T, dimensions::Capacitance>;
 /// Thermodynamic-temperature quantity.

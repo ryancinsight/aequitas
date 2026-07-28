@@ -1,4 +1,4 @@
-use eunomia::FloatElement;
+use eunomia::UnitScalar;
 
 use super::private;
 
@@ -21,9 +21,9 @@ pub trait LinearUnit<D>: private::Sealed {
     #[must_use]
     fn to_base<T>(value: T) -> T
     where
-        T: FloatElement,
+        T: UnitScalar,
     {
-        value * T::from_f64(Self::SCALE)
+        value.scale_by_f64(Self::SCALE)
     }
 
     /// Convert a value from the canonical SI base unit to this unit.
@@ -31,8 +31,8 @@ pub trait LinearUnit<D>: private::Sealed {
     #[must_use]
     fn from_base<T>(value: T) -> T
     where
-        T: FloatElement,
+        T: UnitScalar,
     {
-        value / T::from_f64(Self::SCALE)
+        value.scale_by_f64(1.0 / Self::SCALE)
     }
 }

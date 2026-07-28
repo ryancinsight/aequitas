@@ -1,4 +1,4 @@
-use eunomia::FloatElement;
+use eunomia::UnitScalar;
 
 use crate::unit::LinearUnit;
 
@@ -6,7 +6,7 @@ use super::Quantity;
 
 impl<T, D> Quantity<T, D>
 where
-    T: FloatElement,
+    T: UnitScalar,
 {
     /// Construct from a value expressed in linear unit `U`.
     ///

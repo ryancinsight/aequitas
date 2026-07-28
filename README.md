@@ -310,7 +310,7 @@ remains a development-only differential oracle.
 | --- | --- | --- |
 | Compile-time dimensional analysis | Mature, broad implementation | Required; implemented through one generic dimension algebra |
 | SI and non-SI breadth | Extensive | Deliberately limited to current Atlas consumers |
-| Storage types | Closed macro-generated set of primitive, integer, rational, and complex types | One implementation over every `eunomia::FloatElement` |
+| Storage types | Closed macro-generated set of primitive, integer, rational, and complex types | Real quantities over Eunomia's `UnitScalar` implementations; complex phasors over `eunomia::Complex32`/`Complex64` |
 | Atlas datatype SSOT | Uses `num-traits` storage contracts | Uses Eunomia directly; defines no scalar vocabulary |
 | API variation | Generates storage-specific modules such as `si::f32` and `si::f64` | One `Quantity<T, D>` API with inferred or defaulted `T` |
 | `no_std` | Supported | Supported |

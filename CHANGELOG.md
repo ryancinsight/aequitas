@@ -12,6 +12,10 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Complex phasor unit conversion through Eunomia's provider-owned
+  `UnitScalar` seam, plus the electrical-impedance `Ω` dimension and unit.
+  Real and imaginary components share one physical unit; no imaginary unit is
+  introduced.
 - Electrical charge, potential, conductance, and capacitance quantities with
   coherent Coulomb, Volt, Siemens, and Farad units for typed biophysical and
   sonogenetics contracts.

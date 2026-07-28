@@ -27,6 +27,8 @@ pub type ElectricCharge = Dimension<Z0, Z0, P1, P1, Z0, Z0, Z0>;
 pub type ElectricPotential = Dimension<P2, P1, N3, N1, Z0, Z0, Z0>;
 /// Electric conductance, electric current per electric potential.
 pub type ElectricConductance = Dimension<N2, N1, P3, P2, Z0, Z0, Z0>;
+/// Electrical impedance, electric potential per electric current.
+pub type ElectricalImpedance = Dimension<P2, P1, N3, N2, Z0, Z0, Z0>;
 /// Capacitance, electric charge per electric potential.
 pub type Capacitance = Dimension<N2, N1, P4, P2, Z0, Z0, Z0>;
 /// Absolute thermodynamic temperature.

@@ -4,11 +4,12 @@ use aequitas::systems::si::{
     quantities::{
         AbsorbedDose, AbsorbedDoseRate, AcousticImpedance, Angle, Area, AreaPerMass, Capacitance,
         Compliance, Dimensionless, DynamicViscosity, ElectricCharge, ElectricConductance,
-        ElectricCurrent, ElectricPotential, Energy, EnergyPerArea, EnergyPerVolume, Force,
-        HydraulicInertance, HydraulicResistance, Intensity, KinematicViscosity, Length, Mass,
-        MassDensity, MassDensityRate, MolarEnergy, MolarHeatCapacity, NumberDensity, Power,
-        Pressure, PressureGradient, PressurePerElectricCurrent, QuadraticHydraulicResistance,
-        ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
+        ElectricCurrent, ElectricPotential, ElectricalImpedance, Energy, EnergyPerArea,
+        EnergyPerVolume, Force, HydraulicInertance, HydraulicResistance, Intensity,
+        KinematicViscosity, Length, Mass, MassDensity, MassDensityRate, MolarEnergy,
+        MolarHeatCapacity, NumberDensity, Power, Pressure, PressureGradient,
+        PressurePerElectricCurrent, QuadraticHydraulicResistance, ReciprocalLength,
+        ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
         SpecificAbsorptionRate, SpecificHeatCapacity, SurfaceTension, TemperatureDifference,
         ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume,
         VolumetricFlowRate, VolumetricPowerDensity,
@@ -194,6 +195,21 @@ fn electrical_dimensions_compose_from_base_quantities() {
         conductance.in_unit::<Siemens>().to_bits(),
         0.4_f64.to_bits()
     );
+}
+
+#[test]
+fn complex_phasors_preserve_units_and_dimension() {
+    use aequitas::systems::si::{quantities::Length, units::Kilometer};
+    use eunomia::Complex64;
+
+    let phasor = Complex64::new(1.25, -2.5);
+    let length: Length<Complex64> = Length::from_unit::<Kilometer>(phasor);
+    assert_eq!(length.in_unit::<Kilometer>(), phasor);
+
+    let voltage = ElectricPotential::from_base(Complex64::new(3.0, 4.0));
+    let current = ElectricCurrent::from_base(Complex64::new(1.0, 0.0));
+    let impedance: ElectricalImpedance<Complex64> = voltage / current;
+    assert_eq!(impedance.into_base(), Complex64::new(3.0, 4.0));
 }
 
 #[test]

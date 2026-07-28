@@ -4,9 +4,9 @@ use aequitas::systems::si::{
     quantities::{Dimensionless, Length, ReciprocalLength, Time, Velocity},
     units::{Meter, MeterPerSecond, Second},
 };
-use eunomia::{Bf4, Bf8, Bf16, F4, F8, F16, F32, F64, FloatElement};
+use eunomia::{Bf4, Bf8, Bf16, F4, F8, F16, F32, F64, FloatElement, UnitScalar};
 
-fn assert_velocity_law<T: FloatElement>() {
+fn assert_velocity_law<T: FloatElement + UnitScalar>() {
     // Two and one are exactly representable even in Eunomia's finite E2M1
     // format, so this checks quantity arithmetic rather than saturation.
     let length = Length::from_unit::<Meter>(T::from_f64(2.0));
@@ -16,7 +16,7 @@ fn assert_velocity_law<T: FloatElement>() {
     assert_eq!(velocity.in_unit::<MeterPerSecond>(), T::from_f64(2.0));
 }
 
-fn assert_optical_depth_law<T: FloatElement>() {
+fn assert_optical_depth_law<T: FloatElement + UnitScalar>() {
     let attenuation = ReciprocalLength::from_base(T::from_f64(2.0));
     let path = Length::from_unit::<Meter>(T::from_f64(1.0));
     let optical_depth: Dimensionless<T> = attenuation * path;

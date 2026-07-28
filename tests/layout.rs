@@ -50,6 +50,7 @@ fn dimension_and_unit_markers_occupy_no_storage() {
     assert_eq!(size_of::<dimensions::ElectricCharge>(), 0);
     assert_eq!(size_of::<dimensions::ElectricPotential>(), 0);
     assert_eq!(size_of::<dimensions::ElectricConductance>(), 0);
+    assert_eq!(size_of::<dimensions::ElectricalImpedance>(), 0);
     assert_eq!(size_of::<dimensions::Capacitance>(), 0);
     assert_eq!(size_of::<dimensions::MassDensityRate>(), 0);
     assert_eq!(size_of::<dimensions::TemperatureDifference>(), 0);

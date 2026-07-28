@@ -120,6 +120,15 @@ impl LinearUnit<dimensions::ElectricConductance> for Siemens {
     const SCALE: f64 = 1.0;
 }
 
+/// Ohm, the coherent SI unit of electrical impedance.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Ohm;
+impl Sealed for Ohm {}
+impl LinearUnit<dimensions::ElectricalImpedance> for Ohm {
+    const SYMBOL: &'static str = "Ω";
+    const SCALE: f64 = 1.0;
+}
+
 /// Farad, the coherent SI unit of capacitance.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Farad;

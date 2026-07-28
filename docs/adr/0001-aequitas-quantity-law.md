@@ -51,8 +51,9 @@ The initial package is one `no_std` crate:
   no dynamic dispatch or runtime dimension vector exists;
 - linear units are sealed zero-sized markers with one default conversion
   implementation;
-- unit coefficient metadata is `f64`, but each coefficient is converted once
-  through `T::from_f64` and all quantity arithmetic executes in `T`;
+- unit coefficient metadata is `f64`, but each coefficient is applied once
+  through Eunomia's `UnitScalar::scale_by_f64` seam and all quantity
+  arithmetic executes in `T`;
 - Eunomia owns scalar representations and numeric laws;
 - `uom` is a development-only differential oracle and is absent from the
   runtime dependency graph.
