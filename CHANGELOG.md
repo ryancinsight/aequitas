@@ -12,6 +12,11 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Electric polarizability with coherent `F·m²` units, including Eunomia
+  `Complex64` phasors, plus a semantically distinct reciprocal-volume quantity
+  for geometric coupling coefficients. Reciprocal volume and entity number
+  density share SI exponents but remain separate type-level contracts.
+
 - Mechanical and voltage-transducer dimensions for MEMS consumers: spring
   stiffness, damping coefficient, pressure-per-potential, potential-per-pressure,
   length-per-potential, and surface charge density, with coherent SI unit
