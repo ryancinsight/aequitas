@@ -138,6 +138,15 @@ impl LinearUnit<dimensions::Capacitance> for Farad {
     const SCALE: f64 = 1.0;
 }
 
+/// Farad square metre, the coherent SI unit of electric polarizability.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct FaradSquareMeter;
+impl Sealed for FaradSquareMeter {}
+impl LinearUnit<dimensions::Polarizability> for FaradSquareMeter {
+    const SYMBOL: &'static str = "F·m²";
+    const SCALE: f64 = 1.0;
+}
+
 /// Joule, the coherent SI unit of energy.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Joule;

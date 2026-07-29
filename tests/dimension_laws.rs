@@ -7,7 +7,7 @@ use aequitas::systems::si::{
         ElectricCurrent, ElectricPotential, ElectricalImpedance, Energy, EnergyPerArea,
         EnergyPerVolume, Force, HydraulicInertance, HydraulicResistance, Intensity,
         KinematicViscosity, Length, Mass, MassDensity, MassDensityRate, MolarEnergy,
-        MolarHeatCapacity, NumberDensity, Power, Pressure, PressureGradient,
+        MolarHeatCapacity, NumberDensity, Polarizability, Power, Pressure, PressureGradient,
         PressurePerElectricCurrent, QuadraticHydraulicResistance, ReciprocalLength,
         ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
         SpecificAbsorptionRate, SpecificHeatCapacity, SurfaceTension, TemperatureDifference,
@@ -210,6 +210,20 @@ fn complex_phasors_preserve_units_and_dimension() {
     let current = ElectricCurrent::from_base(Complex64::new(1.0, 0.0));
     let impedance: ElectricalImpedance<Complex64> = voltage / current;
     assert_eq!(impedance.into_base(), Complex64::new(3.0, 4.0));
+}
+
+#[test]
+fn complex_polarizability_preserves_units_and_dimension() {
+    use aequitas::systems::si::units::FaradSquareMeter;
+    use eunomia::Complex64;
+
+    let alpha: Polarizability<Complex64> =
+        Polarizability::from_unit::<FaradSquareMeter>(Complex64::new(2.0, -0.5));
+
+    assert_eq!(
+        alpha.in_unit::<FaradSquareMeter>(),
+        Complex64::new(2.0, -0.5)
+    );
 }
 
 #[test]

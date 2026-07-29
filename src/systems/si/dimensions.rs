@@ -3,8 +3,8 @@
 use typenum::{N1, N2, N3, N4, N7, P1, P2, P3, P4, Z0};
 
 use crate::dimension::{
-    AbsoluteTemperatureSemantics, AngleSemantics, Dimension, SpringStiffnessSemantics,
-    SurfaceTensionSemantics, TemperatureDifferenceSemantics,
+    AbsoluteTemperatureSemantics, AngleSemantics, Dimension, ReciprocalVolumeSemantics,
+    SpringStiffnessSemantics, SurfaceTensionSemantics, TemperatureDifferenceSemantics,
 };
 
 /// Dimensionless quantity.
@@ -31,6 +31,8 @@ pub type ElectricConductance = Dimension<N2, N1, P3, P2, Z0, Z0, Z0>;
 pub type ElectricalImpedance = Dimension<P2, P1, N3, N2, Z0, Z0, Z0>;
 /// Capacitance, electric charge per electric potential.
 pub type Capacitance = Dimension<N2, N1, P4, P2, Z0, Z0, Z0>;
+/// Electric polarizability, dipole moment per electric field.
+pub type Polarizability = Dimension<Z0, N1, P4, P2, Z0, Z0, Z0>;
 /// Absolute thermodynamic temperature.
 pub type ThermodynamicTemperature =
     Dimension<Z0, Z0, Z0, Z0, P1, Z0, Z0, AbsoluteTemperatureSemantics>;
@@ -53,6 +55,8 @@ pub type AreaPerMass = Dimension<P2, N1, Z0, Z0, Z0, Z0, Z0>;
 pub type Volume = Dimension<P3, Z0, Z0, Z0, Z0, Z0, Z0>;
 /// Number density, expressed as entities per volume.
 pub type NumberDensity = Dimension<N3, Z0, Z0, Z0, Z0, Z0, Z0>;
+/// Reciprocal volume without an entity-count semantic.
+pub type ReciprocalVolume = Dimension<N3, Z0, Z0, Z0, Z0, Z0, Z0, ReciprocalVolumeSemantics>;
 /// Velocity.
 pub type Velocity = Dimension<P1, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Frequency.

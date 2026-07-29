@@ -28,6 +28,8 @@ pub type ElectricConductance<T = f64> = Quantity<T, dimensions::ElectricConducta
 pub type ElectricalImpedance<T = f64> = Quantity<T, dimensions::ElectricalImpedance>;
 /// Capacitance quantity.
 pub type Capacitance<T = f64> = Quantity<T, dimensions::Capacitance>;
+/// Electric polarizability quantity, including complex phasors.
+pub type Polarizability<T = f64> = Quantity<T, dimensions::Polarizability>;
 /// Thermodynamic-temperature quantity.
 pub type ThermodynamicTemperature<T = f64> = Quantity<T, dimensions::ThermodynamicTemperature>;
 /// Temperature-difference quantity.
@@ -49,6 +51,8 @@ pub type AreaPerMass<T = f64> = Quantity<T, dimensions::AreaPerMass>;
 pub type Volume<T = f64> = Quantity<T, dimensions::Volume>;
 /// Number-density quantity, expressed as entities per volume.
 pub type NumberDensity<T = f64> = Quantity<T, dimensions::NumberDensity>;
+/// Reciprocal-volume quantity for geometric field coefficients.
+pub type ReciprocalVolume<T = f64> = Quantity<T, dimensions::ReciprocalVolume>;
 /// Velocity quantity.
 pub type Velocity<T = f64> = Quantity<T, dimensions::Velocity>;
 /// Frequency quantity.

@@ -24,6 +24,10 @@ pub struct SpringStiffnessSemantics;
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct AngleSemantics;
 
+/// Semantic marker for geometric reciprocal-volume coefficients.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct ReciprocalVolumeSemantics;
+
 /// Seven-axis SI dimension vector with an optional semantic marker.
 ///
 /// The type parameters are type-level integer exponents in this order:

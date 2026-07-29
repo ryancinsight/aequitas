@@ -6,5 +6,6 @@ mod model;
 pub use algebra::{DivideDimension, MultiplyDimension};
 pub use model::{
     AbsoluteTemperatureSemantics, AngleSemantics, BaseSemantics, Dimension,
-    SpringStiffnessSemantics, SurfaceTensionSemantics, TemperatureDifferenceSemantics,
+    ReciprocalVolumeSemantics, SpringStiffnessSemantics, SurfaceTensionSemantics,
+    TemperatureDifferenceSemantics,
 };
