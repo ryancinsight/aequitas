@@ -79,7 +79,6 @@ dependencies = [
 [[package]]
 name = "eunomia"
 version = "0.7.0"
-source = "git+https://github.com/ryancinsight/eunomia#7021628fe8eb3637c297105f626ee5df78abda84"
 dependencies = [
  "bytemuck",
  "libm",
@@ -436,3 +435,167 @@ dependencies = [
  "quote",
  "syn 2.0.119",
 ]
+
+[[patch.unused]]
+name = "consus-compression"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "consus-core"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "consus-hdf5"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "consus-io"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "consus-npy"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "consus-onnx"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "consus-zarr"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "athena-core"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "iris"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "tyche-core"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "apollo-fft"
+version = "0.25.0"
+
+[[patch.unused]]
+name = "coeus-autograd"
+version = "0.9.0"
+
+[[patch.unused]]
+name = "coeus-core"
+version = "0.9.0"
+
+[[patch.unused]]
+name = "coeus-optim"
+version = "0.9.0"
+
+[[patch.unused]]
+name = "coeus-tensor"
+version = "0.9.0"
+
+[[patch.unused]]
+name = "hyperion"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "ritk-core"
+version = "0.9.0"
+
+[[patch.unused]]
+name = "ritk-dicom"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "ritk-io"
+version = "0.2.0"
+
+[[patch.unused]]
+name = "ritk-registration"
+version = "0.53.0"
+
+[[patch.unused]]
+name = "hephaestus-core"
+version = "0.18.0"
+
+[[patch.unused]]
+name = "hephaestus-cuda"
+version = "0.18.0"
+
+[[patch.unused]]
+name = "hephaestus-metal"
+version = "0.18.0"
+
+[[patch.unused]]
+name = "hephaestus-rocm"
+version = "0.18.0"
+
+[[patch.unused]]
+name = "hephaestus-wgpu"
+version = "0.18.0"
+
+[[patch.unused]]
+name = "mnemosyne"
+version = "0.6.0"
+
+[[patch.unused]]
+name = "mnemosyne-core"
+version = "0.2.0"
+
+[[patch.unused]]
+name = "moirai"
+version = "0.4.0"
+
+[[patch.unused]]
+name = "moirai-async"
+version = "0.4.0"
+
+[[patch.unused]]
+name = "moirai-gpu"
+version = "0.4.0"
+
+[[patch.unused]]
+name = "moirai-sync"
+version = "0.4.0"
+
+[[patch.unused]]
+name = "horae"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "melinoe"
+version = "0.9.0"
+
+[[patch.unused]]
+name = "asclepius"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "asclepius-coeus"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "hermes-simd"
+version = "0.5.0"
+
+[[patch.unused]]
+name = "gaia"
+version = "0.3.0"
+
+[[patch.unused]]
+name = "leto"
+version = "0.40.0"
+
+[[patch.unused]]
+name = "leto-ops"
+version = "0.40.0"
+
+[[patch.unused]]
+name = "themis"
+version = "0.10.1"
+
+[[patch.unused]]
+name = "proteus"
+version = "0.1.0"
