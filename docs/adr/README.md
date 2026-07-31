@@ -15,3 +15,4 @@
 | [0007](0007-number-density-contract.md) | Name the SI Number-Density Quantity | Accepted |
 | [0008](0008-electrical-quantities.md) | Add SI Electrical Quantities for Biophysical Contracts | Accepted — 2026-07-27 |
 | [0009](0009-complex-physical-quantities.md) | Represent Complex Physical Phasors With Eunomia | — |
+| [0010](0010-molar-concentration-optical-wavelength.md) | Add molar concentration and optical wavelength units | Proposed |
