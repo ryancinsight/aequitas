@@ -2,10 +2,10 @@
 
 use aequitas::systems::si::{
     quantities::{
-        AbsorbedDose, AbsorbedDoseRate, AcousticImpedance, Angle, Area, AreaPerMass, Capacitance,
-        Compliance, Dimensionless, DynamicViscosity, ElectricCharge, ElectricConductance,
-        ElectricCurrent, ElectricPotential, ElectricalImpedance, Energy, EnergyPerArea,
-        EnergyPerVolume, Force, HydraulicInertance, HydraulicResistance, Intensity,
+        AbsorbedDose, AbsorbedDoseRate, AcousticImpedance, Angle, Area, AreaPerMass, AreaPerTime,
+        Capacitance, Compliance, Dimensionless, DynamicViscosity, ElectricCharge,
+        ElectricConductance, ElectricCurrent, ElectricPotential, ElectricalImpedance, Energy,
+        EnergyPerArea, EnergyPerVolume, Force, HydraulicInertance, HydraulicResistance, Intensity,
         KinematicViscosity, Length, Mass, MassDensity, MassDensityRate, MolarEnergy,
         MolarHeatCapacity, NumberDensity, Polarizability, Power, Pressure, PressureGradient,
         PressurePerElectricCurrent, QuadraticHydraulicResistance, ReciprocalLength,
@@ -111,6 +111,13 @@ fn conductivity_over_density_and_specific_heat_is_thermal_diffusivity() {
     let diffusivity: ThermalDiffusivity = conductivity / (density * specific_heat);
 
     assert_eq!(diffusivity.into_base().to_bits(), 1.5e-7_f64.to_bits());
+}
+
+#[test]
+fn planar_flow_rate_per_width_uses_area_per_time() {
+    let flow_per_width = AreaPerTime::from_base(0.25_f64);
+
+    assert_eq!(flow_per_width.into_base().to_bits(), 0.25_f64.to_bits());
 }
 
 #[test]

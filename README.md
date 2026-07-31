@@ -38,6 +38,7 @@ assert_eq!(diffusivity.into_base(), 1.5e-7);
 
 Fluid and acoustic transport laws retain their dimensions through the same
 arithmetic. Dynamic viscosity divided by density yields kinematic viscosity,
+and planar flow per unit width uses the named area-per-time contract,
 volumetric flow divided by area yields velocity, and absorption times
 intensity yields volumetric power density; pressure times area yields force.
 Pressure-per-current transducer

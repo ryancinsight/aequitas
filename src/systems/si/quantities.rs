@@ -117,6 +117,8 @@ pub type HeatCapacity<T = f64> = Quantity<T, dimensions::HeatCapacity>;
 pub type SpecificHeatCapacity<T = f64> = Quantity<T, dimensions::SpecificHeatCapacity>;
 /// Thermal-conductivity quantity.
 pub type ThermalConductivity<T = f64> = Quantity<T, dimensions::ThermalConductivity>;
+/// Area-per-time quantity, including planar flow rate per unit width.
+pub type AreaPerTime<T = f64> = Quantity<T, dimensions::AreaPerTime>;
 /// Thermal-diffusivity quantity.
 pub type ThermalDiffusivity<T = f64> = Quantity<T, dimensions::ThermalDiffusivity>;
 /// Mass-density quantity.

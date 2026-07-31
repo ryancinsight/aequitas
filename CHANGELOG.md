@@ -12,6 +12,10 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Named `AreaPerTime` quantity and dimension for planar flow rate per unit
+  width, sharing one provider-owned SI axis with thermal diffusivity and
+  kinematic viscosity.
+
 - Electric polarizability with coherent `F·m²` units, including Eunomia
   `Complex64` phasors, plus a semantically distinct reciprocal-volume quantity
   for geometric coupling coefficients. Reciprocal volume and entity number
