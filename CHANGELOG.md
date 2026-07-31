@@ -12,8 +12,9 @@ All externally observable changes are recorded here.
 
 ### Added
 
-- Added semantic `MolarConcentration` with `mol/m³` and `µmol/L` units, plus
-  the `Nanometer` length unit for optical contracts. These real-valued units
+- Added semantic `MolarConcentration` with `mol/m³`, `mol/L`, and `µmol/L`
+  units, plus the `Nanometer` length unit for optical contracts. These
+  real-valued units
   preserve Eunomia's complex-valued formula and storage boundaries without
   introducing an imaginary physical unit.
 - Named `AreaPerTime` quantity and dimension for planar flow rate per unit

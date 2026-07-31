@@ -1,7 +1,7 @@
 //! Provider conversion and type-identity regressions.
 
 use aequitas::systems::si::quantities::{Length, MolarConcentration, NumberDensity};
-use aequitas::systems::si::units::{MicromolePerLiter, MolePerCubicMeter, Nanometer};
+use aequitas::systems::si::units::{MicromolePerLiter, MolePerCubicMeter, MolePerLiter, Nanometer};
 
 fn assert_conversion(actual: f64, expected: f64) {
     // One unit-scale multiplication contributes at most a small multiple of
@@ -14,6 +14,7 @@ fn assert_conversion(actual: f64, expected: f64) {
 fn molar_concentration_units_preserve_si_base_values() {
     let threshold = MolarConcentration::from_unit::<MicromolePerLiter>(10.0);
     assert_conversion(threshold.into_base(), 0.01);
+    assert_conversion(threshold.in_unit::<MolePerLiter>(), 1.0e-5);
 
     let coherent = MolarConcentration::from_unit::<MolePerCubicMeter>(0.01);
     assert_conversion(coherent.into_base(), 0.01);

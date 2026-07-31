@@ -84,6 +84,15 @@ impl LinearUnit<dimensions::MolarConcentration> for MicromolePerLiter {
     const SCALE: f64 = 1.0e-3;
 }
 
+/// Mole per litre, the conventional molar concentration unit.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct MolePerLiter;
+impl Sealed for MolePerLiter {}
+impl LinearUnit<dimensions::MolarConcentration> for MolePerLiter {
+    const SYMBOL: &'static str = "mol/L";
+    const SCALE: f64 = 1.0e3;
+}
+
 /// Gram.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Gram;

@@ -16,8 +16,9 @@ provider-owned dimensional vocabulary.
 ## Decision
 
 Add a semantic `MolarConcentration` dimension for amount of substance per
-volume, with coherent `MolePerCubicMeter` and scaled `MicromolePerLiter` units.
-Add the scaled `Nanometer` length unit. Both remain zero-cost aliases over
+volume, with coherent `MolePerCubicMeter` and scaled `MolePerLiter` and
+`MicromolePerLiter` units. Add the scaled `Nanometer` length unit. Both remain
+zero-cost aliases over
 Eunomia scalar storage. Molar concentration and optical wavelength are
 real-valued physical quantities; no imaginary or complex physical unit is
 introduced. Complex values remain at existing Eunomia formula/storage

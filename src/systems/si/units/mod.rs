@@ -18,6 +18,6 @@ pub use derived::{
 pub use scaled::{
     Centimeter, CubicMillimeter, ElectronVolt, Gram, GramPerCubicCentimeter, JoulePerMilliliter,
     Kilohertz, Kilometer, Kilopascal, MegaElectronVolt, Megahertz, Megapascal, MicromolePerLiter,
-    Microsecond, Millimeter, MillipascalSecond, Millisecond, Nanometer, PerCentimeter,
-    SquareCentimeter, SquareCentimeterPerGram,
+    Microsecond, Millimeter, MillipascalSecond, Millisecond, MolePerLiter, Nanometer,
+    PerCentimeter, SquareCentimeter, SquareCentimeterPerGram,
 };
