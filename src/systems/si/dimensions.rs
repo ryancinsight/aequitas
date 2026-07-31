@@ -63,6 +63,8 @@ pub type Velocity = Dimension<P1, Z0, N1, Z0, Z0, Z0, Z0>;
 pub type Frequency = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Reciprocal time.
 pub type ReciprocalTime = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
+/// Reciprocal time squared, used by vorticity-squared metrics.
+pub type ReciprocalTimeSquared = Dimension<Z0, Z0, N2, Z0, Z0, Z0, Z0>;
 /// Pressure.
 pub type Pressure = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
 /// Force.

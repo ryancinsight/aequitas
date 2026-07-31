@@ -59,6 +59,8 @@ pub type Velocity<T = f64> = Quantity<T, dimensions::Velocity>;
 pub type Frequency<T = f64> = Quantity<T, dimensions::Frequency>;
 /// Reciprocal-time quantity.
 pub type ReciprocalTime<T = f64> = Quantity<T, dimensions::ReciprocalTime>;
+/// Reciprocal-time-squared quantity, used by vorticity-squared metrics.
+pub type ReciprocalTimeSquared<T = f64> = Quantity<T, dimensions::ReciprocalTimeSquared>;
 /// Pressure quantity.
 pub type Pressure<T = f64> = Quantity<T, dimensions::Pressure>;
 /// Force quantity.

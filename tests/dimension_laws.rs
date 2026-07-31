@@ -9,7 +9,7 @@ use aequitas::systems::si::{
         KinematicViscosity, Length, Mass, MassDensity, MassDensityRate, MolarEnergy,
         MolarHeatCapacity, NumberDensity, Polarizability, Power, Pressure, PressureGradient,
         PressurePerElectricCurrent, QuadraticHydraulicResistance, ReciprocalLength,
-        ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
+        ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime, ReciprocalTimeSquared,
         SpecificAbsorptionRate, SpecificHeatCapacity, SurfaceTension, TemperatureDifference,
         ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume,
         VolumetricFlowRate, VolumetricPowerDensity,
@@ -118,6 +118,13 @@ fn planar_flow_rate_per_width_uses_area_per_time() {
     let flow_per_width = AreaPerTime::from_base(0.25_f64);
 
     assert_eq!(flow_per_width.into_base().to_bits(), 0.25_f64.to_bits());
+}
+
+#[test]
+fn reciprocal_time_squared_carries_vorticity_squared_dimension() {
+    let enstrophy = ReciprocalTimeSquared::from_base(4.0_f64);
+
+    assert_eq!(enstrophy.into_base().to_bits(), 4.0_f64.to_bits());
 }
 
 #[test]
