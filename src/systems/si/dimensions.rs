@@ -3,8 +3,9 @@
 use typenum::{N1, N2, N3, N4, N7, P1, P2, P3, P4, Z0};
 
 use crate::dimension::{
-    AbsoluteTemperatureSemantics, AngleSemantics, Dimension, ReciprocalVolumeSemantics,
-    SpringStiffnessSemantics, SurfaceTensionSemantics, TemperatureDifferenceSemantics,
+    AbsoluteTemperatureSemantics, AngleSemantics, Dimension, MolarConcentrationSemantics,
+    ReciprocalVolumeSemantics, SpringStiffnessSemantics, SurfaceTensionSemantics,
+    TemperatureDifferenceSemantics,
 };
 
 /// Dimensionless quantity.
@@ -57,6 +58,8 @@ pub type Volume = Dimension<P3, Z0, Z0, Z0, Z0, Z0, Z0>;
 pub type NumberDensity = Dimension<N3, Z0, Z0, Z0, Z0, Z0, Z0>;
 /// Reciprocal volume without an entity-count semantic.
 pub type ReciprocalVolume = Dimension<N3, Z0, Z0, Z0, Z0, Z0, Z0, ReciprocalVolumeSemantics>;
+/// Amount of substance per volume, conventionally molar concentration.
+pub type MolarConcentration = Dimension<N3, Z0, Z0, Z0, Z0, P1, Z0, MolarConcentrationSemantics>;
 /// Velocity.
 pub type Velocity = Dimension<P1, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Frequency.

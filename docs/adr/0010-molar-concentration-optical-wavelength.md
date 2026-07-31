@@ -1,6 +1,6 @@
 # ADR 0010: Add molar concentration and optical wavelength units
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-07-31
 - **Driver:** Kwavers `KWAVERS-AEQ-MET-43`
 
@@ -40,3 +40,9 @@ boundaries.
 - Migrate Kwavers blood-oxygenation contracts and verify real-valued
   Eunomia-compatible behavior at the diagnostics boundary.
 
+## Verification
+
+The provider conversion and type-identity regressions pass. Aequitas format,
+warning-denied Clippy, Nextest (44 tests), doctests (13 executable tests plus
+one compile-fail test), and RustDoc pass offline on 2026-07-31. Kwavers
+consumer verification is tracked by `KWAVERS-AEQ-MET-43`.

@@ -48,6 +48,15 @@ impl LinearUnit<dimensions::NumberDensity> for PerCubicMeter {
     const SCALE: f64 = 1.0;
 }
 
+/// Mole per cubic metre, the coherent SI unit of molar concentration.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct MolePerCubicMeter;
+impl Sealed for MolePerCubicMeter {}
+impl LinearUnit<dimensions::MolarConcentration> for MolePerCubicMeter {
+    const SYMBOL: &'static str = "mol/m³";
+    const SCALE: f64 = 1.0;
+}
+
 /// Metre per second, the coherent SI unit of velocity.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MeterPerSecond;

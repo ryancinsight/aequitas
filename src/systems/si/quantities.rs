@@ -53,6 +53,8 @@ pub type Volume<T = f64> = Quantity<T, dimensions::Volume>;
 pub type NumberDensity<T = f64> = Quantity<T, dimensions::NumberDensity>;
 /// Reciprocal-volume quantity for geometric field coefficients.
 pub type ReciprocalVolume<T = f64> = Quantity<T, dimensions::ReciprocalVolume>;
+/// Molar-concentration quantity, expressed as amount of substance per volume.
+pub type MolarConcentration<T = f64> = Quantity<T, dimensions::MolarConcentration>;
 /// Velocity quantity.
 pub type Velocity<T = f64> = Quantity<T, dimensions::Velocity>;
 /// Frequency quantity.

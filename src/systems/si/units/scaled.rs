@@ -21,6 +21,15 @@ impl LinearUnit<dimensions::Length> for Millimeter {
     const SCALE: f64 = 1.0e-3;
 }
 
+/// Nanometre.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Nanometer;
+impl Sealed for Nanometer {}
+impl LinearUnit<dimensions::Length> for Nanometer {
+    const SYMBOL: &'static str = "nm";
+    const SCALE: f64 = 1.0e-9;
+}
+
 /// Centimetre.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Centimeter;
@@ -64,6 +73,15 @@ impl Sealed for Microsecond {}
 impl LinearUnit<dimensions::Time> for Microsecond {
     const SYMBOL: &'static str = "µs";
     const SCALE: f64 = 1.0e-6;
+}
+
+/// Micromole per litre, equivalent to millimole per cubic metre.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct MicromolePerLiter;
+impl Sealed for MicromolePerLiter {}
+impl LinearUnit<dimensions::MolarConcentration> for MicromolePerLiter {
+    const SYMBOL: &'static str = "µmol/L";
+    const SCALE: f64 = 1.0e-3;
 }
 
 /// Gram.

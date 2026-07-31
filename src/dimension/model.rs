@@ -28,6 +28,10 @@ pub struct AngleSemantics;
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct ReciprocalVolumeSemantics;
 
+/// Semantic marker for amount-of-substance concentration per volume.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct MolarConcentrationSemantics;
+
 /// Seven-axis SI dimension vector with an optional semantic marker.
 ///
 /// The type parameters are type-level integer exponents in this order:
