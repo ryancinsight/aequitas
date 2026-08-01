@@ -11,9 +11,9 @@ pub use derived::{
     JoulePerMole, JoulePerMoleKelvin, JoulePerSquareMeter, KilogramPerCubicMeter,
     KilogramPerCubicMeterSecond, KilogramPerSecond, MeterPerSecond, MeterPerVolt,
     MolePerCubicMeter, Newton, NewtonPerMeter, Ohm, Pascal, PascalPerVolt, PascalSecond,
-    PerCubicMeter, PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Rayl, Siemens, SquareMeter,
-    SquareMeterPerKilogram, SquareMeterPerSecond, Volt, VoltPerPascal, Watt, WattPerCubicMeter,
-    WattPerKilogram, WattPerMeterKelvin, WattPerSquareMeter,
+    PerCubicMeter, PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Rayl, Siemens, SiemensPerMeter,
+    SquareMeter, SquareMeterPerKilogram, SquareMeterPerSecond, Volt, VoltPerPascal, Watt,
+    WattPerCubicMeter, WattPerKilogram, WattPerMeterKelvin, WattPerSquareMeter,
 };
 pub use scaled::{
     Centimeter, CubicMillimeter, ElectronVolt, Gram, GramPerCubicCentimeter, JoulePerMilliliter,

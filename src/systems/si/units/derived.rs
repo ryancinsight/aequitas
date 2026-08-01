@@ -129,6 +129,15 @@ impl LinearUnit<dimensions::ElectricConductance> for Siemens {
     const SCALE: f64 = 1.0;
 }
 
+/// Siemens per metre, the coherent SI unit of electrical conductivity.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct SiemensPerMeter;
+impl Sealed for SiemensPerMeter {}
+impl LinearUnit<dimensions::ElectricalConductivity> for SiemensPerMeter {
+    const SYMBOL: &'static str = "S/m";
+    const SCALE: f64 = 1.0;
+}
+
 /// Ohm, the coherent SI unit of electrical impedance.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Ohm;

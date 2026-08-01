@@ -4,22 +4,22 @@ use aequitas::systems::si::{
     quantities::{
         AbsorbedDose, AbsorbedDoseRate, AcousticImpedance, Angle, Area, AreaPerMass, AreaPerTime,
         Capacitance, Compliance, Dimensionless, DynamicViscosity, ElectricCharge,
-        ElectricConductance, ElectricCurrent, ElectricPotential, ElectricalImpedance, Energy,
-        EnergyPerArea, EnergyPerVolume, Force, HydraulicInertance, HydraulicResistance, Intensity,
-        KinematicViscosity, Length, Mass, MassDensity, MassDensityRate, MolarEnergy,
-        MolarHeatCapacity, NumberDensity, Polarizability, Power, Pressure, PressureGradient,
-        PressurePerElectricCurrent, QuadraticHydraulicResistance, ReciprocalLength,
-        ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime, ReciprocalTimeSquared,
-        SpecificAbsorptionRate, SpecificHeatCapacity, SurfaceTension, TemperatureDifference,
-        ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, Volume,
-        VolumetricFlowRate, VolumetricPowerDensity,
+        ElectricConductance, ElectricCurrent, ElectricPotential, ElectricalConductivity,
+        ElectricalImpedance, Energy, EnergyPerArea, EnergyPerVolume, Force, HydraulicInertance,
+        HydraulicResistance, Intensity, KinematicViscosity, Length, Mass, MassDensity,
+        MassDensityRate, MolarEnergy, MolarHeatCapacity, NumberDensity, Polarizability, Power,
+        Pressure, PressureGradient, PressurePerElectricCurrent, QuadraticHydraulicResistance,
+        ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
+        ReciprocalTimeSquared, SpecificAbsorptionRate, SpecificHeatCapacity, SurfaceTension,
+        TemperatureDifference, ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature,
+        Time, Velocity, Volume, VolumetricFlowRate, VolumetricPowerDensity,
     },
     units::{
         Ampere, Coulomb, CubicMeterPerSecond, Farad, Gray, GrayPerSecond, JoulePerCubicMeter,
         JoulePerKilogramKelvin, JoulePerMilliliter, JoulePerMole, JoulePerMoleKelvin, Kelvin,
         Kilogram, KilogramPerCubicMeter, KilogramPerCubicMeterSecond, Meter, MeterPerSecond,
         Newton, NewtonPerMeter, Pascal, PascalSecond, PerCubicMeter, PerKelvin, PerMeter,
-        PerSecond, PerSquareKelvin, Radian, Rayl, Second, Siemens, SquareMeter,
+        PerSecond, PerSquareKelvin, Radian, Rayl, Second, Siemens, SiemensPerMeter, SquareMeter,
         SquareMeterPerSecond, Volt, Watt, WattPerCubicMeter, WattPerKilogram, WattPerSquareMeter,
     },
 };
@@ -208,6 +208,22 @@ fn electrical_dimensions_compose_from_base_quantities() {
     assert_eq!(
         conductance.in_unit::<Siemens>().to_bits(),
         0.4_f64.to_bits()
+    );
+}
+
+#[test]
+fn sar_uses_electrical_conductivity_and_field_magnitude() {
+    let conductivity = ElectricalConductivity::from_unit::<SiemensPerMeter>(0.5_f64);
+    let potential = ElectricPotential::from_unit::<Volt>(2.0_f64);
+    let length = Length::from_unit::<Meter>(1.0_f64);
+    let electric_field = potential / length;
+    let density = MassDensity::from_unit::<KilogramPerCubicMeter>(1_000.0_f64);
+
+    let sar: SpecificAbsorptionRate = conductivity * electric_field * electric_field / density;
+
+    assert_eq!(
+        sar.in_unit::<WattPerKilogram>().to_bits(),
+        0.002_f64.to_bits()
     );
 }
 

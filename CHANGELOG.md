@@ -12,6 +12,11 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Added the `ElectricalConductivity` quantity and coherent `S/m` unit for
+  electromagnetic power-deposition consumers. Its dimensional law composes
+  with electric-field magnitude and mass density to produce
+  `SpecificAbsorptionRate`; complex Eunomia values remain valid at the
+  numerical phasor boundary, while SAR itself is a real magnitude metric.
 - Added semantic `MolarConcentration` with `mol/m³`, `mol/L`, and `µmol/L`
   units, plus the `Nanometer` length unit for optical contracts. These
   real-valued units
