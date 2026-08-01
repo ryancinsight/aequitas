@@ -59,6 +59,8 @@ pub type ReciprocalVolume<T = f64> = Quantity<T, dimensions::ReciprocalVolume>;
 pub type MolarConcentration<T = f64> = Quantity<T, dimensions::MolarConcentration>;
 /// Velocity quantity.
 pub type Velocity<T = f64> = Quantity<T, dimensions::Velocity>;
+/// Acceleration quantity.
+pub type Acceleration<T = f64> = Quantity<T, dimensions::Acceleration>;
 /// Frequency quantity.
 pub type Frequency<T = f64> = Quantity<T, dimensions::Frequency>;
 /// Reciprocal-time quantity.
@@ -67,6 +69,8 @@ pub type ReciprocalTime<T = f64> = Quantity<T, dimensions::ReciprocalTime>;
 pub type ReciprocalTimeSquared<T = f64> = Quantity<T, dimensions::ReciprocalTimeSquared>;
 /// Pressure quantity.
 pub type Pressure<T = f64> = Quantity<T, dimensions::Pressure>;
+/// Pressure-rate quantity, expressed as pascals per second.
+pub type PressureRate<T = f64> = Quantity<T, dimensions::PressureRate>;
 /// Force quantity.
 pub type Force<T = f64> = Quantity<T, dimensions::Force>;
 /// Pressure-per-electric-current quantity.

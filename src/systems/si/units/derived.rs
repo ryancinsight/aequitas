@@ -66,6 +66,15 @@ impl LinearUnit<dimensions::Velocity> for MeterPerSecond {
     const SCALE: f64 = 1.0;
 }
 
+/// Metre per second squared, the coherent SI unit of acceleration.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct MeterPerSecondSquared;
+impl Sealed for MeterPerSecondSquared {}
+impl LinearUnit<dimensions::Acceleration> for MeterPerSecondSquared {
+    const SYMBOL: &'static str = "m/s²";
+    const SCALE: f64 = 1.0;
+}
+
 /// Hertz, the coherent SI unit of frequency.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Hertz;
@@ -90,6 +99,15 @@ pub struct Pascal;
 impl Sealed for Pascal {}
 impl LinearUnit<dimensions::Pressure> for Pascal {
     const SYMBOL: &'static str = "Pa";
+    const SCALE: f64 = 1.0;
+}
+
+/// Pascal per second, the coherent SI unit of pressure rate.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct PascalPerSecond;
+impl Sealed for PascalPerSecond {}
+impl LinearUnit<dimensions::PressureRate> for PascalPerSecond {
+    const SYMBOL: &'static str = "Pa/s";
     const SCALE: f64 = 1.0;
 }
 

@@ -64,6 +64,8 @@ pub type ReciprocalVolume = Dimension<N3, Z0, Z0, Z0, Z0, Z0, Z0, ReciprocalVolu
 pub type MolarConcentration = Dimension<N3, Z0, Z0, Z0, Z0, P1, Z0, MolarConcentrationSemantics>;
 /// Velocity.
 pub type Velocity = Dimension<P1, Z0, N1, Z0, Z0, Z0, Z0>;
+/// Acceleration.
+pub type Acceleration = Dimension<P1, Z0, N2, Z0, Z0, Z0, Z0>;
 /// Frequency.
 pub type Frequency = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Reciprocal time.
@@ -72,6 +74,8 @@ pub type ReciprocalTime = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
 pub type ReciprocalTimeSquared = Dimension<Z0, Z0, N2, Z0, Z0, Z0, Z0>;
 /// Pressure.
 pub type Pressure = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
+/// Pressure rate, pressure per time.
+pub type PressureRate = Dimension<N1, P1, N3, Z0, Z0, Z0, Z0>;
 /// Force.
 pub type Force = Dimension<P1, P1, N2, Z0, Z0, Z0, Z0>;
 /// Pressure per electric current, used for pressure transducer gain.
