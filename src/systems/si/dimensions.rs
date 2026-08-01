@@ -108,6 +108,12 @@ pub type EnergyPerArea = Dimension<Z0, P1, N2, Z0, Z0, Z0, Z0>;
 pub type SurfaceTension = Dimension<Z0, P1, N2, Z0, Z0, Z0, Z0, SurfaceTensionSemantics>;
 /// Absorbed dose or specific energy.
 pub type AbsorbedDose = Dimension<P2, Z0, N2, Z0, Z0, Z0, Z0>;
+/// Specific energy, including turbulent kinetic energy per unit mass.
+///
+/// This is a semantic alias of the absorbed-dose dimension because both are
+/// coherent SI `J/kg` quantities; the distinct name keeps a mechanical-energy
+/// contract from being confused with radiation dose at public boundaries.
+pub type SpecificEnergy = AbsorbedDose;
 /// Absorbed dose rate, equivalently power per mass.
 pub type AbsorbedDoseRate = Dimension<P2, Z0, N3, Z0, Z0, Z0, Z0>;
 /// Specific absorption rate, the radiofrequency-dosimetry name for absorbed

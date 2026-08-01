@@ -10,17 +10,19 @@ use aequitas::systems::si::{
         MassDensityRate, MolarEnergy, MolarHeatCapacity, NumberDensity, Polarizability, Power,
         Pressure, PressureGradient, PressurePerElectricCurrent, QuadraticHydraulicResistance,
         ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
-        ReciprocalTimeSquared, SpecificAbsorptionRate, SpecificHeatCapacity, SurfaceTension,
-        TemperatureDifference, ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature,
-        Time, Velocity, Volume, VolumetricFlowRate, VolumetricPowerDensity,
+        ReciprocalTimeSquared, SpecificAbsorptionRate, SpecificEnergy, SpecificHeatCapacity,
+        SurfaceTension, TemperatureDifference, ThermalConductivity, ThermalDiffusivity,
+        ThermodynamicTemperature, Time, Velocity, Volume, VolumetricFlowRate,
+        VolumetricPowerDensity,
     },
     units::{
         Ampere, Coulomb, CubicMeterPerSecond, Farad, Gray, GrayPerSecond, JoulePerCubicMeter,
-        JoulePerKilogramKelvin, JoulePerMilliliter, JoulePerMole, JoulePerMoleKelvin, Kelvin,
-        Kilogram, KilogramPerCubicMeter, KilogramPerCubicMeterSecond, Meter, MeterPerSecond,
-        Newton, NewtonPerMeter, Pascal, PascalSecond, PerCubicMeter, PerKelvin, PerMeter,
-        PerSecond, PerSquareKelvin, Radian, Rayl, Second, Siemens, SiemensPerMeter, SquareMeter,
-        SquareMeterPerSecond, Volt, Watt, WattPerCubicMeter, WattPerKilogram, WattPerSquareMeter,
+        JoulePerKilogram, JoulePerKilogramKelvin, JoulePerMilliliter, JoulePerMole,
+        JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter, KilogramPerCubicMeterSecond,
+        Meter, MeterPerSecond, Newton, NewtonPerMeter, Pascal, PascalSecond, PerCubicMeter,
+        PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Radian, Rayl, Second, Siemens,
+        SiemensPerMeter, SquareMeter, SquareMeterPerSecond, Volt, Watt, WattPerCubicMeter,
+        WattPerKilogram, WattPerSquareMeter,
     },
 };
 
@@ -100,6 +102,13 @@ fn mass_times_specific_heat_and_temperature_is_energy() {
     let energy: Energy = mass * specific_heat * temperature;
 
     assert_eq!(energy.into_base().to_bits(), 25_200.0_f64.to_bits());
+}
+
+#[test]
+fn specific_energy_has_a_joule_per_kilogram_contract() {
+    let energy = SpecificEnergy::from_unit::<JoulePerKilogram>(12.5_f64);
+
+    assert_eq!(energy.into_base().to_bits(), 12.5_f64.to_bits());
 }
 
 #[test]

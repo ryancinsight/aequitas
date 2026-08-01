@@ -12,6 +12,11 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Added the semantic `SpecificEnergy` alias and coherent `JoulePerKilogram`
+  unit for mechanical specific-energy metrics such as turbulent kinetic
+  energy. It shares the `J/kg` dimension with absorbed dose without introducing
+  a radiation-specific or imaginary unit.
+
 - Added the `ElectricalConductivity` quantity and coherent `S/m` unit for
   electromagnetic power-deposition consumers. Its dimensional law composes
   with electric-field magnitude and mass density to produce
