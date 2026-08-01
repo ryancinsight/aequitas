@@ -36,6 +36,11 @@ let diffusivity: ThermalDiffusivity = conductivity / (density * heat_capacity);
 assert_eq!(diffusivity.into_base(), 1.5e-7);
 ```
 
+Mechanical specific energy has its own semantic `SpecificEnergy` alias and
+`JoulePerKilogram` unit. It shares the coherent `J/kg` dimension with absorbed
+dose while keeping turbulence and mechanical contracts distinct from radiation
+dosimetry.
+
 Fluid and acoustic transport laws retain their dimensions through the same
 arithmetic. Dynamic viscosity divided by density yields kinematic viscosity,
 and planar flow per unit width uses the named area-per-time contract,

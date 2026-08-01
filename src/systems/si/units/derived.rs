@@ -260,6 +260,15 @@ impl LinearUnit<dimensions::AbsorbedDose> for Gray {
     const SCALE: f64 = 1.0;
 }
 
+/// Joule per kilogram, the coherent SI unit of specific energy.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct JoulePerKilogram;
+impl Sealed for JoulePerKilogram {}
+impl LinearUnit<dimensions::SpecificEnergy> for JoulePerKilogram {
+    const SYMBOL: &'static str = "J/kg";
+    const SCALE: f64 = 1.0;
+}
+
 /// Gray per second, the coherent SI unit of absorbed dose rate.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct GrayPerSecond;

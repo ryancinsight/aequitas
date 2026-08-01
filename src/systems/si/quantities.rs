@@ -106,6 +106,8 @@ pub type EnergyPerArea<T = f64> = Quantity<T, dimensions::EnergyPerArea>;
 pub type SurfaceTension<T = f64> = Quantity<T, dimensions::SurfaceTension>;
 /// Absorbed-dose quantity.
 pub type AbsorbedDose<T = f64> = Quantity<T, dimensions::AbsorbedDose>;
+/// Specific-energy quantity, expressed in joules per kilogram.
+pub type SpecificEnergy<T = f64> = Quantity<T, dimensions::SpecificEnergy>;
 /// Absorbed-dose-rate quantity, equivalently power per mass.
 pub type AbsorbedDoseRate<T = f64> = Quantity<T, dimensions::AbsorbedDoseRate>;
 /// Specific-absorption-rate quantity, the radiofrequency-dosimetry name for

@@ -40,6 +40,7 @@ fn dimension_and_unit_markers_occupy_no_storage() {
     assert_eq!(size_of::<dimensions::Compliance>(), 0);
     assert_eq!(size_of::<dimensions::ThermalDiffusivity>(), 0);
     assert_eq!(size_of::<dimensions::AbsorbedDose>(), 0);
+    assert_eq!(size_of::<dimensions::SpecificEnergy>(), 0);
     assert_eq!(size_of::<dimensions::MolarEnergy>(), 0);
     assert_eq!(size_of::<dimensions::MolarHeatCapacity>(), 0);
     assert_eq!(size_of::<dimensions::ReciprocalLength>(), 0);

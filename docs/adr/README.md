@@ -17,3 +17,4 @@
 | [0009](0009-complex-physical-quantities.md) | Represent Complex Physical Phasors With Eunomia | — |
 | [0010](0010-molar-concentration-optical-wavelength.md) | Add molar concentration and optical wavelength units | Accepted |
 | [0011](0011-electrical-conductivity-quantity.md) | Electrical conductivity for SAR contracts | Accepted — 2026-07-31 |
+| [0012](0012-specific-energy-semantic.md) | Semantic specific energy | Accepted — 2026-07-31 |
