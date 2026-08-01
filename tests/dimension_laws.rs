@@ -2,27 +2,27 @@
 
 use aequitas::systems::si::{
     quantities::{
-        AbsorbedDose, AbsorbedDoseRate, AcousticImpedance, Angle, Area, AreaPerMass, AreaPerTime,
-        Capacitance, Compliance, Dimensionless, DynamicViscosity, ElectricCharge,
+        AbsorbedDose, AbsorbedDoseRate, Acceleration, AcousticImpedance, Angle, Area, AreaPerMass,
+        AreaPerTime, Capacitance, Compliance, Dimensionless, DynamicViscosity, ElectricCharge,
         ElectricConductance, ElectricCurrent, ElectricPotential, ElectricalConductivity,
         ElectricalImpedance, Energy, EnergyPerArea, EnergyPerVolume, Force, HydraulicInertance,
         HydraulicResistance, Intensity, KinematicViscosity, Length, Mass, MassDensity,
         MassDensityRate, MolarEnergy, MolarHeatCapacity, NumberDensity, Polarizability, Power,
-        Pressure, PressureGradient, PressurePerElectricCurrent, QuadraticHydraulicResistance,
-        ReciprocalLength, ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime,
-        ReciprocalTimeSquared, SpecificAbsorptionRate, SpecificEnergy, SpecificHeatCapacity,
-        SurfaceTension, TemperatureDifference, ThermalConductivity, ThermalDiffusivity,
-        ThermodynamicTemperature, Time, Velocity, Volume, VolumetricFlowRate,
-        VolumetricPowerDensity,
+        Pressure, PressureGradient, PressurePerElectricCurrent, PressureRate,
+        QuadraticHydraulicResistance, ReciprocalLength, ReciprocalTemperature,
+        ReciprocalTemperatureSquared, ReciprocalTime, ReciprocalTimeSquared,
+        SpecificAbsorptionRate, SpecificEnergy, SpecificHeatCapacity, SurfaceTension,
+        TemperatureDifference, ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature,
+        Time, Velocity, Volume, VolumetricFlowRate, VolumetricPowerDensity,
     },
     units::{
         Ampere, Coulomb, CubicMeterPerSecond, Farad, Gray, GrayPerSecond, JoulePerCubicMeter,
         JoulePerKilogram, JoulePerKilogramKelvin, JoulePerMilliliter, JoulePerMole,
         JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter, KilogramPerCubicMeterSecond,
-        Meter, MeterPerSecond, Newton, NewtonPerMeter, Pascal, PascalSecond, PerCubicMeter,
-        PerKelvin, PerMeter, PerSecond, PerSquareKelvin, Radian, Rayl, Second, Siemens,
-        SiemensPerMeter, SquareMeter, SquareMeterPerSecond, Volt, Watt, WattPerCubicMeter,
-        WattPerKilogram, WattPerSquareMeter,
+        Meter, MeterPerSecond, MeterPerSecondSquared, Newton, NewtonPerMeter, Pascal,
+        PascalPerSecond, PascalSecond, PerCubicMeter, PerKelvin, PerMeter, PerSecond,
+        PerSquareKelvin, Radian, Rayl, Second, Siemens, SiemensPerMeter, SquareMeter,
+        SquareMeterPerSecond, Volt, Watt, WattPerCubicMeter, WattPerKilogram, WattPerSquareMeter,
     },
 };
 
@@ -50,6 +50,30 @@ fn length_divided_by_time_is_velocity() {
     let velocity: Velocity = length / time;
 
     assert_eq!(velocity.into_base().to_bits(), 4.0_f64.to_bits());
+}
+
+#[test]
+fn velocity_divided_by_time_is_acceleration() {
+    let velocity = Velocity::from_unit::<MeterPerSecond>(12.0_f64);
+    let time = Time::from_unit::<Second>(3.0_f64);
+    let acceleration: Acceleration = velocity / time;
+
+    assert_eq!(
+        acceleration.in_unit::<MeterPerSecondSquared>().to_bits(),
+        4.0_f64.to_bits()
+    );
+}
+
+#[test]
+fn pressure_divided_by_time_is_pressure_rate() {
+    let pressure = Pressure::from_unit::<Pascal>(12.0_f64);
+    let time = Time::from_unit::<Second>(3.0_f64);
+    let rate: PressureRate = pressure / time;
+
+    assert_eq!(
+        rate.in_unit::<PascalPerSecond>().to_bits(),
+        4.0_f64.to_bits()
+    );
 }
 
 #[test]

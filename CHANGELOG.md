@@ -12,6 +12,16 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Added the `Acceleration` quantity and coherent `m/s²` unit for dynamic
+  state contracts such as therapeutic microbubble wall acceleration. Eunomia
+  complex values remain valid for genuine phasor data; acceleration is a real
+  physical dimension with no imaginary-unit counterpart.
+
+- Added the `PressureRate` quantity and coherent `Pa/s` unit for acoustic
+  pressure-time-derivative contracts. It is a real pressure rate; Eunomia
+  complex values remain reserved for genuine complex phasors at numerical
+  boundaries.
+
 - Added the semantic `SpecificEnergy` alias and coherent `JoulePerKilogram`
   unit for mechanical specific-energy metrics such as turbulent kinetic
   energy. It shares the `J/kg` dimension with absorbed dose without introducing
