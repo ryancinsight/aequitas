@@ -10,7 +10,6 @@ license = "MIT OR Apache-2.0"
 readme = "README.md"
 keywords = ["units", "dimensional-analysis", "simulation", "no-std"]
 categories = ["no-std", "science"]
-publish = false
 
 [dependencies]
 eunomia = { version = "0.7.0", git = "https://github.com/ryancinsight/eunomia", default-features = false }
