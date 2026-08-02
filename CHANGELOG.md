@@ -6,6 +6,8 @@ All externally observable changes are recorded here.
 
 ### Changed
 
+- Enabled crates.io publication with repository-owned trusted-publishing
+  automation.
 - Removed the revision qualifier from the Eunomia manifest dependency.
   Consumer workspaces now resolve one Eunomia source identity while their lock
   files retain the exact reproducibility pin.
