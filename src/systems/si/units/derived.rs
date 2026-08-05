@@ -139,6 +139,15 @@ impl LinearUnit<dimensions::ElectricCharge> for Coulomb {
     const SCALE: f64 = 1.0;
 }
 
+/// Coulomb per cubic metre, the coherent SI unit of volume charge density.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct CoulombPerCubicMeter;
+impl Sealed for CoulombPerCubicMeter {}
+impl LinearUnit<dimensions::VolumeChargeDensity> for CoulombPerCubicMeter {
+    const SYMBOL: &'static str = "C/m³";
+    const SCALE: f64 = 1.0;
+}
+
 /// Volt, the coherent SI unit of electric potential.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Volt;
@@ -222,6 +231,11 @@ impl LinearUnit<dimensions::SurfaceTension> for NewtonPerMeter {
 
 impl LinearUnit<dimensions::SpringStiffness> for NewtonPerMeter {
     const SYMBOL: &'static str = "N/m";
+    const SCALE: f64 = 1.0;
+}
+
+impl LinearUnit<dimensions::FlexuralRigidity> for Joule {
+    const SYMBOL: &'static str = "J";
     const SCALE: f64 = 1.0;
 }
 

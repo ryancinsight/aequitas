@@ -87,12 +87,16 @@ pub type ElectricPotentialPerPressure<T = f64> =
 pub type LengthPerElectricPotential<T = f64> = Quantity<T, dimensions::LengthPerElectricPotential>;
 /// Surface electric-charge density quantity.
 pub type SurfaceChargeDensity<T = f64> = Quantity<T, dimensions::SurfaceChargeDensity>;
+/// Volume electric-charge density quantity.
+pub type VolumeChargeDensity<T = f64> = Quantity<T, dimensions::VolumeChargeDensity>;
 /// Mechanical spring-stiffness quantity.
 pub type SpringStiffness<T = f64> = Quantity<T, dimensions::SpringStiffness>;
 /// Mechanical damping-coefficient quantity.
 pub type DampingCoefficient<T = f64> = Quantity<T, dimensions::DampingCoefficient>;
 /// Mechanical impedance quantity, including complex force-per-velocity phasors.
 pub type MechanicalImpedance<T = f64> = Quantity<T, dimensions::MechanicalImpedance>;
+/// Flexural-rigidity quantity.
+pub type FlexuralRigidity<T = f64> = Quantity<T, dimensions::FlexuralRigidity>;
 /// Pressure-gradient quantity.
 pub type PressureGradient<T = f64> = Quantity<T, dimensions::PressureGradient>;
 /// Hydraulic-resistance quantity.
