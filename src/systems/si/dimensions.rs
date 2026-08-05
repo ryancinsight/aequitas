@@ -64,6 +64,8 @@ pub type ReciprocalVolume = Dimension<N3, Z0, Z0, Z0, Z0, Z0, Z0, ReciprocalVolu
 pub type MolarConcentration = Dimension<N3, Z0, Z0, Z0, Z0, P1, Z0, MolarConcentrationSemantics>;
 /// Velocity.
 pub type Velocity = Dimension<P1, Z0, N1, Z0, Z0, Z0, Z0>;
+/// Temperature derivative of velocity, expressed as metres per second-kelvin.
+pub type VelocityPerTemperature = Dimension<P1, Z0, N1, Z0, N1, Z0, Z0>;
 /// Acceleration.
 pub type Acceleration = Dimension<P1, Z0, N2, Z0, Z0, Z0, Z0>;
 /// Frequency.
@@ -142,6 +144,9 @@ pub type ThermalDiffusivity = AreaPerTime;
 pub type AreaPerTime = Dimension<P2, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Mass density.
 pub type MassDensity = Dimension<N3, P1, Z0, Z0, Z0, Z0, Z0>;
+/// Temperature derivative of mass density, expressed as kilograms per cubic
+/// metre-kelvin.
+pub type MassDensityPerTemperature = Dimension<N3, P1, Z0, Z0, N1, Z0, Z0>;
 /// Mass-density rate, mass per volume per time.
 pub type MassDensityRate = Dimension<N3, P1, N1, Z0, Z0, Z0, Z0>;
 /// Dynamic viscosity.
@@ -158,3 +163,6 @@ pub type Intensity = Dimension<Z0, P1, N3, Z0, Z0, Z0, Z0>;
 pub type VolumetricPowerDensity = Dimension<N1, P1, N3, Z0, Z0, Z0, Z0>;
 /// Energy per volume.
 pub type EnergyPerVolume = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
+/// Temperature derivative of reciprocal length, expressed as inverse
+/// metre-kelvin.
+pub type ReciprocalLengthPerTemperature = Dimension<N1, Z0, Z0, Z0, N1, Z0, Z0>;

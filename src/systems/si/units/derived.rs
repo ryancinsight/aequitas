@@ -66,6 +66,16 @@ impl LinearUnit<dimensions::Velocity> for MeterPerSecond {
     const SCALE: f64 = 1.0;
 }
 
+/// Metre per second-kelvin, the coherent SI unit of a velocity temperature
+/// derivative.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct MeterPerSecondKelvin;
+impl Sealed for MeterPerSecondKelvin {}
+impl LinearUnit<dimensions::VelocityPerTemperature> for MeterPerSecondKelvin {
+    const SYMBOL: &'static str = "m/(s·K)";
+    const SCALE: f64 = 1.0;
+}
+
 /// Metre per second squared, the coherent SI unit of acceleration.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MeterPerSecondSquared;
@@ -380,6 +390,16 @@ impl LinearUnit<dimensions::MassDensity> for KilogramPerCubicMeter {
     const SCALE: f64 = 1.0;
 }
 
+/// Kilogram per cubic metre-kelvin, the coherent SI unit of a mass-density
+/// temperature derivative.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct KilogramPerCubicMeterKelvin;
+impl Sealed for KilogramPerCubicMeterKelvin {}
+impl LinearUnit<dimensions::MassDensityPerTemperature> for KilogramPerCubicMeterKelvin {
+    const SYMBOL: &'static str = "kg/(m³·K)";
+    const SCALE: f64 = 1.0;
+}
+
 /// Kilogram per cubic metre-second, the coherent SI unit of mass-density rate.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct KilogramPerCubicMeterSecond;
@@ -449,5 +469,15 @@ pub struct PerSquareKelvin;
 impl Sealed for PerSquareKelvin {}
 impl LinearUnit<dimensions::ReciprocalTemperatureSquared> for PerSquareKelvin {
     const SYMBOL: &'static str = "K⁻²";
+    const SCALE: f64 = 1.0;
+}
+
+/// Inverse metre-kelvin, the coherent SI unit of a reciprocal-length
+/// temperature derivative.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct PerMeterKelvin;
+impl Sealed for PerMeterKelvin {}
+impl LinearUnit<dimensions::ReciprocalLengthPerTemperature> for PerMeterKelvin {
+    const SYMBOL: &'static str = "1/(m·K)";
     const SCALE: f64 = 1.0;
 }

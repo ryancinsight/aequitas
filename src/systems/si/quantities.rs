@@ -59,6 +59,8 @@ pub type ReciprocalVolume<T = f64> = Quantity<T, dimensions::ReciprocalVolume>;
 pub type MolarConcentration<T = f64> = Quantity<T, dimensions::MolarConcentration>;
 /// Velocity quantity.
 pub type Velocity<T = f64> = Quantity<T, dimensions::Velocity>;
+/// Temperature derivative of velocity, expressed in m/(s·K).
+pub type VelocityPerTemperature<T = f64> = Quantity<T, dimensions::VelocityPerTemperature>;
 /// Acceleration quantity.
 pub type Acceleration<T = f64> = Quantity<T, dimensions::Acceleration>;
 /// Frequency quantity.
@@ -135,6 +137,8 @@ pub type AreaPerTime<T = f64> = Quantity<T, dimensions::AreaPerTime>;
 pub type ThermalDiffusivity<T = f64> = Quantity<T, dimensions::ThermalDiffusivity>;
 /// Mass-density quantity.
 pub type MassDensity<T = f64> = Quantity<T, dimensions::MassDensity>;
+/// Temperature derivative of mass density, expressed in kg/(m³·K).
+pub type MassDensityPerTemperature<T = f64> = Quantity<T, dimensions::MassDensityPerTemperature>;
 /// Mass-density-rate quantity.
 pub type MassDensityRate<T = f64> = Quantity<T, dimensions::MassDensityRate>;
 /// Dynamic-viscosity quantity.
@@ -151,3 +155,6 @@ pub type Intensity<T = f64> = Quantity<T, dimensions::Intensity>;
 pub type VolumetricPowerDensity<T = f64> = Quantity<T, dimensions::VolumetricPowerDensity>;
 /// Energy-per-volume quantity.
 pub type EnergyPerVolume<T = f64> = Quantity<T, dimensions::EnergyPerVolume>;
+/// Temperature derivative of reciprocal length, expressed in 1/(m·K).
+pub type ReciprocalLengthPerTemperature<T = f64> =
+    Quantity<T, dimensions::ReciprocalLengthPerTemperature>;
