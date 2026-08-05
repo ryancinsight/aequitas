@@ -14,6 +14,11 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Added provider-owned temperature derivatives for velocity, mass density,
+  and reciprocal length, with coherent `m/(s·K)`, `kg/(m³·K)`, and `1/(m·K)`
+  units. These are real SI dimensions; Eunomia complex values remain valid at
+  numerical phasor boundaries without introducing an imaginary unit.
+
 - Added the `Acceleration` quantity and coherent `m/s²` unit for dynamic
   state contracts such as therapeutic microbubble wall acceleration. Eunomia
   complex values remain valid for genuine phasor data; acceleration is a real

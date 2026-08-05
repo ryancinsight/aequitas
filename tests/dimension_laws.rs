@@ -7,22 +7,24 @@ use aequitas::systems::si::{
         ElectricConductance, ElectricCurrent, ElectricPotential, ElectricalConductivity,
         ElectricalImpedance, Energy, EnergyPerArea, EnergyPerVolume, Force, HydraulicInertance,
         HydraulicResistance, Intensity, KinematicViscosity, Length, Mass, MassDensity,
-        MassDensityRate, MolarEnergy, MolarHeatCapacity, NumberDensity, Polarizability, Power,
-        Pressure, PressureGradient, PressurePerElectricCurrent, PressureRate,
-        QuadraticHydraulicResistance, ReciprocalLength, ReciprocalTemperature,
-        ReciprocalTemperatureSquared, ReciprocalTime, ReciprocalTimeSquared,
-        SpecificAbsorptionRate, SpecificEnergy, SpecificHeatCapacity, SurfaceTension,
-        TemperatureDifference, ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature,
-        Time, Velocity, Volume, VolumetricFlowRate, VolumetricPowerDensity,
+        MassDensityPerTemperature, MassDensityRate, MolarEnergy, MolarHeatCapacity, NumberDensity,
+        Polarizability, Power, Pressure, PressureGradient, PressurePerElectricCurrent,
+        PressureRate, QuadraticHydraulicResistance, ReciprocalLength,
+        ReciprocalLengthPerTemperature, ReciprocalTemperature, ReciprocalTemperatureSquared,
+        ReciprocalTime, ReciprocalTimeSquared, SpecificAbsorptionRate, SpecificEnergy,
+        SpecificHeatCapacity, SurfaceTension, TemperatureDifference, ThermalConductivity,
+        ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, VelocityPerTemperature,
+        Volume, VolumetricFlowRate, VolumetricPowerDensity,
     },
     units::{
         Ampere, Coulomb, CubicMeterPerSecond, Farad, Gray, GrayPerSecond, JoulePerCubicMeter,
         JoulePerKilogram, JoulePerKilogramKelvin, JoulePerMilliliter, JoulePerMole,
-        JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter, KilogramPerCubicMeterSecond,
-        Meter, MeterPerSecond, MeterPerSecondSquared, Newton, NewtonPerMeter, Pascal,
-        PascalPerSecond, PascalSecond, PerCubicMeter, PerKelvin, PerMeter, PerSecond,
-        PerSquareKelvin, Radian, Rayl, Second, Siemens, SiemensPerMeter, SquareMeter,
-        SquareMeterPerSecond, Volt, Watt, WattPerCubicMeter, WattPerKilogram, WattPerSquareMeter,
+        JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter, KilogramPerCubicMeterKelvin,
+        KilogramPerCubicMeterSecond, Meter, MeterPerSecond, MeterPerSecondKelvin,
+        MeterPerSecondSquared, Newton, NewtonPerMeter, Pascal, PascalPerSecond, PascalSecond,
+        PerCubicMeter, PerKelvin, PerMeter, PerMeterKelvin, PerSecond, PerSquareKelvin, Radian,
+        Rayl, Second, Siemens, SiemensPerMeter, SquareMeter, SquareMeterPerSecond, Volt, Watt,
+        WattPerCubicMeter, WattPerKilogram, WattPerSquareMeter,
     },
 };
 
@@ -171,6 +173,45 @@ fn temperature_response_coefficients_reduce_to_dimensionless_factors() {
 
     assert_eq!(linear.into_base().to_bits(), 0.5_f64.to_bits());
     assert_eq!(quadratic.into_base().to_bits(), 0.5_f64.to_bits());
+}
+
+#[test]
+fn thermal_coefficient_dimensions_close_over_temperature_difference() {
+    let delta = TemperatureDifference::from_unit::<Kelvin>(2.0_f64);
+    let velocity_slope = VelocityPerTemperature::from_unit::<MeterPerSecondKelvin>(3.0_f64);
+    let density_slope =
+        MassDensityPerTemperature::from_unit::<KilogramPerCubicMeterKelvin>(4.0_f64);
+    let absorption_slope = ReciprocalLengthPerTemperature::from_unit::<PerMeterKelvin>(5.0_f64);
+
+    let velocity: Velocity = velocity_slope * delta;
+    let density: MassDensity = density_slope * delta;
+    let absorption: ReciprocalLength = absorption_slope * delta;
+
+    assert_eq!(
+        velocity.in_unit::<MeterPerSecond>().to_bits(),
+        6.0_f64.to_bits()
+    );
+    assert_eq!(
+        density.in_unit::<KilogramPerCubicMeter>().to_bits(),
+        8.0_f64.to_bits()
+    );
+    assert_eq!(
+        absorption.in_unit::<PerMeter>().to_bits(),
+        10.0_f64.to_bits()
+    );
+}
+
+#[test]
+fn thermal_coefficient_units_preserve_eunomia_complex_values() {
+    use eunomia::Complex64;
+
+    let coefficient: VelocityPerTemperature<Complex64> =
+        VelocityPerTemperature::from_unit::<MeterPerSecondKelvin>(Complex64::new(1.25, -0.5));
+
+    assert_eq!(
+        coefficient.in_unit::<MeterPerSecondKelvin>(),
+        Complex64::new(1.25, -0.5)
+    );
 }
 
 #[test]
