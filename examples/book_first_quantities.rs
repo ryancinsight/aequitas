@@ -41,8 +41,7 @@ fn main() {
     // Wavelength: λ = c / f.  Speed of sound in tissue ≈ 1540 m/s (as a
     // dimensionless ratio here; a typed Velocity would be the production form).
     let speed_of_sound_m_per_s = 1540.0_f64;
-    let wavelength_m =
-        speed_of_sound_m_per_s / centre_freq.in_unit::<Hertz>();
+    let wavelength_m = speed_of_sound_m_per_s / centre_freq.in_unit::<Hertz>();
     let wavelength = Length::from_unit::<Meter>(wavelength_m);
     println!(
         "wavelength at {:.1} MHz in tissue: {:.3} mm",
@@ -52,9 +51,5 @@ fn main() {
 
     // The period is the reciprocal of frequency.  Construct from seconds.
     let period = Time::from_unit::<Second>(1.0 / centre_freq.in_unit::<Hertz>());
-    println!(
-        "period: {:.4e} µs",
-        period.in_unit::<Microsecond>(),
-    );
+    println!("period: {:.4e} µs", period.in_unit::<Microsecond>(),);
 }
-
