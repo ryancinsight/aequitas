@@ -161,6 +161,9 @@ pub type AcousticImpedance = Dimension<N2, P1, N1, Z0, Z0, Z0, Z0>;
 pub type Intensity = Dimension<Z0, P1, N3, Z0, Z0, Z0, Z0>;
 /// Power per volume.
 pub type VolumetricPowerDensity = Dimension<N1, P1, N3, Z0, Z0, Z0, Z0>;
+/// Spatial gradient of volumetric power density, expressed as power per metre
+/// to the fourth power.
+pub type VolumetricPowerDensityGradient = Dimension<N2, P1, N3, Z0, Z0, Z0, Z0>;
 /// Energy per volume.
 pub type EnergyPerVolume = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
 /// Temperature derivative of reciprocal length, expressed as inverse

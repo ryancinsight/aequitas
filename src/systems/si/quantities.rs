@@ -153,6 +153,9 @@ pub type AcousticImpedance<T = f64> = Quantity<T, dimensions::AcousticImpedance>
 pub type Intensity<T = f64> = Quantity<T, dimensions::Intensity>;
 /// Volumetric-power-density quantity.
 pub type VolumetricPowerDensity<T = f64> = Quantity<T, dimensions::VolumetricPowerDensity>;
+/// Spatial gradient of volumetric power density, expressed in W/m⁴.
+pub type VolumetricPowerDensityGradient<T = f64> =
+    Quantity<T, dimensions::VolumetricPowerDensityGradient>;
 /// Energy-per-volume quantity.
 pub type EnergyPerVolume<T = f64> = Quantity<T, dimensions::EnergyPerVolume>;
 /// Temperature derivative of reciprocal length, expressed in 1/(m·K).

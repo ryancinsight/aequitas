@@ -14,6 +14,11 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Added the `VolumetricPowerDensityGradient` quantity and coherent `W/m⁴`
+  unit for formulas whose spatial power-deposition derivative is explicit.
+  This remains a real SI dimension; complex Eunomia values are still confined
+  to numerical phasor boundaries and do not create an imaginary unit.
+
 - Added provider-owned temperature derivatives for velocity, mass density,
   and reciprocal length, with coherent `m/(s·K)`, `kg/(m³·K)`, and `1/(m·K)`
   units. These are real SI dimensions; Eunomia complex values remain valid at
