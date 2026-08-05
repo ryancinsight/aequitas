@@ -454,6 +454,16 @@ impl LinearUnit<dimensions::VolumetricPowerDensity> for WattPerCubicMeter {
     const SCALE: f64 = 1.0;
 }
 
+/// Watt per metre to the fourth power, the coherent SI unit of a volumetric
+/// power-density gradient.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct WattPerMeterFourth;
+impl Sealed for WattPerMeterFourth {}
+impl LinearUnit<dimensions::VolumetricPowerDensityGradient> for WattPerMeterFourth {
+    const SYMBOL: &'static str = "W/m⁴";
+    const SCALE: f64 = 1.0;
+}
+
 /// Per kelvin, the coherent SI unit of reciprocal temperature.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct PerKelvin;

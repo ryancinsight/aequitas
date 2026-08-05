@@ -14,7 +14,7 @@ use aequitas::systems::si::{
         ReciprocalTime, ReciprocalTimeSquared, SpecificAbsorptionRate, SpecificEnergy,
         SpecificHeatCapacity, SurfaceTension, TemperatureDifference, ThermalConductivity,
         ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, VelocityPerTemperature,
-        Volume, VolumetricFlowRate, VolumetricPowerDensity,
+        Volume, VolumetricFlowRate, VolumetricPowerDensity, VolumetricPowerDensityGradient,
     },
     units::{
         Ampere, Coulomb, CubicMeterPerSecond, Farad, Gray, GrayPerSecond, JoulePerCubicMeter,
@@ -24,7 +24,7 @@ use aequitas::systems::si::{
         MeterPerSecondSquared, Newton, NewtonPerMeter, Pascal, PascalPerSecond, PascalSecond,
         PerCubicMeter, PerKelvin, PerMeter, PerMeterKelvin, PerSecond, PerSquareKelvin, Radian,
         Rayl, Second, Siemens, SiemensPerMeter, SquareMeter, SquareMeterPerSecond, Volt, Watt,
-        WattPerCubicMeter, WattPerKilogram, WattPerSquareMeter,
+        WattPerCubicMeter, WattPerKilogram, WattPerMeterFourth, WattPerSquareMeter,
     },
 };
 
@@ -211,6 +211,18 @@ fn thermal_coefficient_units_preserve_eunomia_complex_values() {
     assert_eq!(
         coefficient.in_unit::<MeterPerSecondKelvin>(),
         Complex64::new(1.25, -0.5)
+    );
+}
+
+#[test]
+fn volumetric_power_density_gradient_has_a_watt_per_meter_fourth_contract() {
+    let density = VolumetricPowerDensity::from_unit::<WattPerCubicMeter>(12.0_f64);
+    let length = Length::from_unit::<Meter>(3.0_f64);
+    let gradient: VolumetricPowerDensityGradient = density / length;
+
+    assert_eq!(
+        gradient.in_unit::<WattPerMeterFourth>().to_bits(),
+        4.0_f64.to_bits()
     );
 }
 
