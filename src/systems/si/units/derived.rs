@@ -234,6 +234,11 @@ impl LinearUnit<dimensions::DampingCoefficient> for KilogramPerSecond {
     const SCALE: f64 = 1.0;
 }
 
+impl LinearUnit<dimensions::MechanicalImpedance> for KilogramPerSecond {
+    const SYMBOL: &'static str = "kg/s";
+    const SCALE: f64 = 1.0;
+}
+
 /// Pascal per volt, the coherent SI unit of voltage-driven pressure gain.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct PascalPerVolt;

@@ -3,9 +3,9 @@
 use typenum::{N1, N2, N3, N4, N7, P1, P2, P3, P4, Z0};
 
 use crate::dimension::{
-    AbsoluteTemperatureSemantics, AngleSemantics, Dimension, MolarConcentrationSemantics,
-    ReciprocalVolumeSemantics, SpringStiffnessSemantics, SurfaceTensionSemantics,
-    TemperatureDifferenceSemantics,
+    AbsoluteTemperatureSemantics, AngleSemantics, Dimension, MechanicalImpedanceSemantics,
+    MolarConcentrationSemantics, ReciprocalVolumeSemantics, SpringStiffnessSemantics,
+    SurfaceTensionSemantics, TemperatureDifferenceSemantics,
 };
 
 /// Dimensionless quantity.
@@ -94,6 +94,8 @@ pub type SurfaceChargeDensity = Dimension<N2, Z0, P1, P1, Z0, Z0, Z0>;
 pub type SpringStiffness = Dimension<Z0, P1, N2, Z0, Z0, Z0, Z0, SpringStiffnessSemantics>;
 /// Mechanical damping coefficient, force times time per length.
 pub type DampingCoefficient = Dimension<Z0, P1, N1, Z0, Z0, Z0, Z0>;
+/// Mechanical impedance, force per velocity, with coherent unit `kg/s`.
+pub type MechanicalImpedance = Dimension<Z0, P1, N1, Z0, Z0, Z0, Z0, MechanicalImpedanceSemantics>;
 /// Pressure gradient, pressure per length.
 pub type PressureGradient = Dimension<N2, P1, N2, Z0, Z0, Z0, Z0>;
 /// Hydraulic resistance, pressure per volumetric flow rate.

@@ -19,3 +19,4 @@
 | [0011](0011-electrical-conductivity-quantity.md) | Electrical conductivity for SAR contracts | Accepted — 2026-07-31 |
 | [0012](0012-specific-energy-semantic.md) | Semantic specific energy | Accepted — 2026-07-31 |
 | [0013](0013-acceleration-quantity.md) | Add SI acceleration and pressure-rate quantities | Accepted — 2026-08-01 |
+| [0014](0014-mechanical-impedance-semantic.md) | Name the SI mechanical-impedance quantity | Accepted — 2026-08-05 |

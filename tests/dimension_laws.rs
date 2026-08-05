@@ -7,9 +7,9 @@ use aequitas::systems::si::{
         ElectricConductance, ElectricCurrent, ElectricPotential, ElectricalConductivity,
         ElectricalImpedance, Energy, EnergyPerArea, EnergyPerVolume, Force, HydraulicInertance,
         HydraulicResistance, Intensity, KinematicViscosity, Length, Mass, MassDensity,
-        MassDensityPerTemperature, MassDensityRate, MolarEnergy, MolarHeatCapacity, NumberDensity,
-        Polarizability, Power, Pressure, PressureGradient, PressurePerElectricCurrent,
-        PressureRate, QuadraticHydraulicResistance, ReciprocalLength,
+        MassDensityPerTemperature, MassDensityRate, MechanicalImpedance, MolarEnergy,
+        MolarHeatCapacity, NumberDensity, Polarizability, Power, Pressure, PressureGradient,
+        PressurePerElectricCurrent, PressureRate, QuadraticHydraulicResistance, ReciprocalLength,
         ReciprocalLengthPerTemperature, ReciprocalTemperature, ReciprocalTemperatureSquared,
         ReciprocalTime, ReciprocalTimeSquared, SpecificAbsorptionRate, SpecificEnergy,
         SpecificHeatCapacity, SurfaceTension, TemperatureDifference, ThermalConductivity,
@@ -20,11 +20,12 @@ use aequitas::systems::si::{
         Ampere, Coulomb, CubicMeterPerSecond, Farad, Gray, GrayPerSecond, JoulePerCubicMeter,
         JoulePerKilogram, JoulePerKilogramKelvin, JoulePerMilliliter, JoulePerMole,
         JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter, KilogramPerCubicMeterKelvin,
-        KilogramPerCubicMeterSecond, Meter, MeterPerSecond, MeterPerSecondKelvin,
-        MeterPerSecondSquared, Newton, NewtonPerMeter, Pascal, PascalPerSecond, PascalSecond,
-        PerCubicMeter, PerKelvin, PerMeter, PerMeterKelvin, PerSecond, PerSquareKelvin, Radian,
-        Rayl, Second, Siemens, SiemensPerMeter, SquareMeter, SquareMeterPerSecond, Volt, Watt,
-        WattPerCubicMeter, WattPerKilogram, WattPerMeterFourth, WattPerSquareMeter,
+        KilogramPerCubicMeterSecond, KilogramPerSecond, Meter, MeterPerSecond,
+        MeterPerSecondKelvin, MeterPerSecondSquared, Newton, NewtonPerMeter, Pascal,
+        PascalPerSecond, PascalSecond, PerCubicMeter, PerKelvin, PerMeter, PerMeterKelvin,
+        PerSecond, PerSquareKelvin, Radian, Rayl, Second, Siemens, SiemensPerMeter, SquareMeter,
+        SquareMeterPerSecond, Volt, Watt, WattPerCubicMeter, WattPerKilogram, WattPerMeterFourth,
+        WattPerSquareMeter,
     },
 };
 
@@ -35,6 +36,18 @@ fn angle_has_a_distinct_radian_semantic_contract() {
     assert_eq!(
         angle.in_unit::<Radian>().to_bits(),
         core::f64::consts::FRAC_PI_2.to_bits()
+    );
+}
+
+#[test]
+fn mechanical_impedance_keeps_its_force_per_velocity_unit_for_complex_values() {
+    use eunomia::Complex64;
+
+    let impedance = MechanicalImpedance::from_unit::<KilogramPerSecond>(Complex64::new(2.0, -3.0));
+
+    assert_eq!(
+        impedance.in_unit::<KilogramPerSecond>(),
+        Complex64::new(2.0, -3.0)
     );
 }
 
