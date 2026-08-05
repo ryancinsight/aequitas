@@ -329,6 +329,26 @@ fn complex_phasors_preserve_units_and_dimension() {
 }
 
 #[test]
+fn complex_unit_conversion_scales_real_and_quadrature_components() {
+    use aequitas::systems::si::{
+        quantities::Length,
+        units::{Kilometer, Meter},
+    };
+    use eunomia::{Complex64, ComplexField};
+
+    let phasor = Complex64::new(1.25, -2.5);
+    let length: Length<Complex64> = Length::from_unit::<Kilometer>(phasor);
+    let meters = length.in_unit::<Meter>();
+
+    assert_eq!(meters, Complex64::new(1_250.0, -2_500.0));
+    assert_eq!(ComplexField::real(meters).to_bits(), 1_250.0_f64.to_bits());
+    assert_eq!(
+        ComplexField::imaginary(meters).to_bits(),
+        (-2_500.0_f64).to_bits()
+    );
+}
+
+#[test]
 fn complex_polarizability_preserves_units_and_dimension() {
     use aequitas::systems::si::units::FaradSquareMeter;
     use eunomia::Complex64;
