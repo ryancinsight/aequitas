@@ -51,5 +51,5 @@ fn main() {
 
     // The period is the reciprocal of frequency.  Construct from seconds.
     let period = Time::from_unit::<Second>(1.0 / centre_freq.in_unit::<Hertz>());
-    println!("period: {:.4e} µs", period.in_unit::<Microsecond>(),);
+    println!("period: {:.4e} µs", period.in_unit::<Microsecond>());
 }
