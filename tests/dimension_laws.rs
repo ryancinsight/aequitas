@@ -5,26 +5,28 @@ use aequitas::systems::si::{
         AbsorbedDose, AbsorbedDoseRate, Acceleration, AcousticImpedance, Angle, Area, AreaPerMass,
         AreaPerTime, Capacitance, Compliance, Dimensionless, DynamicViscosity, ElectricCharge,
         ElectricConductance, ElectricCurrent, ElectricPotential, ElectricalConductivity,
-        ElectricalImpedance, Energy, EnergyPerArea, EnergyPerVolume, Force, HydraulicInertance,
-        HydraulicResistance, Intensity, KinematicViscosity, Length, Mass, MassDensity,
-        MassDensityPerTemperature, MassDensityRate, MolarEnergy, MolarHeatCapacity, NumberDensity,
-        Polarizability, Power, Pressure, PressureGradient, PressurePerElectricCurrent,
-        PressureRate, QuadraticHydraulicResistance, ReciprocalLength,
+        ElectricalImpedance, Energy, EnergyPerArea, EnergyPerVolume, FlexuralRigidity, Force,
+        HydraulicInertance, HydraulicResistance, Intensity, KinematicViscosity, Length, Mass,
+        MassDensity, MassDensityPerTemperature, MassDensityRate, MechanicalImpedance, MolarEnergy,
+        MolarHeatCapacity, NumberDensity, Polarizability, Power, Pressure, PressureGradient,
+        PressurePerElectricCurrent, PressureRate, QuadraticHydraulicResistance, ReciprocalLength,
         ReciprocalLengthPerTemperature, ReciprocalTemperature, ReciprocalTemperatureSquared,
         ReciprocalTime, ReciprocalTimeSquared, SpecificAbsorptionRate, SpecificEnergy,
         SpecificHeatCapacity, SurfaceTension, TemperatureDifference, ThermalConductivity,
         ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, VelocityPerTemperature,
-        Volume, VolumetricFlowRate, VolumetricPowerDensity, VolumetricPowerDensityGradient,
+        Volume, VolumeChargeDensity, VolumetricFlowRate, VolumetricPowerDensity,
+        VolumetricPowerDensityGradient,
     },
     units::{
-        Ampere, Coulomb, CubicMeterPerSecond, Farad, Gray, GrayPerSecond, JoulePerCubicMeter,
-        JoulePerKilogram, JoulePerKilogramKelvin, JoulePerMilliliter, JoulePerMole,
-        JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter, KilogramPerCubicMeterKelvin,
-        KilogramPerCubicMeterSecond, Meter, MeterPerSecond, MeterPerSecondKelvin,
-        MeterPerSecondSquared, Newton, NewtonPerMeter, Pascal, PascalPerSecond, PascalSecond,
-        PerCubicMeter, PerKelvin, PerMeter, PerMeterKelvin, PerSecond, PerSquareKelvin, Radian,
-        Rayl, Second, Siemens, SiemensPerMeter, SquareMeter, SquareMeterPerSecond, Volt, Watt,
-        WattPerCubicMeter, WattPerKilogram, WattPerMeterFourth, WattPerSquareMeter,
+        Ampere, Coulomb, CoulombPerCubicMeter, CubicMeterPerSecond, Farad, Gray, GrayPerSecond,
+        Joule, JoulePerCubicMeter, JoulePerKilogram, JoulePerKilogramKelvin, JoulePerMilliliter,
+        JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter,
+        KilogramPerCubicMeterKelvin, KilogramPerCubicMeterSecond, KilogramPerSecond, Meter,
+        MeterPerSecond, MeterPerSecondKelvin, MeterPerSecondSquared, Newton, NewtonPerMeter,
+        Pascal, PascalPerSecond, PascalSecond, PerCubicMeter, PerKelvin, PerMeter, PerMeterKelvin,
+        PerSecond, PerSquareKelvin, Radian, Rayl, Second, Siemens, SiemensPerMeter, SquareMeter,
+        SquareMeterPerSecond, Volt, Watt, WattPerCubicMeter, WattPerKilogram, WattPerMeterFourth,
+        WattPerSquareMeter,
     },
 };
 
@@ -36,6 +38,33 @@ fn angle_has_a_distinct_radian_semantic_contract() {
         angle.in_unit::<Radian>().to_bits(),
         core::f64::consts::FRAC_PI_2.to_bits()
     );
+}
+
+#[test]
+fn mechanical_impedance_keeps_its_force_per_velocity_unit_for_complex_values() {
+    use eunomia::Complex64;
+
+    let impedance = MechanicalImpedance::from_unit::<KilogramPerSecond>(Complex64::new(2.0, -3.0));
+
+    assert_eq!(
+        impedance.in_unit::<KilogramPerSecond>(),
+        Complex64::new(2.0, -3.0)
+    );
+}
+
+#[test]
+fn mems_quantities_preserve_complex_unit_components() {
+    use eunomia::Complex64;
+
+    let charge_density =
+        VolumeChargeDensity::from_unit::<CoulombPerCubicMeter>(Complex64::new(1.5, -0.25));
+    let rigidity = FlexuralRigidity::from_unit::<Joule>(Complex64::new(2.0, -0.5));
+
+    assert_eq!(
+        charge_density.in_unit::<CoulombPerCubicMeter>(),
+        Complex64::new(1.5, -0.25)
+    );
+    assert_eq!(rigidity.in_unit::<Joule>(), Complex64::new(2.0, -0.5));
 }
 
 #[test]

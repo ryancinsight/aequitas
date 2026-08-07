@@ -20,6 +20,14 @@ pub struct SurfaceTensionSemantics;
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct SpringStiffnessSemantics;
 
+/// Semantic marker for force-per-velocity mechanical impedance.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct MechanicalImpedanceSemantics;
+
+/// Semantic marker for flexural rigidity.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct FlexuralRigiditySemantics;
+
 /// Semantic marker for plane and rotational angles measured in radians.
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct AngleSemantics;

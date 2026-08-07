@@ -14,6 +14,16 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Added provider-owned `VolumeChargeDensity` (`C/m³`) and
+  `FlexuralRigidity` (`J`) quantities for MEMS charge-gradient and plate
+  rigidity contracts. Eunomia complex values retain one observable unit for
+  real and quadrature components; no imaginary SI dimension is introduced.
+
+- Added the semantically distinct `MechanicalImpedance` quantity with the
+  coherent `kg/s` unit for force-per-velocity radiation and mechanical
+  impedance phasors. Eunomia `Complex` real and quadrature components retain
+  this single observable unit; no imaginary SI dimension is introduced.
+
 - Added the `VolumetricPowerDensityGradient` quantity and coherent `W/m⁴`
   unit for formulas whose spatial power-deposition derivative is explicit.
   This remains a real SI dimension; complex Eunomia values are still confined
