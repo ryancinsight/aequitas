@@ -2,7 +2,7 @@
 
 All externally observable changes are recorded here.
 
-## Unreleased
+## [0.2.0] - 2026-08-09
 
 ### Changed
 
