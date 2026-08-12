@@ -6,6 +6,15 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Completed the scalar-arithmetic ergonomics on `Quantity`: scalar-left
+  multiplication (`scalar * quantity`) is now commutative with the existing
+  quantity-right form, and `MulAssign`/`DivAssign` scale quantities in place.
+  The complex-phasor (`Quantity<Complex<T>, D>`) surface gains the same
+  commutative scalar product and compound-assignment operators. 9
+  value-semantic tests cover commutativity, in-place scaling, dimension and
+  unit preservation, composition with quantity arithmetic, value-vs-compound
+  parity, and the complex-phasor paths.
+
 - Added `quantity::UnitDisplay`, a unit-aware display wrapper that formats a
   quantity's value in a chosen linear unit together with its
   `LinearUnit::SYMBOL` abbreviation (e.g. `"2.5 m/s"`). The value is
