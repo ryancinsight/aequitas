@@ -321,7 +321,7 @@ remains a development-only differential oracle.
 | API variation | Generates storage-specific modules such as `si::f32` and `si::f64` | One `Quantity<T, D>` API with inferred or defaulted `T` |
 | `no_std` | Supported | Supported |
 | Affine units and quantity kinds | Supported | Not in the initial linear-unit slice |
-| Formatting and serialization | Supported | Outside the initial boundary |
+| Formatting and serialization | Supported | `UnitDisplay` (unit-aware `Display`/`Debug`) and optional serde (canonical scalar) supported |
 | Integer and rational storage | Supported | Outside the floating-point simulation boundary |
 
 The architectural decision and source-level comparison are recorded in
