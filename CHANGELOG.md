@@ -2,6 +2,18 @@
 
 All externally observable changes are recorded here.
 
+## [Unreleased]
+
+### Added
+
+- Added `quantity::UnitDisplay`, a unit-aware display wrapper that formats a
+  quantity's value in a chosen linear unit together with its
+  `LinearUnit::SYMBOL` abbreviation (e.g. `"2.5 m/s"`). The value is
+  materialized through `Quantity::in_unit`, so the printed number is expressed
+  in the requested unit rather than the canonical SI base unit. `Debug`
+  mirrors `Display`. 5 value-semantic tests cover velocity, scaled length
+  (kilometres), derived energy, Debug/Display parity, and immutability.
+
 ## [0.2.0] - 2026-08-09
 
 ### Changed
