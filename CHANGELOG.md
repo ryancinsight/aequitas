@@ -6,6 +6,23 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Added type-level `SqrtDimension` and `CbrtDimension` traits on the SI
+  dimension vector: exponents divisible by two (three) map to their exact
+  type-level quotient, implemented for the concrete exponent tuples present
+  in the shipped dimension inventory (area, mass-squared,
+  acceleration-squared, reciprocal-time-squared,
+  reciprocal-temperature-squared, volume, number-density, and
+  dimensionless). `Quantity::sqrt` and `Quantity::cbrt` root the scalar
+  through the `FloatElement` power surface while carrying the halved /
+  thirded dimension — `sqrt(area)` is a `Length` and `cbrt(volume)` is a
+  `Length`, with no runtime dimension checks. This is the capability the
+  `uom` crate cannot express generically (its dimensions are
+  integer-exponent only). 12 value-semantic tests cover dimension halving /
+  thirding, unit-aware display, round-trips through quantity multiplication,
+  the kinetic-energy composition (`sqrt(2E/m)`), the
+  acceleration-squared path, the reciprocal-time / reciprocal-temperature
+  paths, and the `NaN` domain of the power surface for negative operands.
+
 - Completed the scalar-arithmetic ergonomics on `Quantity`: scalar-left
   multiplication (`scalar * quantity`) is now commutative with the existing
   quantity-right form, and `MulAssign`/`DivAssign` scale quantities in place.
