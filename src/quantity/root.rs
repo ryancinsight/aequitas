@@ -23,6 +23,16 @@ where
     /// For example `sqrt(area)` yields a length and `sqrt(speed_squared)`
     /// yields a speed. The scalar root uses the `FloatElement` power surface
     /// at the native scalar precision.
+    ///
+    /// Dimensions with an odd exponent have no square root by construction,
+    /// so the call fails to compile:
+    ///
+    /// ```compile_fail
+    /// use aequitas::systems::si::quantities::Length;
+    ///
+    /// let side = Length::from_base(4.0);
+    /// let root = side.sqrt(); // `Length` has exponent `P1` (not even)
+    /// ```
     #[inline]
     #[must_use]
     pub fn sqrt(self) -> Quantity<T, <D as SqrtDimension>::Output> {
@@ -41,6 +51,16 @@ where
     /// through `FloatElement::cbrt`, the sign-preserving cube root defined
     /// for all reals — `cbrt(-8 m³)` is `-2 m`, unlike `powf(x, 1/3)` which
     /// is NaN for negative operands.
+    ///
+    /// Dimensions with an exponent not divisible by three have no cube root
+    /// by construction, so the call fails to compile:
+    ///
+    /// ```compile_fail
+    /// use aequitas::systems::si::quantities::Time;
+    ///
+    /// let t = Time::from_base(8.0);
+    /// let root = t.cbrt(); // `Time` has exponent `P1` (not divisible by 3)
+    /// ```
     #[inline]
     #[must_use]
     pub fn cbrt(self) -> Quantity<T, <D as CbrtDimension>::Output> {

@@ -3,7 +3,10 @@
 //! These verify the beyond-`uom` capability: `sqrt` halves and `cbrt` thirds
 //! the type-level dimension while applying the scalar root. Coverage locks
 //! the value behavior, unit-aware display, round-trips through quantity
-//! arithmetic, and the `NaN` domain of the `FloatElement` power surface.
+//! arithmetic, and the sign-preserving `cbrt` of negative operands. The
+//! negative *type-level* case — odd-exponent dimensions such as `Length::sqrt`
+//! and `Time::cbrt` must not compile — is locked by `compile_fail` doctests on
+//! `Quantity::sqrt` / `Quantity::cbrt` in `src/quantity/root.rs`.
 
 use aequitas::quantity::{Quantity, UnitDisplay};
 use aequitas::systems::si::dimensions::{
