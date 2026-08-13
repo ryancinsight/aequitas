@@ -2,6 +2,7 @@
 
 mod algebra;
 mod model;
+mod pow;
 mod root;
 
 pub use algebra::{DivideDimension, MultiplyDimension};
@@ -11,4 +12,5 @@ pub use model::{
     ReciprocalVolumeSemantics, SpringStiffnessSemantics, SurfaceTensionSemantics,
     TemperatureDifferenceSemantics,
 };
+pub use pow::PowDimension;
 pub use root::{CbrtDimension, SqrtDimension};
