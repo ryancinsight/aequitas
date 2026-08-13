@@ -21,6 +21,9 @@ jobs:
         with:
           components: clippy, rustfmt
       - uses: taiki-e/install-action@ea4c0b50b0d394ee91c5bb68a6a295b0556feb8e
+      - name: Normalize lock onto current provider heads
+        shell: bash
+        run: cargo metadata --format-version 1 --all-features > /dev/null
       - name: Format
         run: cargo fmt --all -- --check
       - name: Feature check

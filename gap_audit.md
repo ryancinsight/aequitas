@@ -34,6 +34,28 @@ vocabulary through Eunomia, and exposes one `Quantity<T, D>` API instead of
 `uom`'s closed storage-specific modules. `uom` remains a dev-only
 differential oracle; no production dependency.
 
+### Scalar-operator ergonomics gap
+
+Consumers could only write `quantity * scalar`; the scalar-left form, in-place
+`MulAssign`/`DivAssign`, and the complex-phasor equivalents were missing.
+Resolved upstream as PR #21 (commit `dd0b8e1`, merge `0052b80`): commutative
+scalar-left multiplication for `f32`/`f64`, compound assignment on real and
+complex quantities, with 9 value-semantic tests (f32 and complex-division
+paths completed in the rational-power increment).
+
+### Rational-power dimension gap
+
+`uom` cannot express fractional dimensions generically, so `sqrt`/`cbrt` could
+not carry the halved/thirded dimension. Resolved by `SqrtDimension`/
+`CbrtDimension` with concrete exponent-tuple impls plus `Quantity::sqrt`/
+`cbrt` through the `FloatElement` scalar surface (commit `72ef8b4`; 12
+value-semantic tests). The eunomia-owned sign-preserving `cbrt`
+(`FloatElement::cbrt`, `libm::cbrtf`/`libm::cbrt`) has since landed as the
+scalar-math SSOT and `Quantity::cbrt` now uses it (dropping the `powf(1/3)`
+path). Semantics-marked variants (`Angle::sqrt` → dimensionless,
+`ReciprocalVolume::cbrt` → reciprocal length) now compile with
+`BaseSemantics`-normalized output; no open rational-power gap remains.
+
 ## Deferred (documented boundary — see backlog.md)
 
 - Affine unit kinds and quantity kinds beyond the linear-unit slice.

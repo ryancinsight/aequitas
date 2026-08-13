@@ -4,6 +4,7 @@ mod arithmetic;
 mod construction;
 mod display;
 mod model;
+mod root;
 #[cfg(feature = "serde")]
 mod serde_impl;
 
