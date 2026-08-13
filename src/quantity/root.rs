@@ -1,8 +1,9 @@
 //! Rational-power operations on quantities.
 //!
 //! [`Quantity::sqrt`] and [`Quantity::cbrt`] apply the scalar square/cube root
-//! through the [`FloatElement`] power surface while carrying the correct
-//! half/third dimension at the type level. This is the capability `uom` cannot
+//! through the [`FloatElement`] scalar surface (native `cbrt`; `sqrt` via
+//! `powf(1/2)`) while carrying the correct half/third dimension at the type
+//! level. This is the capability `uom` cannot
 //! express generically (its dimensions are integer-exponent only and its
 //! `sqrt` is hardcoded per quantity).
 
@@ -37,13 +38,12 @@ where
     /// Cube root of this quantity, thirding every dimension exponent.
     ///
     /// For example `cbrt(volume)` yields a length. The scalar is rooted
-    /// through the `FloatElement` power surface (`powf(1/3)`), so a negative
-    /// value yields `NaN` — the same undefined-domain behavior `sqrt` has
-    /// for negative inputs. A sign-preserving cube root is a follow-up if a
-    /// consumer needs negative operands.
+    /// through `FloatElement::cbrt`, the sign-preserving cube root defined
+    /// for all reals — `cbrt(-8 m³)` is `-2 m`, unlike `powf(x, 1/3)` which
+    /// is NaN for negative operands.
     #[inline]
     #[must_use]
     pub fn cbrt(self) -> Quantity<T, <D as CbrtDimension>::Output> {
-        Quantity::from_base(self.value.powf(T::from_f64(1.0 / 3.0)))
+        Quantity::from_base(self.value.cbrt())
     }
 }

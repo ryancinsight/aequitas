@@ -48,9 +48,11 @@ paths completed in the rational-power increment).
 `uom` cannot express fractional dimensions generically, so `sqrt`/`cbrt` could
 not carry the halved/thirded dimension. Resolved by `SqrtDimension`/
 `CbrtDimension` with concrete exponent-tuple impls plus `Quantity::sqrt`/
-`cbrt` through the `FloatElement` power surface (commit `72ef8b4`; 12
-value-semantic tests). Deferred: eunomia-owned sign-preserving `cbrt` and
-semantics-marked dimension tuples (see backlog.md).
+`cbrt` through the `FloatElement` scalar surface (commit `72ef8b4`; 12
+value-semantic tests). The eunomia-owned sign-preserving `cbrt`
+(`FloatElement::cbrt`, `libm::cbrtf`/`libm::cbrt`) has since landed as the
+scalar-math SSOT and `Quantity::cbrt` now uses it (dropping the `powf(1/3)`
+path). Deferred: semantics-marked dimension tuples (see backlog.md).
 
 ## Deferred (documented boundary — see backlog.md)
 

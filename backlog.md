@@ -114,14 +114,14 @@ domain layer.
   (`72ef8b4`); evidence: 12 value-semantic tests and the full canonical gate
   set (fmt, `-D warnings` all-targets, clippy, nextest, doctests,
   no-default).
+- [x] [patch] Eunomia-owned sign-preserving `cbrt` (`libm::cbrtf` default,
+  native `libm::cbrt` for `f64`/`F64`) as the scalar-math SSOT;
+  `Quantity::cbrt` now roots through `FloatElement::cbrt` (`cbrt(-8 m³) ==
+  -2 m`), dropping the `powf(1/3)` path and its NaN-for-negative-operands
+  caveat. Cross-link: root ATLAS-AEQUITAS-ROOT-OPS-012 follow-up.
 
 ## Deferred (documented boundary)
 
-- [ ] [patch] Eunomia `FloatElement` gains a libm-backed, sign-preserving
-  `cbrt` (`libm::cbrtf`/`libm::cbrt`) as the scalar-math SSOT; `Quantity::cbrt`
-  then drops the `powf(1/3)` path and its NaN-for-negative-operands caveat.
-  Forward-path for the rational-power axis (cross-link: root
-  ATLAS-AEQUITAS-ROOT-OPS-012 follow-up).
 - [ ] [patch] Sqrt/cbrt impls for semantics-marked dimensions
   (`ReciprocalVolume`, `Angle`): the concrete tuples currently target
   `BaseSemantics` only. Add marked-variant tuples when a consumer needs

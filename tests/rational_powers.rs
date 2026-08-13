@@ -126,11 +126,9 @@ fn dimensionless_sqrt_and_cbrt_preserve_value() {
 }
 
 #[test]
-fn cbrt_of_negative_value_is_nan_on_powf_surface() {
-    // The `FloatElement` power surface (`powf(x, 1/3)`) is NaN for negative
-    // bases, matching `sqrt`'s undefined-domain behavior. Locked here so the
-    // caveat cannot drift silently.
+fn cbrt_preserves_sign_of_negative_operands() {
+    // cbrt(-8 m³) = -2 m via the sign-preserving `FloatElement::cbrt`.
     let volume = VolQuantity::from_base(-8.0);
     let side: LengthQuantity = volume.cbrt();
-    assert!(side.as_base().is_nan());
+    assert!((*side.as_base() + 2.0).abs() < f64::EPSILON);
 }
