@@ -130,8 +130,32 @@ fn dimensionless_sqrt_and_cbrt_preserve_value() {
 
 #[test]
 fn cbrt_preserves_sign_of_negative_operands() {
-    // cbrt(-8 m³) = -2 m via the sign-preserving `FloatElement::cbrt`.
+    // cbrt(-8 m³) = -2 m via the sign-preserving `FloatElement::cbrt`. The
+    // double-precision root is one ulp off -2.0, so assert the sign and
+    // magnitude with a loose tolerance rather than exact equality.
     let volume = VolQuantity::from_base(-8.0);
     let side: LengthQuantity = volume.cbrt();
-    assert!((*side.as_base() + 2.0).abs() < f64::EPSILON);
+    let value = *side.as_base();
+    assert!(value.is_sign_negative(), "cbrt(-8) must be negative");
+    assert!((value.abs() - 2.0).abs() < 1e-12, "|cbrt(-8)| must be 2");
+}
+
+#[test]
+fn sqrt_of_angle_normalizes_to_dimensionless() {
+    use aequitas::systems::si::quantities::{Angle, Dimensionless as DimensionlessQuantity};
+    // sqrt(9 rad) = 3 — the angle semantic marker normalizes away, so the
+    // result is a plain dimensionless quantity, not an angle.
+    let angle = Angle::from_base(9.0);
+    let rooted: DimensionlessQuantity = angle.sqrt();
+    assert!((*rooted.as_base() - 3.0).abs() < f64::EPSILON);
+}
+
+#[test]
+fn cbrt_of_reciprocal_volume_is_reciprocal_length() {
+    use aequitas::systems::si::quantities::{ReciprocalLength, ReciprocalVolume};
+    // cbrt(27 m⁻³) = 3 m⁻¹ — the reciprocal-volume marker normalizes away,
+    // so the result is a plain reciprocal length.
+    let reciprocal_volume = ReciprocalVolume::from_base(27.0);
+    let reciprocal_length: ReciprocalLength = reciprocal_volume.cbrt();
+    assert!((*reciprocal_length.as_base() - 3.0).abs() < f64::EPSILON);
 }

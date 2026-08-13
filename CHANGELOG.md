@@ -11,13 +11,14 @@ All externally observable changes are recorded here.
   type-level quotient, implemented for the concrete exponent tuples present
   in the shipped dimension inventory (area, mass-squared,
   acceleration-squared, reciprocal-time-squared,
-  reciprocal-temperature-squared, volume, number-density, and
-  dimensionless). `Quantity::sqrt` and `Quantity::cbrt` root the scalar
+  reciprocal-temperature-squared, volume, number-density, angle,
+  reciprocal-volume, and dimensionless; semantics-marked inputs normalize
+  to `BaseSemantics`). `Quantity::sqrt` and `Quantity::cbrt` root the scalar
   through `FloatElement` (`cbrt`; `powf(0.5)` for `sqrt`) while carrying the
   halved / thirded dimension — `sqrt(area)` is a `Length` and
   `cbrt(volume)` is a `Length`, with no runtime dimension checks. This is the capability the
   `uom` crate cannot express generically (its dimensions are
-  integer-exponent only). 12 value-semantic tests cover dimension halving /
+  integer-exponent only). 14 value-semantic tests cover dimension halving /
   thirding, unit-aware display, round-trips through quantity multiplication,
   the kinetic-energy composition (`sqrt(2E/m)`), the
   acceleration-squared path, the reciprocal-time / reciprocal-temperature

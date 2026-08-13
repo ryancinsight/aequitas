@@ -119,13 +119,13 @@ domain layer.
   `Quantity::cbrt` now roots through `FloatElement::cbrt` (`cbrt(-8 m³) ==
   -2 m`), dropping the `powf(1/3)` path and its NaN-for-negative-operands
   caveat. Cross-link: root ATLAS-AEQUITAS-ROOT-OPS-012 follow-up.
+- [x] [patch] Semantics-marked sqrt/cbrt variants: `Angle::sqrt()` (→
+  dimensionless) and `ReciprocalVolume::cbrt()` (→ reciprocal length) now
+  compile; the root output normalizes the semantic marker to
+  `BaseSemantics`, matching `MultiplyDimension`/`DivideDimension`. Evidence:
+  2 value-semantic tests (angle and reciprocal-volume paths).
 
 ## Deferred (documented boundary)
-
-- [ ] [patch] Sqrt/cbrt impls for semantics-marked dimensions
-  (`ReciprocalVolume`, `Angle`): the concrete tuples currently target
-  `BaseSemantics` only. Add marked-variant tuples when a consumer needs
-  `cbrt(reciprocal-volume)` or `sqrt(angle)`.
 
 - [ ] [minor] Affine unit kinds and quantity kinds beyond the linear-unit
   slice (`uom`-style `Kind` system). Not required by current Atlas consumers;

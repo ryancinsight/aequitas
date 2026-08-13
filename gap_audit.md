@@ -52,7 +52,9 @@ not carry the halved/thirded dimension. Resolved by `SqrtDimension`/
 value-semantic tests). The eunomia-owned sign-preserving `cbrt`
 (`FloatElement::cbrt`, `libm::cbrtf`/`libm::cbrt`) has since landed as the
 scalar-math SSOT and `Quantity::cbrt` now uses it (dropping the `powf(1/3)`
-path). Deferred: semantics-marked dimension tuples (see backlog.md).
+path). Semantics-marked variants (`Angle::sqrt` → dimensionless,
+`ReciprocalVolume::cbrt` → reciprocal length) now compile with
+`BaseSemantics`-normalized output; no open rational-power gap remains.
 
 ## Deferred (documented boundary — see backlog.md)
 
