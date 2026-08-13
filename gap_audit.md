@@ -28,11 +28,11 @@ tests.
 
 ### `uom` feature parity
 
-The `uom` 0.38.0 comparison table (README) shows the intentional boundary:
-Aequitas limits SI breadth to current Atlas consumers, owns the scalar
-vocabulary through Eunomia, and exposes one `Quantity<T, D>` API instead of
-`uom`'s closed storage-specific modules. `uom` remains a dev-only
-differential oracle; no production dependency.
+The `uom` 0.38.0 comparison table (see [§uom gap analysis](#uom-gap-analysis))
+shows the intentional boundary: Aequitas limits SI breadth to current Atlas
+consumers, owns the scalar vocabulary through Eunomia, and exposes one
+`Quantity<T, D>` API instead of `uom`'s closed storage-specific modules. `uom`
+remains a dev-only differential oracle; no production dependency.
 
 ### Scalar-operator ergonomics gap
 
@@ -63,6 +63,27 @@ path). Semantics-marked variants (`Angle::sqrt` → dimensionless,
 - Formatting breadth beyond `UnitDisplay`.
 
 Each is gated on a driving Atlas consumer; no consumer currently needs them.
+
+## uom gap analysis
+
+[`uom` 0.38.0](https://docs.rs/uom/0.38.0/uom/) is the comparison baseline and
+remains a development-only differential oracle.
+
+| Capability | `uom` 0.38.0 | Aequitas 0.1 scope |
+| --- | --- | --- |
+| Compile-time dimensional analysis | Mature, broad implementation | Required; implemented through one generic dimension algebra |
+| Type-level rational/integer powers | Integer exponents only; `sqrt`/`powi` hardcoded per quantity | `SqrtDimension`, `CbrtDimension`, and generic `PowDimension<P>` raise the dimension itself at the type level (`powi::<P2>` of `Length` is `Area`) |
+| SI and non-SI breadth | Extensive | Deliberately limited to current Atlas consumers |
+| Storage types | Closed macro-generated set of primitive, integer, rational, and complex types | Real quantities over Eunomia's `UnitScalar` implementations; complex phasors over `eunomia::Complex32`/`Complex64` |
+| Atlas datatype SSOT | Uses `num-traits` storage contracts | Uses Eunomia directly; defines no scalar vocabulary |
+| API variation | Generates storage-specific modules such as `si::f32` and `si::f64` | One `Quantity<T, D>` API with inferred or defaulted `T` |
+| `no_std` | Supported | Supported |
+| Affine units and quantity kinds | Supported | Not in the initial linear-unit slice |
+| Formatting and serialization | Supported | `UnitDisplay` (unit-aware `Display`/`Debug`) and optional serde (canonical scalar) supported |
+| Integer and rational storage | Supported | Outside the floating-point simulation boundary |
+
+The architectural decision and source-level comparison are recorded in
+[ADR 0001](docs/adr/0001-aequitas-quantity-law.md).
 
 ## Verified non-gaps (do not chase)
 

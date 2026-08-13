@@ -309,24 +309,10 @@ modules. Unit markers and dimensions are zero-sized; `Quantity<T, D>` is
 
 ## `uom` gap analysis
 
-[`uom` 0.38.0](https://docs.rs/uom/0.38.0/uom/) is the comparison baseline and
-remains a development-only differential oracle.
-
-| Capability | `uom` 0.38.0 | Aequitas 0.1 scope |
-| --- | --- | --- |
-| Compile-time dimensional analysis | Mature, broad implementation | Required; implemented through one generic dimension algebra |
-| Type-level rational/integer powers | Integer exponents only; `sqrt`/`powi` hardcoded per quantity | `SqrtDimension`, `CbrtDimension`, and generic `PowDimension<P>` raise the dimension itself at the type level (`powi::<P2>` of `Length` is `Area`) |
-| SI and non-SI breadth | Extensive | Deliberately limited to current Atlas consumers |
-| Storage types | Closed macro-generated set of primitive, integer, rational, and complex types | Real quantities over Eunomia's `UnitScalar` implementations; complex phasors over `eunomia::Complex32`/`Complex64` |
-| Atlas datatype SSOT | Uses `num-traits` storage contracts | Uses Eunomia directly; defines no scalar vocabulary |
-| API variation | Generates storage-specific modules such as `si::f32` and `si::f64` | One `Quantity<T, D>` API with inferred or defaulted `T` |
-| `no_std` | Supported | Supported |
-| Affine units and quantity kinds | Supported | Not in the initial linear-unit slice |
-| Formatting and serialization | Supported | `UnitDisplay` (unit-aware `Display`/`Debug`) and optional serde (canonical scalar) supported |
-| Integer and rational storage | Supported | Outside the floating-point simulation boundary |
-
-The architectural decision and source-level comparison are recorded in
-[ADR 0001](docs/adr/0001-aequitas-quantity-law.md).
+The capability comparison against [`uom` 0.38.0](https://docs.rs/uom/0.38.0/uom/),
+including the intentional boundary and deferred items, is maintained in
+[`gap_audit.md`](gap_audit.md#uom-gap-analysis). `uom` remains a development-only
+differential oracle.
 
 ## Verification
 
