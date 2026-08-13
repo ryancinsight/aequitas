@@ -315,6 +315,7 @@ remains a development-only differential oracle.
 | Capability | `uom` 0.38.0 | Aequitas 0.1 scope |
 | --- | --- | --- |
 | Compile-time dimensional analysis | Mature, broad implementation | Required; implemented through one generic dimension algebra |
+| Type-level rational/integer powers | Integer exponents only; `sqrt`/`powi` hardcoded per quantity | `SqrtDimension`, `CbrtDimension`, and generic `PowDimension<P>` raise the dimension itself at the type level (`powi::<P2>` of `Length` is `Area`) |
 | SI and non-SI breadth | Extensive | Deliberately limited to current Atlas consumers |
 | Storage types | Closed macro-generated set of primitive, integer, rational, and complex types | Real quantities over Eunomia's `UnitScalar` implementations; complex phasors over `eunomia::Complex32`/`Complex64` |
 | Atlas datatype SSOT | Uses `num-traits` storage contracts | Uses Eunomia directly; defines no scalar vocabulary |

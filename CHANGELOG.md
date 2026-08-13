@@ -6,6 +6,19 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Added the `PowDimension<P>` trait: raising a dimension to the type-level
+  integer power `P` multiplies every SI base exponent through typenum
+  `Prod`. `Quantity::powi::<P>()` applies the scalar power via
+  `FloatElement::powi` while raising the dimension itself at the type
+  level — `Length::powi::<P2>()` is an `Area`, `Time::powi::<N1>()` is a
+  `ReciprocalTime`, and `powi::<Z0>()` is dimensionless. `uom`'s `powi`
+  only scales the value at runtime with a hardcoded per-quantity dimension,
+  so this is a strict capability extension. Semantics-marked dimensions
+  normalize to `BaseSemantics` (matching `MultiplyDimension` /
+  `DivideDimension`). 17 value-semantic tests cover squaring / cubing,
+  inversion, negative powers, zero-power, round-trips through `sqrt`,
+  dimension shapes, display in `m²`, and semantics normalization.
+
 - Added type-level `SqrtDimension` and `CbrtDimension` traits on the SI
   dimension vector: exponents divisible by two (three) map to their exact
   type-level quotient, implemented for the concrete exponent tuples present

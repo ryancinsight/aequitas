@@ -33,6 +33,27 @@ where
     /// let side = Length::from_base(4.0);
     /// let root = side.sqrt(); // `Length` has exponent `P1` (not even)
     /// ```
+    ///
+    /// Semantics-marked dimensions normalize their marker away: `Angle::sqrt`
+    /// is dimensionless, so assigning the result back to an `Angle` fails:
+    ///
+    /// ```compile_fail
+    /// use aequitas::systems::si::quantities::Angle;
+    ///
+    /// let angle = Angle::from_base(9.0);
+    /// let still_angle: Angle = angle.sqrt(); // yields dimensionless, not Angle
+    /// ```
+    ///
+    /// The normalization is irreversible: squaring a rooted `Angle` still
+    /// yields dimensionless, so the `Angle` marker never re-forms:
+    ///
+    /// ```compile_fail
+    /// use aequitas::systems::si::quantities::Angle;
+    ///
+    /// let angle = Angle::from_base(9.0);
+    /// let rooted = angle.sqrt();            // dimensionless
+    /// let squared: Angle = rooted * rooted; // still dimensionless, not Angle
+    /// ```
     #[inline]
     #[must_use]
     pub fn sqrt(self) -> Quantity<T, <D as SqrtDimension>::Output> {
@@ -60,6 +81,28 @@ where
     ///
     /// let t = Time::from_base(8.0);
     /// let root = t.cbrt(); // `Time` has exponent `P1` (not divisible by 3)
+    /// ```
+    ///
+    /// Semantics-marked dimensions normalize their marker away:
+    /// `ReciprocalVolume::cbrt` is a reciprocal length, so assigning the
+    /// result back to a `ReciprocalVolume` fails:
+    ///
+    /// ```compile_fail
+    /// use aequitas::systems::si::quantities::ReciprocalVolume;
+    ///
+    /// let rv = ReciprocalVolume::from_base(27.0);
+    /// let still_rv: ReciprocalVolume = rv.cbrt(); // yields reciprocal length
+    /// ```
+    ///
+    /// The normalization is irreversible: cubing a rooted `ReciprocalVolume`
+    /// still yields a plain reciprocal volume, so the marker never re-forms:
+    ///
+    /// ```compile_fail
+    /// use aequitas::systems::si::quantities::ReciprocalVolume;
+    ///
+    /// let rv = ReciprocalVolume::from_base(27.0);
+    /// let rooted = rv.cbrt();            // reciprocal length
+    /// let cubed: ReciprocalVolume = rooted * rooted * rooted; // plain, not marked
     /// ```
     #[inline]
     #[must_use]
