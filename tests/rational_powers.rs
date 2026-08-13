@@ -6,7 +6,10 @@
 //! arithmetic, and the sign-preserving `cbrt` of negative operands. The
 //! negative *type-level* case — odd-exponent dimensions such as `Length::sqrt`
 //! and `Time::cbrt` must not compile — is locked by `compile_fail` doctests on
-//! `Quantity::sqrt` / `Quantity::cbrt` in `src/quantity/root.rs`.
+//! `Quantity::sqrt` / `Quantity::cbrt` in `src/quantity/root.rs`. The
+//! semantics-marked normalization — `Angle::sqrt` yields dimensionless (not
+//! `Angle`) and `ReciprocalVolume::cbrt` yields reciprocal length (not
+//! `ReciprocalVolume`) — is locked the same way.
 
 use aequitas::quantity::{Quantity, UnitDisplay};
 use aequitas::systems::si::dimensions::{
