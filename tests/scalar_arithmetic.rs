@@ -82,3 +82,52 @@ fn energy_displays_with_joule() {
     let rendered = format!("{}", UnitDisplay::new(&e, Joule));
     assert_eq!(rendered, "3 J");
 }
+
+#[test]
+fn complex_div_by_scalar_scales_reciprocally() {
+    use eunomia::Complex64;
+    let z = Quantity::<Complex64, Length>::from_base(Complex64::new(2.0, 4.0));
+    let half = z / 2.0_f64;
+    // (2 + 4i) / 2 = 1 + 2i.
+    assert!((half.as_base().re - 1.0).abs() < f64::EPSILON);
+    assert!((half.as_base().im - 2.0).abs() < f64::EPSILON);
+}
+
+#[test]
+fn complex_div_assign_scales_in_place() {
+    use eunomia::Complex64;
+    let mut z = Quantity::<Complex64, Length>::from_base(Complex64::new(4.0, -8.0));
+    z /= 2.0_f64;
+    assert!((z.as_base().re - 2.0).abs() < f64::EPSILON);
+    assert!((z.as_base().im - -4.0).abs() < f64::EPSILON);
+}
+
+#[test]
+fn complex_div_by_scalar_matches_compound() {
+    use eunomia::Complex64;
+    let a = Quantity::<Complex64, Length>::from_base(Complex64::new(6.0, 3.0));
+    let b = a / 3.0_f64;
+    let mut c = Quantity::<Complex64, Length>::from_base(Complex64::new(6.0, 3.0));
+    c /= 3.0_f64;
+    assert!((b.as_base().re - c.as_base().re).abs() < f64::EPSILON);
+    assert!((b.as_base().im - c.as_base().im).abs() < f64::EPSILON);
+}
+
+#[test]
+fn scalar_left_mul_with_f32_is_commutative() {
+    let v = Quantity::<f32, Velocity>::from_base(2.5_f32);
+    let left = 2.0_f32 * v;
+    let right = v * 2.0_f32;
+    // 2.0 * 2.5 m/s = 5.0 m/s both ways.
+    assert!((*left.as_base() - 5.0_f32).abs() < f32::EPSILON);
+    assert!((*right.as_base() - 5.0_f32).abs() < f32::EPSILON);
+}
+
+#[test]
+fn f32_compound_assign_ops_scale_in_place() {
+    let mut v = Quantity::<f32, Velocity>::from_base(2.5_f32);
+    v *= 4.0_f32;
+    assert!((*v.as_base() - 10.0_f32).abs() < f32::EPSILON);
+    v /= 5.0_f32;
+    assert!((*v.as_base() - 2.0_f32).abs() < f32::EPSILON);
+}

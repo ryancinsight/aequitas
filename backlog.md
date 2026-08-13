@@ -96,8 +96,36 @@ domain layer.
   `Debug`/`Display` parity; the printed value is materialized through
   `Quantity::in_unit`. Evidence: 5 value-semantic tests (velocity, scaled
   length, derived energy, Debug/Display parity, immutability).
+- [x] [patch] Scalar-arithmetic ergonomics: commutative scalar-left
+  multiplication (`scalar * quantity`), `MulAssign`/`DivAssign` in-place
+  scaling, and the complex-phasor (`Quantity<Complex<T>, D>`) equivalents.
+  Landed upstream as PR #21 (commit `dd0b8e1`, merge `0052b80`); evidence:
+  9 value-semantic tests (commutativity, in-place scaling, dimension/unit
+  preservation, composition with quantity arithmetic, value-vs-compound
+  parity, complex paths) plus the f32 / complex-division paths completed in
+  the `rational-powers` increment.
+- [x] [patch] Rational-power operations beyond `uom`: type-level
+  `SqrtDimension`/`CbrtDimension` over the concrete exponent tuples in the
+  SI inventory (8 sqrt shapes, 3 cbrt shapes; exact division only, so
+  odd-exponent dimensions get no impl by construction) and `Quantity::sqrt`/
+  `cbrt` rooting the scalar through the `FloatElement` power surface —
+  `sqrt(area)` is a `Length`, `cbrt(volume)` is a `Length`, with no runtime
+  dimension checks. Landed on `codex/aequitas-root-ops-closure`
+  (`72ef8b4`); evidence: 12 value-semantic tests and the full canonical gate
+  set (fmt, `-D warnings` all-targets, clippy, nextest, doctests,
+  no-default).
 
 ## Deferred (documented boundary)
+
+- [ ] [patch] Eunomia `FloatElement` gains a libm-backed, sign-preserving
+  `cbrt` (`libm::cbrtf`/`libm::cbrt`) as the scalar-math SSOT; `Quantity::cbrt`
+  then drops the `powf(1/3)` path and its NaN-for-negative-operands caveat.
+  Forward-path for the rational-power axis (cross-link: root
+  ATLAS-AEQUITAS-ROOT-OPS-012 follow-up).
+- [ ] [patch] Sqrt/cbrt impls for semantics-marked dimensions
+  (`ReciprocalVolume`, `Angle`): the concrete tuples currently target
+  `BaseSemantics` only. Add marked-variant tuples when a consumer needs
+  `cbrt(reciprocal-volume)` or `sqrt(angle)`.
 
 - [ ] [minor] Affine unit kinds and quantity kinds beyond the linear-unit
   slice (`uom`-style `Kind` system). Not required by current Atlas consumers;
