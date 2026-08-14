@@ -6,6 +6,13 @@ dimensions, transparent quantities over Eunomia scalars, and linear SI unit
 conversion, consumed by proteus, hyperion, kwavers, CFDrs, helios, and the
 domain layer.
 
+## Active
+
+- [x] [patch] Make CI verify the committed lock graph with
+  `cargo metadata --locked` instead of re-resolving provider heads before the
+  locked gates. Reconcile the comparison table's delivered `0.2.0` scope.
+  Evidence: exact default-head CI and `git diff --check` pass.
+
 ## Delivered — foundation (0.1.0)
 
 - [x] [arch] Scaffold the provider: generic `Quantity<T, D>` over Eunomia

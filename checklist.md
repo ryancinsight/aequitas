@@ -4,6 +4,12 @@ Target version: 0.2.0
 
 Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified green)
 
+## Lock-graph verification (Unreleased)
+
+- [x] [patch] Verify the committed dependency graph with locked metadata before
+  the feature, Clippy, test, doctest, and Rustdoc gates; remove the unlocked
+  lock-rewrite step. Reconcile the gap table to Aequitas 0.2.0.
+
 ## AEQ-REL-001 [minor] — crates.io publication
 
 - [x] Enable crates publication with repository-owned trusted-publishing

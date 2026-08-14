@@ -69,7 +69,7 @@ Each is gated on a driving Atlas consumer; no consumer currently needs them.
 [`uom` 0.38.0](https://docs.rs/uom/0.38.0/uom/) is the comparison baseline and
 remains a development-only differential oracle.
 
-| Capability | `uom` 0.38.0 | Aequitas 0.1 scope |
+| Capability | `uom` 0.38.0 | Aequitas 0.2 scope |
 | --- | --- | --- |
 | Compile-time dimensional analysis | Mature, broad implementation | Required; implemented through one generic dimension algebra |
 | Type-level rational/integer powers | Integer exponents only; `sqrt`/`powi` hardcoded per quantity | `SqrtDimension`, `CbrtDimension`, and generic `PowDimension<P>` raise the dimension itself at the type level (`powi::<P2>` of `Length` is `Area`) |
