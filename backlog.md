@@ -11,7 +11,10 @@ domain layer.
 - [x] [patch] Make CI verify the committed lock graph with
   `cargo metadata --locked` instead of re-resolving provider heads before the
   locked gates. Reconcile the comparison table's delivered `0.2.0` scope.
-  Evidence: exact default-head CI and `git diff --check` pass.
+  Refresh the standalone lock to record Eunomia default `b6f001a` and remove
+  Atlas overlay-only patch entries. Evidence: exact default-head run
+  `31785906110` passes verify and supply-chain at merged head `7a63b76`, and
+  `git diff --check` passes.
 
 ## Delivered — foundation (0.1.0)
 

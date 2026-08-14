@@ -8,7 +8,10 @@ Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified gree
 
 - [x] [patch] Verify the committed dependency graph with locked metadata before
   the feature, Clippy, test, doctest, and Rustdoc gates; remove the unlocked
-  lock-rewrite step. Reconcile the gap table to Aequitas 0.2.0.
+  lock-rewrite step. Refresh the standalone lock to Eunomia `b6f001a` and
+  remove Atlas overlay-only patch entries. Reconcile the gap table to Aequitas
+  0.2.0. Hosted run `31785906110` passes verify and supply-chain at merged
+  head `7a63b76`.
 
 ## AEQ-REL-001 [minor] — crates.io publication
 
