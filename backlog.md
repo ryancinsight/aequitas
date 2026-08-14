@@ -16,6 +16,11 @@ domain layer.
   `31785906110` passes verify and supply-chain at merged head `7a63b76`, and
   `git diff --check` passes.
 
+- [x] [patch] Refresh the generated ADR index from the existing fifteen
+  canonical decision headers. The index now records `Accepted` for every ADR;
+  no decision content changes. Evidence: the Atlas generator's scoped output
+  matches `docs/adr/README.md` exactly.
+
 ## Delivered — foundation (0.1.0)
 
 - [x] [arch] Scaffold the provider: generic `Quantity<T, D>` over Eunomia

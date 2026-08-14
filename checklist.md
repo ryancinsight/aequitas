@@ -13,6 +13,12 @@ Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified gree
   0.2.0. Hosted run `31785906110` passes verify and supply-chain at merged
   head `7a63b76`.
 
+## ADR governance
+
+- [x] Regenerate `docs/adr/README.md` from the fifteen canonical ADR headers;
+      normalize the generated status tokens to `Accepted` without changing
+      any decision record.
+
 ## AEQ-REL-001 [minor] — crates.io publication
 
 - [x] Enable crates publication with repository-owned trusted-publishing
