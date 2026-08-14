@@ -6,18 +6,18 @@
 
 | ADR | Title | Status |
 | --- | ----- | ------ |
-| [0001](0001-aequitas-quantity-law.md) | Own Atlas physical-quantity law in Aequitas | — |
-| [0002](0002-fluid-acoustic-quantity-laws.md) | Add fluid and acoustic transport quantity laws | — |
-| [0003](0003-energy-density-temperature-difference.md) | Add energy density and temperature-difference semantics | — |
-| [0004](0004-surface-tension-semantic.md) | Distinguish Surface Tension from Energy per Area | — |
-| [0005](0005-angle-semantic.md) | Distinguish Angles from Dimensionless Scalars | — |
-| [0006](0006-force-semantic.md) | Name the SI Force Quantity | — |
+| [0001](0001-aequitas-quantity-law.md) | Own Atlas physical-quantity law in Aequitas | Accepted |
+| [0002](0002-fluid-acoustic-quantity-laws.md) | Add fluid and acoustic transport quantity laws | Accepted |
+| [0003](0003-energy-density-temperature-difference.md) | Add energy density and temperature-difference semantics | Accepted |
+| [0004](0004-surface-tension-semantic.md) | Distinguish Surface Tension from Energy per Area | Accepted |
+| [0005](0005-angle-semantic.md) | Distinguish Angles from Dimensionless Scalars | Accepted |
+| [0006](0006-force-semantic.md) | Name the SI Force Quantity | Accepted |
 | [0007](0007-number-density-contract.md) | Name the SI Number-Density Quantity | Accepted |
-| [0008](0008-electrical-quantities.md) | Add SI Electrical Quantities for Biophysical Contracts | Accepted — 2026-07-27 |
-| [0009](0009-complex-physical-quantities.md) | Represent Complex Physical Phasors With Eunomia | — |
+| [0008](0008-electrical-quantities.md) | Add SI Electrical Quantities for Biophysical Contracts | Accepted |
+| [0009](0009-complex-physical-quantities.md) | Represent Complex Physical Phasors With Eunomia | Accepted |
 | [0010](0010-molar-concentration-optical-wavelength.md) | Add molar concentration and optical wavelength units | Accepted |
-| [0011](0011-electrical-conductivity-quantity.md) | Electrical conductivity for SAR contracts | Accepted — 2026-07-31 |
-| [0012](0012-specific-energy-semantic.md) | Semantic specific energy | Accepted — 2026-07-31 |
-| [0013](0013-acceleration-quantity.md) | Add SI acceleration and pressure-rate quantities | Accepted — 2026-08-01 |
-| [0014](0014-mechanical-impedance-semantic.md) | Name the SI mechanical-impedance quantity | Accepted — 2026-08-05 |
-| [0015](0015-mems-physical-quantities.md) | Name MEMS charge-density and flexural-rigidity quantities | Accepted — 2026-08-05 |
+| [0011](0011-electrical-conductivity-quantity.md) | Electrical Conductivity for SAR Contracts | Accepted |
+| [0012](0012-specific-energy-semantic.md) | Semantic Specific Energy | Accepted |
+| [0013](0013-acceleration-quantity.md) | Add SI acceleration and pressure-rate quantities | Accepted |
+| [0014](0014-mechanical-impedance-semantic.md) | Name the SI mechanical-impedance quantity | Accepted |
+| [0015](0015-mems-physical-quantities.md) | Name MEMS charge-density and flexural-rigidity quantities | Accepted |

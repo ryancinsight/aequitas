@@ -2,6 +2,13 @@
 
 ## Closed gaps
 
+### ADR index freshness
+
+The generated ADR index previously retained missing and date-suffixed status
+tokens despite all fifteen decision records carrying canonical accepted
+statuses. It now matches the generator output and records `Accepted` for every
+ADR. No decision content changed; this is documentation-derived state.
+
 ### Complex-unit conversion seam (resolved via Eunomia E-035)
 
 The stack audit found Aequitas could convert `FloatElement` values but had no
