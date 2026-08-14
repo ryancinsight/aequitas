@@ -7,6 +7,11 @@
 //! time: multiplying a [`MassDensity`] by a [`Velocity`] produces an
 //! [`AcousticImpedance`] — any other product is a type error.
 
+#![expect(
+    clippy::print_stdout,
+    reason = "book example: stdout is the demonstrated output"
+)]
+
 use aequitas::systems::si::{
     quantities::{AcousticImpedance, MassDensity, Velocity},
     units::{GramPerCubicCentimeter, KilogramPerCubicMeter, MeterPerSecond, Rayl},

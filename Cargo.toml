@@ -25,13 +25,41 @@ default = ["std"]
 std = ["eunomia/std"]
 serde = ["dep:serde"]
 
-[lints.rust]
+[workspace]
+members = ["."]
+default-members = ["."]
+resolver = "3"
+
+[lints]
+workspace = true
+
+[workspace.lints.rust]
 missing_docs = "deny"
 unsafe_code = "forbid"
 
-[lints.clippy]
-pedantic = { level = "warn", priority = -1 }
+[workspace.lints.clippy]
+pedantic = { level = "deny", priority = -1 }
+
+# Pedantic floor ratchet: every class listed below already fires in this
+# workspace and is allowed at its measured baseline; every class NOT listed
+# is a hard error. Counts are `cargo clippy --all-targets` hits at the time
+# the floor was established (total / production, production excluding
+# `#[cfg(test)]` modules and test, bench and example targets). Burn a class
+# down to zero, then delete its line -- the floor tightens, never loosens.
+#
+# The ratchet is empty: a census over `--all-features`, default features and
+# `--no-default-features`, across all targets, found 0 pedantic hits. The
+# whole of `clippy::pedantic` is therefore a hard error here with no
+# exceptions -- keep it that way.
+
+# --- Restriction floor ---
+# Aequitas is a library: an input-dependent `unwrap` is a panic in a consumer's
+# process. Denied outright with no ratchet -- zero production sites.
 unwrap_used = "deny"
+# A library never writes to the process's stdio; output belongs to the caller.
+print_stdout = "deny"
+print_stderr = "deny"
+dbg_macro = "deny"
 
 [profile.dev]
 debug = "line-tables-only"

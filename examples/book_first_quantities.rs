@@ -5,6 +5,11 @@
 //! a display unit.  Every conversion factor is a compile-time constant; the
 //! actual multiplication instructions are the only runtime cost.
 
+#![expect(
+    clippy::print_stdout,
+    reason = "book example: stdout is the demonstrated output"
+)]
+
 use aequitas::systems::si::{
     quantities::{Frequency, Length, Pressure, Time},
     units::{Hertz, Kilopascal, Megahertz, Meter, Microsecond, Millimeter, Pascal, Second},
