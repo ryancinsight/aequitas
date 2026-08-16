@@ -4,6 +4,18 @@ Target version: 0.2.0
 
 Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified green)
 
+## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
+
+- [x] Re-run the locked provider gate set from an isolated checkout at the
+      current provider head; record exact results and evidence limits in
+      `gap_audit.md`.
+- [x] Confirm deferred affine, integer/rational-storage, and broader-formatting
+      capabilities remain consumer-gated and do not require implementation in
+      this increment.
+- [x] Complete the provider-local documentation closure and hosted checks.
+      Isolated gates are green at `4ab0eb4`; hosted validation remains the
+      authoritative release boundary for a future provider change.
+
 ## Lock-graph verification (Unreleased)
 
 - [x] [patch] Verify the committed dependency graph with locked metadata before

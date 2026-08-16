@@ -1,5 +1,32 @@
 # Aequitas gap audit
 
+## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
+
+The current provider head is `4ab0eb4` (`chore(aequitas): Promote the lint
+floor to a denied workspace table`). The isolated checkout passed the
+provider-owned gates from outside the Atlas umbrella overlay:
+
+- `cargo fmt --check --manifest-path .../Cargo.toml`
+- `cargo check --locked --all-features --all-targets --manifest-path .../Cargo.toml`
+- `cargo clippy --locked --all-targets --all-features --manifest-path .../Cargo.toml -- -D warnings`
+- `cargo nextest run --locked --all-features --manifest-path .../Cargo.toml`: 104/104 passed, 0 skipped
+- `cargo test --locked --doc --all-features --manifest-path .../Cargo.toml`: 13 runtime doctests and 8 compile-fail doctests passed; 1 doctest is intentionally ignored
+- `cargo doc --locked --no-deps --all-features --manifest-path .../Cargo.toml`
+- `cargo deny check`: advisories, bans, licenses, and sources passed
+
+The cargo-deny run emitted one expected `unmatched-source` warning for the
+Eunomia Git source because the Atlas development overlay resolves that
+dependency locally. The overlay also rewrites the local lockfile; that derived
+churn was discarded and is not a provider defect. The standalone locked gates
+above were run outside the overlay and did not require a lockfile rewrite.
+
+The deferred affine-unit, integer/rational-storage, and broader-formatting
+capabilities remain documented consumer-gated boundaries. No current Atlas
+consumer requires them, so this increment adds no speculative API or storage
+variant. The suite supplies dimension-law, conversion-property, generic-scalar,
+layout, and `uom` differential evidence; it does not establish runtime
+performance, memory usage, hardware behavior, or hosted release readiness.
+
 ## Closed gaps
 
 ### ADR index freshness
