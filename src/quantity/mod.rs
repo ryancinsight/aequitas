@@ -1,5 +1,6 @@
 //! Transparent physical quantities and arithmetic.
 
+mod absminmax;
 mod arithmetic;
 mod construction;
 mod display;
