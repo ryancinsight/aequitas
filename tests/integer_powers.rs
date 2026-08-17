@@ -185,3 +185,47 @@ fn powi_acceleration_shape() {
     let back: Acceleration = squared.sqrt();
     assert!((*back.as_base() - 2.0).abs() < f64::EPSILON);
 }
+
+#[test]
+fn reciprocal_of_time_is_reciprocal_time() {
+    // (2 s)⁻¹ = 0.5 s⁻¹.
+    let time = TimeQuantity::from_base(2.0);
+    let reciprocal = time.reciprocal();
+    let reciprocal: RecipTimeQuantity = reciprocal;
+    assert!((*reciprocal.as_base() - 0.5).abs() < f64::EPSILON);
+}
+
+#[test]
+fn reciprocal_of_length_is_reciprocal_length() {
+    // (4 m)⁻¹ = 0.25 m⁻¹.
+    let length = LengthQuantity::from_base(4.0);
+    let reciprocal = length.reciprocal();
+    let reciprocal: ReciprocalLength = reciprocal;
+    assert!((*reciprocal.as_base() - 0.25).abs() < f64::EPSILON);
+}
+
+#[test]
+fn reciprocal_inverts_velocity_shape() {
+    // velocity = length·time⁻¹, so velocity⁻¹ = time·length⁻¹.
+    let velocity = VelocityQuantity::from_base(4.0);
+    let reciprocal = velocity.reciprocal();
+    let reciprocal: Quantity<f64, ReciprocalVelocityShape> = reciprocal;
+    assert!((*reciprocal.as_base() - 0.25).abs() < f64::EPSILON);
+}
+
+#[test]
+fn reciprocal_agrees_with_powi_n1() {
+    // reciprocal() and powi::<N1>() are the same dimension and value.
+    let time = TimeQuantity::from_base(5.0);
+    let named: RecipTimeQuantity = time.reciprocal();
+    let powered: RecipTimeQuantity = time.powi::<N1>();
+    assert!((*named.as_base() - *powered.as_base()).abs() < f64::EPSILON);
+}
+
+#[test]
+fn reciprocal_of_reciprocal_is_identity() {
+    // (4 m)⁻¹⁻¹ = 4 m; inverting twice restores the original quantity.
+    let length = LengthQuantity::from_base(4.0);
+    let back: LengthQuantity = length.reciprocal().reciprocal();
+    assert!((*back.as_base() - 4.0).abs() < f64::EPSILON);
+}
