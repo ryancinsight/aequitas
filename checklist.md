@@ -4,6 +4,18 @@ Target version: 0.2.0
 
 Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified green)
 
+## AEQ-STRUCTURE-001 — Oversized unit and law-test leaves
+
+- [x] Move the private derived-unit implementation into a vertical module and
+      place the transport leaves in a dedicated child module.
+- [x] Move the final dosimetry/temperature law group behind a test module
+      without changing test bodies or public unit exports.
+- [x] Run the provider format, locked package, Clippy, Nextest, doctest, and
+      rustdoc gates; formatting, Clippy, Nextest 125/125, doctests 26/26, and
+      rustdoc pass on the offline local graph. The locked package gate remains
+      blocked before compilation by the Atlas overlay's lock mismatch; the
+      committed lock was restored unchanged.
+
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
 
 - [x] Re-run the locked provider gate set from an isolated checkout at the

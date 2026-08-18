@@ -6,6 +6,24 @@ dimensions, transparent quantities over Eunomia scalars, and linear SI unit
 conversion, consumed by proteus, hyperion, kwavers, CFDrs, helios, and the
 domain layer.
 
+## AEQ-STRUCTURE-001 — Split oversized unit and law-test leaves [patch] — done 2026-08-18
+
+- **Owner:** Atlas coordinator; scope is the private derived-unit module and
+  `tests/dimension_laws.rs` only.
+- **Acceptance:** every touched Rust file is below the 500-line structural
+  target; all 38 dimension-law tests remain present and value-semantic; the
+  public unit paths and standalone module exports remain unchanged.
+- **Non-goals:** quantity laws, public names, dependency changes, and deferred
+  affine/integer-storage/formatting capabilities.
+- **Evidence:** private `derived.rs` is now `derived/mod.rs` plus the
+  `derived/transport.rs` leaf (432 and 92 lines); `dimension_laws.rs` is 493
+  lines and its six dosimetry/temperature cases live in
+  `tests/dimension_laws/dosimetry.rs`. The dimension-law count remains 38.
+  Offline local diagnostics pass: all-features Clippy with `-D warnings`,
+  Nextest 125/125, doctests 26/26 including compile-fail cases, and rustdoc.
+  The locked gate remains blocked before compilation by the Atlas overlay's
+  generated lock mismatch; the committed `Cargo.lock` is unchanged.
+
 ## Active
 
 - [x] [patch] Make CI verify the committed lock graph with
