@@ -144,14 +144,18 @@ let pressure: Pressure = tension / radius;
 assert_eq!(pressure.in_unit::<Pascal>(), 36.0);
 ```
 
-Angles are represented as a distinct dimensionless semantic quantity and are
-stored in radians:
+Angles are represented as a distinct dimensionless semantic quantity, stored in
+radians and readable in either radians or degrees:
 
 ```rust
-use aequitas::systems::si::{quantities::Angle, units::Radian};
+use aequitas::systems::si::{quantities::Angle, units::{Degree, Radian}};
 
 let quarter_turn = Angle::from_unit::<Radian>(core::f64::consts::FRAC_PI_2);
 assert_eq!(quarter_turn.in_unit::<Radian>(), core::f64::consts::FRAC_PI_2);
+
+// The same angle, constructed and read in degrees.
+let right_angle = Angle::from_unit::<Degree>(90.0);
+assert!((right_angle.in_unit::<Radian>() - core::f64::consts::FRAC_PI_2).abs() <= f64::EPSILON);
 ```
 
 Electrical contracts compose current, time, and potential without raw unit
