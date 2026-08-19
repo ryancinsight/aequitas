@@ -6,6 +6,15 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Added the `Degree` linear unit for the `Angle` dimension, with
+  `SCALE = pi / 180` — the exact defining ratio. `Angle` already carried its own
+  semantics but `Radian` was its only unit, so degree-facing call sites wrote
+  `Angle::from_unit::<Radian>(x.to_radians())` and the unit lived in a method
+  name rather than the type. `Angle::from_unit::<Degree>(90.0)` and
+  `angle.in_unit::<Degree>()` now express that directly. Angles remain
+  non-additive: `Add` is bound on `BaseAdditiveDimension`, which
+  `AngleSemantics` does not implement, and that is unchanged.
+
 - Added the `PowDimension<P>` trait: raising a dimension to the type-level
   integer power `P` multiplies every SI base exponent through typenum
   `Prod`. `Quantity::powi::<P>()` applies the scalar power via

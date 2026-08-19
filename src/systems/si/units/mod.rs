@@ -18,8 +18,8 @@ pub use derived::{
     WattPerKilogram, WattPerMeterFourth, WattPerMeterKelvin, WattPerSquareMeter,
 };
 pub use scaled::{
-    Centimeter, CubicMillimeter, ElectronVolt, Gram, GramPerCubicCentimeter, JoulePerMilliliter,
-    Kilohertz, Kilometer, Kilopascal, MegaElectronVolt, Megahertz, Megapascal, MicromolePerLiter,
-    Microsecond, Millimeter, MillipascalSecond, Millisecond, MolePerLiter, Nanometer,
-    PerCentimeter, SquareCentimeter, SquareCentimeterPerGram,
+    Centimeter, CubicMillimeter, Degree, ElectronVolt, Gram, GramPerCubicCentimeter,
+    JoulePerMilliliter, Kilohertz, Kilometer, Kilopascal, MegaElectronVolt, Megahertz, Megapascal,
+    MicromolePerLiter, Microsecond, Millimeter, MillipascalSecond, Millisecond, MolePerLiter,
+    Nanometer, PerCentimeter, SquareCentimeter, SquareCentimeterPerGram,
 };

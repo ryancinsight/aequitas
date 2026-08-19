@@ -3,6 +3,20 @@ use crate::{
     unit::{LinearUnit, private::Sealed},
 };
 
+/// Degree of arc, the non-SI angle unit accepted for use with the SI.
+///
+/// `SCALE` is the exact defining ratio `pi / 180`: one degree is that many
+/// radians, so `to_base` multiplies by it and `in_unit::<Degree>` divides.
+/// `Angle` carries its own dimension semantics, so a degree value cannot be
+/// mistaken for a bare scalar or for radians once it is inside a `Quantity`.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Degree;
+impl Sealed for Degree {}
+impl LinearUnit<dimensions::Angle> for Degree {
+    const SYMBOL: &'static str = "deg";
+    const SCALE: f64 = core::f64::consts::PI / 180.0;
+}
+
 /// Joule per millilitre, a scaled energy-per-volume unit.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct JoulePerMilliliter;
