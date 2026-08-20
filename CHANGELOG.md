@@ -9,6 +9,8 @@ All externally observable changes are recorded here.
 - Enable executable mdBook samples through the shared Atlas Pages workflow.
   The nine existing Rust fences now compile against the packaged `aequitas`
   library under the pinned Rust 1.97.0 gate instead of being silently ignored.
+  The caller also pins the existing Atlas workflow commit so the hosted reusable
+  workflow resolves before job creation.
 
 - Split the derived SI unit implementations into domain-named modules while
   retaining the existing public unit paths and transport boundary. The
