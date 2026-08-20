@@ -2,87 +2,32 @@
 
 use aequitas::systems::si::{
     quantities::{
-        AbsorbedDose, Acceleration, AcousticImpedance, Angle, Area, AreaPerMass, AreaPerTime,
-        Capacitance, Compliance, Dimensionless, DynamicViscosity, ElectricCharge,
-        ElectricConductance, ElectricCurrent, ElectricPotential, ElectricalConductivity,
-        ElectricalImpedance, Energy, EnergyPerArea, EnergyPerVolume, FlexuralRigidity, Force,
-        HydraulicInertance, HydraulicResistance, Intensity, KinematicViscosity, Length, Mass,
-        MassDensity, MassDensityPerTemperature, MassDensityRate, MechanicalImpedance, MolarEnergy,
-        MolarHeatCapacity, NumberDensity, Polarizability, Power, Pressure, PressureGradient,
-        PressurePerElectricCurrent, PressureRate, QuadraticHydraulicResistance, ReciprocalLength,
-        ReciprocalLengthPerTemperature, ReciprocalTemperature, ReciprocalTemperatureSquared,
-        ReciprocalTime, ReciprocalTimeSquared, SpecificAbsorptionRate, SpecificEnergy,
-        SpecificHeatCapacity, SurfaceTension, TemperatureDifference, ThermalConductivity,
-        ThermalDiffusivity, ThermodynamicTemperature, Time, Velocity, VelocityPerTemperature,
-        Volume, VolumeChargeDensity, VolumetricFlowRate, VolumetricPowerDensity,
-        VolumetricPowerDensityGradient,
+        AbsorbedDose, Acceleration, AcousticImpedance, Area, AreaPerMass, AreaPerTime, Capacitance,
+        Compliance, Dimensionless, DynamicViscosity, ElectricCharge, ElectricConductance,
+        ElectricCurrent, ElectricPotential, ElectricalConductivity, Energy, EnergyPerArea,
+        EnergyPerVolume, FlexuralRigidity, Force, HydraulicInertance, HydraulicResistance,
+        Intensity, KinematicViscosity, Length, Mass, MassDensity, MassDensityPerTemperature,
+        MassDensityRate, MechanicalImpedance, MolarEnergy, MolarHeatCapacity, NumberDensity, Power,
+        Pressure, PressureGradient, PressurePerElectricCurrent, PressureRate,
+        QuadraticHydraulicResistance, ReciprocalLength, ReciprocalLengthPerTemperature,
+        ReciprocalTemperature, ReciprocalTemperatureSquared, ReciprocalTime, ReciprocalTimeSquared,
+        SpecificAbsorptionRate, SpecificEnergy, SpecificHeatCapacity, SurfaceTension,
+        TemperatureDifference, ThermalConductivity, ThermalDiffusivity, ThermodynamicTemperature,
+        Time, Velocity, VelocityPerTemperature, Volume, VolumeChargeDensity, VolumetricFlowRate,
+        VolumetricPowerDensity, VolumetricPowerDensityGradient,
     },
     units::{
-        Ampere, Coulomb, CoulombPerCubicMeter, CubicMeterPerSecond, Degree, Farad, Gray, Joule,
+        Ampere, Coulomb, CoulombPerCubicMeter, CubicMeterPerSecond, Farad, Gray, Joule,
         JoulePerCubicMeter, JoulePerKilogram, JoulePerKilogramKelvin, JoulePerMilliliter,
         JoulePerMole, JoulePerMoleKelvin, Kelvin, Kilogram, KilogramPerCubicMeter,
         KilogramPerCubicMeterKelvin, KilogramPerCubicMeterSecond, KilogramPerSecond, Meter,
         MeterPerSecond, MeterPerSecondKelvin, MeterPerSecondSquared, Newton, NewtonPerMeter,
         Pascal, PascalPerSecond, PascalSecond, PerCubicMeter, PerKelvin, PerMeter, PerMeterKelvin,
-        PerSecond, PerSquareKelvin, Radian, Rayl, Second, Siemens, SiemensPerMeter, SquareMeter,
+        PerSecond, PerSquareKelvin, Rayl, Second, Siemens, SiemensPerMeter, SquareMeter,
         SquareMeterPerSecond, Volt, Watt, WattPerCubicMeter, WattPerKilogram, WattPerMeterFourth,
         WattPerSquareMeter,
     },
 };
-
-#[test]
-fn angle_has_a_distinct_radian_semantic_contract() {
-    let angle = Angle::from_unit::<Radian>(core::f64::consts::FRAC_PI_2);
-
-    assert_eq!(
-        angle.in_unit::<Radian>().to_bits(),
-        core::f64::consts::FRAC_PI_2.to_bits()
-    );
-}
-
-/// Degree and radian are two units of one dimension, so a quantity built in
-/// either reads back correctly in the other. The reference values are the
-/// defining ratio, not a previous run: a straight angle is exactly `pi`
-/// radians and a right angle exactly `FRAC_PI_2`.
-#[test]
-fn degree_and_radian_are_the_same_angle_in_two_units() {
-    let straight = Angle::from_unit::<Degree>(180.0);
-    assert!(
-        (straight.in_unit::<Radian>() - core::f64::consts::PI).abs() <= 4.0 * f64::EPSILON,
-        "180 deg read back as {} rad",
-        straight.in_unit::<Radian>()
-    );
-
-    let right = Angle::from_unit::<Radian>(core::f64::consts::FRAC_PI_2);
-    assert!(
-        (right.in_unit::<Degree>() - 90.0).abs() <= 4.0 * f64::EPSILON * 90.0,
-        "FRAC_PI_2 read back as {} deg",
-        right.in_unit::<Degree>()
-    );
-}
-
-/// The conversion is a pure scale, so it preserves sign and zero exactly.
-///
-/// `Angle` is deliberately not additive — `Add` is bound on
-/// `BaseAdditiveDimension`, which `AngleSemantics` does not implement — so this
-/// checks the conversion itself rather than arithmetic the dimension withholds.
-#[test]
-fn degree_conversion_preserves_sign_and_zero() {
-    let negative = Angle::from_unit::<Degree>(-45.0);
-    assert!(
-        (negative.in_unit::<Radian>() + core::f64::consts::FRAC_PI_4).abs() <= 4.0 * f64::EPSILON,
-        "-45 deg must be -pi/4 rad, got {}",
-        negative.in_unit::<Radian>()
-    );
-
-    assert_eq!(
-        Angle::from_unit::<Degree>(0.0_f64)
-            .in_unit::<Radian>()
-            .to_bits(),
-        0.0_f64.to_bits(),
-        "zero must convert without introducing a signed zero"
-    );
-}
 
 #[test]
 fn mechanical_impedance_keeps_its_force_per_velocity_unit_for_complex_values() {
@@ -387,55 +332,6 @@ fn sar_uses_electrical_conductivity_and_field_magnitude() {
 }
 
 #[test]
-fn complex_phasors_preserve_units_and_dimension() {
-    use aequitas::systems::si::{quantities::Length, units::Kilometer};
-    use eunomia::Complex64;
-
-    let phasor = Complex64::new(1.25, -2.5);
-    let length: Length<Complex64> = Length::from_unit::<Kilometer>(phasor);
-    assert_eq!(length.in_unit::<Kilometer>(), phasor);
-
-    let voltage = ElectricPotential::from_base(Complex64::new(3.0, 4.0));
-    let current = ElectricCurrent::from_base(Complex64::new(1.0, 0.0));
-    let impedance: ElectricalImpedance<Complex64> = voltage / current;
-    assert_eq!(impedance.into_base(), Complex64::new(3.0, 4.0));
-}
-
-#[test]
-fn complex_unit_conversion_scales_real_and_quadrature_components() {
-    use aequitas::systems::si::{
-        quantities::Length,
-        units::{Kilometer, Meter},
-    };
-    use eunomia::{Complex64, ComplexField};
-
-    let phasor = Complex64::new(1.25, -2.5);
-    let length: Length<Complex64> = Length::from_unit::<Kilometer>(phasor);
-    let meters = length.in_unit::<Meter>();
-
-    assert_eq!(meters, Complex64::new(1_250.0, -2_500.0));
-    assert_eq!(ComplexField::real(meters).to_bits(), 1_250.0_f64.to_bits());
-    assert_eq!(
-        ComplexField::imaginary(meters).to_bits(),
-        (-2_500.0_f64).to_bits()
-    );
-}
-
-#[test]
-fn complex_polarizability_preserves_units_and_dimension() {
-    use aequitas::systems::si::units::FaradSquareMeter;
-    use eunomia::Complex64;
-
-    let alpha: Polarizability<Complex64> =
-        Polarizability::from_unit::<FaradSquareMeter>(Complex64::new(2.0, -0.5));
-
-    assert_eq!(
-        alpha.in_unit::<FaradSquareMeter>(),
-        Complex64::new(2.0, -0.5)
-    );
-}
-
-#[test]
 fn photon_interaction_dimensions_close() {
     let area = Area::from_unit::<SquareMeter>(2.0_f64);
     let mass = Mass::from_unit::<Kilogram>(4.0_f64);
@@ -535,3 +431,9 @@ fn energy_density_and_temperature_difference_dimensions_close() {
 
 #[path = "dimension_laws/dosimetry.rs"]
 mod dosimetry;
+
+#[path = "dimension_laws/angle.rs"]
+mod angle;
+
+#[path = "dimension_laws/complex.rs"]
+mod complex;
