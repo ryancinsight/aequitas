@@ -4,7 +4,9 @@ Scaled units are ordinary Aequitas linear units whose `SCALE` expresses a
 prefix or an exact relationship to an SI base unit. The scale always points
 from the named unit to the canonical stored value.
 
-```rust,ignore
+```rust
+extern crate aequitas;
+
 use aequitas::systems::si::{quantities::{Length, Frequency}, units::{Millimeter, Megahertz}};
 
 assert_eq!(Length::from_unit::<Millimeter>(2.5).into_base(), 2.5e-3);

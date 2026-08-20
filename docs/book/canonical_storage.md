@@ -5,7 +5,9 @@ A `Length` contains metres, a `Pressure` contains pascals, and a
 `MassDensity` contains kilograms per cubic metre. The representation never
 carries a runtime unit tag or a hidden scale factor.
 
-```rust,ignore
+```rust
+extern crate aequitas;
+
 use aequitas::systems::si::{quantities::Length, units::{Meter, Kilometer}};
 
 let distance = Length::from_unit::<Kilometer>(1.25_f64);

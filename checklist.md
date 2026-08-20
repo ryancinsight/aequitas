@@ -4,6 +4,18 @@ Target version: 0.2.0
 
 Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified green)
 
+## AEQ-DOC-BOOK-001 — Execute book samples
+
+- [x] Replace the nine `rust,ignore` fences with executable `rust` fences and
+      add explicit `extern crate aequitas` declarations for rustdoc's library
+      path contract.
+- [x] Pin the Pages caller to Atlas `53eb15a` and enable `mdbook-test` with
+      Rust `1.97.0` and package staging for `aequitas`.
+- [ ] Collect the hosted exact-head Pages/book gate before closing the item;
+      the local Windows cache contains MSVC artifacts while mdBook selects the
+      GNU rustdoc by default, so local cross-target compilation is not closure
+      evidence.
+
 ## AEQ-STRUCTURE-001 — Oversized unit and law-test leaves
 
 - [x] Move the private derived-unit implementation into a vertical module and

@@ -14,7 +14,7 @@ enforced at compile time, not at runtime.
 
 ## Source
 
-```rust,ignore
+```rust
 {{#include ../../../examples/book_acoustic_impedance.rs}}
 ```
 

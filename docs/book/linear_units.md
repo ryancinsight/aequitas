@@ -4,7 +4,9 @@ A linear unit is a zero-sized type implementing `LinearUnit<D>`, where `D` is
 its dimension. The trait supplies a compile-time `SYMBOL` and `SCALE`; the
 conversion law is simply `base = value × SCALE`.
 
-```rust,ignore
+```rust
+extern crate aequitas;
+
 use aequitas::systems::si::{quantities::Pressure, units::{Kilopascal, Pascal}};
 use aequitas::unit::LinearUnit;
 

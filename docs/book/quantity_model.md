@@ -4,7 +4,9 @@ A physical quantity is a scalar paired with a dimension known to the Rust
 compiler. Aequitas represents that pair as `Quantity<T, D>`: a transparent
 wrapper around `T` plus a zero-sized `PhantomData<D>` marker.
 
-```rust,ignore
+```rust
+extern crate aequitas;
+
 use aequitas::quantity::Quantity;
 use aequitas::systems::si::{dimensions, quantities::Length};
 

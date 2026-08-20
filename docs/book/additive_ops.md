@@ -5,7 +5,9 @@ ordinary base-semantic dimensions, `Add`, `Sub`, `AddAssign`, and `SubAssign`
 operate on the same `Quantity<T, D>` type, and `Neg` changes only the scalar
 sign.
 
-```rust,ignore
+```rust
+extern crate aequitas;
+
 use aequitas::systems::si::quantities::{Length, Time};
 
 let mut distance = Length::from_base(3.0_f64);

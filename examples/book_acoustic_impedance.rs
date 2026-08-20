@@ -12,6 +12,8 @@
     reason = "book example: stdout is the demonstrated output"
 )]
 
+extern crate aequitas;
+
 use aequitas::systems::si::{
     quantities::{AcousticImpedance, MassDensity, Velocity},
     units::{GramPerCubicCentimeter, KilogramPerCubicMeter, MeterPerSecond, Rayl},

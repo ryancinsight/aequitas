@@ -6,6 +6,27 @@ dimensions, transparent quantities over Eunomia scalars, and linear SI unit
 conversion, consumed by proteus, hyperion, kwavers, CFDrs, helios, and the
 domain layer.
 
+## AEQ-DOC-BOOK-001 — Execute book samples [patch] — implementation complete; hosted verification pending
+
+- **Owner:** Atlas coordinator; PR [#37](https://github.com/ryancinsight/aequitas/pull/37)
+  at exact head `2f63705`.
+- **Scope:** the shared Pages caller, the nine existing Rust book fences, and
+  the two included book example sources; no public API, lockfile, or dependency
+  change.
+- **Acceptance:** every existing Rust fence executes through `mdbook test` with
+  the packaged `aequitas` library and pinned Rust 1.97.0; `mdbook build` and the
+  provider hosted Pages gate pass.
+- **Baseline:** the caller used Atlas workflow revision `4c31dd7` without
+  `mdbook-test`, and all Rust fences were `rust,ignore`, so the previous local
+  test was existence-only.
+- **Correction:** the first PR revision used a non-existent Atlas commit and
+  failed before job creation in run `32335910858`; commit `2f63705` pins the
+  existing root commit `53eb15ae2fa7ee9192e5d006989a430269fdc881`.
+- **Local evidence:** format, `mdbook build`, and strict link scan pass. The
+  local executable `mdbook test` reaches the real snippets but cannot resolve
+  the staged MSVC package and proc-macro artifacts from the shared Windows
+  cache; hosted Linux is the acceptance environment.
+
 ## AEQ-STRUCTURE-001 — Split oversized unit and law-test leaves [patch] — done 2026-08-18
 
 - **Owner:** Atlas coordinator; scope is the private derived-unit module and

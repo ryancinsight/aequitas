@@ -11,7 +11,7 @@ typically folds away when the factor is 1.0.
 
 ## Source
 
-```rust,ignore
+```rust
 {{#include ../../../examples/book_first_quantities.rs}}
 ```
 

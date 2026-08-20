@@ -16,7 +16,9 @@ corresponding exponent vectors and `DivideDimension` subtracts them. Quantity
 `Mul` and `Div` use those associated output dimensions, so an operation can
 produce a named result only when its dimensional algebra is valid.
 
-```rust,ignore
+```rust
+extern crate aequitas;
+
 use aequitas::systems::si::quantities::{MassDensity, Velocity, AcousticImpedance};
 
 let density = MassDensity::from_base(1_000.0_f64);
