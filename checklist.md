@@ -16,6 +16,17 @@ Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified gree
       blocked before compilation by the Atlas overlay's lock mismatch; the
       committed lock was restored unchanged.
 
+## AEQ-STRUCTURE-002 — Derived-unit domain leaves
+
+- [x] Split the derived-unit implementations into domain-named leaves for
+      geometry, kinematics, mechanics, electrical, radiation, and thermal
+      units while retaining the transport leaf and the public re-export list.
+- [x] Verify the conformance ratchet reaches
+      `manifest_implementation=0` without changing any other class.
+- [x] Run formatting, pinned-MSVC all-feature Clippy, all-feature Nextest
+      `127/127`, and workspace doctests (`17` pass, `9` compile-fail pass,
+      `1` ignored). Restore the overlay-generated lock and leave it unchanged.
+
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
 
 - [x] Re-run the locked provider gate set from an isolated checkout at the

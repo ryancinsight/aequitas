@@ -4,6 +4,12 @@ All externally observable changes are recorded here.
 
 ## [Unreleased]
 
+### Changed
+
+- Split the derived SI unit implementations into domain-named modules while
+  retaining the existing public unit paths and transport boundary. The
+  `derived` manifest now contains only module declarations and re-exports.
+
 ### Added
 
 - Added the `Degree` linear unit for the `Angle` dimension, with

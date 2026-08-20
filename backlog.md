@@ -24,6 +24,22 @@ domain layer.
   The locked gate remains blocked before compilation by the Atlas overlay's
   generated lock mismatch; the committed `Cargo.lock` is unchanged.
 
+## AEQ-STRUCTURE-002 — Split derived-unit domain leaves [patch] — done 2026-08-19
+
+- **Owner:** Atlas coordinator; scope is the private
+  `src/systems/si/units/derived/` module tree and its manifest only.
+- **Acceptance:** `derived/mod.rs` contains declarations and re-exports only;
+  every derived-unit implementation has one domain-named leaf; public unit
+  paths and all value semantics remain unchanged.
+- **Evidence:** the implementation now lives in `geometry`, `kinematics`,
+  `mechanics`, `electrical`, `radiation`, `thermal`, and `transport` leaves.
+  The conformance scan reduces `manifest_implementation` from `1` to `0`
+  with every other tracked class unchanged at zero. Pinned-MSVC all-feature
+  Clippy passes, Nextest passes `127/127`, and doctests pass `17` plus `9`
+  compile-fail cases with one ignored example. The Atlas overlay rewrote the
+  working lock during local gates; it was restored unchanged and is not part
+  of the provider increment.
+
 ## Active
 
 - [x] [patch] Make CI verify the committed lock graph with
