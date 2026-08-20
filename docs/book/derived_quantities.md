@@ -6,7 +6,9 @@ physical equations. Multiplying `Quantity<T, LhsDimension>` by
 `DivideDimension`. The output scalar is multiplied or divided in the usual
 way, while the compiler computes the output dimension.
 
-```rust,ignore
+```rust
+extern crate aequitas;
+
 use aequitas::systems::si::{
     quantities::{AcousticImpedance, MassDensity, Velocity},
     units::{KilogramPerCubicMeter, MeterPerSecond},

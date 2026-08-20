@@ -10,6 +10,8 @@
     reason = "book example: stdout is the demonstrated output"
 )]
 
+extern crate aequitas;
+
 use aequitas::systems::si::{
     quantities::{Frequency, Length, Pressure, Time},
     units::{Hertz, Kilopascal, Megahertz, Meter, Microsecond, Millimeter, Pascal, Second},
