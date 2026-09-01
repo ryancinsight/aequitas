@@ -28,6 +28,14 @@ jobs:
     permissions:
       contents: read
 
+  semver:
+    name: SemVer
+    uses: ryancinsight/atlas/.github/workflows/semver-gate.yml@17516f1cb046e9c0b2d4a9a1e6bfd3b09cfbeb711
+    with:
+      package: aequitas
+    permissions:
+      contents: read
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 30
