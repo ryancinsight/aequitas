@@ -25,7 +25,26 @@ env:
   RUST_TOOLCHAIN: 1.97.0
 
 jobs:
+  # The blocking public-surface verdict belongs to the release, not to a
+  # merge: the CI workflow calls the same gate informationally on PRs, and a
+  # default-branch push must not compare against the published baseline
+  # (atlas ATLAS-SEMVER-GATE-MAIN-PUSH-RED). `release-gate` declares the
+  # release intent this workflow's own event cannot carry.
+  semver:
+    name: SemVer gate (release)
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      startsWith(github.event.release.tag_name, 'crate-')
+    uses: ryancinsight/atlas/.github/workflows/semver-gate.yml@806949a176cc139efe7c514d7e42c9b9a9447f45
+    with:
+      release-gate: true
+      package: aequitas
+      rust-toolchain: 1.97.0
+    permissions:
+      contents: read
+
   validate:
+    needs: semver
     if: >-
       github.event_name == 'workflow_dispatch' ||
       startsWith(github.event.release.tag_name, 'crate-')
