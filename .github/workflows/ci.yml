@@ -30,7 +30,7 @@ jobs:
 
   semver:
     name: SemVer
-    uses: ryancinsight/atlas/.github/workflows/semver-gate.yml@378081ec6cb04da4009253ecfb25e8b6966aa4e2
+    uses: ryancinsight/atlas/.github/workflows/semver-gate.yml@9062cfc6d78808cf1b7af60ae97f11825a6c8468
     with:
       package: aequitas
     permissions:
