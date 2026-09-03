@@ -170,11 +170,21 @@ impl LinearUnit<dimensions::Pressure> for Kilopascal {
     const SCALE: f64 = 1.0e3;
 }
 
+impl LinearUnit<dimensions::Stress> for Kilopascal {
+    const SYMBOL: &'static str = "kPa";
+    const SCALE: f64 = 1.0e3;
+}
+
 /// Megapascal.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Megapascal;
 impl Sealed for Megapascal {}
 impl LinearUnit<dimensions::Pressure> for Megapascal {
+    const SYMBOL: &'static str = "MPa";
+    const SCALE: f64 = 1.0e6;
+}
+
+impl LinearUnit<dimensions::Stress> for Megapascal {
     const SYMBOL: &'static str = "MPa";
     const SCALE: f64 = 1.0e6;
 }

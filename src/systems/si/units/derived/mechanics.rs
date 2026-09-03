@@ -12,6 +12,11 @@ impl LinearUnit<dimensions::Pressure> for Pascal {
     const SCALE: f64 = 1.0;
 }
 
+impl LinearUnit<dimensions::Stress> for Pascal {
+    const SYMBOL: &'static str = "Pa";
+    const SCALE: f64 = 1.0;
+}
+
 /// Pascal per second, the coherent SI unit of pressure rate.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct PascalPerSecond;

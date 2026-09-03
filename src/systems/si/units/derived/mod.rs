@@ -13,7 +13,7 @@ pub use electrical::{
 pub use geometry::{CubicMeter, PerCubicMeter, PerMeter, SquareMeter, SquareMeterPerKilogram};
 pub use kinematics::{
     Hertz, MeterPerSecond, MeterPerSecondKelvin, MeterPerSecondSquared, MolePerCubicMeter,
-    PerSecond,
+    MolePerCubicMeterSecond, MolePerSquareMeterSecond, PerSecond,
 };
 pub use mechanics::{
     Joule, JoulePerSquareMeter, KilogramPerSecond, Newton, NewtonPerMeter, Pascal, PascalPerSecond,

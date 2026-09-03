@@ -12,6 +12,9 @@ use aequitas::systems::si::dimensions;
 use aequitas::systems::si::quantities::{
     MolarConcentration, MolarFlux, Pressure, ReactionRate, Stress, Time,
 };
+use aequitas::systems::si::units::{
+    Megapascal, MolePerCubicMeterSecond, MolePerSquareMeterSecond, Pascal,
+};
 
 // ---------------------------------------------------------------------------
 // Stress is dimensionally pressure and semantically distinct
@@ -34,12 +37,40 @@ fn stress_and_pressure_are_distinct_types() {
     clippy::float_cmp,
     reason = "values round-trip through from_base/into_base, and the divided cases (2/4, 6/3) are exactly representable in binary, so exact equality is the correct assertion"
 )]
-fn stress_carries_the_pressure_exponents() {
-    // Distinct identity must not mean a distinct dimension: stress still
-    // converts through pressure units and still means force per area.
-    let stress = Stress::<f64>::from_base(2.0e8);
-    let pressure = Pressure::<f64>::from_base(2.0e8);
-    assert_eq!(stress.into_base(), pressure.into_base());
+fn stress_converts_through_pressure_units() {
+    // Distinct identity must not mean an unusable quantity. Stress carries its
+    // own LinearUnit impls on the pascal family, exactly as Kelvin carries them
+    // for both ThermodynamicTemperature and TemperatureDifference. Testing via
+    // from_base would bypass the unit contract entirely.
+    let yield_strength = Stress::<f64>::from_unit::<Megapascal>(250.0);
+    assert_eq!(yield_strength.into_base(), 250.0e6);
+
+    // Round trip through a different scale on the same family.
+    assert_eq!(yield_strength.in_unit::<Pascal>(), 250.0e6);
+    assert_eq!(yield_strength.in_unit::<Megapascal>(), 250.0);
+
+    // Same numeric magnitude as the pressure reading it is not interchangeable
+    // with: the separation is in the type, never in the value.
+    let pressure = Pressure::<f64>::from_unit::<Megapascal>(250.0);
+    assert_eq!(yield_strength.into_base(), pressure.into_base());
+}
+
+#[expect(
+    clippy::float_cmp,
+    reason = "coherent-unit scales are exactly 1.0, so the conversion is exact"
+)]
+#[test]
+fn reaction_quantities_convert_through_their_coherent_units() {
+    // A dimension with no unit impl is reachable only through from_base, which
+    // bypasses the unit contract. Both new dimensions carry their coherent SI
+    // unit so consumers state values in units rather than in base scalars.
+    let rate = ReactionRate::<f64>::from_unit::<MolePerCubicMeterSecond>(2.5);
+    assert_eq!(rate.into_base(), 2.5);
+    assert_eq!(rate.in_unit::<MolePerCubicMeterSecond>(), 2.5);
+
+    let flux = MolarFlux::<f64>::from_unit::<MolePerSquareMeterSecond>(0.75);
+    assert_eq!(flux.into_base(), 0.75);
+    assert_eq!(flux.in_unit::<MolePerSquareMeterSecond>(), 0.75);
 }
 
 #[test]
