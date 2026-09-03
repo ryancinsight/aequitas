@@ -9,7 +9,7 @@ pub use algebra::{DivideDimension, MultiplyDimension};
 pub use model::{
     AbsoluteTemperatureSemantics, AngleSemantics, BaseSemantics, Dimension,
     FlexuralRigiditySemantics, MechanicalImpedanceSemantics, MolarConcentrationSemantics,
-    ReciprocalVolumeSemantics, SpringStiffnessSemantics, SurfaceTensionSemantics,
+    ReciprocalVolumeSemantics, SpringStiffnessSemantics, StressSemantics, SurfaceTensionSemantics,
     TemperatureDifferenceSemantics,
 };
 pub use pow::PowDimension;

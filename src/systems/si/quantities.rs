@@ -57,6 +57,10 @@ pub type NumberDensity<T = f64> = Quantity<T, dimensions::NumberDensity>;
 pub type ReciprocalVolume<T = f64> = Quantity<T, dimensions::ReciprocalVolume>;
 /// Molar-concentration quantity, expressed as amount of substance per volume.
 pub type MolarConcentration<T = f64> = Quantity<T, dimensions::MolarConcentration>;
+/// Volumetric reaction rate.
+pub type ReactionRate<T = f64> = Quantity<T, dimensions::ReactionRate>;
+/// Molar flux across a surface.
+pub type MolarFlux<T = f64> = Quantity<T, dimensions::MolarFlux>;
 /// Velocity quantity.
 pub type Velocity<T = f64> = Quantity<T, dimensions::Velocity>;
 /// Temperature derivative of velocity, expressed in m/(s·K).
@@ -71,6 +75,8 @@ pub type ReciprocalTime<T = f64> = Quantity<T, dimensions::ReciprocalTime>;
 pub type ReciprocalTimeSquared<T = f64> = Quantity<T, dimensions::ReciprocalTimeSquared>;
 /// Pressure quantity.
 pub type Pressure<T = f64> = Quantity<T, dimensions::Pressure>;
+/// Mechanical stress, dimensionally pressure with distinct semantics.
+pub type Stress<T = f64> = Quantity<T, dimensions::Stress>;
 /// Pressure-rate quantity, expressed as pascals per second.
 pub type PressureRate<T = f64> = Quantity<T, dimensions::PressureRate>;
 /// Force quantity.

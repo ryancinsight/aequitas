@@ -36,6 +36,16 @@ pub struct AngleSemantics;
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct ReciprocalVolumeSemantics;
 
+/// Semantic marker for mechanical stress.
+///
+/// Stress shares the pressure dimension but is a distinct physical concept: a
+/// second-order tensor component describing internal force per unit area on an
+/// oriented surface, where pressure is the isotropic scalar part of that state
+/// and an elastic modulus is a material property. Separating them keeps a
+/// modulus from being assigned where a stress is meant.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct StressSemantics;
+
 /// Semantic marker for amount-of-substance concentration per volume.
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct MolarConcentrationSemantics;
