@@ -1,11 +1,10 @@
 # Aequitas backlog
 
-## AEQ-EUNOMIA-IDENTITY-2026-09-03 — Unify Eunomia source identity [patch] — in-progress <a id="aeq-eunomia-identity-2026-09-03"></a>
+## AEQ-EUNOMIA-IDENTITY-2026-09-03 — Unify Eunomia source identity [patch] — done 2026-09-04 <a id="aeq-eunomia-identity-2026-09-03"></a>
 
-- **Integrator:** Codex; **branch:** `build/aequitas-eunomia-identity`; **lease:** `Cargo.toml`, `Cargo.lock`, and this item.
-- **Outcome:** align Aequitas’ Eunomia dependency with merged provider PR #87 (`2723759`) so its quantity scalars remain nominally identical to Leto, Hermes, and Hephaestus without conversions.
-- **Acceptance:** standalone lockfile resolves one canonical Eunomia source; check, Clippy, nextest, doctests, and rustdoc pass after removing the temporary revision pin.
-- **Last-update:** 2026-09-04.
+- [x] PR #51 merged at `e61a3cf`; Eunomia resolves from the canonical default
+  source at `2723759`; lockfile, strict Clippy, Nextest 127/127, doctests,
+  rustdoc, no-default, and lockfile checks pass.
 
 Strategic roadmap; tags `[patch]`/`[minor]`/`[major]`/`[arch]` per SemVer class.
 Aequitas is the Atlas physical-quantity and dimensional-law SSOT: type-level SI
