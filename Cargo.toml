@@ -12,9 +12,9 @@ keywords = ["units", "dimensional-analysis", "simulation", "no-std"]
 categories = ["no-std", "science"]
 
 [dependencies]
-# Temporary co-evolution pin for Eunomia PR #87; remove `rev` after the
-# provider derive delivery merges to main and regenerate Cargo.lock.
-eunomia = { version = "0.8.0", git = "https://github.com/ryancinsight/eunomia", rev = "fdbf12275d35aa1545060a4277644c497ddcda37", default-features = false }
+# Eunomia PR #87 is merged to main; the canonical source keeps provider
+# consumers on one nominal scalar identity.
+eunomia = { version = "0.8.0", git = "https://github.com/ryancinsight/eunomia", default-features = false }
 typenum = "1.20.1"
 serde = { version = "1.0", default-features = false, optional = true }
 
