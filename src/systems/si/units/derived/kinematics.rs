@@ -12,6 +12,25 @@ impl LinearUnit<dimensions::MolarConcentration> for MolePerCubicMeter {
     const SCALE: f64 = 1.0;
 }
 
+/// Mole per cubic metre per second, the coherent SI unit of volumetric
+/// reaction rate.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct MolePerCubicMeterSecond;
+impl Sealed for MolePerCubicMeterSecond {}
+impl LinearUnit<dimensions::ReactionRate> for MolePerCubicMeterSecond {
+    const SYMBOL: &'static str = "mol/(m³·s)";
+    const SCALE: f64 = 1.0;
+}
+
+/// Mole per square metre per second, the coherent SI unit of molar flux.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct MolePerSquareMeterSecond;
+impl Sealed for MolePerSquareMeterSecond {}
+impl LinearUnit<dimensions::MolarFlux> for MolePerSquareMeterSecond {
+    const SYMBOL: &'static str = "mol/(m²·s)";
+    const SCALE: f64 = 1.0;
+}
+
 /// Metre per second, the coherent SI unit of velocity.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MeterPerSecond;

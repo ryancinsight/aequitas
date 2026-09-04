@@ -5,7 +5,8 @@ use typenum::{N1, N2, N3, N4, N7, P1, P2, P3, P4, Z0};
 use crate::dimension::{
     AbsoluteTemperatureSemantics, AngleSemantics, Dimension, FlexuralRigiditySemantics,
     MechanicalImpedanceSemantics, MolarConcentrationSemantics, ReciprocalVolumeSemantics,
-    SpringStiffnessSemantics, SurfaceTensionSemantics, TemperatureDifferenceSemantics,
+    SpringStiffnessSemantics, StressSemantics, SurfaceTensionSemantics,
+    TemperatureDifferenceSemantics,
 };
 
 /// Dimensionless quantity.
@@ -62,6 +63,16 @@ pub type NumberDensity = Dimension<N3, Z0, Z0, Z0, Z0, Z0, Z0>;
 pub type ReciprocalVolume = Dimension<N3, Z0, Z0, Z0, Z0, Z0, Z0, ReciprocalVolumeSemantics>;
 /// Amount of substance per volume, conventionally molar concentration.
 pub type MolarConcentration = Dimension<N3, Z0, Z0, Z0, Z0, P1, Z0, MolarConcentrationSemantics>;
+/// Volumetric reaction rate: amount of substance per volume per time.
+///
+/// `MolarConcentration / Time`, the net production term a species balance
+/// consumes.
+pub type ReactionRate = Dimension<N3, Z0, N1, Z0, Z0, P1, Z0>;
+/// Molar flux: amount of substance per area per time.
+///
+/// `ReactionRate * Length`, the surface transport term a species balance
+/// exchanges across an interface.
+pub type MolarFlux = Dimension<N2, Z0, N1, Z0, Z0, P1, Z0>;
 /// Velocity.
 pub type Velocity = Dimension<P1, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Temperature derivative of velocity, expressed as metres per second-kelvin.
@@ -76,6 +87,10 @@ pub type ReciprocalTime = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0>;
 pub type ReciprocalTimeSquared = Dimension<Z0, Z0, N2, Z0, Z0, Z0, Z0>;
 /// Pressure.
 pub type Pressure = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
+/// Mechanical stress: internal force per unit area on an oriented surface.
+///
+/// Dimensionally pressure, semantically distinct. See [`StressSemantics`].
+pub type Stress = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0, StressSemantics>;
 /// Pressure rate, pressure per time.
 pub type PressureRate = Dimension<N1, P1, N3, Z0, Z0, Z0, Z0>;
 /// Force.
