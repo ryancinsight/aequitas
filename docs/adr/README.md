@@ -24,3 +24,4 @@
 | [0013](0013-acceleration-quantity.md) | Add SI acceleration and pressure-rate quantities | Accepted |
 | [0014](0014-mechanical-impedance-semantic.md) | Name the SI mechanical-impedance quantity | Accepted |
 | [0015](0015-mems-physical-quantities.md) | Name MEMS charge-density and flexural-rigidity quantities | Accepted |
+| [0016](0016-python-quantity-binding.md) | Expose Aequitas quantities to Python as a runtime dimension tag | Proposed |

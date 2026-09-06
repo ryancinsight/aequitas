@@ -12,6 +12,36 @@ dimensions, transparent quantities over Eunomia scalars, and linear SI unit
 conversion, consumed by proteus, hyperion, kwavers, CFDrs, helios, and the
 domain layer.
 
+## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel [arch][minor] — todo <a id="aeq-py-binding-001"></a>
+
+- **Decision:** [ADR 0016](docs/adr/0016-python-quantity-binding.md).
+- **Outcome:** a PyPI wheel exposing every SI quantity and unit with
+  conversion and dimensional arithmetic, consumable from `kwavers-python`.
+- **Scope:** promote this repo to a two-member workspace and add
+  `aequitas-python` (`cdylib`, PyO3, maturin); derive the runtime dimension
+  tag from the existing `Dimension` parameters through a const trait; emit
+  the runtime table and `.pyi` stubs from one codegen pass.
+- **Non-goals:** any `pyo3` dependency in `aequitas`; array-valued
+  quantities; affine units (AEQ-PY-AFFINE-001); the kwavers consumer side.
+- **Acceptance:** every exported dimension round-trips against
+  `Quantity::in_unit` for each of its units; semantic normalization matches
+  `MultiplyDimension`/`DivideDimension` per marker; codegen passes
+  regenerate-and-diff; `pytest` green against the built wheel.
+- **Dependencies:** none to start; publication needs the trusted-publishing
+  pipeline and an `abi3` floor decision.
+
+## AEQ-PY-AFFINE-001 — Affine units for the thermal surface [minor] — todo <a id="aeq-py-affine-001"></a>
+
+- **Outcome:** `degC` (and `degF`) expressible, so a Python consumer of a
+  thermal API is not forced to kelvin.
+- **Scope:** the affine unit contract deferred below, narrowed to
+  thermodynamic temperature; `LinearUnit` stays sealed and unchanged.
+- **Acceptance:** offset conversion round-trips value-semantically;
+  `AbsoluteTemperatureSemantics` and `TemperatureDifferenceSemantics` keep
+  their distinction across it (a difference has no offset).
+- **Driver:** AEQ-PY-BINDING-001 consequences; kwavers exposes a thermal
+  surface to Python.
+
 ## AEQ-DOC-BOOK-001 — Execute book samples [patch] — implementation complete; hosted verification pending
 
 - **Owner:** Atlas coordinator; PR [#37](https://github.com/ryancinsight/aequitas/pull/37)
@@ -204,8 +234,9 @@ domain layer.
 ## Deferred (documented boundary)
 
 - [ ] [minor] Affine unit kinds and quantity kinds beyond the linear-unit
-  slice (`uom`-style `Kind` system). Not required by current Atlas consumers;
-  revisit when a consumer needs offset units beyond temperature.
+  slice (`uom`-style `Kind` system). The temperature slice is now driven by a
+  consumer and tracked at [AEQ-PY-AFFINE-001](#aeq-py-affine-001); the
+  general `Kind` system stays deferred.
 - [ ] [minor] Integer and rational quantity storage. The simulation boundary
   is floating-point over Eunomia scalars; revisit on a consumer need.
 - [ ] [patch] Broader formatting surface beyond `UnitDisplay` (unit-algebra
