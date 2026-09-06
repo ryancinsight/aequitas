@@ -21,6 +21,9 @@ domain layer.
   `aequitas-python` (`cdylib`, PyO3, maturin); derive the runtime dimension
   tag from the existing `Dimension` parameters through a const trait; emit
   the runtime table and `.pyi` stubs from one codegen pass.
+- **Names:** PyPI distribution `aequitas-python`, import package
+  `pyaequitas` — verified free 2026-09-06; plain `aequitas` is taken on PyPI
+  by an unrelated project whose top-level import would collide.
 - **Non-goals:** any `pyo3` dependency in `aequitas`; array-valued
   quantities; affine units (AEQ-PY-AFFINE-001); the kwavers consumer side.
 - **Acceptance:** every exported dimension round-trips against
