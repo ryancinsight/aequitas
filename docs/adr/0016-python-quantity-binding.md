@@ -5,6 +5,12 @@
 Proposed — 2026-09-06. Mandated by
 [AEQ-PY-BINDING-001](../../backlog.md#aeq-py-binding-001).
 
+Revised 2026-09-06: the first revision asserted that `kwavers-python` was
+absent from PyPI and left the distribution name unstated. A registry check
+found `kwavers-python` 0.1.0 already published under this author, and the
+`aequitas` name taken by an unrelated project. Both corrections are folded
+into Consequences and change the naming decision, not the representation.
+
 ## Context
 
 Aequitas encodes SI dimensions in types. `Quantity<T, D>` is
@@ -69,15 +75,15 @@ and the runtime table come from one pass over the Rust inventory.
 ### Cross-extension interop
 
 Two independently built extension modules do not share Rust types. A `Length`
-constructed in `aequitas._aequitas` is opaque to `pykwavers._pykwavers` unless
-both link the same `aequitas-python` version, and a version skew there fails at
-runtime with an error naming the same type twice.
+constructed in `pyaequitas._pyaequitas` is opaque to `pykwavers._pykwavers`
+unless both link the same `aequitas-python` version, and a version skew there
+fails at runtime with an error naming the same type twice.
 
 The contract is therefore duck-typed, not ABI-shared: an object is a quantity
 if it exposes its base-unit magnitude and its dimension tag through named
-attributes. `kwavers-python` validates the tag at the boundary and extracts the
-magnitude, accepting any conforming object and staying decoupled from
-Aequitas' wheel version. A direct downcast may serve as a fast path where both
+attributes. `pykwavers` validates the tag at the boundary and extracts the
+magnitude, accepting any conforming object and staying decoupled from the
+`aequitas-python` wheel version. A direct downcast may serve as a fast path where both
 wheels agree, never as the requirement. The per-call cost is a tuple
 comparison, which is not observable beside a simulation step.
 
@@ -119,11 +125,22 @@ express it. The deferred affine-unit item in the backlog is promoted to a
 blocker for the thermal surface specifically, and is implemented upstream in
 `aequitas` rather than approximated in the binding.
 
-Publishing is two pipelines, not one. `kwavers-python` is currently
-`publish = false` and absent from PyPI, so the interop this record describes
-presumes both distributions ship. Each needs the trusted-publishing flow,
-`abi3` wheels, a `manylinux` floor, and an install-and-import smoke test.
-Aequitas' binding surface is pure scalar, so `abi3` is clean for it.
+The consumer already ships. `kwavers-python` 0.1.0 is published on PyPI under
+this author, so the interop described here lands against a live distribution
+rather than a hypothetical one, and the bare-float compatibility clause above
+is a released-API obligation, not a courtesy. Its Cargo `publish = false`
+governs crates.io only.
+
+Aequitas therefore needs its own publish pipeline: trusted publishing, an
+`abi3` floor, a `manylinux` floor, and an install-and-import smoke test. The
+binding surface is pure scalar, so `abi3` is clean for it.
+
+The distribution name is constrained. `aequitas` on PyPI is taken by an
+unrelated project at v1.1.0, and that project's top-level import is also
+`aequitas`, so claiming that import name would collide inside any environment
+holding both. The distribution is `aequitas-python` and the import package is
+`pyaequitas`, mirroring the `kwavers-python`/`pykwavers` split already used in
+this stack. The Rust crate name `aequitas` is unaffected.
 
 The cross-repo half of this contract — the attribute protocol and its
 validation — is a meta-repo concern and is recorded there, with contract tests
