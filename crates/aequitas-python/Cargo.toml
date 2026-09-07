@@ -1,0 +1,46 @@
+[package]
+name = "aequitas-python"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+authors = ["Ryan Clanton <ryanclanton@outlook.com>"]
+description = "Python bindings for the Aequitas physical-quantity surface"
+repository = "https://github.com/ryancinsight/aequitas"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+keywords = ["units", "dimensional-analysis", "python", "pyo3", "si"]
+categories = ["science", "api-bindings"]
+# The wheel is the deliverable; the crate is not a crates.io artifact.
+publish = false
+
+[lib]
+name = "_pyaequitas"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+aequitas = { workspace = true, features = ["std"] }
+# `multiple-pymethods`: the quantity surface is split across `model` and
+# `arithmetic` so neither file approaches the structural size target; both
+# contribute `#[pymethods]` to one class.
+pyo3 = { version = "0.29", features = ["abi3-py38", "multiple-pymethods"] }
+typenum = "1.20.1"
+
+[dev-dependencies]
+pyo3 = { version = "0.29", features = ["abi3-py38", "multiple-pymethods", "auto-initialize"] }
+
+# This crate does not inherit `[workspace.lints]`. The workspace forbids
+# `unsafe_code`, which is correct for the law crate and unreachable here: the
+# `#[pyclass]` and `#[pymodule]` expansions emit `unsafe impl` blocks, and a
+# lint level cannot distinguish macro-generated code from hand-written code.
+# Every other floor the workspace sets is reproduced below. Hand-written
+# `unsafe` is instead excluded mechanically by `tests/no_handwritten_unsafe.rs`,
+# which scans this crate's own sources.
+[lints.rust]
+missing_docs = "deny"
+
+[lints.clippy]
+pedantic = { level = "deny", priority = -1 }
+unwrap_used = "deny"
+print_stdout = "deny"
+print_stderr = "deny"
+dbg_macro = "deny"

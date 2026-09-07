@@ -1,0 +1,60 @@
+[build-system]
+requires = ["maturin>=1.9.4,<2.0"]
+build-backend = "maturin"
+
+[project]
+# `aequitas` on PyPI is an unrelated project whose top-level import is also
+# `aequitas`, so this distribution takes the `-python` suffix and the import
+# package takes the `py` prefix, mirroring `kwavers-python`/`pykwavers`.
+name = "aequitas-python"
+dynamic = ["version"]
+description = "SI physical quantities and dimensional arithmetic, backed by Rust"
+authors = [{ name = "Ryan Clanton", email = "ryanclanton@outlook.com" }]
+license = { text = "MIT OR Apache-2.0" }
+readme = "README.md"
+# Matches the `abi3-py38` floor the extension is built against, and the floor
+# `kwavers-python` already publishes, so a user installing both never meets a
+# version-matrix gap.
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Rust",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Typing :: Typed",
+]
+keywords = ["units", "si", "dimensional-analysis", "physics", "quantities"]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "mypy>=1.0"]
+
+[project.urls]
+Homepage = "https://github.com/ryancinsight/aequitas"
+Repository = "https://github.com/ryancinsight/aequitas"
+
+[tool.maturin]
+python-source = "python"
+module-name = "pyaequitas._pyaequitas"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v"
+
+[tool.mypy]
+# The analysis target, not the runtime floor: current mypy refuses to model
+# anything below 3.10, while `requires-python` above stays at the abi3 floor.
+# The stubs use `typing.Optional`/`List`/`Tuple` throughout, so they remain
+# valid on every version the wheel supports.
+python_version = "3.10"
+strict = true

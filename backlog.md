@@ -12,7 +12,19 @@ dimensions, transparent quantities over Eunomia scalars, and linear SI unit
 conversion, consumed by proteus, hyperion, kwavers, CFDrs, helios, and the
 domain layer.
 
-## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel [arch][minor] — todo <a id="aeq-py-binding-001"></a>
+## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel [arch][minor] — in-progress <a id="aeq-py-binding-001"></a>
+
+- **Integrator:** Atlas coordinator.
+- **Landed:** the `aequitas-python` member, runtime tag derived from the
+  `Dimension` parameters, generated inventory and stubs, 63 Rust and 39 Python
+  value-semantic tests, and the `bindings` CI job. Evidence: fmt, workspace
+  clippy `-D warnings`, `--no-default-features`, workspace tests, doctests,
+  rustdoc, generator `check`, an `abi3-py38` wheel built and installed, and
+  mypy rejecting the declared bad cases in `tests/typing/cases.py`.
+- **Remaining:** the publish pipeline (trusted publishing, `manylinux`,
+  install-and-import smoke) and the kwavers consumer side, which is a
+  cross-repo item; per-quantity typed classes are split out as
+  [AEQ-PY-TYPING-001](#aeq-py-typing-001).
 
 - **Decision:** [ADR 0016](docs/adr/0016-python-quantity-binding.md).
 - **Outcome:** a PyPI wheel exposing every SI quantity and unit with
@@ -32,6 +44,24 @@ domain layer.
   regenerate-and-diff; `pytest` green against the built wheel.
 - **Dependencies:** none to start; publication needs the trusted-publishing
   pipeline and an `abi3` floor decision.
+
+## AEQ-PY-TYPING-001 — Per-quantity classes so a type checker sees dimensions [minor] — todo <a id="aeq-py-typing-001"></a>
+
+- **Outcome:** `mypy` rejects `length + time` before the program runs, not only
+  the interpreter at call time.
+- **Scope:** generated per-quantity classes over the one runtime `Quantity`,
+  with the closed set of dimensional pairings emitted as `@overload`
+  signatures; arithmetic must return the registered class for the result tag,
+  or the stubs would claim a type the runtime does not produce.
+- **Non-goals:** changing the runtime tag or the cross-extension protocol.
+- **Acceptance:** the shipped classes are the classes arithmetic returns
+  (asserted at runtime, not only in stubs); `tests/typing/cases.py` grows the
+  dimensional-mismatch cases and they fail with their declared codes.
+- **Why split:** ADR 0016 records this as part of the decision. The current
+  stubs are accurate for the surface that exists -- one `Quantity` class -- and
+  a stub claiming 81 classes over a one-class runtime would be a lie a type
+  checker propagates, so the two ship separately.
+- **Dependencies:** [AEQ-PY-BINDING-001](#aeq-py-binding-001).
 
 ## AEQ-PY-AFFINE-001 — Affine units for the thermal surface [minor] — todo <a id="aeq-py-affine-001"></a>
 
