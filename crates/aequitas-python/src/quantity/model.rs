@@ -1,11 +1,10 @@
 //! The Python-visible physical quantity.
 
-use pyo3::exceptions::{PyKeyError, PyTypeError, PyValueError};
+use pyo3::exceptions::{PyKeyError, PyValueError};
 use pyo3::prelude::*;
 use pyo3::types::{PyString, PyTuple};
 
-use crate::protocol::{BASE_ATTR, DIMENSION_ATTR};
-use crate::tag::{AXES, DimensionTag, SemanticTag};
+use crate::tag::DimensionTag;
 use crate::units;
 
 /// A physical quantity: a magnitude in canonical SI base units and the
@@ -200,10 +199,10 @@ pub fn dimension_tuple(py: Python<'_>, tag: DimensionTag) -> PyResult<Bound<'_, 
 
 /// Read a quantity out of any object satisfying the protocol.
 ///
-/// Accepts this class directly and, failing that, any object exposing
-/// [`BASE_ATTR`] and [`DIMENSION_ATTR`]. The duck-typed path is what lets a
-/// consumer built against a different `aequitas-python` version interoperate:
-/// the tuple compares structurally where a downcast would not.
+/// Tries this class first, then the structural read in [`crate::consumer`].
+/// The downcast is only a fast path: the duck-typed arm is what lets a
+/// consumer built against a different `aequitas-python` version interoperate,
+/// because the tag tuple compares structurally where a downcast would not.
 ///
 /// # Errors
 ///
@@ -213,44 +212,6 @@ pub fn extract_quantity(value: &Bound<'_, PyAny>) -> PyResult<PyQuantity> {
     if let Ok(native) = value.extract::<PyQuantity>() {
         return Ok(native);
     }
-
-    let (Ok(base), Ok(dimension)) = (value.getattr(BASE_ATTR), value.getattr(DIMENSION_ATTR))
-    else {
-        return Err(PyTypeError::new_err(format!(
-            "expected a quantity or an object exposing `{BASE_ATTR}` and \
-             `{DIMENSION_ATTR}`, got `{}`",
-            value.get_type().name()?,
-        )));
-    };
-
-    let base: f64 = base.extract()?;
-    let (exponents, semantics): (Vec<i64>, String) = dimension.extract().map_err(|_| {
-        PyValueError::new_err(format!("`{DIMENSION_ATTR}` must be ((int x {AXES}), str)"))
-    })?;
-
-    if exponents.len() != AXES {
-        return Err(PyValueError::new_err(format!(
-            "`{DIMENSION_ATTR}` must carry exactly {AXES} exponents, got {}",
-            exponents.len()
-        )));
-    }
-
-    let mut axes = [0_i8; AXES];
-    for (slot, exponent) in axes.iter_mut().zip(exponents) {
-        *slot = i8::try_from(exponent).map_err(|_| {
-            PyValueError::new_err(format!("dimension exponent {exponent} is out of range"))
-        })?;
-    }
-
-    let semantics = SemanticTag::ALL
-        .into_iter()
-        .find(|candidate| candidate.name() == semantics)
-        .ok_or_else(|| {
-            PyValueError::new_err(format!("unknown dimension semantics '{semantics}'"))
-        })?;
-
-    Ok(PyQuantity::from_base(
-        base,
-        DimensionTag::new(axes, semantics),
-    ))
+    let (base, tag) = crate::consumer::read(value)?;
+    Ok(PyQuantity::from_base(base, tag))
 }
