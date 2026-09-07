@@ -45,6 +45,23 @@ domain layer.
 - **Dependencies:** none to start; publication needs the trusted-publishing
   pipeline and an `abi3` floor decision.
 
+## AEQ-RELEASE-EUNOMIA-CBRT-001 — Aequitas cannot be packaged for crates.io [patch] — blocked <a id="aeq-release-eunomia-cbrt-001"></a>
+
+- **Symptom:** `cargo package --locked -p aequitas` fails to verify the
+  tarball with `E0599: no method named cbrt found for type parameter T` at
+  `src/quantity/root.rs:110`.
+- **Cause:** packaging strips the git source from the `eunomia` dependency, so
+  the verification build resolves `eunomia 0.8.0` from crates.io.
+  `FloatElement::cbrt` exists on eunomia's default branch but not in that
+  release: the published `src/impls/field.rs` carries `sqrt` and no `cbrt`.
+- **Not caused by the binding work:** the commit that surfaced this touched
+  neither `src/` nor the `eunomia` requirement.
+- **Blocker:** eunomia must publish a release carrying `cbrt`, which is a
+  release action outside this repository's authority.
+- **Re-open trigger:** a crates.io eunomia release containing
+  `FloatElement::cbrt`; then advance the requirement and re-run
+  `cargo package --locked -p aequitas`.
+
 ## AEQ-PY-TYPING-001 — Per-quantity classes so a type checker sees dimensions [minor] — todo <a id="aeq-py-typing-001"></a>
 
 - **Outcome:** `mypy` rejects `length + time` before the program runs, not only
