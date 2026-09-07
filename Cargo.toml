@@ -28,9 +28,16 @@ std = ["eunomia/std"]
 serde = ["dep:serde"]
 
 [workspace]
-members = ["."]
+members = [".", "crates/aequitas-python"]
 default-members = ["."]
 resolver = "3"
+
+# The binding crate is excluded from `default-members` so a bare `cargo build`
+# in this repo keeps building the `no_std` law crate alone. Gate commands that
+# must cover it pass `--workspace`.
+
+[workspace.dependencies]
+aequitas = { path = ".", version = "0.2.0", default-features = false }
 
 [lints]
 workspace = true
