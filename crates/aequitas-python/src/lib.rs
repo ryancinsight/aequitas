@@ -27,11 +27,13 @@
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
+pub mod consumer;
 pub mod protocol;
 pub mod quantity;
 pub mod tag;
 pub mod units;
 
+pub use consumer::Dimensioned;
 pub use quantity::PyQuantity;
 
 /// Names of every quantity Aequitas defines.
