@@ -181,3 +181,73 @@ fn read_rejects_a_malformed_tag() {
         }
     });
 }
+
+#[test]
+fn a_quantity_that_is_also_a_number_is_still_dimension_checked() {
+    // The regression this guards: `f64` extraction honours `__float__`, and
+    // quantity types define one (pint's does). Reading the number first let
+    // such an object through as a bare magnitude with its dimension never
+    // examined -- a time accepted where a length belonged, silently.
+    let source = r"
+class Sneaky:
+    __aequitas_base__ = 2.0
+    __aequitas_dimension__ = ((0, 0, 1, 0, 0, 0, 0), 'base')
+
+    def __float__(self):
+        return 2.0
+
+result = Sneaky()
+";
+    Python::attach(|py| {
+        let object = build(py, source);
+        assert!(
+            object.extract::<f64>().is_ok(),
+            "the fixture must be float-convertible, or it does not test the hole"
+        );
+        let error = object
+            .extract::<Dimensioned<dimensions::Length>>()
+            .expect_err("a float-convertible time is still not a length");
+        assert!(error.to_string().contains("expected a quantity"), "{error}");
+    });
+}
+
+#[test]
+fn a_float_convertible_quantity_of_the_right_dimension_is_accepted() {
+    let source = r"
+class Convertible:
+    __aequitas_base__ = 0.25
+    __aequitas_dimension__ = ((1, 0, 0, 0, 0, 0, 0), 'base')
+
+    def __float__(self):
+        return 999.0
+
+result = Convertible()
+";
+    Python::attach(|py| {
+        let object = build(py, source);
+        let length: Dimensioned<dimensions::Length> = object.extract().expect("extracts");
+        // The protocol value, not `__float__`'s answer.
+        assert!((length.base() - 0.25).abs() < f64::EPSILON);
+    });
+}
+
+#[test]
+fn a_malformed_tag_surfaces_rather_than_falling_back_to_the_number() {
+    let source = r"
+class Broken:
+    __aequitas_base__ = 1.0
+    __aequitas_dimension__ = ((1, 0, 0), 'base')
+
+    def __float__(self):
+        return 1.0
+
+result = Broken()
+";
+    Python::attach(|py| {
+        let object = build(py, source);
+        let error = object
+            .extract::<Dimensioned<dimensions::Length>>()
+            .expect_err("a malformed tag is an error, not a bare number");
+        assert!(error.to_string().contains("exactly 7"), "{error}");
+    });
+}
