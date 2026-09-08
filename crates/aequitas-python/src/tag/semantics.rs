@@ -76,7 +76,7 @@ impl SemanticTag {
     /// Every marker in declaration order.
     ///
     /// Exhaustive by construction: adding a variant without extending this
-    /// array fails the round-trip test in [`super::tests`].
+    /// array fails the round-trip test in this module's test module.
     pub const ALL: [Self; 11] = [
         Self::Base,
         Self::AbsoluteTemperature,
