@@ -14,36 +14,28 @@ domain layer.
 
 ## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel [arch][minor] — in-progress <a id="aeq-py-binding-001"></a>
 
-- **Integrator:** Atlas coordinator.
-- **Landed:** the `aequitas-python` member, runtime tag derived from the
-  `Dimension` parameters, generated inventory and stubs, 63 Rust and 39 Python
-  value-semantic tests, and the `bindings` CI job. Evidence: fmt, workspace
-  clippy `-D warnings`, `--no-default-features`, workspace tests, doctests,
-  rustdoc, generator `check`, an `abi3-py38` wheel built and installed, and
-  mypy rejecting the declared bad cases in `tests/typing/cases.py`.
-- **Remaining:** the publish pipeline (trusted publishing, `manylinux`,
-  install-and-import smoke) and the kwavers consumer side, which is a
-  cross-repo item; per-quantity typed classes are split out as
-  [AEQ-PY-TYPING-001](#aeq-py-typing-001).
-
 - **Decision:** [ADR 0016](docs/adr/0016-python-quantity-binding.md).
 - **Outcome:** a PyPI wheel exposing every SI quantity and unit with
   conversion and dimensional arithmetic, consumable from `kwavers-python`.
-- **Scope:** promote this repo to a two-member workspace and add
-  `aequitas-python` (`cdylib`, PyO3, maturin); derive the runtime dimension
-  tag from the existing `Dimension` parameters through a const trait; emit
-  the runtime table and `.pyi` stubs from one codegen pass.
-- **Names:** PyPI distribution `aequitas-python`, import package
-  `pyaequitas` — verified free 2026-09-06; plain `aequitas` is taken on PyPI
-  by an unrelated project whose top-level import would collide.
-- **Non-goals:** any `pyo3` dependency in `aequitas`; array-valued
-  quantities; affine units (AEQ-PY-AFFINE-001); the kwavers consumer side.
+- **Names:** distribution `aequitas-python`, import package `pyaequitas`;
+  plain `aequitas` is taken on PyPI by an unrelated project whose top-level
+  import would collide.
+- **Landed:** the `aequitas-python` member; the runtime tag derived from the
+  `Dimension` parameters; generated inventory and stubs; `Dimensioned<D>` as
+  the consumer parameter type; 74 Rust tests. The consumer side landed too --
+  kwavers converted 93 dimensioned parameters over 8 files (kwavers#726).
+- **Correction:** `Dimensioned<D>` tried `f64` first, and that honours
+  `__float__`, which quantity types define (pint's does), so a declared time
+  was accepted as a length with its dimension never checked. Fixed in #58;
+  the protocol is read before the float arm.
+- **Remaining:** the publish pipeline only -- trusted publishing, a
+  `manylinux` floor, install-and-import smoke. Affine units are
+  [AEQ-PY-AFFINE-001](#aeq-py-affine-001), typed classes
+  [AEQ-PY-TYPING-001](#aeq-py-typing-001).
 - **Acceptance:** every exported dimension round-trips against
-  `Quantity::in_unit` for each of its units; semantic normalization matches
-  `MultiplyDimension`/`DivideDimension` per marker; codegen passes
-  regenerate-and-diff; `pytest` green against the built wheel.
-- **Dependencies:** none to start; publication needs the trusted-publishing
-  pipeline and an `abi3` floor decision.
+  `Quantity::in_unit`; semantic normalization matches
+  `MultiplyDimension`/`DivideDimension`; codegen regenerate-and-diff clean;
+  `pytest` green against the built wheel.
 
 ## AEQ-RELEASE-EUNOMIA-CBRT-001 — Aequitas cannot be packaged for crates.io [patch] — blocked <a id="aeq-release-eunomia-cbrt-001"></a>
 
