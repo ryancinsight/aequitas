@@ -69,6 +69,15 @@ pub fn read(value: &Bound<'_, PyAny>) -> PyResult<(f64, DimensionTag)> {
     Ok((base, DimensionTag::new(axes, semantics)))
 }
 
+/// Whether an object declares itself a quantity.
+///
+/// Presence of both attributes, not their contents: a malformed tag must
+/// surface as the error [`read`] gives it rather than silently falling back to
+/// a bare-number reading, which is the hole this check closes.
+fn carries_protocol(object: Borrowed<'_, '_, PyAny>) -> bool {
+    object.hasattr(BASE_ATTR).unwrap_or(false) && object.hasattr(DIMENSION_ATTR).unwrap_or(false)
+}
+
 /// A parameter accepting a base-unit float or a quantity of dimension `D`.
 ///
 /// The float arm preserves an already-published contract: a consumer whose
@@ -135,9 +144,16 @@ where
     type Error = PyErr;
 
     fn extract(object: Borrowed<'_, 'py, PyAny>) -> Result<Self, Self::Error> {
-        // A bare number keeps its historical meaning: base SI units. Checked
-        // first because it is both the common case and the cheap one.
-        if let Ok(base) = object.extract::<f64>() {
+        // The protocol is checked first, and the order is load-bearing. `f64`
+        // extraction goes through `PyFloat_AsDouble`, which honours
+        // `__float__` -- and a quantity type may well define one; pint's does.
+        // Trying the number first therefore let any such object through as a
+        // bare magnitude with its dimension never examined, so a time was
+        // accepted where a length belonged. An object that declares itself a
+        // quantity is treated as one.
+        if !carries_protocol(object)
+            && let Ok(base) = object.extract::<f64>()
+        {
             return Ok(Self::from_base(base));
         }
 
