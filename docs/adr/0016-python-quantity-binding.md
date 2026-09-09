@@ -41,6 +41,26 @@ float whose meaning lives in a parameter name.
 
 ## Decision
 
+### Revision 2026-09-09: the extractor checks the magnitude
+
+`Dimensioned`'s float arm was specified as unchecked, on the reasoning that
+"there is nothing in a bare number to check". There is. `NaN` is not a physical
+magnitude, and a binding that forwards one hands a consumer a computation that
+returns `NaN` — kwavers' `pmut_self_heating` multiplied an extracted drive
+voltage and returned a non-finite power (kwavers#726, CodeRabbit review).
+
+Both arms now check. The type carries which magnitudes it admits:
+`Dimensioned<D>` is finite-only, and `Dimensioned<D, MayBeInfinite>` additionally
+admits `±inf` for a parameter that publishes infinity as a sentinel — kwavers'
+`set_focus_distance` documents `INF` for "no focusing", so a blanket rejection
+would have broken a published contract. `NaN` is rejected under both: it is the
+absence of a value, not a sentinel.
+
+The default tightens every existing consumer parameter without a source change,
+which is the point — a site that wants the sentinel now says so in its type
+rather than in a comment.
+
+
 Aequitas grows a second workspace member, `aequitas-python`: a `cdylib` PyO3
 crate that owns every Python-facing type. The `aequitas` crate stays `no_std`,
 `forbid(unsafe_code)`, and free of any `pyo3` dependency. This is the

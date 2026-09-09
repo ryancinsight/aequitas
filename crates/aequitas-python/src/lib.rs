@@ -32,5 +32,5 @@ mod queries;
 pub mod tag;
 pub mod units;
 
-pub use consumer::Dimensioned;
+pub use consumer::{Dimensioned, Finite, Finiteness, MayBeInfinite};
 pub use quantity::PyQuantity;

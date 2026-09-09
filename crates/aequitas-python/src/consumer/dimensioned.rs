@@ -7,6 +7,7 @@ use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 use pyo3::{Borrowed, FromPyObject};
 
+use super::finiteness::{Finite, Finiteness};
 use super::value::{carries_protocol, read};
 use crate::tag::TaggedDimension;
 
@@ -14,9 +15,17 @@ use crate::tag::TaggedDimension;
 ///
 /// The float arm preserves an already-published contract: a consumer whose
 /// signature was `f64` in canonical SI base units keeps accepting exactly what
-/// it accepted before, unchecked, because there is nothing in a bare number to
-/// check. The quantity arm is the addition, and it is checked -- passing a
-/// time where a length belongs raises rather than silently scaling.
+/// it accepted before. The quantity arm is the addition, and its dimension is
+/// checked -- passing a time where a length belongs raises rather than
+/// silently scaling.
+///
+/// Both arms check the magnitude. `NaN` is not a physical value and never
+/// extracts; infinity extracts only under [`MayBeInfinite`], for a parameter
+/// that publishes it as a sentinel. Without this the binding layer forwards a
+/// non-finite number into a computation that returns one, which is how a
+/// self-heating power came back as `NaN` from a `NaN` drive voltage.
+///
+/// [`MayBeInfinite`]: super::MayBeInfinite
 ///
 /// `D` is a type-level Aequitas dimension, so the expected tag is a constant
 /// and the check is a comparison of two 8-byte values.
@@ -29,18 +38,20 @@ use crate::tag::TaggedDimension;
 /// }
 /// ```
 #[derive(Debug)]
-pub struct Dimensioned<D> {
+pub struct Dimensioned<D, F = Finite> {
     base: f64,
     dimension: PhantomData<D>,
+    finiteness: PhantomData<F>,
 }
 
-impl<D> Dimensioned<D> {
+impl<D, F> Dimensioned<D, F> {
     /// Construct from a magnitude already in canonical SI base units.
     #[must_use]
     pub const fn from_base(base: f64) -> Self {
         Self {
             base,
             dimension: PhantomData,
+            finiteness: PhantomData,
         }
     }
 
@@ -61,17 +72,18 @@ impl<D> Dimensioned<D> {
     }
 }
 
-impl<D> Clone for Dimensioned<D> {
+impl<D, F> Clone for Dimensioned<D, F> {
     fn clone(&self) -> Self {
         *self
     }
 }
 
-impl<D> Copy for Dimensioned<D> {}
+impl<D, F> Copy for Dimensioned<D, F> {}
 
-impl<'py, D> FromPyObject<'_, 'py> for Dimensioned<D>
+impl<'py, D, F> FromPyObject<'_, 'py> for Dimensioned<D, F>
 where
     D: TaggedDimension,
+    F: Finiteness,
 {
     type Error = PyErr;
 
@@ -86,7 +98,7 @@ where
         if !carries_protocol(object)
             && let Ok(base) = object.extract::<f64>()
         {
-            return Ok(Self::from_base(base));
+            return Self::checked(base);
         }
 
         let (base, tag) = read(&object)?;
@@ -94,6 +106,24 @@ where
         if tag != expected {
             return Err(PyValueError::new_err(format!(
                 "expected a quantity of `{expected}`, got `{tag}`"
+            )));
+        }
+        Self::checked(base)
+    }
+}
+
+impl<D, F> Dimensioned<D, F>
+where
+    D: TaggedDimension,
+    F: Finiteness,
+{
+    /// The magnitude, or a rejection naming the dimension and what it admits.
+    fn checked(base: f64) -> Result<Self, PyErr> {
+        if base.is_nan() || (base.is_infinite() && !F::ALLOWS_INFINITE) {
+            let expected = <D as TaggedDimension>::TAG;
+            return Err(PyValueError::new_err(format!(
+                "`{expected}` requires {}, got `{base}`",
+                F::ADMITS
             )));
         }
         Ok(Self::from_base(base))

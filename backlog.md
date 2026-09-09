@@ -1,5 +1,23 @@
 # Aequitas backlog
 
+<a id="aeq-dimensioned-accepts-non-finite-2026-09-09"></a>
+
+## AEQ-DIMENSIONED-ACCEPTS-NON-FINITE-2026-09-09 — The extractor forwarded NaN and infinity [patch] — done 2026-09-09
+
+- **Found by review on kwavers#726:** `Dimensioned::extract` checked neither
+  arm for finiteness, so a consumer's `pmut_self_heating` multiplied an
+  extracted drive voltage and returned a non-finite power.
+- **Delivered:** both arms check. `Dimensioned<D>` is finite-only;
+  `Dimensioned<D, MayBeInfinite>` admits `±inf` for a parameter that publishes
+  it as a sentinel (kwavers' `set_focus_distance` documents `INF` for "no
+  focusing", so a blanket rejection would break a published contract). `NaN` is
+  rejected under both. Recorded as a revision on
+  [ADR 0016](docs/adr/0016-python-quantity-binding.md).
+- **Verified:** six tests cover NaN and infinity on the float arm, NaN on the
+  protocol arm, the sentinel under `MayBeInfinite`, NaN still rejected there,
+  and an ordinary magnitude unaffected; workspace 217/217, fmt and
+  warning-denied clippy clean.
+
 ## AEQ-EUNOMIA-IDENTITY-2026-09-03 — Unify Eunomia source identity [patch] — done 2026-09-04 <a id="aeq-eunomia-identity-2026-09-03"></a>
 
 - [x] PR #51 merged at `e61a3cf`; Eunomia resolves from the canonical default

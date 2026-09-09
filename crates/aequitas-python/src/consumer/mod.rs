@@ -12,10 +12,12 @@
 //! (see [`crate::protocol`]).
 
 mod dimensioned;
+mod finiteness;
 mod value;
 
 #[cfg(test)]
 mod tests;
 
 pub use dimensioned::Dimensioned;
+pub use finiteness::{Finite, Finiteness, MayBeInfinite};
 pub use value::read;
