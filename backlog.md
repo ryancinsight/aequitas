@@ -2,6 +2,25 @@
 
 <a id="aeq-dimensioned-accepts-non-finite-2026-09-09"></a>
 
+<a id="aeq-recurseml-permanently-red-2026-09-09"></a>
+
+## AEQ-RECURSEML-PERMANENTLY-RED-2026-09-09 — The recurseml check errors on every pull request [patch] [ci] — blocked
+
+- **Measured 2026-09-09:** `recurseml/analysis` reports ERROR on #58, #59, #60
+  and #61 — every recent pull request. It is a third-party GitHub App, not a
+  repository workflow, so no committed job produces or can fix it.
+- **Why it matters:** a check that is red on every pull request whatever the
+  change trains readers to skim the check list, which is the same
+  desensitisation the SemVer informational gate was fixed for. It also makes
+  "one failing check" a useless signal for the PR-watching automation.
+- **Blocker:** removing or reconfiguring a GitHub App installation is an
+  account/permission change, outside the merge-mechanics grant. The user
+  uninstalls the app or disables its checks.
+- **Re-open trigger:** the app is removed, or it starts reporting a real
+  verdict.
+- Same class as kwavers `KW-CI-094`; if a third member shows it, this belongs
+  on the meta board as one fleet item rather than per-member copies.
+
 ## AEQ-DIMENSIONED-ACCEPTS-NON-FINITE-2026-09-09 — The extractor forwarded NaN and infinity [patch] — done 2026-09-09
 
 - **Found by review on kwavers#726:** `Dimensioned::extract` checked neither
