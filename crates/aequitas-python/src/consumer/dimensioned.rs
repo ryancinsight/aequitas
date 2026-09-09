@@ -13,15 +13,17 @@ use crate::tag::TaggedDimension;
 
 /// A parameter accepting a base-unit float or a quantity of dimension `D`.
 ///
-/// The float arm preserves an already-published contract: a consumer whose
-/// signature was `f64` in canonical SI base units keeps accepting exactly what
-/// it accepted before. The quantity arm is the addition, and its dimension is
-/// checked -- passing a time where a length belongs raises rather than
-/// silently scaling.
+/// The float arm carries an already-published contract forward: a consumer
+/// whose signature was `f64` in canonical SI base units keeps accepting every
+/// finite magnitude it accepted before, unconverted. The quantity arm is the
+/// addition, and its dimension is checked -- passing a time where a length
+/// belongs raises rather than silently scaling.
 ///
-/// Both arms check the magnitude. `NaN` is not a physical value and never
-/// extracts; infinity extracts only under [`MayBeInfinite`], for a parameter
-/// that publishes it as a sentinel. Without this the binding layer forwards a
+/// What the float arm no longer accepts is a magnitude that is not a value:
+/// both arms reject `NaN`, and infinity extracts only under [`MayBeInfinite`],
+/// for a parameter that publishes it as a sentinel. That is a deliberate
+/// tightening, not a preserved contract -- a caller passing `float('nan')`
+/// used to be forwarded and now raises. Without this the binding layer forwards a
 /// non-finite number into a computation that returns one, which is how a
 /// self-heating power came back as `NaN` from a `NaN` drive voltage.
 ///
