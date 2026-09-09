@@ -15,3 +15,9 @@ Thumbs.db
 # Run outputs
 output/
 *.log
+
+# Python bytecode. Two of these were tracked, so every `pytest` run in
+# `crates/aequitas-python` reported a dirty tree; the files are derived from
+# the sources beside them and are interpreter- and pytest-version-specific.
+__pycache__/
+*.py[cod]
