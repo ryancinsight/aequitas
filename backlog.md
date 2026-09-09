@@ -1,5 +1,42 @@
 # Aequitas backlog
 
+<a id="aeq-dimensioned-accepts-non-finite-2026-09-09"></a>
+
+<a id="aeq-recurseml-permanently-red-2026-09-09"></a>
+
+## AEQ-RECURSEML-PERMANENTLY-RED-2026-09-09 — The recurseml check errors on every pull request [patch] [ci] — blocked
+
+- **Measured 2026-09-09:** `recurseml/analysis` reports ERROR on #58, #59, #60
+  and #61 — every recent pull request. It is a third-party GitHub App, not a
+  repository workflow, so no committed job produces or can fix it.
+- **Why it matters:** a check that is red on every pull request whatever the
+  change trains readers to skim the check list, which is the same
+  desensitisation the SemVer informational gate was fixed for. It also makes
+  "one failing check" a useless signal for the PR-watching automation.
+- **Blocker:** removing or reconfiguring a GitHub App installation is an
+  account/permission change, outside the merge-mechanics grant. The user
+  uninstalls the app or disables its checks.
+- **Re-open trigger:** the app is removed, or it starts reporting a real
+  verdict.
+- Same class as kwavers `KW-CI-094`; if a third member shows it, this belongs
+  on the meta board as one fleet item rather than per-member copies.
+
+## AEQ-DIMENSIONED-ACCEPTS-NON-FINITE-2026-09-09 — The extractor forwarded NaN and infinity [patch] — done 2026-09-09
+
+- **Found by review on kwavers#726:** `Dimensioned::extract` checked neither
+  arm for finiteness, so a consumer's `pmut_self_heating` multiplied an
+  extracted drive voltage and returned a non-finite power.
+- **Delivered:** both arms check. `Dimensioned<D>` is finite-only;
+  `Dimensioned<D, MayBeInfinite>` admits `±inf` for a parameter that publishes
+  it as a sentinel (kwavers' `set_focus_distance` documents `INF` for "no
+  focusing", so a blanket rejection would break a published contract). `NaN` is
+  rejected under both. Recorded as a revision on
+  [ADR 0016](docs/adr/0016-python-quantity-binding.md).
+- **Verified:** six tests cover NaN and infinity on the float arm, NaN on the
+  protocol arm, the sentinel under `MayBeInfinite`, NaN still rejected there,
+  and an ordinary magnitude unaffected; workspace 217/217, fmt and
+  warning-denied clippy clean.
+
 ## AEQ-EUNOMIA-IDENTITY-2026-09-03 — Unify Eunomia source identity [patch] — done 2026-09-04 <a id="aeq-eunomia-identity-2026-09-03"></a>
 
 - [x] PR #51 merged at `e61a3cf`; Eunomia resolves from the canonical default
