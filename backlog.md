@@ -115,6 +115,23 @@ domain layer.
   thermal API is not forced to kelvin.
 - **Integrator:** claude-opus-5, claimed 2026-09-10, lane
   `worktrees/aequitas-affine-units`. Core contract first, then the binding.
+- **Contract landed in #64.** `AffineUnit<D>` (`base = value * SCALE + OFFSET`),
+  sealed like `LinearUnit`, with `DegreeCelsius` and `DegreeFahrenheit`
+  implementing it for `ThermodynamicTemperature` and `LinearUnit` for
+  `TemperatureDifference` -- same marker, same symbol, and the quantity's
+  dimension picks the conversion. `Quantity::from_affine_unit` /
+  `in_affine_unit` are the constructors. Eleven tests against the defining
+  identities, including -40 (where both scales agree, an oracle independent of
+  either offset) and the two readings of 25 degC differing by exactly the ice
+  point.
+- **Tolerance note for whoever extends this:** near a scale's bottom the
+  conversion cancels catastrophically -- at -459.67 degF the base value is
+  ~1e-14 while the terms producing it are ~255 K each -- so a round-trip bound
+  must derive from `OFFSET / SCALE`, not from the result. A bound scaled to the
+  result fails there, and widening it would be fitting a number.
+- **Remaining for the outcome:** the Python surface. `degC` is not yet
+  expressible from `pyaequitas`; the binding's unit registry is built from
+  `LinearUnit` implementors and needs to carry affine units too.
 - **No upstream change needed:** the offset needs addition, which `UnitScalar`
   lacks, but `RealField` (via `FloatElement: NumericElement`) already carries
   `Add` and `ONE`, so the offset is `T::ONE.scale_by_f64(OFFSET)`. Bounding on
