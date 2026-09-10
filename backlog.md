@@ -4,6 +4,30 @@
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
 
+## AEQ-MERGE-GATE-2026-09-10 — main took merges with no verification [patch] [ci] — done
+
+- **Found by merging into it.** #64 was enqueued with `--auto` and merged
+  **immediately**, before a single check reported: `main` had no protection, so
+  every workflow here was advisory. This is the defect kwavers closed as
+  KW-CI-115 after the same discovery.
+- **Applied 2026-09-10.** Four required contexts, all from `ci.yml`:
+  `verify` (50s), `Python bindings` (51s), `supply-chain` (42s),
+  `Lockfile integrity / Lockfile integrity` (15s). The whole gate is about a
+  minute, so it is faster than the work it gates and will not be routed around.
+- **Excluded:** `SemVer (informational)` is informational by name;
+  `SemVer (release gate)` skips on pull requests; `CodeRabbit` and
+  `recurseml/analysis` are third-party and the latter is permanently red
+  (AEQ-RECURSEML-PERMANENTLY-RED-2026-09-09).
+- **No deadlock risk here**, unlike kwavers: `ci.yml`'s `pull_request:` trigger
+  carries no path filter, so every pull request runs it and a required check
+  always reports. `enforce_admins` stays false so board commits can still reach
+  `main` directly, which is how this file is maintained.
+- **`strict: false`** deliberately: requiring branches be up to date forces a
+  full re-run whenever `main` moves, and the queue is the stack's scarce
+  resource.
+- Repository mechanics were already correct: auto-merge on, squash off, merge
+  and rebase allowed.
+
 ## AEQ-RECURSEML-PERMANENTLY-RED-2026-09-09 — The recurseml check errors on every pull request [patch] [ci] — blocked
 
 - **Measured 2026-09-09:** `recurseml/analysis` reports ERROR on #58, #59, #60
