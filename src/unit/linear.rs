@@ -6,7 +6,8 @@ use super::private;
 ///
 /// Linear conversion is `base = value × SCALE`. Implementations live in
 /// Aequitas so the positive, finite scale invariant and symbol vocabulary have
-/// one owner. Affine units require a distinct future contract.
+/// one owner. Affine units use [`AffineUnit`](super::AffineUnit), whose zero
+/// is not the base unit's zero.
 pub trait LinearUnit<D>: private::Sealed {
     /// Unit abbreviation.
     const SYMBOL: &'static str;

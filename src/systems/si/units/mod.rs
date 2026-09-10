@@ -1,8 +1,13 @@
-//! Zero-sized linear SI unit markers.
+//! Zero-sized SI unit markers.
+//!
+//! Linear throughout except [`DegreeCelsius`] and [`DegreeFahrenheit`], whose
+//! degrees carry an offset when they name a temperature and none when they
+//! name a difference.
 
 mod base;
 mod derived;
 mod scaled;
+mod temperature;
 
 pub use base::{Ampere, Candela, Kelvin, Kilogram, Meter, Mole, Radian, Second};
 pub use derived::{
@@ -18,6 +23,8 @@ pub use derived::{
     Volt, VoltPerPascal, Watt, WattPerCubicMeter, WattPerKilogram, WattPerMeterFourth,
     WattPerMeterKelvin, WattPerSquareMeter,
 };
+pub use temperature::{DegreeCelsius, DegreeFahrenheit};
+
 pub use scaled::{
     Centimeter, CubicMillimeter, Degree, ElectronVolt, Gram, GramPerCubicCentimeter,
     JoulePerMilliliter, Kilohertz, Kilometer, Kilopascal, MegaElectronVolt, Megahertz, Megapascal,
