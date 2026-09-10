@@ -109,10 +109,18 @@ domain layer.
   checker propagates, so the two ship separately.
 - **Dependencies:** [AEQ-PY-BINDING-001](#aeq-py-binding-001).
 
-## AEQ-PY-AFFINE-001 — Affine units for the thermal surface [minor] — todo <a id="aeq-py-affine-001"></a>
+## AEQ-PY-AFFINE-001 — Affine units for the thermal surface [minor] — in-progress <a id="aeq-py-affine-001"></a>
 
 - **Outcome:** `degC` (and `degF`) expressible, so a Python consumer of a
   thermal API is not forced to kelvin.
+- **Integrator:** claude-opus-5, claimed 2026-09-10, lane
+  `worktrees/aequitas-affine-units`. Core contract first, then the binding.
+- **No upstream change needed:** the offset needs addition, which `UnitScalar`
+  lacks, but `RealField` (via `FloatElement: NumericElement`) already carries
+  `Add` and `ONE`, so the offset is `T::ONE.scale_by_f64(OFFSET)`. Bounding on
+  `RealField` also excludes complex scalars, which is the physics: an affine
+  offset on a phasor is meaningless, and `UnitScalar`'s own documentation says
+  a complex value is scaled componentwise as quadrature.
 - **Scope:** the affine unit contract deferred below, narrowed to
   thermodynamic temperature; `LinearUnit` stays sealed and unchanged.
 - **Acceptance:** offset conversion round-trips value-semantically;
