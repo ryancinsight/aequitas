@@ -4,6 +4,19 @@
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
 
+## AEQ-CI-BINDING-GATES-2026-09-11 — CI never compiled, linted or tested the binding crate in Rust [patch] [ci] — in-progress <a id="aeq-ci-binding-gates-2026-09-11"></a>
+
+- **Symptom:** `default-members = ["."]` keeps bare cargo on the law crate, and
+  `Cargo.toml` says gates covering the binding pass `--workspace`; none of
+  the `verify` steps did. `aequitas-python`'s clippy, doctests and Rust tests
+  -- the conversion sweep recorded in the gap audit as the live check -- ran
+  only on a developer's machine.
+- **Fix:** `--workspace` on clippy, nextest, doctests and rustdoc in `verify`,
+  with the pinned Python the binding's embedded-interpreter tests link to.
+- **Acceptance:** the PR's `verify` log lists the `aequitas-python` tests.
+- **Integrator:** claude-opus-5, same lane and branch as
+  [AEQ-PY-OPERAND-FLOAT-2026-09-11](#aeq-py-operand-float-2026-09-11).
+
 ## AEQ-PY-OPERAND-FLOAT-2026-09-11 — Arithmetic read a protocol quantity with `__float__` as a scalar [patch] — in-progress <a id="aeq-py-operand-float-2026-09-11"></a>
 
 - **Symptom:** `aq.length(2.0) * t`, with `t` a protocol-conforming time that
