@@ -1,11 +1,13 @@
 //! Dimensional arithmetic on the Python side.
 //!
 //! Every operation here has a type-level counterpart in Aequitas. Addition
-//! requires identical dimensions, which `Add` expresses by taking `Self`;
-//! multiplication and division combine exponents and normalize the semantic
-//! marker, matching `MultiplyDimension` and `DivideDimension`, whose outputs
-//! are always `Dimension<..., BaseSemantics>`. What `rustc` rejects at compile
-//! time this module raises at call time.
+//! requires identical dimensions, which `Add` expresses by taking `Self`.
+//! Multiplying or dividing by a quantity combines exponents and normalizes the
+//! semantic marker, matching `MultiplyDimension` and `DivideDimension`, whose
+//! outputs are always `Dimension<..., BaseSemantics>`. Scaling by a bare number
+//! keeps the dimension, marker included, because `Mul<T>` and `Div<T>` for
+//! `Quantity<T, D>` return `Self`. What `rustc` rejects at compile time this
+//! module raises at call time.
 
 use pyo3::exceptions::{PyValueError, PyZeroDivisionError};
 use pyo3::prelude::*;
@@ -87,13 +89,20 @@ impl PyQuantity {
         Ok(Self::from_base(self.base_value() - rhs.base_value(), self.tag()).into())
     }
 
+    /// Scaling by a bare number keeps the dimension, marker included:
+    /// `Quantity<T, D> * T` is `Quantity<T, D>` in Aequitas, so a stress times
+    /// two is still a stress. Only a quantity operand combines dimensions.
     pub(crate) fn __mul__(&self, other: &Bound<'_, PyAny>) -> PyResult<Classed> {
-        let rhs = Operand::parse(other)?.as_quantity();
-        let tag = self
-            .tag()
-            .multiply(rhs.tag())
-            .map_err(|error| PyValueError::new_err(error.to_string()))?;
-        Ok(Self::from_base(self.base_value() * rhs.base_value(), tag).into())
+        let (factor, tag) = match Operand::parse(other)? {
+            Operand::Scalar(scalar) => (scalar, self.tag()),
+            Operand::Quantity(rhs) => (
+                rhs.base_value(),
+                self.tag()
+                    .multiply(rhs.tag())
+                    .map_err(|error| PyValueError::new_err(error.to_string()))?,
+            ),
+        };
+        Ok(Self::from_base(self.base_value() * factor, tag).into())
     }
 
     /// Multiplication is commutative, so a scalar on the left routes here.
@@ -101,16 +110,22 @@ impl PyQuantity {
         self.__mul__(other)
     }
 
+    /// Division by a bare number keeps the dimension, as `Div<T>` does in
+    /// Aequitas; division by a quantity combines dimensions.
     pub(crate) fn __truediv__(&self, other: &Bound<'_, PyAny>) -> PyResult<Classed> {
-        let rhs = Operand::parse(other)?.as_quantity();
-        if rhs.base_value() == 0.0 {
+        let (divisor, tag) = match Operand::parse(other)? {
+            Operand::Scalar(scalar) => (scalar, self.tag()),
+            Operand::Quantity(rhs) => (
+                rhs.base_value(),
+                self.tag()
+                    .divide(rhs.tag())
+                    .map_err(|error| PyValueError::new_err(error.to_string()))?,
+            ),
+        };
+        if divisor == 0.0 {
             return Err(PyZeroDivisionError::new_err("division by a zero quantity"));
         }
-        let tag = self
-            .tag()
-            .divide(rhs.tag())
-            .map_err(|error| PyValueError::new_err(error.to_string()))?;
-        Ok(Self::from_base(self.base_value() / rhs.base_value(), tag).into())
+        Ok(Self::from_base(self.base_value() / divisor, tag).into())
     }
 
     /// Division is not commutative: a scalar on the left divides by this

@@ -84,6 +84,11 @@ All externally observable changes are recorded here.
 
 ### Fixed
 
+- `pyaequitas` scaling by a bare number keeps the quantity's dimension, as
+  `Quantity<T, D> * T` does in Aequitas. `aq.stress(1.0) * 2.0` was a
+  pressure and `aq.angle(1.0) * 2.0` a bare dimensionless value, so a scaled
+  stress no longer added to a stress.
+
 - `pyaequitas` arithmetic reads the quantity protocol before `__float__`. A
   protocol-conforming quantity that also defines `__float__` was multiplied
   or divided as a bare scalar, so a length times such a time came back a

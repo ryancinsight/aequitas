@@ -7,6 +7,7 @@ use pyo3::prelude::*;
 use pyo3::types::{PyAnyMethods, PyDict};
 
 use aequitas::systems::si::dimensions;
+use aequitas::systems::si::quantities::{Angle, Dimensionless, Pressure, Stress};
 
 use super::{PyQuantity, extract_quantity};
 use crate::tag::{DimensionTag, SemanticTag, TaggedDimension};
@@ -485,6 +486,68 @@ result = ForeignTime()
             .expect("length / time is defined");
         assert_eq!(speed.tag(), <dimensions::Velocity as TaggedDimension>::TAG);
         assert_exact(speed.base_value(), 0.5);
+    });
+}
+
+/// Scaling by a bare number keeps the dimension, marker included.
+///
+/// The `let _: Stress<f64>` lines are the oracle: they compile only because
+/// the law crate's `Mul<T>`, reflected `Mul`, and `Div<T>` for `Quantity<T, D>`
+/// return the same `D`. The binding normalized the marker instead, so a stress
+/// scaled by two came back a pressure and no longer added to a stress.
+#[test]
+fn scaling_by_a_number_keeps_the_semantic_marker() {
+    let _: Stress<f64> = Stress::<f64>::from_base(1.0) * 2.0;
+    let _: Stress<f64> = 2.0 * Stress::<f64>::from_base(1.0);
+    let _: Stress<f64> = Stress::<f64>::from_base(1.0) / 2.0;
+    let _: Angle<f64> = Angle::<f64>::from_base(1.0) * 2.0;
+
+    let stress = <dimensions::Stress as TaggedDimension>::TAG;
+    let angle = <dimensions::Angle as TaggedDimension>::TAG;
+    Python::attach(|py| {
+        let two = 2.0_f64.into_pyobject(py).expect("bind");
+
+        let scaled = PyQuantity::from_base(1.0, stress)
+            .__mul__(&two)
+            .expect("stress * 2 is defined");
+        assert_eq!(scaled.tag(), stress);
+        assert_exact(scaled.base_value(), 2.0);
+
+        let reflected = PyQuantity::from_base(1.0, stress)
+            .__rmul__(&two)
+            .expect("2 * stress is defined");
+        assert_eq!(reflected.tag(), stress);
+
+        let halved = PyQuantity::from_base(1.0, stress)
+            .__truediv__(&two)
+            .expect("stress / 2 is defined");
+        assert_eq!(halved.tag(), stress);
+        assert_exact(halved.base_value(), 0.5);
+
+        let turned = PyQuantity::from_base(1.0, angle)
+            .__mul__(&two)
+            .expect("angle * 2 is defined");
+        assert_eq!(turned.tag(), angle);
+    });
+}
+
+/// A dimensionless *quantity* is not a bare number: multiplying by one combines
+/// dimensions and normalizes the marker, as `MultiplyDimension` does.
+#[test]
+fn a_dimensionless_quantity_operand_normalizes_the_marker() {
+    let _: Pressure<f64> = Stress::<f64>::from_base(1.0) * Dimensionless::<f64>::from_base(2.0);
+
+    Python::attach(|py| {
+        let factor = PyQuantity::from_base(2.0, DimensionTag::DIMENSIONLESS)
+            .into_pyobject(py)
+            .expect("bind");
+        let product = PyQuantity::from_base(1.0, <dimensions::Stress as TaggedDimension>::TAG)
+            .__mul__(&factor)
+            .expect("stress * dimensionless is defined");
+        assert_eq!(
+            product.tag(),
+            <dimensions::Pressure as TaggedDimension>::TAG
+        );
     });
 }
 
