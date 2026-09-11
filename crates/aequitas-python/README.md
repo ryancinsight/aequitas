@@ -107,7 +107,8 @@ narrow it with `isinstance` first.
 ## Free-threaded Python
 
 The module declares itself safe without the GIL, so importing it on a
-free-threaded interpreter (3.13t and later) leaves the GIL off. Quantities are
+free-threaded interpreter (3.14t and later; PyO3 supports none earlier)
+leaves the GIL off. Quantities are
 immutable and may be shared across threads. A free-threaded build needs a
 wheel built for its version; the abi3 wheel serves every GIL build from 3.8.
 

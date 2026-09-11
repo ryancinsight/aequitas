@@ -19,7 +19,7 @@ All externally observable changes are recorded here.
 ### Added
 
 - `pyaequitas` declares itself safe on free-threaded Python: importing it on
-  3.13t leaves the GIL off, and CI runs the Python suite on a free-threaded
+  3.14t leaves the GIL off, and CI runs the Python suite on a free-threaded
   interpreter.
 
 - `pyaequitas` stubs type arithmetic: to a type checker `aq.length(1.0) *

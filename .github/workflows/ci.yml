@@ -87,10 +87,15 @@ jobs:
         include:
           - python: "3.12"
             variant: ""
-          # Free-threaded CPython. The stable ABI does not cover it before
-          # 3.15, so this cell builds a version-specific wheel.
-          - python: "3.13t"
+            tools: pytest mypy
+          # Free-threaded CPython. PyO3 supports it from 3.14, and the stable
+          # ABI does not cover it before 3.15, so this cell builds a
+          # version-specific wheel. The type-checking tools stay on the GIL
+          # cell: their compiled dependencies do not all build here, and what
+          # they check does not depend on the interpreter.
+          - python: "3.14t"
             variant: " (free-threaded)"
+            tools: pytest
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       - uses: dtolnay/rust-toolchain@a5f673d0ba8626c3977bb416a1612774bc82181b
@@ -107,7 +112,7 @@ jobs:
         # or the stubs, which no Rust test can detect on its own.
         run: python scripts/generate-surface.py check
       - name: Install the build and check tools
-        run: pip install "maturin>=1.9.4,<2.0" pytest mypy
+        run: pip install "maturin>=1.9.4,<2.0" ${{ matrix.tools }}
       - name: Build and install the wheel
         working-directory: crates/aequitas-python
         # `--interpreter python` builds for the job's own interpreter: an abi3

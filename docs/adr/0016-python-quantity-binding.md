@@ -181,8 +181,9 @@ binding surface is pure scalar, so `abi3` is clean for it.
 The abi3 wheel serves GIL builds only: the stable ABI does not cover
 free-threaded CPython until abi3t in 3.15. The module declares
 `gil_used = false` -- every pyclass is frozen over `Copy` data and the module
-holds no mutable state -- and CI runs the Python suite on 3.13t against a
-version-specific wheel, asserting in a fresh interpreter that the import
+holds no mutable state -- and CI runs the Python suite on 3.14t, the first
+free-threaded version PyO3 supports, against a version-specific wheel,
+asserting in a fresh interpreter that the import
 leaves the GIL off. Until the floor reaches 3.15, the release matrix adds
 one `cp3XXt` wheel per supported free-threaded version beside the abi3 wheel.
 Driving item:
