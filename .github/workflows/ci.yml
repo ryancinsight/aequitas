@@ -45,6 +45,11 @@ jobs:
         with:
           components: clippy, rustfmt
       - uses: taiki-e/install-action@ea4c0b50b0d394ee91c5bb68a6a295b0556feb8e
+      # The binding crate's tests embed an interpreter, so the workspace
+      # gates below need one to link against.
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.12"
       - name: Verify the committed lock graph
         shell: bash
         run: cargo metadata --locked --format-version 1 --all-features > /dev/null
@@ -52,16 +57,20 @@ jobs:
         run: cargo fmt --all -- --check
       - name: Feature check
         run: cargo check --locked --no-default-features
+      # `--workspace` on every gate that must cover the binding crate:
+      # `default-members` keeps a bare cargo command on the no_std law crate,
+      # so without it these steps never compiled, linted or tested
+      # `aequitas-python` -- the conversion sweep included.
       - name: Clippy
-        run: cargo clippy --locked --all-targets --all-features -- -D warnings
+        run: cargo clippy --locked --workspace --all-targets --all-features -- -D warnings
       - name: Native tests
-        run: cargo nextest run --locked --all-features
+        run: cargo nextest run --locked --workspace --all-features
       - name: Documentation tests
-        run: cargo test --locked --doc --all-features
+        run: cargo test --locked --workspace --doc --all-features
       - name: Documentation
         env:
           RUSTDOCFLAGS: -D warnings
-        run: cargo doc --locked --no-deps --all-features
+        run: cargo doc --locked --workspace --no-deps --all-features
 
   # The binding's own gate. Separate from `verify` because it needs a Python
   # interpreter and a wheel build, and because its distinctive failure -- a
