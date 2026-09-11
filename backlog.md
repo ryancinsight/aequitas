@@ -154,6 +154,17 @@ domain layer.
   `MultiplyDimension`/`DivideDimension`; codegen regenerate-and-diff clean;
   `pytest` green against the built wheel.
 
+## AEQ-PY-WHEEL-MACOS-X86-2026-09-11 — The wheel matrix has no Intel macOS wheel [patch] [ci] — todo <a id="aeq-py-wheel-macos-x86-2026-09-11"></a>
+
+- **Gap:** `python-release.yml` builds and smoke-tests on four native
+  runners; Intel macOS is absent, so pip there falls back to the sdist and
+  needs a Rust toolchain.
+- **Open question:** which GitHub-hosted label provides x86_64 macOS now, or
+  whether the wheel cross-builds on arm64 and smoke-tests under Rosetta.
+- **Acceptance:** an x86_64 macOS wheel per ABI, smoke-tested by running the
+  Python suite on x86_64, in the same matrix.
+- **Found by:** [AEQ-PY-BINDING-001](#aeq-py-binding-001), PR #72.
+
 ## AEQ-RELEASE-TAG-FORM-2026-09-11 — The crate release workflow keys on a `crate-` tag prefix [patch] [ci] — todo <a id="aeq-release-tag-form-2026-09-11"></a>
 
 - **Finding:** `rust-release.yml` publishes only for tags starting `crate-`, a
