@@ -141,10 +141,12 @@ domain layer.
   `FloatElement::cbrt`; then advance the requirement and re-run
   `cargo package --locked -p aequitas`.
 
-## AEQ-PY-TYPING-001 — Per-quantity classes so a type checker sees dimensions [minor] — todo <a id="aeq-py-typing-001"></a>
+## AEQ-PY-TYPING-001 — Per-quantity classes so a type checker sees dimensions [minor] — in-progress <a id="aeq-py-typing-001"></a>
 
 - **Outcome:** `mypy` rejects `length + time` before the program runs, not only
   the interpreter at call time.
+- **Integrator:** claude-opus-5, claimed 2026-09-11, lane
+  `worktrees/aequitas-python-typing` on `feat/aequitas-python-typing`.
 - **Scope:** generated per-quantity classes over the one runtime `Quantity`,
   with the closed set of dimensional pairings emitted as `@overload`
   signatures; arithmetic must return the registered class for the result tag,
