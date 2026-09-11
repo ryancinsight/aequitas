@@ -146,6 +146,12 @@ domain layer.
   `__float__`, which quantity types define (pint's does), so a declared time
   was accepted as a length with its dimension never checked. Fixed in #58;
   the protocol is read before the float arm.
+- **Integrator:** claude-opus-5, taken over 2026-09-11 (the item had none), lane
+  `worktrees/aequitas-python-typing`. PyPI name re-checked: `aequitas-python`
+  is unregistered (404), `aequitas` taken (200).
+- **Blocked substep:** registering the PyPI trusted publisher (project
+  `aequitas-python`, workflow `python-release.yml`, environment `pypi`) is a
+  pypi.org account action for the owner; the workflow lands without it.
 - **Remaining:** the publish pipeline only -- trusted publishing, a
   `manylinux` floor, install-and-import smoke. Affine units landed in
   [AEQ-PY-AFFINE-001](#aeq-py-affine-001); typed classes in
