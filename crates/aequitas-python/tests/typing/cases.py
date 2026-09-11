@@ -28,6 +28,14 @@ symbols: List[str] = aq.unit_symbols("pressure")
 typed_length: aq.Length = aq.length(1.0)
 one_class: aq.ThermalDiffusivity = aq.kinematic_viscosity(1.0)
 widened: aq.Quantity = aq.length(1.0)
+product: aq.Area = aq.length(1.0) * aq.length(2.0)
+speed: aq.Velocity = aq.length(1.0) / aq.time(1.0)
+side: aq.Length = aq.area(4.0).sqrt()
+squared: aq.Area = aq.length(2.0) ** 2
+scaled_stress: aq.Stress = aq.stress(1.0) * 2.0
+frequency: aq.Frequency = 1.0 / aq.time(2.0)
+summed: aq.Length = aq.length(1.0) + aq.length(2.0)
+fifth: aq.Quantity = aq.length(1.0) ** 5
 
 # --- MUST FAIL BELOW ---
 
@@ -37,3 +45,7 @@ wrong: str = radius.base  # assignment
 radius.in_unit(5)  # arg-type
 aq.length(1.0) ** 0.5  # operator
 mistyped: aq.Time = aq.length(1.0)  # assignment
+aq.length(1.0) + aq.time(1.0)  # operator
+aq.length(1.0) < aq.time(1.0)  # operator
+aq.stress(1.0) + aq.pressure(1.0)  # operator
+wrong_product: aq.Length = aq.length(1.0) * aq.length(1.0)  # assignment

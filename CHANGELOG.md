@@ -18,6 +18,10 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- `pyaequitas` stubs type arithmetic: to a type checker `aq.length(1.0) *
+  aq.length(2.0)` is an `aq.Area`, and `aq.length(1.0) + aq.time(1.0)` is an
+  error, as it is a `ValueError` at runtime.
+
 - `pyaequitas` has a class per named dimension. `aq.length(2.0)` is an
   `aq.Length`, the product of two lengths an `aq.Area`, and a dimension no
   alias names a plain `aq.Quantity`. Aliases of one dimension are one class
