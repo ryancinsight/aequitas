@@ -27,6 +27,19 @@ variant. The suite supplies dimension-law, conversion-property, generic-scalar,
 layout, and `uom` differential evidence; it does not establish runtime
 performance, memory usage, hardware behavior, or hosted release readiness.
 
+## Escaped defects
+
+- **A path filter ignored an input of the job it gates.** The book workflow
+  ran on `docs/book/**` while its samples compile against `src/`; 82ec9b5 gave
+  `Kilopascal` a second `LinearUnit`, the chapter failed E0283, and nothing ran
+  for eight days. Check: 08f687c triggers on `src/**` and the manifests.
+  Pattern: a `paths` filter covers the dependency closure of its job.
+- **A bitwise claim tested on round numbers.** The binding's conversion test
+  used seven hand-picked values and passed while 24 of 89 units differed from
+  the law crate by an ulp. Check: the seeded 4,107-value sweep in
+  `crates/aequitas-python/src/units/tests.rs` (3f93d67), shown to fail against
+  the old division. Pattern: an equality claim over a domain needs a sweep.
+
 ## Closed gaps
 
 ### ADR index freshness

@@ -116,8 +116,8 @@ domain layer.
   was accepted as a length with its dimension never checked. Fixed in #58;
   the protocol is read before the float arm.
 - **Remaining:** the publish pipeline only -- trusted publishing, a
-  `manylinux` floor, install-and-import smoke. Affine units are
-  [AEQ-PY-AFFINE-001](#aeq-py-affine-001), typed classes
+  `manylinux` floor, install-and-import smoke. Affine units landed in
+  [AEQ-PY-AFFINE-001](#aeq-py-affine-001); typed classes are
   [AEQ-PY-TYPING-001](#aeq-py-typing-001).
 - **Acceptance:** every exported dimension round-trips against
   `Quantity::in_unit`; semantic normalization matches
@@ -159,63 +159,19 @@ domain layer.
   checker propagates, so the two ship separately.
 - **Dependencies:** [AEQ-PY-BINDING-001](#aeq-py-binding-001).
 
-## AEQ-PY-AFFINE-001 — Affine units for the thermal surface [minor] — in-progress <a id="aeq-py-affine-001"></a>
+## AEQ-PY-AFFINE-001 — Affine units for the thermal surface [minor] — done 2026-09-11 <a id="aeq-py-affine-001"></a>
 
-- **Outcome:** `degC` (and `degF`) expressible, so a Python consumer of a
-  thermal API is not forced to kelvin.
-- **Integrator:** claude-opus-5, claimed 2026-09-10, lane
-  `worktrees/aequitas-affine-units`. Core contract first, then the binding.
-- **Contract landed in #64.** `AffineUnit<D>` (`base = value * SCALE + OFFSET`),
-  sealed like `LinearUnit`, with `DegreeCelsius` and `DegreeFahrenheit`
-  implementing it for `ThermodynamicTemperature` and `LinearUnit` for
-  `TemperatureDifference` -- same marker, same symbol, and the quantity's
-  dimension picks the conversion. `Quantity::from_affine_unit` /
-  `in_affine_unit` are the constructors. Eleven tests against the defining
-  identities, including -40 (where both scales agree, an oracle independent of
-  either offset) and the two readings of 25 degC differing by exactly the ice
-  point.
-- **Tolerance note for whoever extends this:** near a scale's bottom the
-  conversion cancels catastrophically -- at -459.67 degF the base value is
-  ~1e-14 while the terms producing it are ~255 K each -- so a round-trip bound
-  must derive from `OFFSET / SCALE`, not from the result. A bound scaled to the
-  result fails there, and widening it would be fitting a number.
-- **Remaining for the outcome:** the Python surface. `degC` is not yet
-  expressible from `pyaequitas`; the binding's unit registry is built from
-  `LinearUnit` implementors and needs to carry affine units too.
-- **No upstream change needed:** the offset needs addition, which `UnitScalar`
-  lacks, but `RealField` (via `FloatElement: NumericElement`) already carries
-  `Add` and `ONE`, so the offset is `T::ONE.scale_by_f64(OFFSET)`. Bounding on
-  `RealField` also excludes complex scalars, which is the physics: an affine
-  offset on a phasor is meaningless, and `UnitScalar`'s own documentation says
-  a complex value is scaled componentwise as quadrature.
-- **Scope:** the affine unit contract deferred below, narrowed to
-  thermodynamic temperature; `LinearUnit` stays sealed and unchanged.
-- **Acceptance:** offset conversion round-trips value-semantically;
-  `AbsoluteTemperatureSemantics` and `TemperatureDifferenceSemantics` keep
-  their distinction across it (a difference has no offset).
-- **Driver:** AEQ-PY-BINDING-001 consequences; kwavers exposes a thermal
-  surface to Python.
+- Contract in #64; binding in [#66](https://github.com/ryancinsight/aequitas/pull/66),
+  merge `ee91281`: `degC` and `degF` resolve per quantity from `pyaequitas`,
+  affine for a temperature and linear for a difference.
+- #66 also made the binding's inverse bitwise the law crate's (it divided by
+  the scale: 24 of 89 units off by an ulp, now swept over 4,107 values).
 
-## AEQ-DOC-BOOK-001 — Execute book samples [patch] — implementation complete; hosted verification pending
+## AEQ-DOC-BOOK-001 — Execute book samples [patch] — done 2026-09-11 <a id="aeq-doc-book-001"></a>
 
-- **Owner:** Atlas coordinator; PR [#37](https://github.com/ryancinsight/aequitas/pull/37)
-  at exact head `2f63705`.
-- **Scope:** the shared Pages caller, the nine existing Rust book fences, and
-  the two included book example sources; no public API, lockfile, or dependency
-  change.
-- **Acceptance:** every existing Rust fence executes through `mdbook test` with
-  the packaged `aequitas` library and pinned Rust 1.97.0; `mdbook build` and the
-  provider hosted Pages gate pass.
-- **Baseline:** the caller used Atlas workflow revision `4c31dd7` without
-  `mdbook-test`, and all Rust fences were `rust,ignore`, so the previous local
-  test was existence-only.
-- **Correction:** the first PR revision used a non-existent Atlas commit and
-  failed before job creation in run `32335910858`; commit `2f63705` pins the
-  existing root commit `53eb15ae2fa7ee9192e5d006989a430269fdc881`.
-- **Local evidence:** format, `mdbook build`, and strict link scan pass. The
-  local executable `mdbook test` reaches the real snippets but cannot resolve
-  the staged MSVC package and proc-macro artifacts from the shared Windows
-  cache; hosted Linux is the acceptance environment.
+- Hosted `mdbook test` passed at `b77fe83` (run 34611215330, `deploy / Build
+  book`); all 11 chapters also pass locally against artifacts staged from
+  cargo's JSON output. Escaped defect recorded in [gap_audit.md](gap_audit.md).
 
 ## AEQ-STRUCTURE-001 — Split oversized unit and law-test leaves [patch] — done 2026-08-18
 
@@ -388,8 +344,8 @@ domain layer.
 ## Deferred (documented boundary)
 
 - [ ] [minor] Affine unit kinds and quantity kinds beyond the linear-unit
-  slice (`uom`-style `Kind` system). The temperature slice is now driven by a
-  consumer and tracked at [AEQ-PY-AFFINE-001](#aeq-py-affine-001); the
+  slice (`uom`-style `Kind` system). The temperature slice landed in
+  [AEQ-PY-AFFINE-001](#aeq-py-affine-001); the
   general `Kind` system stays deferred.
 - [ ] [minor] Integer and rational quantity storage. The simulation boundary
   is floating-point over Eunomia scalars; revisit on a consumer need.
