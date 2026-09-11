@@ -9,9 +9,10 @@
 
 use pyo3::exceptions::{PyValueError, PyZeroDivisionError};
 use pyo3::prelude::*;
-use pyo3::types::PyAny;
+use pyo3::types::{PyAny, PyFloat, PyInt};
 
 use super::model::{PyQuantity, extract_quantity};
+use crate::consumer::carries_protocol;
 use crate::tag::DimensionTag;
 
 /// A binary operation was given operands of incompatible dimension.
@@ -28,12 +29,33 @@ enum Operand {
 }
 
 impl Operand {
-    /// A bare `float`/`int` is a dimensionless scalar; anything else must
-    /// satisfy the quantity protocol.
+    /// A bare `float`/`int` is a dimensionless scalar; an object carrying
+    /// the quantity protocol is a quantity; only an object without the
+    /// protocol is read through `__float__`.
+    ///
+    /// The protocol must be consulted before `__float__`: a quantity type
+    /// may define both (pint's defines `__float__`), and reading one as a
+    /// scalar keeps its magnitude and drops its dimension, so `length * time`
+    /// came back a length without an error. `Dimensioned<D>` had the same
+    /// order and was corrected in #58.
+    ///
+    /// The two exact-type arms are the fast paths, not a semantic choice: a
+    /// native quantity needs no attribute lookup, and an exact `float` or
+    /// `int` cannot carry the protocol attributes.
     fn parse(value: &Bound<'_, PyAny>) -> PyResult<Self> {
-        if let Ok(scalar) = value.extract::<f64>() {
+        if let Ok(native) = value.cast::<PyQuantity>() {
+            return Ok(Self::Quantity(*native.get()));
+        }
+        if value.is_exact_instance_of::<PyFloat>() || value.is_exact_instance_of::<PyInt>() {
+            return value.extract::<f64>().map(Self::Scalar);
+        }
+        if !carries_protocol(value.as_borrowed())
+            && let Ok(scalar) = value.extract::<f64>()
+        {
             return Ok(Self::Scalar(scalar));
         }
+        // Conforming, or neither a quantity nor a number: the protocol read
+        // yields the quantity or the diagnostic naming what was expected.
         extract_quantity(value).map(Self::Quantity)
     }
 

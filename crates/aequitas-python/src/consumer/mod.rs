@@ -20,4 +20,5 @@ mod tests;
 
 pub use dimensioned::Dimensioned;
 pub use finiteness::{Finite, Finiteness, MayBeInfinite};
+pub(crate) use value::carries_protocol;
 pub use value::read;

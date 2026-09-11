@@ -60,6 +60,6 @@ pub fn read(value: &Bound<'_, PyAny>) -> PyResult<(f64, DimensionTag)> {
 /// Presence of both attributes, not their contents: a malformed tag must
 /// surface as the error [`read`] gives it rather than silently falling back to
 /// a bare-number reading, which is the hole this check closes.
-pub(super) fn carries_protocol(object: Borrowed<'_, '_, PyAny>) -> bool {
+pub(crate) fn carries_protocol(object: Borrowed<'_, '_, PyAny>) -> bool {
     object.hasattr(BASE_ATTR).unwrap_or(false) && object.hasattr(DIMENSION_ATTR).unwrap_or(false)
 }
