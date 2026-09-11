@@ -165,7 +165,7 @@ domain layer.
   Python suite on x86_64, in the same matrix.
 - **Found by:** [AEQ-PY-BINDING-001](#aeq-py-binding-001), PR #72.
 
-## AEQ-RELEASE-TAG-FORM-2026-09-11 — The crate release workflow keys on a `crate-` tag prefix [patch] [ci] — todo <a id="aeq-release-tag-form-2026-09-11"></a>
+## AEQ-RELEASE-TAG-FORM-2026-09-11 — The crate release workflow keys on a `crate-` tag prefix [patch] [ci] — in-progress <a id="aeq-release-tag-form-2026-09-11"></a>
 
 - **Finding:** `rust-release.yml` publishes only for tags starting `crate-`, a
   type marker the release tooling cannot parse; the ecosystem forms are
@@ -177,6 +177,8 @@ domain layer.
 - **Acceptance:** an ADR records the versioning unit; the release workflows
   derive their package from a tag in the chosen form, with no `crate-` prefix.
 - **Found by:** AEQ-PY-BINDING-001, writing the wheel publish workflow.
+- **Integrator:** claude-opus-5, lane `worktrees/aequitas-python-typing` on
+  `docs/aequitas-release-versioning`; ADR 0017.
 
 ## AEQ-RELEASE-EUNOMIA-CBRT-001 — Aequitas cannot be packaged for crates.io [patch] — blocked <a id="aeq-release-eunomia-cbrt-001"></a>
 
