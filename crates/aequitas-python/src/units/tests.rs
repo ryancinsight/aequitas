@@ -6,15 +6,18 @@
 //! means the *inventory* is wrong -- a quantity mapped to the wrong dimension
 //! -- not that a scale was mistyped, which the design makes unrepresentable.
 
-use aequitas::systems::si::quantities::{Length, Mass, Pressure, Time};
+use aequitas::systems::si::quantities::{Area, Energy, Length, Mass, Pressure, Time, Volume};
 use aequitas::systems::si::units::{
-    Centimeter, Gram, Kilopascal, Megapascal, Millimeter, Millisecond, Nanometer,
+    Centimeter, CubicMillimeter, ElectronVolt, Gram, Kilopascal, MegaElectronVolt, Megapascal,
+    Microsecond, Millimeter, Millisecond, Nanometer, SquareCentimeter,
 };
 use aequitas::systems::si::{dimensions, units as si_units};
 use aequitas::unit::LinearUnit;
 
 use super::{all, by_name, by_tag};
 use crate::tag::TaggedDimension;
+use aequitas::systems::si::quantities::ThermodynamicTemperature;
+use aequitas::systems::si::units::{DegreeCelsius, DegreeFahrenheit};
 
 /// Assert two `f64` values are bitwise identical.
 ///
@@ -67,6 +70,14 @@ fn every_scale_is_finite_and_positive() {
                 unit.name,
                 unit.scale
             );
+            if let Some(offset) = unit.offset {
+                assert!(
+                    offset.is_finite(),
+                    "{}::{} has offset {offset}",
+                    quantity.name,
+                    unit.name
+                );
+            }
         }
     }
 }
@@ -89,35 +100,93 @@ fn registry_tags_match_the_type_level_dimensions() {
     );
 }
 
-/// Assert that a registry conversion equals the Aequitas conversion.
+/// Values a conversion is checked at: a seeded sweep across many decades,
+/// plus the witnesses a probe found where dividing by the scale and
+/// multiplying by its reciprocal disagree.
+///
+/// A handful of round numbers is exactly the input set most likely to hide an
+/// ulp-level difference, which is how the earlier seven-point version passed
+/// while a quarter of the units disagreed with the law crate.
+fn sweep() -> Vec<f64> {
+    let mut values = vec![
+        12.5,
+        3.0,
+        532.0,
+        250.0,
+        40.0,
+        101.325,
+        2.5,
+        6.318_609_123_747_463e-11,
+        -9.823_474_589_799_991e-2,
+        1.097_804_469_310_134_3,
+        3.037_926_988_917_369_6e-4,
+    ];
+    // xorshift64: deterministic, dependency-free, and spread over 24 decades.
+    let mut state: u64 = 0x9E37_79B9_7F4A_7C15;
+    for _ in 0..4096 {
+        state ^= state << 13;
+        state ^= state >> 7;
+        state ^= state << 17;
+        let mantissa =
+            f64::from(u32::try_from(state >> 40).expect("24 bits fit")) / f64::from(1_u32 << 24);
+        let exponent = i32::try_from(state % 25).expect("under 25") - 12;
+        let sign = if state & 1 == 0 { 1.0 } else { -1.0 };
+        values.push(sign * (1.0 + mantissa) * 10_f64.powi(exponent));
+    }
+    values
+}
+
+/// Assert that the registry's conversions equal Aequitas's, both directions.
+///
+/// Calls `Unit::to_base` and `Unit::from_base` -- the code `model.rs` runs --
+/// rather than re-deriving the arithmetic, which would test nothing about the
+/// binding.
 macro_rules! assert_conversion_matches {
-    ($quantity:literal, $alias:ident, $unit:ty, $symbol:literal, $value:expr) => {{
+    ($quantity:literal, $alias:ident, $unit:ty, $symbol:literal) => {{
         let named = by_name($quantity).expect("quantity is registered");
         let unit = named.unit($symbol).expect("unit is registered");
 
-        let through_registry = $value * unit.scale;
-        let through_aequitas = $alias::<f64>::from_unit::<$unit>($value).into_base();
-        assert_exact_in_context(
-            through_registry,
-            through_aequitas,
-            &format!("{} in {} diverges from Aequitas", $quantity, $symbol),
-        );
+        for value in sweep() {
+            let through_registry = unit.to_base(value);
+            let through_aequitas = $alias::<f64>::from_unit::<$unit>(value).into_base();
+            assert_exact_in_context(
+                through_registry,
+                through_aequitas,
+                &format!(
+                    "{} {} into base diverges from Aequitas at {value:e}",
+                    $quantity, $symbol
+                ),
+            );
 
-        let back_through_registry = through_registry / unit.scale;
-        let back_through_aequitas = $alias::<f64>::from_base(through_aequitas).in_unit::<$unit>();
-        assert_exact(back_through_registry, back_through_aequitas);
+            let back_through_registry = unit.from_base(through_aequitas);
+            let back_through_aequitas =
+                $alias::<f64>::from_base(through_aequitas).in_unit::<$unit>();
+            assert_exact_in_context(
+                back_through_registry,
+                back_through_aequitas,
+                &format!(
+                    "{} {} out of base diverges from Aequitas at {value:e}",
+                    $quantity, $symbol
+                ),
+            );
+        }
     }};
 }
 
 #[test]
 fn conversions_agree_with_the_law_crate() {
-    assert_conversion_matches!("length", Length, Millimeter, "mm", 12.5);
-    assert_conversion_matches!("length", Length, Centimeter, "cm", 3.0);
-    assert_conversion_matches!("length", Length, Nanometer, "nm", 532.0);
-    assert_conversion_matches!("mass", Mass, Gram, "g", 250.0);
-    assert_conversion_matches!("time", Time, Millisecond, "ms", 40.0);
-    assert_conversion_matches!("pressure", Pressure, Kilopascal, "kPa", 101.325);
-    assert_conversion_matches!("pressure", Pressure, Megapascal, "MPa", 2.5);
+    assert_conversion_matches!("length", Length, Millimeter, "mm");
+    assert_conversion_matches!("length", Length, Centimeter, "cm");
+    assert_conversion_matches!("length", Length, Nanometer, "nm");
+    assert_conversion_matches!("mass", Mass, Gram, "g");
+    assert_conversion_matches!("time", Time, Millisecond, "ms");
+    assert_conversion_matches!("time", Time, Microsecond, "\u{b5}s");
+    assert_conversion_matches!("pressure", Pressure, Kilopascal, "kPa");
+    assert_conversion_matches!("pressure", Pressure, Megapascal, "MPa");
+    assert_conversion_matches!("energy", Energy, ElectronVolt, "eV");
+    assert_conversion_matches!("energy", Energy, MegaElectronVolt, "MeV");
+    assert_conversion_matches!("area", Area, SquareCentimeter, "cm\u{b2}");
+    assert_conversion_matches!("volume", Volume, CubicMillimeter, "mm\u{b3}");
 }
 
 #[test]
@@ -210,4 +279,70 @@ fn dimensionless_carries_no_linear_units() {
     // to convert through, and construction goes through base values.
     let scalar = by_name("dimensionless").expect("dimensionless is registered");
     assert!(scalar.units.is_empty());
+}
+
+/// `degC` names an offset for a temperature and none for a difference.
+///
+/// The affine contract's reason to exist, crossing into the binding: the
+/// symbol resolves per quantity, so a Celsius temperature carries the ice
+/// point and a Celsius difference carries nothing. Were one lookup to serve
+/// both, every temperature difference would be wrong by 273.15 K.
+#[test]
+fn celsius_means_an_offset_for_a_temperature_and_none_for_a_difference() {
+    let absolute = by_name("thermodynamic_temperature").expect("registered");
+    let difference = by_name("temperature_difference").expect("registered");
+
+    let absolute_celsius = absolute.unit("degC").expect("affine degC is registered");
+    let difference_celsius = difference.unit("degC").expect("linear degC is registered");
+
+    assert_exact(
+        absolute_celsius
+            .offset
+            .expect("degC is affine for a temperature"),
+        273.15,
+    );
+    assert!(
+        difference_celsius.offset.is_none(),
+        "a Celsius difference must carry no offset"
+    );
+    assert_exact(absolute_celsius.to_base(0.0), 273.15);
+    assert_exact(difference_celsius.to_base(10.0), 10.0);
+}
+
+/// Assert the registry's affine conversions equal Aequitas's, both directions.
+macro_rules! assert_affine_conversion_matches {
+    ($unit:ty, $symbol:literal) => {{
+        let named = by_name("thermodynamic_temperature").expect("registered");
+        let unit = named.unit($symbol).expect("affine unit is registered");
+
+        for value in sweep() {
+            let through_registry = unit.to_base(value);
+            let through_aequitas =
+                ThermodynamicTemperature::<f64>::from_affine_unit::<$unit>(value).into_base();
+            assert_exact_in_context(
+                through_registry,
+                through_aequitas,
+                &format!("{} into base diverges from Aequitas at {value:e}", $symbol),
+            );
+
+            let back_through_registry = unit.from_base(through_aequitas);
+            let back_through_aequitas =
+                ThermodynamicTemperature::<f64>::from_base(through_aequitas)
+                    .in_affine_unit::<$unit>();
+            assert_exact_in_context(
+                back_through_registry,
+                back_through_aequitas,
+                &format!(
+                    "{} out of base diverges from Aequitas at {value:e}",
+                    $symbol
+                ),
+            );
+        }
+    }};
+}
+
+#[test]
+fn affine_conversions_agree_with_the_law_crate() {
+    assert_affine_conversion_matches!(DegreeCelsius, "degC");
+    assert_affine_conversion_matches!(DegreeFahrenheit, "degF");
 }

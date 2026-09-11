@@ -71,7 +71,7 @@ impl PyQuantity {
                 }
             ))
         })?;
-        Ok(Self::from_base(value * resolved.scale, named.tag))
+        Ok(Self::from_base(resolved.to_base(value), named.tag))
     }
 
     /// Construct a quantity of `quantity` from a value already in base units.
@@ -102,7 +102,7 @@ impl PyQuantity {
             .ok_or_else(|| {
                 PyValueError::new_err(format!("unit '{unit}' does not belong to `{}`", self.tag))
             })?;
-        Ok(self.base / resolved.scale)
+        Ok(resolved.from_base(self.base))
     }
 
     /// The dimension tag, as `((exponents...), semantics)`.

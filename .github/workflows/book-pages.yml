@@ -11,6 +11,13 @@ on:
     paths:
 
       - "docs/book/**"
+      # The book's samples compile against the crate, so a change
+      # to the crate can break them without touching docs/book/.
+      # 82ec9b5 did exactly that and the book stayed red, unseen,
+      # for eight days.
+      - "src/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
 
       - ".github/workflows/book-pages.yml"
 
@@ -19,6 +26,9 @@ on:
     paths:
 
       - "docs/book/**"
+      - "src/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
 
       - ".github/workflows/book-pages.yml"
 

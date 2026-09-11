@@ -99,10 +99,12 @@ every operator.
 `aq.quantity_names()` lists every quantity; `aq.unit_symbols(name)` lists the
 units one accepts. Both come from the Rust inventory, not a copy of it.
 
-Temperature is kelvin only. `LinearUnit` in the law crate is linear
-(`base = value * scale`), so degrees Celsius and Fahrenheit -- which need an
-offset -- are not yet expressible. That is an upstream gap, tracked as
-`AEQ-PY-AFFINE-001`, not something this layer fakes.
+A symbol resolves within the quantity it is given to, and that is what makes
+temperature work. `degC` and `degF` are affine for `thermodynamic_temperature`,
+so `aq.thermodynamic_temperature(0.0, "degC").base` is `273.15`, and linear for
+`temperature_difference`, where ten degrees Celsius is ten kelvin. The offset
+is the law crate's `AffineUnit::OFFSET`, read at build time, never a copy
+maintained here.
 
 ## Licence
 

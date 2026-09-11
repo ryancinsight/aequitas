@@ -3,8 +3,9 @@
 //! Generated inventory of every Aequitas quantity and its units.
 //!
 //! Each entry names a quantity alias, its dimension, and the unit
-//! markers implementing `LinearUnit` for that dimension. Symbols,
-//! scale factors and dimension exponents are read from the Rust
+//! markers implementing `LinearUnit` for that dimension, plus any
+//! implementing `AffineUnit` under `affine`. Symbols, scale factors,
+//! offsets and dimension exponents are read from the Rust
 //! associated constants at expansion time, never copied here, so this
 //! file records *which* units exist and never *what they mean*.
 
@@ -65,6 +66,9 @@ crate::quantity_inventory! {
     },
     thermodynamic_temperature => ThermodynamicTemperature, dimensions::ThermodynamicTemperature {
         Kelvin: units::Kelvin,
+    } affine {
+        DegreeCelsius: units::DegreeCelsius,
+        DegreeFahrenheit: units::DegreeFahrenheit,
     },
     temperature_difference => TemperatureDifference, dimensions::TemperatureDifference {
         DegreeCelsius: units::DegreeCelsius,
