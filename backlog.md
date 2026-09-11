@@ -161,6 +161,19 @@ domain layer.
   `MultiplyDimension`/`DivideDimension`; codegen regenerate-and-diff clean;
   `pytest` green against the built wheel.
 
+## AEQ-RELEASE-TAG-FORM-2026-09-11 — The crate release workflow keys on a `crate-` tag prefix [patch] [ci] — todo <a id="aeq-release-tag-form-2026-09-11"></a>
+
+- **Finding:** `rust-release.yml` publishes only for tags starting `crate-`, a
+  type marker the release tooling cannot parse; the ecosystem forms are
+  `v<version>` for a workspace release and `<package>-v<version>` for an
+  independently versioned crate (cargo-release, release-plz).
+- **Also:** `aequitas` is 0.2.0 and `aequitas-python` 0.1.0, so the workspace
+  does not version as one unit; independent versioning needs a recorded
+  decision, and the tag form follows from it.
+- **Acceptance:** an ADR records the versioning unit; the release workflows
+  derive their package from a tag in the chosen form, with no `crate-` prefix.
+- **Found by:** AEQ-PY-BINDING-001, writing the wheel publish workflow.
+
 ## AEQ-RELEASE-EUNOMIA-CBRT-001 — Aequitas cannot be packaged for crates.io [patch] — blocked <a id="aeq-release-eunomia-cbrt-001"></a>
 
 - **Symptom:** `cargo package --locked -p aequitas` fails to verify the
