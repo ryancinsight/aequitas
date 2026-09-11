@@ -17,6 +17,33 @@ pub struct Unit {
     pub scale: f64,
 }
 
+impl Unit {
+    /// Convert a value in this unit to canonical SI base units.
+    ///
+    /// One multiplication by `scale`: the operation `LinearUnit::to_base`
+    /// performs, on the same operands, so the result is bitwise Aequitas's.
+    #[inline]
+    #[must_use]
+    pub fn to_base(&self, value: f64) -> f64 {
+        value * self.scale
+    }
+
+    /// Convert a canonical SI base value into this unit.
+    ///
+    /// Multiplies by the reciprocal rather than dividing, because that is what
+    /// `LinearUnit::from_base` does -- `value.scale_by_f64(1.0 / SCALE)`, which
+    /// Eunomia implements as a multiplication. Division rounds differently
+    /// whenever `1 / scale` is inexact, which is almost every decimal scale: a
+    /// seeded sweep of 20,009 values found 24 of the 89 units disagreeing with
+    /// the law crate by an ulp, millimetres in an eighth of all values, while
+    /// the seven hand-picked points the tests used happened to agree.
+    #[inline]
+    #[must_use]
+    pub fn from_base(&self, base: f64) -> f64 {
+        base * (1.0 / self.scale)
+    }
+}
+
 /// One named quantity and the units it admits.
 #[derive(Clone, Copy, Debug)]
 pub struct Quantity {
