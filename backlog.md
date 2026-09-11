@@ -148,7 +148,7 @@ domain layer.
   the protocol is read before the float arm.
 - **Remaining:** the publish pipeline only -- trusted publishing, a
   `manylinux` floor, install-and-import smoke. Affine units landed in
-  [AEQ-PY-AFFINE-001](#aeq-py-affine-001); typed classes are
+  [AEQ-PY-AFFINE-001](#aeq-py-affine-001); typed classes in
   [AEQ-PY-TYPING-001](#aeq-py-typing-001).
 - **Acceptance:** every exported dimension round-trips against
   `Quantity::in_unit`; semantic normalization matches
@@ -174,29 +174,11 @@ domain layer.
   `FloatElement::cbrt`; then advance the requirement and re-run
   `cargo package --locked -p aequitas`.
 
-## AEQ-PY-TYPING-001 — Per-quantity classes so a type checker sees dimensions [minor] — in-progress <a id="aeq-py-typing-001"></a>
+## AEQ-PY-TYPING-001 — Per-quantity classes so a type checker sees dimensions [minor] — done 2026-09-11 <a id="aeq-py-typing-001"></a>
 
-- **Outcome:** `mypy` rejects `length + time` before the program runs, not only
-  the interpreter at call time.
-- **Integrator:** claude-opus-5, claimed 2026-09-11, lane
-  `worktrees/aequitas-python-typing`; slice 2 on `feat/aequitas-python-overloads`.
-- **Slice 1 landed in [#68](https://github.com/ryancinsight/aequitas/pull/68)**,
-  merge `9a7034d`: 73 runtime classes, one per distinct dimension, aliases of
-  one Rust type bound to one class, stubs typing each constructor as its own
-  class. **Remaining:** arithmetic overloads so `length + time` fails mypy.
-- **Scope:** generated per-quantity classes over the one runtime `Quantity`,
-  with the closed set of dimensional pairings emitted as `@overload`
-  signatures; arithmetic must return the registered class for the result tag,
-  or the stubs would claim a type the runtime does not produce.
-- **Non-goals:** changing the runtime tag or the cross-extension protocol.
-- **Acceptance:** the shipped classes are the classes arithmetic returns
-  (asserted at runtime, not only in stubs); `tests/typing/cases.py` grows the
-  dimensional-mismatch cases and they fail with their declared codes.
-- **Why split:** ADR 0016 records this as part of the decision. The current
-  stubs are accurate for the surface that exists -- one `Quantity` class -- and
-  a stub claiming 81 classes over a one-class runtime would be a lie a type
-  checker propagates, so the two ship separately.
-- **Dependencies:** [AEQ-PY-BINDING-001](#aeq-py-binding-001).
+- [#68](https://github.com/ryancinsight/aequitas/pull/68) (`9a7034d`): 73 classes, one per distinct dimension;
+  [#70](https://github.com/ryancinsight/aequitas/pull/70) (`0a20498`): overloads carry the tag algebra, so mypy
+  infers `Area` and rejects `length + time`; the stub is checked against the runtime both ways.
 
 ## AEQ-PY-AFFINE-001 — Affine units for the thermal surface [minor] — done 2026-09-11 <a id="aeq-py-affine-001"></a>
 
