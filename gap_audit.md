@@ -39,6 +39,12 @@ performance, memory usage, hardware behavior, or hosted release readiness.
   the law crate by an ulp. Check: the seeded 4,107-value sweep in
   `crates/aequitas-python/src/units/tests.rs` (3f93d67), shown to fail against
   the old division. Pattern: an equality claim over a domain needs a sweep.
+  That sweep ran only locally until #67 (next entry).
+- **A gate scoped by a comment, not by its commands.** `Cargo.toml` said gates
+  covering the binding pass `--workspace`; no CI step did, and
+  `default-members` kept them on the law crate. Check: #67 adds `--workspace`
+  and the PR's `verify` log lists the binding's tests. Pattern: confirm a
+  crate's tests appear in the CI run before naming them as a guard.
 
 ## Closed gaps
 
