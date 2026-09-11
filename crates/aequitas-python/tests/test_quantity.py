@@ -201,6 +201,35 @@ class ForeignQuantity:
         self.__aequitas_dimension__ = dimension
 
 
+class ForeignTimeWithFloat:
+    """A protocol time that, like a pint quantity, also defines ``__float__``."""
+
+    __aequitas_base__ = 4.0
+    __aequitas_dimension__ = ((0, 0, 1, 0, 0, 0, 0), "base")
+
+    def __float__(self) -> float:
+        return 4.0
+
+
+def test_a_protocol_quantity_with_float_keeps_its_dimension() -> None:
+    # Read through ``__float__``, the time kept its magnitude and lost its
+    # dimension, so these products came back lengths without an error.
+    time = ForeignTimeWithFloat()
+    assert (aq.length(2.0) * time).dimension[0] == (1, 0, 1, 0, 0, 0, 0)
+    assert (time * aq.length(2.0)).dimension[0] == (1, 0, 1, 0, 0, 0, 0)
+    speed = aq.length(2.0) / time
+    assert speed.quantity == "velocity"
+    assert speed.base == 0.5
+
+
+def test_bare_numbers_are_still_dimensionless_scalars() -> None:
+    radius = aq.length(2.0)
+    assert (radius * 3).base == 6.0
+    assert (radius * 1.5).quantity == "length"
+    assert (3 * radius).base == 6.0
+    assert (True * radius).base == 2.0
+
+
 def test_a_foreign_object_participates_in_arithmetic() -> None:
     foreign = ForeignQuantity(2.0, ((0, 0, 1, 0, 0, 0, 0), "base"))
     speed = aq.length(8.0) / foreign

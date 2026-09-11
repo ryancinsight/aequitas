@@ -75,6 +75,13 @@ All externally observable changes are recorded here.
   mirrors `Display`. 5 value-semantic tests cover velocity, scaled length
   (kilometres), derived energy, Debug/Display parity, and immutability.
 
+### Fixed
+
+- `pyaequitas` arithmetic reads the quantity protocol before `__float__`. A
+  protocol-conforming quantity that also defines `__float__` was multiplied
+  or divided as a bare scalar, so a length times such a time came back a
+  length, with no error raised. Bare numbers remain dimensionless scalars.
+
 ## [0.2.0] - 2026-08-09
 
 ### Changed

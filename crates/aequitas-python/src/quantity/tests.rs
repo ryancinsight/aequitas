@@ -440,6 +440,54 @@ fn an_unnamed_derived_dimension_still_renders() {
     assert!(odd.__repr__().contains("m^5"), "{}", odd.__repr__());
 }
 
+/// A protocol object that also defines `__float__` keeps its dimension.
+///
+/// Reading it as a scalar kept the magnitude and dropped the dimension, so
+/// `length * time` came back a length with no error raised.
+#[test]
+fn a_protocol_object_with_float_keeps_its_dimension_in_arithmetic() {
+    let setup = r#"
+class ForeignTime:
+    __aequitas_base__ = 4.0
+    __aequitas_dimension__ = ((0, 0, 1, 0, 0, 0, 0), "base")
+
+    def __float__(self):
+        return 4.0
+
+result = ForeignTime()
+"#;
+    Python::attach(|py| {
+        let globals = PyDict::new(py);
+        py.run(
+            &std::ffi::CString::new(setup).expect("no interior nul"),
+            Some(&globals),
+            None,
+        )
+        .expect("class defines");
+        let foreign = globals.get_item("result").expect("lookup").expect("bound");
+        let length_times_time = <dimensions::Length as TaggedDimension>::TAG
+            .multiply(<dimensions::Time as TaggedDimension>::TAG)
+            .expect("in range");
+
+        let product = length(2.0)
+            .__mul__(&foreign)
+            .expect("length * time is defined");
+        assert_eq!(product.tag(), length_times_time);
+        assert_exact(product.base_value(), 8.0);
+
+        let reflected = length(2.0)
+            .__rmul__(&foreign)
+            .expect("time * length is defined");
+        assert_eq!(reflected.tag(), length_times_time);
+
+        let speed = length(2.0)
+            .__truediv__(&foreign)
+            .expect("length / time is defined");
+        assert_eq!(speed.tag(), <dimensions::Velocity as TaggedDimension>::TAG);
+        assert_exact(speed.base_value(), 0.5);
+    });
+}
+
 #[test]
 fn the_module_exposes_every_registered_quantity() {
     let names = crate::units::all();
