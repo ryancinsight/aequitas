@@ -4,18 +4,11 @@
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
 
-## AEQ-PY-FREE-THREADED-2026-09-11 — The binding re-enables the GIL on a free-threaded interpreter [minor] — in-progress <a id="aeq-py-free-threaded-2026-09-11"></a>
+## AEQ-PY-FREE-THREADED-2026-09-11 — The binding re-enables the GIL on a free-threaded interpreter [minor] — done 2026-09-11 <a id="aeq-py-free-threaded-2026-09-11"></a>
 
-- **Symptom:** `#[pymodule]` declares no `gil_used = false`, so importing
-  `pyaequitas` on a free-threaded build turns the GIL back on process-wide.
-- **Scope:** audit the binding for shared mutable state, declare the module
-  free-threading safe, and test on a `t` interpreter in CI (none is installed
-  locally). abi3 does not cover free-threaded builds until 3.15, so the
-  `t` cell builds a version-specific wheel; PyO3 0.29 handles that itself.
-- **Acceptance:** on 3.13t, `sys._is_gil_enabled()` is false after import and
-  a thread-pool test on shared quantities gives value-exact results; the GIL
-  build runs the same suite. The required `Python bindings` check keeps its name.
-- **Integrator:** claude-opus-5, lane `worktrees/aequitas-python-typing`.
+- [#71](https://github.com/ryancinsight/aequitas/pull/71), merge `ae321ff`: `gil_used = false` on an audited module;
+  the bindings matrix adds 3.14t (PyO3 refuses 3.13t), where a fresh interpreter reports the GIL off
+  after import. `Python bindings (free-threaded)` is now a required check.
 
 ## AEQ-PY-SCALAR-TAG-2026-09-11 — Scaling a quantity by a number dropped its semantic marker [patch] — done 2026-09-11 <a id="aeq-py-scalar-tag-2026-09-11"></a>
 
