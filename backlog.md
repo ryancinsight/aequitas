@@ -172,7 +172,11 @@ domain layer.
 - **Outcome:** `mypy` rejects `length + time` before the program runs, not only
   the interpreter at call time.
 - **Integrator:** claude-opus-5, claimed 2026-09-11, lane
-  `worktrees/aequitas-python-typing` on `feat/aequitas-python-typing`.
+  `worktrees/aequitas-python-typing`; slice 2 on `feat/aequitas-python-overloads`.
+- **Slice 1 landed in [#68](https://github.com/ryancinsight/aequitas/pull/68)**,
+  merge `9a7034d`: 73 runtime classes, one per distinct dimension, aliases of
+  one Rust type bound to one class, stubs typing each constructor as its own
+  class. **Remaining:** arithmetic overloads so `length + time` fails mypy.
 - **Scope:** generated per-quantity classes over the one runtime `Quantity`,
   with the closed set of dimensional pairings emitted as `@overload`
   signatures; arithmetic must return the registered class for the result tag,
