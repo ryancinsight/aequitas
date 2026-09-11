@@ -133,6 +133,23 @@ def test_scalar_multiplication_is_commutative() -> None:
     assert (2.0 * length).quantity == "length"
 
 
+def test_scaling_by_a_number_keeps_the_semantic_marker() -> None:
+    # `Quantity<T, D> * T` is `Quantity<T, D>` in Aequitas: a stress scaled by
+    # two is still a stress, so it still adds to one.
+    stress = aq.stress(1.0)
+    assert type(stress * 2.0) is aq.Stress
+    assert type(2.0 * stress) is aq.Stress
+    assert type(stress / 2.0) is aq.Stress
+    assert (stress * 2.0 + stress).base == 3.0
+    assert (aq.angle(1.0) * 2.0).dimension[1] == "angle"
+    assert type(aq.thermodynamic_temperature(300.0) * 2.0) is aq.ThermodynamicTemperature
+
+
+def test_a_dimensionless_quantity_is_not_a_bare_number() -> None:
+    # A dimensionless quantity combines dimensions like any quantity does.
+    assert type(aq.stress(1.0) * aq.dimensionless(2.0)) is aq.Pressure
+
+
 def test_scalar_over_quantity_inverts_the_dimension() -> None:
     assert (1.0 / aq.time(4.0)).quantity == "frequency"
     assert (1.0 / aq.time(4.0)).base == 0.25
