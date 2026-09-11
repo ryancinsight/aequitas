@@ -87,10 +87,31 @@ carrying only exponents would collapse exactly the distinctions ADRs 0003,
 an annotation on it.
 
 Static checking is recovered in the Python type checker rather than abandoned.
-Codegen emits `.pyi` stubs in which each of the 81 aliases is a distinct class
-and the closed set of dimensional pairings appears as `@overload` signatures,
-so `mypy` rejects `length + time` before the program runs. The generated stubs
-and the runtime table come from one pass over the Rust inventory.
+Each distinct dimension the inventory names is a `Quantity` subclass -- 73
+classes for 81 aliases -- and every operation returns an instance of the class
+for its result's dimension, so the classes a checker reads in the stubs are the
+classes the interpreter creates. The closed set of dimensional pairings appears
+as `@overload` signatures, so `mypy` rejects `length + time` before the program
+runs. The stubs, the class table and the runtime inventory come from one pass
+over the Rust source.
+
+### Revision 2026-09-11: a class per dimension, not per alias
+
+The first text gave each of the 81 aliases its own class. Seven dimensions
+carry more than one alias, and in every case the aliases name one Rust type:
+`ThermalDiffusivity = AreaPerTime`, and `Pressure` and `EnergyPerVolume` are
+the same `Dimension<N1, P1, N2, ...>`. A product carries a dimension and no
+alias, so with a class per alias arithmetic could not say which of
+`AreaPerTime`, `ThermalDiffusivity` and `KinematicViscosity` to return, and the
+stubs would promise a class the runtime cannot produce.
+
+The binding therefore mirrors Rust: one class per distinct dimension, named
+after its first alias, with the other aliases bound as further names of the
+same class (`aq.ThermalDiffusivity is aq.AreaPerTime`). A dimension no alias
+names, such as `m^5`, stays a plain `Quantity`. Evidence: the runtime tags of
+the 81 aliases (73 distinct, 7 shared) and the compile-time assertions in the
+generated class inventory. Driving item:
+[AEQ-PY-TYPING-001](../../backlog.md#aeq-py-typing-001).
 
 ### Cross-extension interop
 

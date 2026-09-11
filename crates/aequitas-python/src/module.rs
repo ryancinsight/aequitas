@@ -15,6 +15,7 @@ use crate::{protocol, units};
 #[pymodule]
 fn _pyaequitas(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<PyQuantity>()?;
+    crate::quantity::classes::register(module)?;
     module.add_function(wrap_pyfunction!(quantity_names, module)?)?;
     module.add_function(wrap_pyfunction!(unit_symbols, module)?)?;
     module.add_function(wrap_pyfunction!(dimension_of, module)?)?;

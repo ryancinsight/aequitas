@@ -25,6 +25,9 @@ ordered: bool = radius < aq.length(3.0)
 no_unit: aq.Quantity = aq.length(1.0)
 raw: float = aq.base_value_of(radius, "length")
 symbols: List[str] = aq.unit_symbols("pressure")
+typed_length: aq.Length = aq.length(1.0)
+one_class: aq.ThermalDiffusivity = aq.kinematic_viscosity(1.0)
+widened: aq.Quantity = aq.length(1.0)
 
 # --- MUST FAIL BELOW ---
 
@@ -33,3 +36,4 @@ radius.nonexistent  # attr-defined
 wrong: str = radius.base  # assignment
 radius.in_unit(5)  # arg-type
 aq.length(1.0) ** 0.5  # operator
+mistyped: aq.Time = aq.length(1.0)  # assignment
