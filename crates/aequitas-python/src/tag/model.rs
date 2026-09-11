@@ -47,6 +47,23 @@ impl DimensionTag {
         self.semantics
     }
 
+    /// Equality usable in constant evaluation, where `PartialEq` is not.
+    ///
+    /// The generated class inventory asserts at compile time that every alias
+    /// grouped under a class has the class's dimension, and that no two
+    /// classes share one; both comparisons happen in `const` items.
+    #[must_use]
+    pub const fn same_as(self, other: Self) -> bool {
+        let mut axis = 0;
+        while axis < AXES {
+            if self.exponents[axis] != other.exponents[axis] {
+                return false;
+            }
+            axis += 1;
+        }
+        self.semantics.discriminant() == other.semantics.discriminant()
+    }
+
     /// True when every exponent is zero, whatever the semantics.
     ///
     /// An angle is dimensionless in this sense while remaining distinct from a

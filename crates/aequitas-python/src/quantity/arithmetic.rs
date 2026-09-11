@@ -11,6 +11,7 @@ use pyo3::exceptions::{PyValueError, PyZeroDivisionError};
 use pyo3::prelude::*;
 use pyo3::types::{PyAny, PyFloat, PyInt};
 
+use super::classes::Classed;
 use super::model::{PyQuantity, extract_quantity};
 use crate::consumer::carries_protocol;
 use crate::tag::DimensionTag;
@@ -70,43 +71,37 @@ impl Operand {
 
 #[pymethods]
 impl PyQuantity {
-    pub(crate) fn __add__(&self, other: &Bound<'_, PyAny>) -> PyResult<Self> {
+    pub(crate) fn __add__(&self, other: &Bound<'_, PyAny>) -> PyResult<Classed> {
         let rhs = extract_quantity(other)?;
         if self.tag() != rhs.tag() {
             return Err(mismatch("add", self.tag(), rhs.tag()));
         }
-        Ok(Self::from_base(
-            self.base_value() + rhs.base_value(),
-            self.tag(),
-        ))
+        Ok(Self::from_base(self.base_value() + rhs.base_value(), self.tag()).into())
     }
 
-    pub(crate) fn __sub__(&self, other: &Bound<'_, PyAny>) -> PyResult<Self> {
+    pub(crate) fn __sub__(&self, other: &Bound<'_, PyAny>) -> PyResult<Classed> {
         let rhs = extract_quantity(other)?;
         if self.tag() != rhs.tag() {
             return Err(mismatch("subtract", self.tag(), rhs.tag()));
         }
-        Ok(Self::from_base(
-            self.base_value() - rhs.base_value(),
-            self.tag(),
-        ))
+        Ok(Self::from_base(self.base_value() - rhs.base_value(), self.tag()).into())
     }
 
-    pub(crate) fn __mul__(&self, other: &Bound<'_, PyAny>) -> PyResult<Self> {
+    pub(crate) fn __mul__(&self, other: &Bound<'_, PyAny>) -> PyResult<Classed> {
         let rhs = Operand::parse(other)?.as_quantity();
         let tag = self
             .tag()
             .multiply(rhs.tag())
             .map_err(|error| PyValueError::new_err(error.to_string()))?;
-        Ok(Self::from_base(self.base_value() * rhs.base_value(), tag))
+        Ok(Self::from_base(self.base_value() * rhs.base_value(), tag).into())
     }
 
     /// Multiplication is commutative, so a scalar on the left routes here.
-    pub(crate) fn __rmul__(&self, other: &Bound<'_, PyAny>) -> PyResult<Self> {
+    pub(crate) fn __rmul__(&self, other: &Bound<'_, PyAny>) -> PyResult<Classed> {
         self.__mul__(other)
     }
 
-    pub(crate) fn __truediv__(&self, other: &Bound<'_, PyAny>) -> PyResult<Self> {
+    pub(crate) fn __truediv__(&self, other: &Bound<'_, PyAny>) -> PyResult<Classed> {
         let rhs = Operand::parse(other)?.as_quantity();
         if rhs.base_value() == 0.0 {
             return Err(PyZeroDivisionError::new_err("division by a zero quantity"));
@@ -115,12 +110,12 @@ impl PyQuantity {
             .tag()
             .divide(rhs.tag())
             .map_err(|error| PyValueError::new_err(error.to_string()))?;
-        Ok(Self::from_base(self.base_value() / rhs.base_value(), tag))
+        Ok(Self::from_base(self.base_value() / rhs.base_value(), tag).into())
     }
 
     /// Division is not commutative: a scalar on the left divides by this
     /// quantity, so the dimension inverts.
-    pub(crate) fn __rtruediv__(&self, other: &Bound<'_, PyAny>) -> PyResult<Self> {
+    pub(crate) fn __rtruediv__(&self, other: &Bound<'_, PyAny>) -> PyResult<Classed> {
         let lhs = Operand::parse(other)?.as_quantity();
         if self.base_value() == 0.0 {
             return Err(PyZeroDivisionError::new_err("division by a zero quantity"));
@@ -129,19 +124,19 @@ impl PyQuantity {
             .tag()
             .divide(self.tag())
             .map_err(|error| PyValueError::new_err(error.to_string()))?;
-        Ok(Self::from_base(lhs.base_value() / self.base_value(), tag))
+        Ok(Self::from_base(lhs.base_value() / self.base_value(), tag).into())
     }
 
-    pub(crate) fn __neg__(&self) -> Self {
-        Self::from_base(-self.base_value(), self.tag())
+    pub(crate) fn __neg__(&self) -> Classed {
+        Self::from_base(-self.base_value(), self.tag()).into()
     }
 
-    pub(crate) fn __pos__(&self) -> Self {
-        *self
+    pub(crate) fn __pos__(&self) -> Classed {
+        (*self).into()
     }
 
-    pub(crate) fn __abs__(&self) -> Self {
-        Self::from_base(self.base_value().abs(), self.tag())
+    pub(crate) fn __abs__(&self) -> Classed {
+        Self::from_base(self.base_value().abs(), self.tag()).into()
     }
 
     /// Integer powers only.
@@ -153,7 +148,7 @@ impl PyQuantity {
         &self,
         exponent: &Bound<'_, PyAny>,
         modulo: Option<&Bound<'_, PyAny>>,
-    ) -> PyResult<Self> {
+    ) -> PyResult<Classed> {
         if modulo.is_some() {
             return Err(PyValueError::new_err(
                 "modular exponentiation is not defined for a physical quantity",
@@ -171,35 +166,35 @@ impl PyQuantity {
             .tag()
             .powi(narrowed)
             .map_err(|error| PyValueError::new_err(error.to_string()))?;
-        Ok(Self::from_base(self.base_value().powi(power), tag))
+        Ok(Self::from_base(self.base_value().powi(power), tag).into())
     }
 
     /// Square root, defined when every exponent is even.
     ///
     /// Runtime image of `SqrtDimension`, which has no impl for dimensions
     /// whose exponents do not halve exactly.
-    pub(crate) fn sqrt(&self) -> PyResult<Self> {
+    pub(crate) fn sqrt(&self) -> PyResult<Classed> {
         let tag = self
             .tag()
             .root(2)
             .map_err(|error| PyValueError::new_err(error.to_string()))?;
-        Ok(Self::from_base(self.base_value().sqrt(), tag))
+        Ok(Self::from_base(self.base_value().sqrt(), tag).into())
     }
 
     /// Cube root, defined when every exponent is a multiple of three.
     ///
     /// Sign-preserving, matching Aequitas' `cbrt`: the cube root of a negative
     /// volume is a negative length.
-    pub(crate) fn cbrt(&self) -> PyResult<Self> {
+    pub(crate) fn cbrt(&self) -> PyResult<Classed> {
         let tag = self
             .tag()
             .root(3)
             .map_err(|error| PyValueError::new_err(error.to_string()))?;
-        Ok(Self::from_base(self.base_value().cbrt(), tag))
+        Ok(Self::from_base(self.base_value().cbrt(), tag).into())
     }
 
     /// Multiplicative inverse.
-    pub(crate) fn reciprocal(&self) -> PyResult<Self> {
+    pub(crate) fn reciprocal(&self) -> PyResult<Classed> {
         if self.base_value() == 0.0 {
             return Err(PyZeroDivisionError::new_err(
                 "reciprocal of a zero quantity",
@@ -209,7 +204,7 @@ impl PyQuantity {
             .tag()
             .reciprocal()
             .map_err(|error| PyValueError::new_err(error.to_string()))?;
-        Ok(Self::from_base(self.base_value().recip(), tag))
+        Ok(Self::from_base(self.base_value().recip(), tag).into())
     }
 
     pub(crate) fn __richcmp__(

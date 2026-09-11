@@ -89,10 +89,16 @@ shape does.
 
 ## Typing
 
-The package ships `py.typed` and generated stubs, so a type checker sees the
-`Quantity` surface. Dimensional compatibility itself is checked at runtime:
-the exponents live in the value, so a checker sees `Quantity` on both sides of
-every operator.
+The package ships `py.typed` and generated stubs. Each dimension Aequitas names
+is a subclass of `Quantity` -- `aq.Length`, `aq.Area`, `aq.AreaPerTime` -- and
+every constructor and operation returns an instance of the class for its
+dimension, so a checker reads `aq.length(2.0)` as a `Length`. Aliases of one
+dimension are one class (`aq.ThermalDiffusivity is aq.AreaPerTime`), and a
+dimension no alias names, such as `m^5`, is a plain `Quantity`. `aq.CLASSES`
+maps every name to its class.
+
+The stubs type arithmetic as returning `Quantity`; compatibility between
+operands is checked at runtime, where the exponents live.
 
 ## Units
 

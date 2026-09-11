@@ -13,6 +13,8 @@ semantic discriminant. Operations that ``rustc`` would reject raise here.
     >>> area = radius * radius
     >>> area.quantity
     'area'
+    >>> type(area) is aq.Area
+    True
     >>> aq.length(1.0, "m") + aq.time(1.0, "s")
     Traceback (most recent call last):
         ...
@@ -29,6 +31,7 @@ from typing import Callable, Optional
 
 from ._pyaequitas import (
     BASE_ATTR,
+    CLASSES,
     DIMENSION_ATTR,
     PROTOCOL_VERSION,
     UNITS,
@@ -41,6 +44,7 @@ from ._pyaequitas import (
 
 __all__ = [
     "BASE_ATTR",
+    "CLASSES",
     "DIMENSION_ATTR",
     "PROTOCOL_VERSION",
     "UNITS",
@@ -80,3 +84,8 @@ for _name in quantity_names():
     __all__.append(_name)
 
 del _name
+
+# One class per named dimension, bound under every alias of it:
+# `aq.Length`, `aq.AreaPerTime`, and `aq.ThermalDiffusivity is aq.AreaPerTime`.
+globals().update(CLASSES)
+__all__.extend(CLASSES)

@@ -18,6 +18,13 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- `pyaequitas` has a class per named dimension. `aq.length(2.0)` is an
+  `aq.Length`, the product of two lengths an `aq.Area`, and a dimension no
+  alias names a plain `aq.Quantity`. Aliases of one dimension are one class
+  (`aq.ThermalDiffusivity is aq.AreaPerTime`); the stubs declare every class
+  and type each constructor as returning its own, and `aq.CLASSES` maps every
+  name to its class.
+
 - Added the `Degree` linear unit for the `Angle` dimension, with
   `SCALE = pi / 180` — the exact defining ratio. `Angle` already carried its own
   semantics but `Radian` was its only unit, so degree-facing call sites wrote

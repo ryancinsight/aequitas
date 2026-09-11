@@ -4,6 +4,7 @@ use pyo3::exceptions::{PyKeyError, PyValueError};
 use pyo3::prelude::*;
 use pyo3::types::{PyString, PyTuple};
 
+use super::classes::Classed;
 use crate::tag::DimensionTag;
 use crate::units;
 
@@ -20,6 +21,7 @@ use crate::units;
     name = "Quantity",
     module = "pyaequitas._pyaequitas",
     frozen,
+    subclass,
     from_py_object
 )]
 #[derive(Clone, Copy, Debug)]
@@ -57,7 +59,7 @@ impl PyQuantity {
     /// `K` both an absolute temperature and a temperature difference.
     #[staticmethod]
     #[pyo3(signature = (value, unit, *, quantity))]
-    pub(crate) fn from_unit(value: f64, unit: &str, quantity: &str) -> PyResult<Self> {
+    pub(crate) fn from_unit(value: f64, unit: &str, quantity: &str) -> PyResult<Classed> {
         let named = units::by_name(quantity)
             .ok_or_else(|| PyKeyError::new_err(format!("unknown quantity '{quantity}'")))?;
         let resolved = named.unit(unit).ok_or_else(|| {
@@ -71,15 +73,15 @@ impl PyQuantity {
                 }
             ))
         })?;
-        Ok(Self::from_base(resolved.to_base(value), named.tag))
+        Ok(Self::from_base(resolved.to_base(value), named.tag).into())
     }
 
     /// Construct a quantity of `quantity` from a value already in base units.
     #[staticmethod]
-    pub(crate) fn from_base_of(value: f64, quantity: &str) -> PyResult<Self> {
+    pub(crate) fn from_base_of(value: f64, quantity: &str) -> PyResult<Classed> {
         let named = units::by_name(quantity)
             .ok_or_else(|| PyKeyError::new_err(format!("unknown quantity '{quantity}'")))?;
-        Ok(Self::from_base(value, named.tag))
+        Ok(Self::from_base(value, named.tag).into())
     }
 
     /// Magnitude in canonical SI base units.
