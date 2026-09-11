@@ -290,7 +290,12 @@ def main() -> int:
     for key, path in destinations.items():
         relative = path.relative_to(root)
         if args.mode == "generate":
-            path.write_text(rendered[key], encoding="utf-8")
+            # Text mode would translate "
+" to "
+" on Windows and rewrite
+            # every unchanged generated file; write what the tree contains.
+            path.write_text(rendered[key], encoding="utf-8", newline="
+")
             print(f"{relative}: written")
             continue
         if not path.exists():
