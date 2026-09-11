@@ -4,6 +4,22 @@
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
 
+## AEQ-PY-OPERAND-FLOAT-2026-09-11 — Arithmetic read a protocol quantity with `__float__` as a scalar [patch] — in-progress <a id="aeq-py-operand-float-2026-09-11"></a>
+
+- **Symptom:** `aq.length(2.0) * t`, with `t` a protocol-conforming time that
+  also defines `__float__` (as pint's quantities do), returns a length: the
+  time's dimension is dropped without an error. `/` and reflected `*` too.
+- **Cause:** `Operand::parse` tries `extract::<f64>()` before the protocol --
+  the order #58 corrected in `Dimensioned<D>`, left in place here.
+- **Fix:** exact `float`/`int` are scalars; anything else is read through the
+  protocol first, falling back to `__float__` only when it does not conform.
+  It also drops a discarded TypeError from every quantity-by-quantity product
+  (`a*b` measured 205 ns against 41 ns for `a+b`).
+- **Acceptance:** multiplying and dividing by a protocol object with
+  `__float__` yields the combined dimension, asserted in Rust and in pytest.
+- **Integrator:** claude-opus-5, lane `worktrees/aequitas-python-typing` on
+  `fix/aequitas-python-operand-protocol`.
+
 ## AEQ-SURFACE-STALE-AFTER-64-2026-09-11 — #64 left the binding surface stale and main red [patch] [ci] — done
 
 - Merged in #65 (2026-09-11 14:11 UTC), held by the new gate until `verify`,
