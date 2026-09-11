@@ -4,6 +4,23 @@
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
 
+## AEQ-GITDIR-GUTTED-2026-09-10 — The aequitas gitdir lost its metadata and recent objects overnight [patch] — done
+
+- **Found 2026-09-11 09:50:** `repos/aequitas` reported "not a git repository".
+  The pointer was correct; `.git/modules/repos/aequitas` held only `objects/`
+  and `refs/` -- `HEAD`, `config`, `index`, `logs/`, `packed-refs` gone, and
+  every loose object written after 17:07 the day before deleted with them
+  (35 missing, including `HEAD`'s tree). Directory mtime 22:50; no other member
+  was touched. Cause not determined from the tree.
+- **Nothing unique was lost.** Surviving `refs/heads/main` equalled
+  `origin/main` (`9cdf1d7`), and after repair the working tree is identical to
+  `HEAD`. The damaged store's only non-origin content was dangling editor
+  checkpoints and a stale copy of `crate-aequitas-v0.2.0` from before origin
+  moved it from the #16 merge to the #17 lock-fix merge on 2026-08-09.
+- **Repair:** a no-negotiation refetch into the corrupt store recovered only
+  part of it, so the gitdir was rebuilt from a fresh clone of origin (fsck
+  clean), re-pointed at the working tree, and the index rebuilt from `HEAD`.
+
 ## AEQ-MERGE-GATE-2026-09-10 — main took merges with no verification [patch] [ci] — done
 
 - **Found by merging into it.** #64 was enqueued with `--auto` and merged
