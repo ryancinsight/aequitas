@@ -4,19 +4,11 @@
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
 
-## AEQ-PY-SCALAR-TAG-2026-09-11 — Scaling a quantity by a number dropped its semantic marker [patch] — in-progress <a id="aeq-py-scalar-tag-2026-09-11"></a>
+## AEQ-PY-SCALAR-TAG-2026-09-11 — Scaling a quantity by a number dropped its semantic marker [patch] — done 2026-09-11 <a id="aeq-py-scalar-tag-2026-09-11"></a>
 
-- **Symptom:** `aq.stress(1.0) * 2.0` is a pressure, `aq.angle(1.0) * 2.0` a
-  bare dimensionless value, and a scaled absolute temperature an unnamed
-  quantity; so `stress * 2 + stress` raises a dimension mismatch.
-- **Cause:** the binding turns a bare number into a dimensionless quantity and
-  multiplies tags, which normalizes the marker to base. Aequitas's
-  `Mul<T>`/`Div<T>` for `Quantity<T, D>` return `Self`: a scalar keeps `D`.
-- **Acceptance:** scalar `*`, reflected `*` and `/` keep the tag, asserted
-  against the law crate's own result types; a dimensionless *quantity*
-  operand still normalizes, as `MultiplyDimension` does.
-- **Integrator:** claude-opus-5, lane `worktrees/aequitas-python-typing` on
-  `fix/aequitas-python-scalar-tag`, stacked on #68.
+- Fixed in [#69](https://github.com/ryancinsight/aequitas/pull/69), merge `98446f9`:
+  scalar `*` and `/` keep the tag; Rust tests pin the law crate's `Stress<f64>`
+  result types and fail against the old code.
 
 ## AEQ-CI-BINDING-GATES-2026-09-11 — CI never compiled, linted or tested the binding crate in Rust [patch] [ci] — done 2026-09-11 <a id="aeq-ci-binding-gates-2026-09-11"></a>
 
