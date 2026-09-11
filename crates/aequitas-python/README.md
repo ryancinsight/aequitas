@@ -97,8 +97,12 @@ dimension are one class (`aq.ThermalDiffusivity is aq.AreaPerTime`), and a
 dimension no alias names, such as `m^5`, is a plain `Quantity`. `aq.CLASSES`
 maps every name to its class.
 
-The stubs type arithmetic as returning `Quantity`; compatibility between
-operands is checked at runtime, where the exponents live.
+Arithmetic is typed too. The stubs carry the dimensional algebra as
+overloads, so a checker infers `Area` from `length * length` and rejects
+`length + time` before the program runs, as the runtime rejects it with
+`ValueError`. A value typed as plain `Quantity` -- a dimension no alias names,
+or one a checker cannot see -- does not add to a named class on its right;
+narrow it with `isinstance` first.
 
 ## Units
 
