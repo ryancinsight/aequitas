@@ -24,6 +24,9 @@ concurrency:
 env:
   RUST_TOOLCHAIN: 1.97.0
 
+# Releases are tagged `<package>-v<version>` (ADR 0017). This workflow acts on
+# the crates.io distribution's prefix only, so an `aequitas-python-v...`
+# release -- which does not start with `aequitas-v` -- never starts it.
 jobs:
   # The blocking public-surface verdict belongs to the release, not to a
   # merge: the CI workflow calls the same gate informationally on PRs, and a
@@ -34,7 +37,7 @@ jobs:
     name: SemVer gate (release)
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      startsWith(github.event.release.tag_name, 'crate-')
+      startsWith(github.event.release.tag_name, 'aequitas-v')
     uses: ryancinsight/atlas/.github/workflows/semver-gate.yml@806949a176cc139efe7c514d7e42c9b9a9447f45
     with:
       release-gate: true
@@ -47,7 +50,7 @@ jobs:
     needs: semver
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      startsWith(github.event.release.tag_name, 'crate-')
+      startsWith(github.event.release.tag_name, 'aequitas-v')
     name: Validate crate package
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -80,11 +83,11 @@ jobs:
           set -euo pipefail
 
           if [[ "$EVENT_NAME" == "release" ]]; then
-            if [[ "$RELEASE_TAG" =~ ^crate-(.+)-v([0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?)$ ]]; then
+            if [[ "$RELEASE_TAG" =~ ^(.+)-v([0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?)$ ]]; then
               package="${BASH_REMATCH[1]}"
               version="${BASH_REMATCH[2]}"
             else
-              echo "release tag must be crate-<package>-v<version>" >&2
+              echo "release tag must be <package>-v<version> (ADR 0017)" >&2
               exit 1
             fi
           else
