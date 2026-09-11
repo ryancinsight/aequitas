@@ -67,6 +67,8 @@ crate::quantity_inventory! {
         Kelvin: units::Kelvin,
     },
     temperature_difference => TemperatureDifference, dimensions::TemperatureDifference {
+        DegreeCelsius: units::DegreeCelsius,
+        DegreeFahrenheit: units::DegreeFahrenheit,
         Kelvin: units::Kelvin,
     },
     reciprocal_temperature => ReciprocalTemperature, dimensions::ReciprocalTemperature {
