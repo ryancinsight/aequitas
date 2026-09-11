@@ -4,26 +4,14 @@
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
 
-## AEQ-SURFACE-STALE-AFTER-64-2026-09-11 — #64 left the binding surface stale and main red [patch] [ci] — in-progress
+## AEQ-SURFACE-STALE-AFTER-64-2026-09-11 — #64 left the binding surface stale and main red [patch] [ci] — done
 
-- **Escaped defect, mine.** #64 added `LinearUnit<TemperatureDifference>` impls
-  for `DegreeCelsius` and `DegreeFahrenheit`. `scripts/generate-surface.py`
-  discovers every `impl LinearUnit` under `src/systems/si/units/`, so the
-  inventory and package stub went stale, and `Python bindings` has failed on
-  `main` since 2026-09-10 21:05.
-- **Why it escaped:** the local run covered the law crate's gate only (fmt,
-  clippy, nextest, doc) and not the `Python bindings` job, which is where the
-  surface check lives; and #64 merged the moment it was enqueued, because
-  `main` had no required checks yet (AEQ-MERGE-GATE-2026-09-10 came after).
-- **Checks that now catch it:** `Python bindings` is a required context, so the
-  same change could no longer merge. Still missing locally: the pre-push hook
-  runs only the lockfile check, so a push touching `src/systems/si/units/` or
-  `crates/aequitas-python/` should also run `generate-surface.py check`, which
-  takes under a second.
-- **Cure:** regeneration only -- two inventory lines under
-  `temperature_difference` and one stub comment; the units are linear there,
-  so the regenerated surface is also semantically correct. Verified: surface
-  check current, 80 binding tests pass.
+- Merged in #65 (2026-09-11 14:11 UTC), held by the new gate until `verify`,
+  `Python bindings`, `supply-chain` and `Lockfile integrity` passed. Cause: #64
+  added `LinearUnit` impls without regenerating, ran only the law crate's gate,
+  and merged before protection existed. The pre-push hook still lacks
+  `generate-surface.py check`; carried to the stack-level hook item rather than
+  patched here, since that campaign is replacing member hooks.
 
 ## AEQ-GITDIR-GUTTED-2026-09-10 — The aequitas gitdir lost its metadata and recent objects overnight [patch] — done
 
