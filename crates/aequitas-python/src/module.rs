@@ -12,7 +12,16 @@ use crate::{protocol, units};
 /// # Errors
 ///
 /// Propagates registration failures from the interpreter.
-#[pymodule]
+///
+/// # Free-threaded interpreters
+///
+/// `gil_used = false` declares the module safe without the GIL; without it a
+/// free-threaded interpreter turns the GIL back on for the whole process when
+/// it imports this module. The declaration rests on an audit: every pyclass is
+/// `frozen` over `Copy` data, so no method mutates shared state, and the
+/// module holds no mutable state of its own -- the unit and class tables are
+/// `const`.
+#[pymodule(gil_used = false)]
 fn _pyaequitas(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<PyQuantity>()?;
     crate::quantity::classes::register(module)?;

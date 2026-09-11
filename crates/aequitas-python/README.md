@@ -104,6 +104,13 @@ overloads, so a checker infers `Area` from `length * length` and rejects
 or one a checker cannot see -- does not add to a named class on its right;
 narrow it with `isinstance` first.
 
+## Free-threaded Python
+
+The module declares itself safe without the GIL, so importing it on a
+free-threaded interpreter (3.13t and later) leaves the GIL off. Quantities are
+immutable and may be shared across threads. A free-threaded build needs a
+wheel built for its version; the abi3 wheel serves every GIL build from 3.8.
+
 ## Units
 
 `aq.quantity_names()` lists every quantity; `aq.unit_symbols(name)` lists the

@@ -77,20 +77,32 @@ jobs:
   # quantity added upstream that never reached the generated inventory or the
   # stubs -- is invisible to a Rust-only job.
   bindings:
-    name: Python bindings
+    # The name carries a matrix expression, which GitHub uses verbatim, so the
+    # GIL cell keeps reporting as the required `Python bindings` check.
+    name: Python bindings${{ matrix.variant }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      matrix:
+        include:
+          - python: "3.12"
+            variant: ""
+          # Free-threaded CPython. The stable ABI does not cover it before
+          # 3.15, so this cell builds a version-specific wheel.
+          - python: "3.13t"
+            variant: " (free-threaded)"
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       - uses: dtolnay/rust-toolchain@a5f673d0ba8626c3977bb416a1612774bc82181b
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python }}
       - name: Confirm the pinned toolchain is the one running
         # A committed `rust-toolchain.toml` outranks the action's own
         # selection, so the version is printed rather than assumed.
         run: rustc --version
       - name: Generated surface is current
+        if: matrix.variant == ''
         # Fails when an upstream quantity or unit never reached the inventory
         # or the stubs, which no Rust test can detect on its own.
         run: python scripts/generate-surface.py check
@@ -98,11 +110,16 @@ jobs:
         run: pip install "maturin>=1.9.4,<2.0" pytest mypy
       - name: Build and install the wheel
         working-directory: crates/aequitas-python
-        run: maturin build --locked --release --out dist && pip install dist/*.whl
+        # `--interpreter python` builds for the job's own interpreter: an abi3
+        # wheel on a GIL build, a version-specific one on a free-threaded build.
+        run: maturin build --locked --release --out dist --interpreter python && pip install dist/*.whl
       - name: Python tests
         working-directory: crates/aequitas-python
         run: pytest tests -q
       - name: Wheel metadata renders
+        # Once is enough: the metadata does not depend on the interpreter, and
+        # twine's dependencies are not all built for free-threaded CPython.
+        if: matrix.variant == ''
         working-directory: crates/aequitas-python
         run: pip install twine && twine check dist/*.whl
 
