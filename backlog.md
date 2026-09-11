@@ -123,7 +123,7 @@ dimensions, transparent quantities over Eunomia scalars, and linear SI unit
 conversion, consumed by proteus, hyperion, kwavers, CFDrs, helios, and the
 domain layer.
 
-## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel [arch][minor] — in-progress <a id="aeq-py-binding-001"></a>
+## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel [arch][minor] — blocked <a id="aeq-py-binding-001"></a>
 
 - **Decision:** [ADR 0016](docs/adr/0016-python-quantity-binding.md).
 - **Outcome:** a PyPI wheel exposing every SI quantity and unit with
@@ -142,13 +142,14 @@ domain layer.
 - **Integrator:** claude-opus-5, taken over 2026-09-11 (the item had none), lane
   `worktrees/aequitas-python-typing`. PyPI name re-checked: `aequitas-python`
   is unregistered (404), `aequitas` taken (200).
-- **Blocked substep:** registering the PyPI trusted publisher (project
-  `aequitas-python`, workflow `python-release.yml`, environment `pypi`) is a
-  pypi.org account action for the owner; the workflow lands without it.
-- **Remaining:** the publish pipeline only -- trusted publishing, a
-  `manylinux` floor, install-and-import smoke. Affine units landed in
-  [AEQ-PY-AFFINE-001](#aeq-py-affine-001); typed classes in
-  [AEQ-PY-TYPING-001](#aeq-py-typing-001).
+- **Pipeline landed** in [#72](https://github.com/ryancinsight/aequitas/pull/72) (`d81c9fb`): `python-release.yml`
+  builds 8 wheels (abi3 and 3.14t on four native runners) plus an sdist, each smoke-tested;
+  its PR run 34618118204 passed every build job. Affine units and typed classes landed too.
+- **Blocker:** the PyPI trusted publisher is not registered (project `aequitas-python`,
+  owner `ryancinsight`, repo `aequitas`, workflow `python-release.yml`, environment `pypi`);
+  that is a pypi.org account action for the owner.
+- **Re-open trigger:** the publisher registered; then a release tagged
+  `aequitas-python-v0.1.0` publishes and the `published` job installs it back.
 - **Acceptance:** every exported dimension round-trips against
   `Quantity::in_unit`; semantic normalization matches
   `MultiplyDimension`/`DivideDimension`; codegen regenerate-and-diff clean;
@@ -165,20 +166,10 @@ domain layer.
   Python suite on x86_64, in the same matrix.
 - **Found by:** [AEQ-PY-BINDING-001](#aeq-py-binding-001), PR #72.
 
-## AEQ-RELEASE-TAG-FORM-2026-09-11 — The crate release workflow keys on a `crate-` tag prefix [patch] [ci] — in-progress <a id="aeq-release-tag-form-2026-09-11"></a>
+## AEQ-RELEASE-TAG-FORM-2026-09-11 — The crate release workflow keys on a `crate-` tag prefix [patch] [ci] — done 2026-09-11 <a id="aeq-release-tag-form-2026-09-11"></a>
 
-- **Finding:** `rust-release.yml` publishes only for tags starting `crate-`, a
-  type marker the release tooling cannot parse; the ecosystem forms are
-  `v<version>` for a workspace release and `<package>-v<version>` for an
-  independently versioned crate (cargo-release, release-plz).
-- **Also:** `aequitas` is 0.2.0 and `aequitas-python` 0.1.0, so the workspace
-  does not version as one unit; independent versioning needs a recorded
-  decision, and the tag form follows from it.
-- **Acceptance:** an ADR records the versioning unit; the release workflows
-  derive their package from a tag in the chosen form, with no `crate-` prefix.
-- **Found by:** AEQ-PY-BINDING-001, writing the wheel publish workflow.
-- **Integrator:** claude-opus-5, lane `worktrees/aequitas-python-typing` on
-  `docs/aequitas-release-versioning`; ADR 0017.
+- [#73](https://github.com/ryancinsight/aequitas/pull/73) (`c322c77`): ADR 0017 records independent versioning;
+  `rust-release.yml` gates on `aequitas-v` and parses `<package>-v<version>`.
 
 ## AEQ-RELEASE-EUNOMIA-CBRT-001 — Aequitas cannot be packaged for crates.io [patch] — blocked <a id="aeq-release-eunomia-cbrt-001"></a>
 
