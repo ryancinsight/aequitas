@@ -1,0 +1,225 @@
+name: Python Release
+
+# Builds, smoke-tests and publishes the `aequitas-python` distribution.
+#
+# The distribution is versioned apart from the workspace, so its releases
+# carry their own tag, `aequitas-python-v<version>`; any other release event
+# does nothing here. A pull request that edits this workflow or the package
+# metadata runs everything except the publish, so the pipeline is proven where
+# it changes rather than first on a release.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/python-release.yml"
+      - "crates/aequitas-python/pyproject.toml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: python-release-${{ github.event.release.tag_name || github.ref }}
+  # A half-cancelled publish is worse than a superseded one.
+  cancel-in-progress: false
+
+jobs:
+  version:
+    name: Release version
+    if: >-
+      github.event_name != 'release' ||
+      startsWith(github.event.release.tag_name, 'aequitas-python-v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.read.outputs.version }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - name: Read the version and check the release tag against it
+        id: read
+        env:
+          EVENT: ${{ github.event_name }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import tomllib
+
+          with open("crates/aequitas-python/Cargo.toml", "rb") as manifest:
+              version = tomllib.load(manifest)["package"]["version"]
+          tag = os.environ.get("TAG", "")
+          if os.environ["EVENT"] == "release" and tag != f"aequitas-python-v{version}":
+              raise SystemExit(f"release tag {tag!r} does not name aequitas-python {version}")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"version={version}\n")
+          print(f"aequitas-python {version}")
+          PY
+
+  wheels:
+    name: Wheel (${{ matrix.platform }}, ${{ matrix.abi }})
+    needs: version
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      # A release matrix reports every target's failure in one run.
+      fail-fast: false
+      matrix:
+        platform: [linux-x86_64, linux-aarch64, macos-arm64, windows-x86_64]
+        # abi3 serves every GIL build from 3.8. Free-threaded CPython needs a
+        # version-specific wheel until abi3t (3.15), and PyO3 supports it from
+        # 3.14.
+        abi: [abi3, free-threaded]
+        include:
+          - platform: linux-x86_64
+            runner: ubuntu-latest
+            target: x86_64
+          - platform: linux-aarch64
+            runner: ubuntu-24.04-arm
+            target: aarch64
+          - platform: macos-arm64
+            runner: macos-14
+            target: aarch64
+          - platform: windows-x86_64
+            runner: windows-latest
+            target: x64
+          - abi: abi3
+            python: "3.12"
+            interpreter: python3.12
+          - abi: free-threaded
+            python: "3.14t"
+            interpreter: python3.14t
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Build the wheel
+        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        with:
+          working-directory: crates/aequitas-python
+          target: ${{ matrix.target }}
+          # The glibc floor for Linux wheels; ignored on other platforms.
+          manylinux: "2014"
+          args: --release --locked --out dist --interpreter ${{ matrix.interpreter }}
+      - name: Smoke-test the wheel on its own platform
+        shell: bash
+        working-directory: crates/aequitas-python
+        # The full Python suite against the installed wheel, not an import
+        # alone. The type-checking tests skip: mypy is not installed here, and
+        # CI's bindings job runs them.
+        run: |
+          python -m pip install pytest
+          python -m pip install --no-index --find-links dist aequitas-python
+          python -m pytest tests -q
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dist-${{ matrix.platform }}-${{ matrix.abi }}
+          path: crates/aequitas-python/dist/*.whl
+          if-no-files-found: error
+
+  sdist:
+    name: Source distribution
+    needs: version
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.12"
+      - name: Build the source distribution
+        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        with:
+          working-directory: crates/aequitas-python
+          command: sdist
+          args: --out dist
+      - uses: dtolnay/rust-toolchain@a5f673d0ba8626c3977bb416a1612774bc82181b
+      - name: Build and test from the source distribution
+        shell: bash
+        working-directory: crates/aequitas-python
+        # A user without a matching wheel builds from this archive, so it must
+        # carry everything the build needs -- the path dependency included.
+        run: |
+          python -m pip install pytest
+          python -m pip install dist/*.tar.gz
+          python -m pytest tests -q
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dist-sdist
+          path: crates/aequitas-python/dist/*.tar.gz
+          if-no-files-found: error
+
+  metadata:
+    name: Distribution metadata
+    needs: [wheels, sdist]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: dist-*
+          merge-multiple: true
+          path: dist
+      - name: Every artifact renders and carries valid metadata
+        run: pipx run twine check --strict dist/*
+
+  publish:
+    name: Publish to PyPI
+    if: github.event_name == 'release'
+    needs: [version, metadata]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: pypi
+      url: https://pypi.org/project/aequitas-python/${{ needs.version.outputs.version }}/
+    permissions:
+      # Trusted publishing: PyPI mints a short-lived token for this workflow
+      # identity. No long-lived token exists to leak.
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: dist-*
+          merge-multiple: true
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+
+  published:
+    name: Install from PyPI
+    if: github.event_name == 'release'
+    needs: [version, publish]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.12"
+      - name: Install the release from the index and run the suite
+        shell: bash
+        working-directory: crates/aequitas-python
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        # The upload is visible on the simple index after a propagation delay,
+        # so installation is retried a bounded number of times; the dry-run
+        # gates above cannot see an upload-side fault, which is why this job
+        # exists at all.
+        run: |
+          python -m pip install pytest
+          for attempt in 1 2 3 4 5 6; do
+            if python -m pip install --no-cache-dir "aequitas-python==${VERSION}"; then
+              break
+            fi
+            [ "$attempt" = 6 ] && { echo "aequitas-python ${VERSION} never became installable"; exit 1; }
+            sleep 30
+          done
+          python -m pytest tests -q
