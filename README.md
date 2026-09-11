@@ -195,6 +195,24 @@ assert_eq!(delta.in_unit::<Kelvin>(), 10.0);
 assert_eq!(restored.in_unit::<Kelvin>(), 300.0);
 ```
 
+Degrees Celsius and Fahrenheit are affine for a temperature and linear for a
+difference. The same marker serves both, and the dimension picks the
+conversion, so the ice-point offset reaches a temperature and never a
+difference:
+
+```rust
+use aequitas::systems::si::{
+    quantities::{TemperatureDifference, ThermodynamicTemperature},
+    units::{DegreeCelsius, Kelvin},
+};
+
+let freezing = ThermodynamicTemperature::from_affine_unit::<DegreeCelsius>(0.0_f64);
+let warmer = TemperatureDifference::from_unit::<DegreeCelsius>(10.0_f64);
+
+assert_eq!(freezing.in_unit::<Kelvin>(), 273.15);
+assert_eq!(warmer.in_unit::<Kelvin>(), 10.0);
+```
+
 Energy density is available as a first-class quantity for acoustic, thermal,
 and cavitation metrics:
 

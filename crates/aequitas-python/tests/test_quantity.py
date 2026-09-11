@@ -259,3 +259,26 @@ def test_the_package_is_typed() -> None:
     assert (root / "py.typed").exists()
     assert (root / "__init__.pyi").exists()
     assert (root / "_pyaequitas.pyi").exists()
+
+
+def test_celsius_is_affine_for_a_temperature_and_linear_for_a_difference() -> None:
+    # The ice point is 273.15 K by the definition of the Celsius scale, and a
+    # Celsius difference is a kelvin difference. One symbol, resolved per
+    # quantity, must not mean one conversion.
+    assert aq.thermodynamic_temperature(0.0, "degC").base == 273.15
+    assert aq.temperature_difference(10.0, "degC").base == 10.0
+
+
+def test_celsius_reads_back_through_in_unit() -> None:
+    assert aq.thermodynamic_temperature(0.0, "degC").in_unit("degC") == 0.0
+    # Near the offset the round trip cancels, so the bound is set by the
+    # 273.15 K the terms carry rather than by the reading itself.
+    value = aq.thermodynamic_temperature(37.0, "degC").in_unit("degC")
+    assert abs(value - 37.0) <= 8 * math.ulp(273.15)
+
+
+def test_the_celsius_and_fahrenheit_scales_cross_at_minus_forty() -> None:
+    # An oracle independent of either offset: the two scales agree at -40.
+    celsius = aq.thermodynamic_temperature(-40.0, "degC").base
+    fahrenheit = aq.thermodynamic_temperature(-40.0, "degF").base
+    assert abs(celsius - fahrenheit) <= 8 * math.ulp(273.15)

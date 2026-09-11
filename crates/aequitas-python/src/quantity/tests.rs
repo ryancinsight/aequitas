@@ -450,3 +450,16 @@ fn the_module_exposes_every_registered_quantity() {
     );
     assert!(units::by_name("mass_density").is_some());
 }
+
+/// `degC` resolves per quantity through the `#[pymethods]` surface.
+#[test]
+fn celsius_resolves_per_quantity_through_the_python_surface() {
+    let temperature = PyQuantity::from_unit(0.0, "degC", "thermodynamic_temperature")
+        .expect("affine degC resolves for a temperature");
+    let difference = PyQuantity::from_unit(10.0, "degC", "temperature_difference")
+        .expect("linear degC resolves for a difference");
+
+    assert_exact(temperature.base_value(), 273.15);
+    assert_exact(difference.base_value(), 10.0);
+    assert_exact(temperature.in_unit("degC").expect("degC reads back"), 0.0);
+}

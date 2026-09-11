@@ -28,5 +28,9 @@ correct dimension, `SCALE`, and `SYMBOL`.
 `SCALE` is an associated constant, not runtime configuration. The operation is
 monomorphized and a compiler can fold a constant conversion into the numeric
 kernel. Symbols are `&'static str`, so reporting a unit needs no allocation.
-Affine units such as Celsius require an offset and deliberately belong to a
-future, separate contract rather than being forced into this linear API.
+Affine units such as Celsius need an offset, so they have their own contract,
+`AffineUnit`, rather than being forced into this linear API: `base = value *
+SCALE + OFFSET`. A degree Celsius is affine for `ThermodynamicTemperature` and
+linear for `TemperatureDifference`. The same marker implements both, and the
+quantity's dimension selects the conversion, so a temperature difference never
+picks up the 273.15 K offset that belongs only to a temperature.
