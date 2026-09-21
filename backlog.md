@@ -133,7 +133,7 @@
   checked additions leaves no room for an indirect call to show, so the change
   stands on the abstraction being zero-cost, not on a number.
 
-## AEQ-PY-READ-COST-2026-09-21 — A Python-passed quantity costs 462 ns and two heap allocations per argument [perf] [minor] <a id="aeq-py-read-cost-2026-09-21"></a>
+## AEQ-PY-READ-COST-2026-09-21 — A Python-passed quantity costs 462 ns and two heap allocations per argument [perf] [minor] — done 2026-09-21 <a id="aeq-py-read-cost-2026-09-21"></a>
 
 - **Outcome:** `consumer::value::read` is the path a Python-passed quantity
   takes through a consumer's `Dimensioned<D>` parameter: `consumer` cannot
@@ -147,8 +147,9 @@
 - **Acceptance:** the read path is allocation-free, or the alternative's cost
   is measured before and after in release mode with the pytest suite run
   against a built wheel.
-- **Non-goals:** the input set the wire form accepts, the abi3 floor, and the
-  two-wheel interoperability guarantee.
+- **Non-goals (as filed):** the input set the wire form accepts, the abi3 floor,
+  and the two-wheel interoperability guarantee. The floor was later taken up as
+  its own item and moved: `AEQ-PY-FLOOR-2026-09-21`.
 - Every reduction was attempted and refused, and each reason is recorded
   in-source on `read` rather than left implicit:
   - *Borrow the marker instead of copying it* -- `PyStringMethods::to_str` is
@@ -156,10 +157,12 @@
     `abi3-py38`, so the borrowed form does not exist; `to_cow` and
     `to_string_lossy` both fall back to an owned copy under the limited API.
     Borrowing needs the abi3 floor dropped: a distribution decision.
-  - *Replace the exponent `Vec<i64>` with a stack array* -- `Vec` accepts any
-    Python sequence of integers, a fixed-size array only its own shape, so
-    this narrows what the protocol admits. Behavioural, and the suite that
-    would justify it needs a wheel this checkout does not build.
+  - *Replace the exponent `Vec<i64>` with a stack array* -- refused as
+    *extraction*, not as a change: pyo3's `[T; N]` extractor goes through
+    `PySequence_Check`, so it admits a sequence where the vector admits any
+    iterable. It was solved the other way instead -- take the tag's members as
+    objects and fill the array by iteration, which admits exactly what the
+    vector did and drops the allocation anyway. See the closure below.
   - *Cache the `((int x 7), str)` tuple* -- would cut the getter's per-read
     work, but adds shared mutable state to a crate that ships for
     free-threaded CPython with `gil_used = false`. Needs an ADR.
@@ -170,6 +173,57 @@
   this path are free. `units::by_tag` is **1.24 ns/call** and the scan
   `Quantity::in_unit` performs is **7.56 ns/call**, both under 3% of one
   `read`, so no lookup index is warranted.
+- Closed 2026-09-21. Half the cost is gone and the remainder is a floor.
+  `read` now takes the tag's two members as objects and reads the exponents
+  straight into the fixed-width axis array, instead of unpacking
+  `(Vec<i64>, String)` and building a seven-element vector per call only to
+  copy it into that array and drop it: **2.000 -> 1.000 allocations per call**
+  on both `read` and `Dimensioned::<Length>::extract`, measured with a
+  temporary counting allocator that was deleted before the commit. The
+  acceptance criterion's second half is met as well -- the pytest suite ran
+  against a built wheel: **2365 passed, 1 skipped** on a project-local conda
+  CPython 3.13.12 venv, the skip being the GIL cell's expected
+  `test_free_threading.py` case. Limits: the allocation column is exact and
+  profile-independent, but the timing column was re-measured in the debug
+  profile only, so no release speedup is claimed -- the 462/315 ns in the
+  outcome above belong to the previous implementation -- and that wheel was a
+  debug build, built outside the stack's overlay because `--locked` cannot run
+  inside it.
+- The last allocation went too, once the floor was moved out from under it:
+  `AEQ-PY-FLOOR-2026-09-21` took the crate to `abi3-py310` and the marker name
+  is now borrowed, so `read` allocates **nothing** (1.0000 -> 0.0000 per call).
+  The three routes that would have held the floor at 3.8 stay refuted rather
+  than untried, in `src/consumer/value.rs` and in the gap audit.
+
+## AEQ-PY-FLOOR-2026-09-21 — The Python floor is abi3-py38, and the read's last allocation is its price [api] [minor] — done 2026-09-21 <a id="aeq-py-floor-2026-09-21"></a>
+
+- **Outcome:** the structural read copied the tag's marker name into a `String`
+  on every call, because no borrowing read exists below the limited API's 3.10
+  level. `abi3-py310` is the lowest stable-ABI level that exposes
+  `PyUnicode_AsUTF8AndSize` -- pyo3 says so on the method itself -- so moving
+  the floor one step is what lets the name be borrowed instead of copied.
+- **Acceptance:** the read allocates nothing, and the change is separated from
+  the floor so that neither alone explains the result.
+- **Decision:** raise the floor to `abi3-py310` rather than drop abi3. One
+  wheel per platform is preserved: the release matrix stays 4 platforms x 2
+  abi, where a non-abi3 build needs a wheel per interpreter version and still
+  cannot serve free-threaded CPython before `abi3t`.
+- **Cost, stated:** Python 3.8 (end of life 2024-10) and 3.9 (end of life
+  2025-10) can no longer install this distribution, and `kwavers-python` still
+  publishes the 3.8 floor, so a user on either version can install that
+  distribution but not this one.
+- **Verification:** the floor and the code change were separated with a probe
+  holding every other variable fixed -- `abi3-py310` with the name still
+  extracted through `String` measured **1.0000** allocations per call, and the
+  same floor with the name borrowed measured **0.0000**. Then fmt, clippy
+  `-D warnings`, and 92 binding tests pass; `maturin build` tags the wheel
+  `cp310-abi3` ("Built wheel for abi3 Python ≥ 3.10"); and the suite against
+  that wheel is **2365 passed, 1 skipped**, unchanged from the py38 wheel.
+- **Rejected:** dropping abi3 entirely (same allocation removed, at one wheel
+  per interpreter version, and no help for free-threading before `abi3t`);
+  keeping 3.8 via `to_cow`, `to_string_lossy`, or `PartialEq<str>` (each
+  copies, the last one up to eleven times per call).
+- No non-goals: this item is the floor itself.
 
 ## AEQ-PY-FREE-THREADED-2026-09-11 — The binding re-enables the GIL on a free-threaded interpreter [minor] — done 2026-09-11 <a id="aeq-py-free-threaded-2026-09-11"></a>
 

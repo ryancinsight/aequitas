@@ -46,6 +46,18 @@ performance, memory usage, hardware behavior, or hosted release readiness.
   `default-members` kept them on the law crate. Check: #67 adds `--workspace`
   and the PR's `verify` log lists the binding's tests. Pattern: confirm a
   crate's tests appear in the CI run before naming them as a guard.
+- **A book sample no local gate compiles.** The `linear_units.md` fence added
+  with the unit-composition change opened with `use aequitas::...` and named
+  `typenum::P2` inline, where every other Rust fence in the book opens with
+  `extern crate aequitas;`. The book compiles under an edition with no extern
+  prelude -- `book.toml` sets no `[rust] edition` -- so `mdbook test` failed
+  with `E0433: cannot find module or crate 'aequitas'`, and the `Deploy mdBook`
+  job, which triggers on `src/**`, would have failed on the same commit. Check:
+  the fence now carries the prelude its seven siblings have, and
+  `mdbook test docs/book` exits 0. Pattern: the Rust gates cannot see the book,
+  so a sample is verified only by running the book's own gate -- the blind spot
+  the workflow's `paths:` comment already describes from 82ec9b5. Caught by
+  reproducing the job locally, because the hosted runs had not started.
 
 ## Closed gaps
 
@@ -212,8 +224,8 @@ three passes was 1.70-1.79 ns (`tag_multiply`), 296-315 ns (`read`) and
 | Path | Rust heap allocations | Time |
 | --- | --- | --- |
 | `DimensionTag::multiply` | 0.000 /call | 1.7-1.8 ns/call |
-| `consumer::read` (structural, 2 attribute lookups) | 1.000 /call (was 2.000) | 296-315 ns/call |
-| `Dimensioned::<Length>::extract`, native quantity | 1.000 /call (was 2.000) | 448-462 ns/call |
+| `consumer::read` (structural, 2 attribute lookups) | 0.000 /call (was 2.000) | 296-315 ns/call |
+| `Dimensioned::<Length>::extract`, native quantity | 0.000 /call (was 2.000) | 448-462 ns/call |
 | `units::by_tag` | 0.000 /call | 1.24 ns/call |
 | the scan `Quantity::in_unit` performs | 0.000 /call | 7.56 ns/call |
 | law crate `src/` | none -- no `Box`, `Vec`, `String` or `format!` | -- |
@@ -222,14 +234,21 @@ The allocation column was re-measured; the time column was not. A second probe
 run took both read paths from 2.000 to 1.000 allocations per call -- an
 allocation count does not depend on the build profile, unlike a timing -- and
 reported 1080 -> 909 ns for `read` and 1274 -> 1097 ns for `Dimensioned` **in
-the debug profile**, where the release figures in the table do not apply.
+the debug profile**, where the release figures in the table do not apply. A
+third run, at the `abi3-py310` floor, took both to 0.000.
 
 Conclusion: the boundary is where the money is, and it is the *structural read*
-that spends it, not the scans around it. One of its two allocations is now gone,
-and the one that remains is the semantic marker's name, which is the price of
-the `abi3-py38` floor rather than an oversight. `AEQ-PY-READ-COST-2026-09-21`
-carries the rest; the scans are closed as not worth an index, at under 3% of one
-`read` between them.
+that spends it, not the scans around it. Both of its allocations are now gone,
+the last one by moving the crate's floor to `abi3-py310` -- the lowest
+stable-ABI level that exposes `PyUnicode_AsUTF8AndSize`, and so the lowest at
+which the semantic marker's name can be borrowed instead of copied. The floor
+and the code change were separated with a probe that held every other variable
+fixed: `abi3-py310` with the name still extracted through `String` measured
+**1.0000** allocations per call, and the same floor with the name borrowed
+measured **0.0000**, so neither alone accounts for the result. The move also
+fixes this crate's Python floor, which is now 3.10 rather than 3.8.
+`AEQ-PY-READ-COST-2026-09-21` is closed; the scans are closed as not worth an
+index, at under 3% of one `read` between them.
 
 ## Verified non-gaps (do not chase)
 
@@ -271,22 +290,29 @@ carries the rest; the scans are closed as not worth an index, at under 3% of one
   (`exactly 7 exponents, got 9` as well as the short case) plus the
   out-of-range and unknown-semantics messages, so the diagnostics the rewrite
   had to preserve are asserted rather than assumed.
-- **The read's remaining allocation is the `abi3-py38` floor, and three ways
-  around it are refuted rather than untried** — the semantic name is read
-  through `String` because every allocation-free route is closed.
-  `PyStringMethods::to_str` is gated on `any(Py_3_10, not(Py_LIMITED_API))` and
-  this crate builds `abi3-py38`, so the borrowed form does not exist here;
-  `to_cow` and `to_string_lossy` fall back to an owned copy, which copies
-  *twice*. pyo3's `PartialEq<str> for Bound<PyString>` is the route that looks
-  free and is not: under `not(Py_3_13)`, which abi3-py38 always is, it routes
-  through `to_cow()`, so comparing the eleven candidate names would convert the
-  string up to eleven times, each conversion allocating a Python bytes object —
-  strictly worse than the one `String`. The route that would work is a cached
-  Python mapping from wire name to marker, so the lookup uses the string's own
-  hash instead of a Rust copy; it needs a static holding interpreter-bound
-  objects, which this crate's free-threaded build turns into a correctness
-  question rather than a saving. Removing the floor itself means dropping the
-  abi3 floor, a distribution decision this crate does not own.
+- **The read's last allocation was the Python floor, and the floor moved to
+  `abi3-py310`** — the marker name is now borrowed through
+  `PyStringMethods::to_str` rather than copied through `String`, which removes
+  the call's last Rust heap allocation (measured 1.0000 -> 0.0000 per call).
+  `to_str` is gated on `any(Py_3_10, not(Py_LIMITED_API))`, so it needs either
+  a stable-ABI level of 3.10 — where `PyUnicode_AsUTF8AndSize` entered the
+  limited API, per pyo3's own comment on that method — or no limited API at
+  all. `abi3-py310` was chosen over dropping abi3 because it keeps one wheel
+  per platform: the release matrix stays 4 platforms x 2 abi, where a non-abi3
+  build needs a wheel per interpreter version and still cannot serve
+  free-threaded CPython before `abi3t`. The cost is Python 3.8 (end of life
+  2024-10) and 3.9 (end of life 2025-10), and parity with `kwavers-python`,
+  which still publishes the 3.8 floor; `requires-python`, the classifiers, and
+  the two "GIL build from 3.8" comments moved with it. The three routes that
+  would have kept 3.8 stay refuted rather than untried: `to_cow` and
+  `to_string_lossy` fall back to an owned copy under the limited API, which
+  copies *twice*; `PartialEq<str> for Bound<PyString>` routes through `to_cow()`
+  below 3.13, so comparing the eleven candidate names would convert the string
+  up to eleven times, each conversion allocating a Python bytes object —
+  strictly worse than the one `String` it replaces; and a cached Python
+  name-to-marker mapping needs a static holding interpreter-bound objects,
+  which this crate's free-threaded build turns into a correctness question
+  rather than a saving.
 - **The name-to-marker resolution has one owner** — it used to be a scan of
   `SemanticTag::ALL` written out in the consumer *and* again in the test that
   certifies the vocabulary. It is now `SemanticTag::from_name`, beside
@@ -356,6 +382,33 @@ the workspace; superseded on that axis by the snapshot below.
   separating the dimension-generic kernel from the affine temperature laws.
   The aggregate file is now module wiring, so the 40 identities still compile
   as one binary and no test count moves.
-- Not run here: the pytest suite and the wheel build (no interpreter-side
-  environment in this checkout), and `cargo deny` -- so supply-chain and
-  Python-side claims are not evidenced by this snapshot.
+- **The Python side is verified rather than deferred.** The `Python bindings`
+  job's own commands were reproduced in a project-local venv: `maturin build`
+  produced `aequitas_python-0.1.0-cp310-abi3-win_amd64.whl` and
+  `pytest tests -q` reported **2365 passed, 1 skipped**, the skip being
+  `test_free_threading.py:25: a GIL build has no GIL to keep off` -- the case
+  the job's 3.14t cell covers. `mypy` was installed too, so the stub-checking
+  tests ran rather than skipping. Three deviations, stated rather than glossed:
+  the wheel is a debug build, the interpreter is conda CPython 3.13.12 rather
+  than the job's 3.12, and `--locked` cannot be used inside the stack because
+  the Atlas overlay wants to rewrite `Cargo.lock` (restored byte-for-byte
+  afterwards). This is the record's only Python-visible evidence, and it is
+  what closes the production-leaf split's method-registration risk, which no
+  Rust test covers. The wheel was rebuilt at the `abi3-py310` floor and the
+  suite re-run unchanged (same 2365 passed, 1 skipped) after the floor moved,
+  and maturin tags the new wheel `cp310-abi3` ("Built wheel for abi3 Python ≥
+  3.10"), so the figures above are the ones this crate now publishes.
+- **Supply-chain is verified**, which it was not before this snapshot:
+  `cargo deny check` reports advisories, bans, licenses and sources all ok.
+  Its one `unmatched-source` warning is the overlay artifact the earlier
+  isolated audit predicted -- Eunomia resolves to a local tree, so `allow-git`
+  matches nothing -- and it also reports an informational duplicate `syn`
+  (2.0.119 through `eunomia-derive`, 3.0.4 through `bytemuck_derive`).
+- **The locked graph is verified**: `python scripts/lockfile.py --check`
+  resolves `Cargo.lock` under `--locked` with two first-party git sources,
+  which is the check the `Lockfile integrity` job runs.
+- Not evidenced here: the hosted runs themselves. At the time of writing this
+  repo had six runs queued and none in progress, so no `verify`, `Python
+  bindings` or `supply-chain` job had started on this branch; the local checks
+  above are the substitutes, and one hosted run did complete green earlier
+  (`Deploy mdBook`).

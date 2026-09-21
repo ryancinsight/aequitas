@@ -12,18 +12,19 @@ description = "SI physical quantities and dimensional arithmetic, backed by Rust
 authors = [{ name = "Ryan Clanton", email = "ryanclanton@outlook.com" }]
 license = { text = "MIT OR Apache-2.0" }
 readme = "README.md"
-# Matches the `abi3-py38` floor the extension is built against, and the floor
-# `kwavers-python` already publishes, so a user installing both never meets a
-# version-matrix gap.
-requires-python = ">=3.8"
+# The `abi3-py310` floor the extension is built against. It is the lowest
+# stable-ABI level that exposes `PyUnicode_AsUTF8AndSize`, which the read path
+# borrows a marker name through; below it that name is copied on every call.
+# Python 3.8 and 3.9 are past end of life, so no supported interpreter is
+# excluded. `kwavers-python` still publishes the 3.8 floor, so a 3.8 or 3.9
+# user can install it but not this distribution.
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -52,9 +53,9 @@ python_files = ["test_*.py"]
 addopts = "-v"
 
 [tool.mypy]
-# The analysis target, not the runtime floor: current mypy refuses to model
-# anything below 3.10, while `requires-python` above stays at the abi3 floor.
-# The stubs use `typing.Optional`/`List`/`Tuple` throughout, so they remain
-# valid on every version the wheel supports.
+# The analysis target, which now coincides with the runtime floor above --
+# current mypy refuses to model anything below 3.10 either way. The stubs use
+# `typing.Optional`/`List`/`Tuple` throughout, so they remain valid on every
+# version the wheel supports.
 python_version = "3.10"
 strict = true
