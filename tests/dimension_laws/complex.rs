@@ -1,10 +1,62 @@
 //! Complex-valued quantity and unit-conversion identities.
+//!
+//! A complex value is an axis of its own rather than a domain: the unit legs of
+//! these identities are electrical, mechanical and thermal, but what each
+//! asserts is that a marker's scale and the dimension algebra act on the real
+//! and quadrature components alike. Keeping them together is what makes that
+//! one claim readable in one place.
 
 use aequitas::systems::si::{
-    quantities::{ElectricCurrent, ElectricPotential, ElectricalImpedance, Length, Polarizability},
-    units::{FaradSquareMeter, Kilometer, Meter},
+    quantities::{
+        ElectricCurrent, ElectricPotential, ElectricalImpedance, FlexuralRigidity, Length,
+        MechanicalImpedance, Polarizability, VelocityPerTemperature, VolumeChargeDensity,
+    },
+    units::{
+        CoulombPerCubicMeter, FaradSquareMeter, Joule, KilogramPerSecond, Kilometer, Meter,
+        MeterPerSecondKelvin,
+    },
 };
 use eunomia::{Complex64, ComplexField};
+
+#[test]
+fn mechanical_impedance_keeps_its_force_per_velocity_unit_for_complex_values() {
+    use eunomia::Complex64;
+
+    let impedance = MechanicalImpedance::from_unit::<KilogramPerSecond>(Complex64::new(2.0, -3.0));
+
+    assert_eq!(
+        impedance.in_unit::<KilogramPerSecond>(),
+        Complex64::new(2.0, -3.0)
+    );
+}
+
+#[test]
+fn mems_quantities_preserve_complex_unit_components() {
+    use eunomia::Complex64;
+
+    let charge_density =
+        VolumeChargeDensity::from_unit::<CoulombPerCubicMeter>(Complex64::new(1.5, -0.25));
+    let rigidity = FlexuralRigidity::from_unit::<Joule>(Complex64::new(2.0, -0.5));
+
+    assert_eq!(
+        charge_density.in_unit::<CoulombPerCubicMeter>(),
+        Complex64::new(1.5, -0.25)
+    );
+    assert_eq!(rigidity.in_unit::<Joule>(), Complex64::new(2.0, -0.5));
+}
+
+#[test]
+fn thermal_coefficient_units_preserve_eunomia_complex_values() {
+    use eunomia::Complex64;
+
+    let coefficient: VelocityPerTemperature<Complex64> =
+        VelocityPerTemperature::from_unit::<MeterPerSecondKelvin>(Complex64::new(1.25, -0.5));
+
+    assert_eq!(
+        coefficient.in_unit::<MeterPerSecondKelvin>(),
+        Complex64::new(1.25, -0.5)
+    );
+}
 
 #[test]
 fn complex_phasors_preserve_units_and_dimension() {

@@ -4,6 +4,44 @@
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
 
+## AEQ-LAW-TREE-2026-09-21 — The law crate's test aggregate and additive kernel were horizontal [patch] — done 2026-09-21 <a id="aeq-law-tree-2026-09-21"></a>
+
+- **Outcome:** `tests/dimension_laws.rs` (439 lines) held 28 dimensional
+  identities in one scope spanning seven unit domains, so a thermal-coefficient
+  law sat beside a hydraulic one and the file was the member's largest. The
+  three `#[path]` leaves beside it (`dosimetry` 81, `angle` 57, `complex` 44)
+  already showed the intended grain: one leaf per subject, six tests or fewer.
+  `src/quantity/arithmetic/additive.rs` (169) had the same defect on the
+  production side -- it held the dimension-generic `Add`/`Sub` kernel and its
+  private witness trait together with the nine affine temperature impls, the
+  one case where addition changes the dimension it started from.
+- **Acceptance:** one leaf per SI unit domain, mirroring
+  `systems::si::units::{geometry,kinematics,mechanics,thermal,transport,electrical,radiation}`;
+  every test function preserved by name and body; the generic kernel and the
+  affine laws separated; the gate green.
+- **Non-goals:** `src/systems/si/{quantities,dimensions}.rs` and
+  `src/systems/si/units/scaled.rs` -- see the limits below.
+- Implemented:
+  `tests/dimension_laws/{kinematics,mechanics,thermal,transport,hydraulics,electrical,radiation}.rs`,
+  with the three complex-valued identities moved into `complex.rs` whose
+  charter already owned them and the aggregate reduced to `#[path]` wiring;
+  `src/quantity/arithmetic/affine.rs`, and `additive.rs` reduced to the kernel.
+- Evidence: 40 test functions identical by name before and after (28 in the
+  aggregate + 6/3/3 in the leaves), none added and none removed; nextest
+  239/239 unchanged; `python scripts/generate-surface.py check` reports all
+  four generated artifacts `current`; fmt, all-targets all-feature Clippy with
+  `-D warnings`, doctests, `RUSTDOCFLAGS=-D warnings` and
+  `--no-default-features` are green.
+- Limits: the two files the generator reads in place cannot be split.
+  `collect_quantities` reads *only* `systems/si/quantities.rs` **and in source
+  order**, so a leaf split would both empty the generator's input and silently
+  reorder the generated inventory; `collect_dimension_types` reads *only*
+  `systems/si/dimensions.rs`. Unit files are free by contrast: `collect_units`
+  and `collect_affine_units` glob `units/**/*.rs` recursively and sort what
+  they find, so unit leaves are order-independent. `scaled.rs` was left whole
+  deliberately, on the evidence in `gap_audit.md`'s non-gap list rather than on
+  its size alone.
+
 ## AEQ-PY-TESTS-SPLIT-2026-09-21 — The quantity test file crossed the structural target [patch] — done 2026-09-21 <a id="aeq-py-tests-split-2026-09-21"></a>
 
 - **Outcome:** `crates/aequitas-python/src/quantity/tests.rs` (576 lines) trips

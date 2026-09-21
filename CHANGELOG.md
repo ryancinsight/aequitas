@@ -6,6 +6,16 @@ All externally observable changes are recorded here.
 
 ### Changed
 
+- Split the law crate's dimensional-identity tests into one leaf per SI unit
+  domain (kinematics, mechanics, thermal, transport, hydraulics, electrical,
+  radiation), moved the complex-valued identities into the leaf that already
+  owns the value-kind axis, and reduced the aggregate file to `#[path]` wiring.
+  The affine temperature arithmetic is likewise separated from the
+  dimension-generic additive kernel it was mixed with. Nothing observable
+  changes: the 40 test functions are identical by name, the public quantity and
+  unit paths are untouched, and `scripts/generate-surface.py check` still
+  reports all four generated artifacts current.
+
 - Enable executable mdBook samples through the shared Atlas Pages workflow.
   The nine existing Rust fences now compile against the packaged `aequitas`
   library under the pinned Rust 1.97.0 gate instead of being silently ignored.

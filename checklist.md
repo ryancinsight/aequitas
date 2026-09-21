@@ -64,6 +64,30 @@ Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified gree
       `in_unit`'s scan 7.56 ns) in `gap_audit.md`; file the unreduced cost as
       `AEQ-PY-READ-COST-2026-09-21` rather than leaving it unstated.
 
+## AEQ-STRUCTURE-005 — Law-crate domain leaves and the affine arithmetic seam
+
+- [x] Split `tests/dimension_laws.rs` (439 lines, 28 tests) into one leaf per
+      unit domain -- kinematics, mechanics, thermal, transport, hydraulics,
+      electrical, radiation -- leaving the aggregate as `#[path]` wiring so the
+      identities still compile as one integration binary.
+- [x] Move the three complex-valued identities into `complex.rs`, whose
+      existing charter already owns the value-kind axis, instead of leaving
+      them under a domain leaf that does not describe them.
+- [x] Split `src/quantity/arithmetic/additive.rs` (169 lines) into the
+      dimension-generic kernel with its private `BaseAdditiveDimension`
+      witness, and `affine.rs` holding the nine temperature impls that relate
+      two dimensions instead of preserving one.
+- [x] Verify the function set is unchanged -- 40 test functions, identical
+      names and bodies before and after -- and that the generator's own `check`
+      mode still reports all four generated artifacts current.
+- [x] Run the gate: formatting, all-feature all-targets Clippy with
+      `-D warnings`, Nextest `239/239`, doctests, Rustdoc under `-D warnings`,
+      and `--no-default-features`. The overlay-generated lock is restored
+      byte-for-byte.
+- [x] Record why `systems/si/{quantities,dimensions}.rs` and `units/scaled.rs`
+      stay whole, citing the generator's read targets, so the same split is not
+      re-attempted on a pinned file.
+
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
 
 - [x] Re-run the locked provider gate set from an isolated checkout at the

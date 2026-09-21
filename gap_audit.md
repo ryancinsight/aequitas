@@ -151,6 +151,25 @@ fields to `pub(super)` and giving up the invariant. Evidence: 71 function
 definitions identical before and after, no generated surface touched, the same
 gate set green.
 
+The law crate had the same shape on both sides. `tests/dimension_laws.rs`
+(439 lines) held 28 identities spanning seven unit domains in one scope, so a
+thermal-coefficient law was ordered by nothing but the sequence in which it was
+written; the three `#[path]` leaves already beside it (`dosimetry` 81, `angle`
+57, `complex` 44) showed the intended grain. It is now one leaf per domain --
+`kinematics`, `mechanics`, `thermal`, `transport`, `hydraulics`, `electrical`,
+`radiation` -- with the three complex-valued identities moved into `complex.rs`,
+whose charter already owned the value-kind axis, and with the aggregate left as
+module wiring. On the production side,
+`quantity/arithmetic/additive.rs` (169 lines) held the dimension-generic
+`Add`/`Sub` kernel together with the nine affine temperature impls; it is now
+`additive.rs` (kernel plus its private `BaseAdditiveDimension` witness) and
+`affine.rs` (the one place where addition changes the dimension it started
+from, documented as such in the leaf). Evidence: 40 test functions identical by
+name, none added and none removed; nextest 239/239; the generator's `check` mode
+reports all four artifacts current; the same gate set green. Limits: this is
+restructuring, so it adds no coverage and changes no behaviour, and the Python
+side remains untested here as before.
+
 ## Deferred (documented boundary — see backlog.md)
 
 - Affine unit kinds and quantity kinds beyond the linear-unit slice.
@@ -232,6 +251,29 @@ one `read` between them.
 - **The binding has no `dyn`** — `crates/aequitas-python/src` contains no
   trait object; the generated class table is `&'static [Class]` of statically
   known functions.
+- **Two law-crate source files are pinned by the generator, not by taste** —
+  `scripts/generate-surface.py`'s `collect_quantities` reads *only*
+  `src/systems/si/quantities.rs`, and returns `(alias, dimension)` pairs **in
+  source order**; splitting it into leaves would empty the generator's input
+  (`SystemExit`, "no quantity aliases matched") and reordering it would
+  silently reorder the generated inventory. `collect_dimension_types` reads
+  *only* `src/systems/si/dimensions.rs` in the same way. Unit files are the
+  opposite and may be split freely: `collect_units` and `collect_affine_units`
+  glob `src/systems/si/units/**/*.rs` recursively and sort the markers they
+  find, so unit-leaf boundaries and file order do not reach the artifact.
+  Evidence: `python scripts/generate-surface.py check` reports all four
+  artifacts `current` after a production-side split.
+- **`src/systems/si/units/scaled.rs` (226 lines) is not a split candidate** —
+  it is 23 markers of one shape (doc comment, zero-sized struct, `Sealed`,
+  `LinearUnit` impl), under the 500-line target, and the sibling
+  `units/derived/` leaves do not encode a domain taxonomy a split could follow
+  consistently: `MolePerCubicMeter` sits in `kinematics.rs`, while
+  `KilogramPerCubicMeter`, `Watt` and `SquareMeterPerSecond` sit in
+  `thermal.rs` and `PerMeter`, `SquareMeter` and `SquareMeterPerKilogram` in
+  `geometry.rs`. A "by domain" split would either propagate those placements or
+  introduce a second taxonomy inside one directory; a homogeneous list is
+  cheaper to read than either, and `AEQ-STRUCTURE-002` already made the
+  domain-leaf decision for the implementations that carry behaviour.
 
 ## Current verified state (2026-08-12)
 
@@ -251,12 +293,20 @@ the workspace; superseded on that axis by the snapshot below.
   preserves its declaration set.
 - Formatting, all-targets all-feature Clippy with `-D warnings`, doctests (28
   passed, 2 ignored) and `cargo doc` with `RUSTDOCFLAGS=-D warnings`: pass.
-- `cargo check --no-default-features`: pass. Largest Rust file in the member:
-  439 lines (`tests/dimension_laws.rs`); no file exceeds 500, and the largest
-  production file in the binding is the generated `units/inventory.rs` at 278.
-- Production leaves added in this increment: `tag/{model,algebra,error}` and
-  `quantity/{model,construct,inspect,wire}`; `quantity/mod.rs` names the four
-  seams so a reader knows which leaf answers which question.
+- `cargo check --no-default-features`: pass. Largest file in the law crate:
+  231 lines (`tests/integer_powers.rs`), down from 439
+  (`tests/dimension_laws.rs`); no file exceeds 500, and the member's largest
+  file remains the generated binding `units/inventory.rs` at 278.
+- Production leaves added in the binding increment:
+  `tag/{model,algebra,error}` and `quantity/{model,construct,inspect,wire}`;
+  `quantity/mod.rs` names the four seams so a reader knows which leaf answers
+  which question.
+- Leaves added in the law-crate increment: seven domain leaves under
+  `tests/dimension_laws/`, the three complex-valued identities consolidated
+  into the existing `complex.rs`, and `quantity/arithmetic/{additive,affine}.rs`
+  separating the dimension-generic kernel from the affine temperature laws.
+  The aggregate file is now module wiring, so the 40 identities still compile
+  as one binary and no test count moves.
 - Not run here: the pytest suite and the wheel build (no interpreter-side
   environment in this checkout), and `cargo deny` -- so supply-chain and
   Python-side claims are not evidenced by this snapshot.
