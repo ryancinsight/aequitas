@@ -36,9 +36,10 @@ performance, memory usage, hardware behavior, or hosted release readiness.
   Pattern: a `paths` filter covers the dependency closure of its job.
 - **A bitwise claim tested on round numbers.** The binding's conversion test
   used seven hand-picked values and passed while 24 of 89 units differed from
-  the law crate by an ulp. Check: the seeded 4,107-value sweep in
-  `crates/aequitas-python/src/units/tests.rs` (3f93d67), shown to fail against
-  the old division. Pattern: an equality claim over a domain needs a sweep.
+  the law crate by an ulp. Check: the seeded 4,107-value sweep, introduced in
+  `crates/aequitas-python/src/units/tests.rs` (3f93d67) and now in
+  `units/tests/{fixtures,conversion}.rs`, shown to fail against the old
+  division. Pattern: an equality claim over a domain needs a sweep.
   That sweep ran only locally until #67 (next entry).
 - **A gate scoped by a comment, not by its commands.** `Cargo.toml` said gates
   covering the binding pass `--workspace`; no CI step did, and
@@ -109,7 +110,7 @@ path). Semantics-marked variants (`Angle::sqrt` → dimensionless,
 `ReciprocalVolume::cbrt` → reciprocal length) now compile with
 `BaseSemantics`-normalized output; no open rational-power gap remains.
 
-### Contract-shaped test leaves
+### Horizontal files split into leaves
 
 The binding's test surface was horizontal: one `tests.rs` per module holding
 every contract for that module. `units/tests.rs` kept the conversion sweep, the
@@ -134,6 +135,21 @@ exceeds 500 lines. Limits, stated rather than implied: this is test-module
 restructuring, so it adds no coverage, changes no behaviour and does not touch
 the generated surface; the pytest suite did not run in this checkout because no
 wheel is built here, so the Python-side tests are unverified by this increment.
+The test-tree half landed as
+[#75](https://github.com/ryancinsight/aequitas/pull/75) (`e129d80`).
+
+The production modules had the same shape and were split the same way:
+`tag/model.rs` (223 lines) and `quantity/model.rs` (219) became
+`tag/{model,algebra,error}` and `quantity/{model,construct,inspect,wire}`, with
+`quantity/mod.rs` naming the four seams. Two mechanics are worth reusing. A
+public module's doc may not link its private leaves -- `cargo doc -D warnings`
+fails on it -- so the module doc names them in plain text and the links stay in
+the leaves. And because field privacy is module-scoped, moving an `impl` into a
+sibling leaf makes direct private-field access illegal; the leaves reach the
+value through the accessors that already existed, rather than widening the
+fields to `pub(super)` and giving up the invariant. Evidence: 71 function
+definitions identical before and after, no generated surface touched, the same
+gate set green.
 
 ## Deferred (documented boundary — see backlog.md)
 

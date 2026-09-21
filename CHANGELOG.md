@@ -16,6 +16,18 @@ All externally observable changes are recorded here.
   retaining the existing public unit paths and transport boundary. The
   `derived` manifest now contains only module declarations and re-exports.
 
+- Split the binding's test files and production modules into one leaf per
+  contract, with shared fixtures defined once instead of per leaf. Nothing
+  observable changes: the declaration surface is identical (71 function
+  definitions, none added and none removed), the generated classes, stubs and
+  method behaviour are untouched, and the suite still reports 239 tests.
+
+- `DimensionTag::combine` takes its checked operation as a generic parameter
+  instead of a `fn` pointer, so both call sites monomorphize and the seven-axis
+  loop inlines. Not observable, and no speedup is claimed: the measured change
+  (1.70 ns to 1.79 ns per call) is noise for a loop of seven checked
+  additions, so the justification is that the abstraction is now zero-cost.
+
 ### Added
 
 - `pyaequitas` declares itself safe on free-threaded Python: importing it on

@@ -13,13 +13,16 @@
   tests remain, each body unchanged; the gate is green.
 - **Non-goals:** the generated `.pyi` stub (5,196 lines, not scanned) and any
   behavioural change to the binding.
-- Closed in `83e7293` (`test(python): Split quantity tests by contract`).
-  Verified at that head, independently of the commit message: the 576-line file
-  is gone and the member's largest Rust file is `tests/dimension_laws.rs` at 439,
-  so the 500-line class is at zero; fmt, `clippy -D warnings` over
-  `--workspace --all-targets --all-features`, nextest (239/239), doctests and
-  rustdoc are all green. The recorded atlas pin still trails this head by one
-  commit; advancing a gitlink is the sweep's step, not this item's.
+- Closed in `83e7293` (`test(python): Split quantity tests by contract`),
+  merged as [#75](https://github.com/ryancinsight/aequitas/pull/75) (`e129d80`
+  on `main`). Verified at that head, independently of the commit message: the
+  576-line file is gone and the member's largest Rust file is
+  `tests/dimension_laws.rs` at 439, so the 500-line class is at zero; fmt,
+  `clippy -D warnings` over `--workspace --all-targets --all-features`, nextest
+  (239/239), doctests and rustdoc are all green. Limits: the merge landed the
+  *test-tree* half only -- the two commits after it are unlanded, and the
+  recorded atlas pin trails member `main` by more than that; advancing a
+  gitlink is the sweep's step, not this item's.
 
 ## AEQ-PY-TEST-TREE-2026-09-21 — The remaining binding test modules were horizontal, not contract-shaped [patch] — done 2026-09-21 <a id="aeq-py-test-tree-2026-09-21"></a>
 
