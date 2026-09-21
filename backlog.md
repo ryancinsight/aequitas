@@ -133,7 +133,7 @@
   checked additions leaves no room for an indirect call to show, so the change
   stands on the abstraction being zero-cost, not on a number.
 
-## AEQ-PY-READ-COST-2026-09-21 — A Python-passed quantity costs 462 ns and two heap allocations per argument [perf] [minor] <a id="aeq-py-read-cost-2026-09-21"></a>
+## AEQ-PY-READ-COST-2026-09-21 — A Python-passed quantity costs 462 ns and two heap allocations per argument [perf] [minor] — done 2026-09-21 <a id="aeq-py-read-cost-2026-09-21"></a>
 
 - **Outcome:** `consumer::value::read` is the path a Python-passed quantity
   takes through a consumer's `Dimensioned<D>` parameter: `consumer` cannot
@@ -156,10 +156,12 @@
     `abi3-py38`, so the borrowed form does not exist; `to_cow` and
     `to_string_lossy` both fall back to an owned copy under the limited API.
     Borrowing needs the abi3 floor dropped: a distribution decision.
-  - *Replace the exponent `Vec<i64>` with a stack array* -- `Vec` accepts any
-    Python sequence of integers, a fixed-size array only its own shape, so
-    this narrows what the protocol admits. Behavioural, and the suite that
-    would justify it needs a wheel this checkout does not build.
+  - *Replace the exponent `Vec<i64>` with a stack array* -- refused as
+    *extraction*, not as a change: pyo3's `[T; N]` extractor goes through
+    `PySequence_Check`, so it admits a sequence where the vector admits any
+    iterable. It was solved the other way instead -- take the tag's members as
+    objects and fill the array by iteration, which admits exactly what the
+    vector did and drops the allocation anyway. See the closure below.
   - *Cache the `((int x 7), str)` tuple* -- would cut the getter's per-read
     work, but adds shared mutable state to a crate that ships for
     free-threaded CPython with `gil_used = false`. Needs an ADR.
@@ -170,6 +172,32 @@
   this path are free. `units::by_tag` is **1.24 ns/call** and the scan
   `Quantity::in_unit` performs is **7.56 ns/call**, both under 3% of one
   `read`, so no lookup index is warranted.
+- Closed 2026-09-21. Half the cost is gone and the remainder is a floor.
+  `read` now takes the tag's two members as objects and reads the exponents
+  straight into the fixed-width axis array, instead of unpacking
+  `(Vec<i64>, String)` and building a seven-element vector per call only to
+  copy it into that array and drop it: **2.000 -> 1.000 allocations per call**
+  on both `read` and `Dimensioned::<Length>::extract`, measured with a
+  temporary counting allocator that was deleted before the commit. The
+  acceptance criterion's second half is met as well -- the pytest suite ran
+  against a built wheel: **2365 passed, 1 skipped** on a project-local conda
+  CPython 3.13.12 venv, the skip being the GIL cell's expected
+  `test_free_threading.py` case. Limits: the allocation column is exact and
+  profile-independent, but the timing column was re-measured in the debug
+  profile only, so no release speedup is claimed -- the 462/315 ns in the
+  outcome above belong to the previous implementation -- and that wheel was a
+  debug build, built outside the stack's overlay because `--locked` cannot run
+  inside it.
+- The allocation that remains is the semantic marker's name, and it is the
+  `abi3-py38` floor rather than an open question. `to_str` does not exist under
+  the limited API; `to_cow` copies twice; and pyo3's
+  `PartialEq<str> for Bound<PyString>` -- the route that looks free -- routes
+  through `to_cow()` under `not(Py_3_13)`, so comparing eleven candidate names
+  would mean eleven conversions, each allocating a Python bytes object. A
+  cached Python name-to-marker mapping would remove it, at the price of a
+  static holding interpreter-bound objects, which the free-threaded build turns
+  into a correctness question rather than a saving. Removing it for real means
+  dropping the abi3 floor: a distribution decision this item does not own.
 
 ## AEQ-PY-FREE-THREADED-2026-09-11 — The binding re-enables the GIL on a free-threaded interpreter [minor] — done 2026-09-11 <a id="aeq-py-free-threaded-2026-09-11"></a>
 

@@ -356,6 +356,30 @@ the workspace; superseded on that axis by the snapshot below.
   separating the dimension-generic kernel from the affine temperature laws.
   The aggregate file is now module wiring, so the 40 identities still compile
   as one binary and no test count moves.
-- Not run here: the pytest suite and the wheel build (no interpreter-side
-  environment in this checkout), and `cargo deny` -- so supply-chain and
-  Python-side claims are not evidenced by this snapshot.
+- **The Python side is verified rather than deferred.** The `Python bindings`
+  job's own commands were reproduced in a project-local venv: `maturin build`
+  produced `aequitas_python-0.1.0-cp38-abi3-win_amd64.whl` and
+  `pytest tests -q` reported **2365 passed, 1 skipped**, the skip being
+  `test_free_threading.py:25: a GIL build has no GIL to keep off` -- the case
+  the job's 3.14t cell covers. `mypy` was installed too, so the stub-checking
+  tests ran rather than skipping. Three deviations, stated rather than glossed:
+  the wheel is a debug build, the interpreter is conda CPython 3.13.12 rather
+  than the job's 3.12, and `--locked` cannot be used inside the stack because
+  the Atlas overlay wants to rewrite `Cargo.lock` (restored byte-for-byte
+  afterwards). This is the record's only Python-visible evidence, and it is
+  what closes the production-leaf split's method-registration risk, which no
+  Rust test covers.
+- **Supply-chain is verified**, which it was not before this snapshot:
+  `cargo deny check` reports advisories, bans, licenses and sources all ok.
+  Its one `unmatched-source` warning is the overlay artifact the earlier
+  isolated audit predicted -- Eunomia resolves to a local tree, so `allow-git`
+  matches nothing -- and it also reports an informational duplicate `syn`
+  (2.0.119 through `eunomia-derive`, 3.0.4 through `bytemuck_derive`).
+- **The locked graph is verified**: `python scripts/lockfile.py --check`
+  resolves `Cargo.lock` under `--locked` with two first-party git sources,
+  which is the check the `Lockfile integrity` job runs.
+- Not evidenced here: the hosted runs themselves. At the time of writing this
+  repo had six runs queued and none in progress, so no `verify`, `Python
+  bindings` or `supply-chain` job had started on this branch; the local checks
+  above are the substitutes, and one hosted run did complete green earlier
+  (`Deploy mdBook`).
