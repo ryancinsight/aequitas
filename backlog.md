@@ -44,6 +44,79 @@
   it adds no coverage and changes no behaviour; the pytest suite was not run
   here (this checkout has no built wheel).
 
+## AEQ-PY-SEAM-2026-09-21 — The binding's production modules were horizontal, and no seam had a measured cost [patch] [perf] — done 2026-09-21 <a id="aeq-py-seam-2026-09-21"></a>
+
+- **Outcome:** `tag/model.rs` (223 lines) held the tag's identity, its algebra
+  and its two failure types in one scope, so the seven-element exponent loop
+  sat beside the rendering with nothing saying which the file was about;
+  `quantity/model.rs` (219) held the class declaration, the unit-resolution
+  constructors, every getter and the cross-extension wire form. Neither is one
+  contract: both are one value or one class whose `#[pymethods]` surface is
+  several.
+- **Acceptance:** one leaf per contract; private fields reachable only through
+  their accessors; the declaration surface preserved exactly; the gate green.
+- **Non-goals:** the generated `units/inventory.rs` and
+  `quantity/classes/inventory.rs`, the `.pyi` stubs, and any behavioural
+  change.
+- Implemented: `tag/{model,algebra,error}.rs` and
+  `quantity/{model,construct,inspect,wire}.rs`. The crate already opts into
+  `pyo3`'s `multiple-pymethods` "so neither file approaches the structural size
+  target", so this is the documented intent rather than a new pattern.
+- Evidence: 71 function definitions before and after the split -- none added,
+  none removed, names and bodies unchanged (splitting a value across sibling
+  leaves does make direct private-field access illegal, so the leaves reach the
+  magnitude and the tag through the existing accessors); 239/239 tests pass,
+  and fmt, `clippy -D warnings` over `--workspace --all-targets --all-features`,
+  doctests, `RUSTDOCFLAGS=-D warnings` and `--no-default-features` are green.
+  `cargo doc -D warnings` failed once mid-work because a public module doc
+  linked its private leaves; the links were dropped, not the lint.
+- The one codegen fix here is `DimensionTag::combine`, which took
+  `op: fn(i8, i8) -> Option<i8>` and so paid an indirect call per axis through
+  a loop the optimizer could not see into. It is generic and monomorphizes
+  now. **No speedup is claimed:** measured on a temporary release-mode probe
+  (counting global allocator, deleted after use), `tag_multiply` is 0.000
+  allocs/call at 1.70 ns before and 1.79 ns after -- a seven-element loop of
+  checked additions leaves no room for an indirect call to show, so the change
+  stands on the abstraction being zero-cost, not on a number.
+
+## AEQ-PY-READ-COST-2026-09-21 — A Python-passed quantity costs 462 ns and two heap allocations per argument [perf] [minor] <a id="aeq-py-read-cost-2026-09-21"></a>
+
+- **Outcome:** `consumer::value::read` is the path a Python-passed quantity
+  takes through a consumer's `Dimensioned<D>` parameter: `consumer` cannot
+  downcast to `PyQuantity` -- its own doc requires that a consumer which never
+  registers the class must not instantiate its type object -- so it reads the
+  object structurally instead. Measured in release mode: `read` **315 ns and
+  2.000 allocations per call**, `Dimensioned::extract` **462 ns and 2.000
+  allocations per argument**. The law crate allocates nothing at all: `src/`
+  contains no `Box`, `Vec`, `String` or `format!`, so the whole cost is at the
+  boundary.
+- **Acceptance:** the read path is allocation-free, or the alternative's cost
+  is measured before and after in release mode with the pytest suite run
+  against a built wheel.
+- **Non-goals:** the input set the wire form accepts, the abi3 floor, and the
+  two-wheel interoperability guarantee.
+- Every reduction was attempted and refused, and each reason is recorded
+  in-source on `read` rather than left implicit:
+  - *Borrow the marker instead of copying it* -- `PyStringMethods::to_str` is
+    gated on `any(Py_3_10, not(Py_LIMITED_API))` and this crate builds
+    `abi3-py38`, so the borrowed form does not exist; `to_cow` and
+    `to_string_lossy` both fall back to an owned copy under the limited API.
+    Borrowing needs the abi3 floor dropped: a distribution decision.
+  - *Replace the exponent `Vec<i64>` with a stack array* -- `Vec` accepts any
+    Python sequence of integers, a fixed-size array only its own shape, so
+    this narrows what the protocol admits. Behavioural, and the suite that
+    would justify it needs a wheel this checkout does not build.
+  - *Cache the `((int x 7), str)` tuple* -- would cut the getter's per-read
+    work, but adds shared mutable state to a crate that ships for
+    free-threaded CPython with `gil_used = false`. Needs an ADR.
+  - *Invert the dependency to give `consumer` a fast path* -- a hook
+    installed at module init keeps `PyQuantity` out of the consumer's
+    signatures, but it is the coupling that module forbids by construction.
+- Not a gap, and recorded so it is not re-measured: the linear scans around
+  this path are free. `units::by_tag` is **1.24 ns/call** and the scan
+  `Quantity::in_unit` performs is **7.56 ns/call**, both under 3% of one
+  `read`, so no lookup index is warranted.
+
 ## AEQ-PY-FREE-THREADED-2026-09-11 — The binding re-enables the GIL on a free-threaded interpreter [minor] — done 2026-09-11 <a id="aeq-py-free-threaded-2026-09-11"></a>
 
 - [#71](https://github.com/ryancinsight/aequitas/pull/71), merge `ae321ff`: `gil_used = false` on an audited module;

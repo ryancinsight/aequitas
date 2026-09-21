@@ -164,6 +164,30 @@ remains a development-only differential oracle.
 The architectural decision and source-level comparison are recorded in
 [ADR 0001](docs/adr/0001-aequitas-quantity-law.md).
 
+## Measured cost baseline (2026-09-21)
+
+Release-mode probe over the binding's dimension seam, temporary and not
+committed: a counting `GlobalAlloc` for the allocation columns, and a
+deterministic loop with `black_box` for the time columns. Method limits: one
+machine, one run per figure, and no statistical treatment -- read the numbers
+as magnitudes, not as benchmarks. The run-to-run spread observed across the
+three passes was 1.70-1.79 ns (`tag_multiply`), 296-315 ns (`read`) and
+448-462 ns (`dimensioned`), so differences under ~5% are noise.
+
+| Path | Rust heap allocations | Time |
+| --- | --- | --- |
+| `DimensionTag::multiply` | 0.000 /call | 1.7-1.8 ns/call |
+| `consumer::read` (structural, 2 attribute lookups) | 2.000 /call | 296-315 ns/call |
+| `Dimensioned::<Length>::extract`, native quantity | 2.000 /call | 448-462 ns/call |
+| `units::by_tag` | 0.000 /call | 1.24 ns/call |
+| the scan `Quantity::in_unit` performs | 0.000 /call | 7.56 ns/call |
+| law crate `src/` | none -- no `Box`, `Vec`, `String` or `format!` | -- |
+
+Conclusion: the boundary is where the money is, and it is the *structural read*
+that spends it, not the scans around it. `AEQ-PY-READ-COST-2026-09-21` carries
+the unreduced half; the scans are closed as not worth an index, at under 3% of
+one `read` between them.
+
 ## Verified non-gaps (do not chase)
 
 - **No imaginary SI dimension** — complex phasors carry one observable unit
@@ -178,6 +202,20 @@ The architectural decision and source-level comparison are recorded in
   `Quantity<T, D>` has the size and alignment of `T`; proven by layout tests.
 - **no_std** — the crate builds and checks with `--no-default-features`; the
   optional `serde` and `std` features are additive.
+- **Linear tag lookups are not a cost** — measured 1.24 ns for `units::by_tag`
+  and 7.56 ns for the scan `Quantity::in_unit` performs, against 296-315 ns for
+  one structural read. Seven of the 81 quantities share the first axis, so the
+  filter rejects almost every entry on one comparison; a sorted index or a hash
+  would buy nothing and add a second ordering to keep in step with the
+  generated inventory.
+- **The two `fn`-pointer tables in `quantity::classes::model` are not
+  removable indirection** — a `const` table cannot hold closures, and each
+  entry is already a distinct monomorphized function per generated class, so
+  the pointer is the table's representation, not an abstraction cost. The
+  removable one was `DimensionTag::combine`'s operation parameter, now generic.
+- **The binding has no `dyn`** — `crates/aequitas-python/src` contains no
+  trait object; the generated class table is `&'static [Class]` of statically
+  known functions.
 
 ## Current verified state (2026-08-12)
 
@@ -192,12 +230,17 @@ the workspace; superseded on that axis by the snapshot below.
 
 ## Current verified state (2026-09-21)
 
-- Nextest: 239/239 (workspace, all features), 0 skipped -- unchanged by the
-test-tree split, which preserves the function set.
+- Nextest: 239/239 (workspace, all features), 0 skipped -- unchanged across
+  both the test-tree split and the production-leaf split, each of which
+  preserves its declaration set.
 - Formatting, all-targets all-feature Clippy with `-D warnings`, doctests (28
   passed, 2 ignored) and `cargo doc` with `RUSTDOCFLAGS=-D warnings`: pass.
 - `cargo check --no-default-features`: pass. Largest Rust file in the member:
-  439 lines (`tests/dimension_laws.rs`); no file exceeds 500.
+  439 lines (`tests/dimension_laws.rs`); no file exceeds 500, and the largest
+  production file in the binding is the generated `units/inventory.rs` at 278.
+- Production leaves added in this increment: `tag/{model,algebra,error}` and
+  `quantity/{model,construct,inspect,wire}`; `quantity/mod.rs` names the four
+  seams so a reader knows which leaf answers which question.
 - Not run here: the pytest suite and the wheel build (no interpreter-side
   environment in this checkout), and `cargo deny` -- so supply-chain and
   Python-side claims are not evidenced by this snapshot.

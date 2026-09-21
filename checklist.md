@@ -43,6 +43,27 @@ Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified gree
       all-targets Clippy with `-D warnings`, Nextest `239/239`, doctests, and
       Rustdoc. The overlay-generated lock is restored byte-for-byte.
 
+## AEQ-STRUCTURE-004 — Production leaves and the tag algebra's indirection
+
+- [x] Split `tag/model.rs` (223 lines) into the tag's identity (`model`), its
+      exponent algebra (`algebra`) and its two refusals (`error`).
+- [x] Split `quantity/model.rs` (219 lines) by seam: the value (`model`), the
+      unit-resolution constructors (`construct`), the inspection getters
+      (`inspect`) and the cross-extension wire form with its read-back
+      (`wire`). Private fields stay private; the leaves use the accessors.
+- [x] Make `DimensionTag::combine` generic over its checked operation instead
+      of taking a `fn` pointer, so both call sites monomorphize and the
+      seven-axis loop inlines. No speedup is claimed: the probe measured
+      1.70 ns before and 1.79 ns after.
+- [x] Verify 71 function definitions before and after with none added or
+      removed, then run the gate: formatting, all-feature all-targets Clippy
+      with `-D warnings`, Nextest `239/239`, doctests, Rustdoc under
+      `-D warnings`, and `--no-default-features`.
+- [x] Record the measured cost of the structural read (`~315 ns`, 2
+      allocations per call) and of the scans around it (`by_tag` 1.24 ns,
+      `in_unit`'s scan 7.56 ns) in `gap_audit.md`; file the unreduced cost as
+      `AEQ-PY-READ-COST-2026-09-21` rather than leaving it unstated.
+
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
 
 - [x] Re-run the locked provider gate set from an isolated checkout at the

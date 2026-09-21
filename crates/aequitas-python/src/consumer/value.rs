@@ -13,6 +13,27 @@ use crate::tag::{AXES, DimensionTag, SemanticTag};
 /// [`DIMENSION_ATTR`], so an object built by a different version of this wheel
 /// -- or by hand in Python -- is accepted on equal terms.
 ///
+/// # Cost
+///
+/// Measured at the head that introduced this note: two Rust heap allocations
+/// and ~296 ns per call, and the Python-passed-quantity path through
+/// [`crate::consumer::Dimensioned`] is ~448 ns per argument because a native
+/// quantity takes this structural read rather than a downcast.
+///
+/// Both allocations were examined and neither can be removed without a
+/// decision this crate does not own:
+///
+/// - The marker name cannot be borrowed. `PyStringMethods::to_str` is gated on
+///   `any(Py_3_10, not(Py_LIMITED_API))`, and this crate builds `abi3-py38`, so
+///   the borrowed form does not exist here; `to_cow` and `to_string_lossy` both
+///   fall back to an owned copy under the limited API, which copies *twice*.
+///   Borrowing it means dropping the abi3 floor -- a distribution decision.
+/// - The exponent vector cannot be a stack array without narrowing the wire
+///   form: `Vec<i64>` accepts any Python sequence of integers, where a
+///   fixed-size array accepts only its own shape. That is a change to what the
+///   protocol admits, and the Python-side suite that would justify it needs a
+///   built wheel that this checkout does not have.
+///
 /// # Errors
 ///
 /// Raises `TypeError` when the object exposes neither attribute, and
