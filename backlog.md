@@ -4,6 +4,16 @@
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
 
+## AEQ-PY-TESTS-SPLIT-2026-09-21 — The quantity test file crossed the structural target [patch] <a id="aeq-py-tests-split-2026-09-21"></a>
+
+- **Outcome:** `crates/aequitas-python/src/quantity/tests.rs` (576 lines) trips
+  the stack's `oversized_files` class, which holds the member's pin behind the
+  atlas sweep.
+- **Acceptance:** no Rust file in the member exceeds the 500-line target; all 35
+  tests remain, each body unchanged; the gate is green.
+- **Non-goals:** the generated `.pyi` stub (5,196 lines, not scanned) and any
+  behavioural change to the binding.
+
 ## AEQ-PY-FREE-THREADED-2026-09-11 — The binding re-enables the GIL on a free-threaded interpreter [minor] — done 2026-09-11 <a id="aeq-py-free-threaded-2026-09-11"></a>
 
 - [#71](https://github.com/ryancinsight/aequitas/pull/71), merge `ae321ff`: `gil_used = false` on an audited module;
