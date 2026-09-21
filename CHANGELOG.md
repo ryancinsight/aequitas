@@ -71,6 +71,25 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- Compose SI units without adding a named marker per derived unit: `Unit<D>`
+  owns conversion scale and allocation-free symbol formatting, a blanket impl
+  derives it from `LinearUnit<D>`, and explicit impls cover `Product`,
+  `Quotient` and integer `Power`. Coherence stays closed because `LinearUnit`
+  now also requires a private named-marker trait, which additionally requires
+  `UnitDimension`, so a named unit cannot ship without its composition
+  dimension. Decision:
+  [ADR 0018](docs/adr/0018-unit-composition.md). Compound scales are
+  const-evaluated, inverse conversions divide natively instead of multiplying
+  by a reciprocal that could overflow first, and Celsius/Fahrenheit contribute
+  temperature *intervals* only -- a compound expression cannot construct an
+  affine absolute temperature. Nothing observable changes for named units:
+  `scripts/generate-surface.py check` still reports all four generated
+  artifacts current. Evidence: `tests/unit_composition.rs` compares named and
+  composed units, signed and zero powers, scaled denominators, nested
+  expressions, unnamed dimensions and formatting, and compile-fail doctests
+  reject dimension and semantic mismatches. No performance improvement is
+  claimed.
+
 - `pyaequitas` declares itself safe on free-threaded Python: importing it on
   3.14t leaves the GIL off, and CI runs the Python suite on a free-threaded
   interpreter.

@@ -88,6 +88,37 @@ Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified gree
       stay whole, citing the generator's read targets, so the same split is not
       re-attempted on a pinned file.
 
+## AEQ-UNIT-COMPOSITION — Compose linear units through dimensional algebra
+
+- [x] Give compound units a contract of their own: `Unit<D>` owns conversion
+      scale and symbol formatting, a blanket impl derives it from
+      `LinearUnit<D>`, and explicit impls cover `Product`, `Quotient` and
+      integer `Power`. `LinearUnit` additionally requires the private
+      named-marker trait, which itself requires `UnitDimension`, so a named
+      unit cannot ship without its composition dimension.
+- [x] Keep const evaluation total: compound scales are const-evaluated and
+      bounded, inverse conversions use native division rather than a
+      reciprocal that could overflow, and Celsius/Fahrenheit contribute
+      temperature intervals so no compound expression yields an affine
+      absolute temperature. Decision:
+      [ADR 0018](docs/adr/0018-unit-composition.md).
+- [x] Value tests cover named and composed equality, signed and zero powers,
+      scaled denominators, nested expressions, unnamed dimensions and
+      formatting, with compile-fail doctests for the dimension and semantic
+      refusals.
+- [x] Run the gate on the combined tree: formatting, all-feature all-targets
+      Clippy with `-D warnings`, Nextest `252/252`, doctests, Rustdoc under
+      `-D warnings`, `--no-default-features`, generated-surface freshness and
+      the SemVer check. The overlay-generated lock is restored byte-for-byte.
+- [x] Land it: composition committed on `codex/unit-composition` and landed as
+      [#78](https://github.com/ryancinsight/aequitas/pull/78) (`b159a32`),
+      with the binding leaves it composes into landed as
+      [#77](https://github.com/ryancinsight/aequitas/pull/77) (`3746b36`).
+      Limits: the design and its claims are the authoring session's -- what is
+      verified here is that the combined tree passes the gate set, and the
+      tests are the ones that came with it, so this adds no independent
+      coverage.
+
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
 
 - [x] Re-run the locked provider gate set from an isolated checkout at the

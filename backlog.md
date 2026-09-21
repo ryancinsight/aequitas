@@ -3,7 +3,9 @@
 <a id="AEQ-UNIT-COMPOSITION"></a>
 ## AEQ-UNIT-COMPOSITION — Compose linear units [minor] [arch]
 
-- status: review; integrator: codex-unit-composition
+- status: done 2026-09-21; integrator: codex-unit-composition
+- Landed: the whole lane merged as [#78](https://github.com/ryancinsight/aequitas/pull/78) (`b159a32`), which carried the composition commits and every structural leaf split on top of them; the lane's last three commits merged as [#77](https://github.com/ryancinsight/aequitas/pull/77) (`3746b36`), whose tree differs from #78's main in exactly one file, `.githooks/pre-push`, and in no Rust source.
+- Limits: the design and its claims are the authoring session's; what is verified here is that the combined tree passes fmt, `clippy -D warnings` over `--workspace --all-targets --all-features`, Nextest `252/252`, doctests, `Rustdoc -D warnings`, `--no-default-features`, generated-surface freshness and the SemVer check. The 208 lines of value tests are the change's own.
 - Outcome: product, quotient and integer-power units convert through normalized dimensions.
 - Scope: Rust unit contracts, SI marker dimensions, conversion, display, binding conversion parity, tests and documentation.
 - Non-goals: runtime parsing, Python expression API, automatic catalog-name formatting.
@@ -54,6 +56,7 @@
   they find, so unit leaves are order-independent. `scaled.rs` was left whole
   deliberately, on the evidence in `gap_audit.md`'s non-gap list rather than on
   its size alone.
+- Landed: [#78](https://github.com/ryancinsight/aequitas/pull/78) (`b159a32`).
 
 ## AEQ-PY-TESTS-SPLIT-2026-09-21 — The quantity test file crossed the structural target [patch] — done 2026-09-21 <a id="aeq-py-tests-split-2026-09-21"></a>
 
@@ -71,7 +74,10 @@
   `tests/dimension_laws.rs` at 439, so the 500-line class is at zero; fmt,
   `clippy -D warnings` over `--workspace --all-targets --all-features`, nextest
   (239/239), doctests and rustdoc are all green. Limits: the merge landed the
-  *test-tree* half only -- the two commits after it are unlanded, and the
+  *test-tree* half only; the rest of the lane has since landed as
+  [#78](https://github.com/ryancinsight/aequitas/pull/78) (`b159a32`) and
+  [#77](https://github.com/ryancinsight/aequitas/pull/77) (`3746b36`), so no
+  commit of this lane is unlanded, and the
   recorded atlas pin trails member `main` by more than that; advancing a
   gitlink is the sweep's step, not this item's.
 
@@ -97,6 +103,7 @@
   fmt, doctests and rustdoc green. Limits: this is test-module restructuring, so
   it adds no coverage and changes no behaviour; the pytest suite was not run
   here (this checkout has no built wheel).
+- Landed: [#78](https://github.com/ryancinsight/aequitas/pull/78) (`b159a32`).
 
 ## AEQ-PY-SEAM-2026-09-21 — The binding's production modules were horizontal, and no seam had a measured cost [patch] [perf] — done 2026-09-21 <a id="aeq-py-seam-2026-09-21"></a>
 
@@ -132,6 +139,7 @@
   allocs/call at 1.70 ns before and 1.79 ns after -- a seven-element loop of
   checked additions leaves no room for an indirect call to show, so the change
   stands on the abstraction being zero-cost, not on a number.
+- Landed: [#78](https://github.com/ryancinsight/aequitas/pull/78) (`b159a32`).
 
 ## AEQ-PY-READ-COST-2026-09-21 — A Python-passed quantity costs 462 ns and two heap allocations per argument [perf] [minor] — done 2026-09-21 <a id="aeq-py-read-cost-2026-09-21"></a>
 
@@ -194,6 +202,9 @@
   is now borrowed, so `read` allocates **nothing** (1.0000 -> 0.0000 per call).
   The three routes that would have held the floor at 3.8 stay refuted rather
   than untried, in `src/consumer/value.rs` and in the gap audit.
+- Landed: the exponents change with [#78](https://github.com/ryancinsight/aequitas/pull/78)
+  (`b159a32`) and the closure record with
+  [#77](https://github.com/ryancinsight/aequitas/pull/77) (`3746b36`).
 
 ## AEQ-PY-FLOOR-2026-09-21 — The Python floor is abi3-py38, and the read's last allocation is its price [api] [minor] — done 2026-09-21 <a id="aeq-py-floor-2026-09-21"></a>
 
@@ -224,6 +235,9 @@
   keeping 3.8 via `to_cow`, `to_string_lossy`, or `PartialEq<str>` (each
   copies, the last one up to eleven times per call).
 - No non-goals: this item is the floor itself.
+- Landed: [#77](https://github.com/ryancinsight/aequitas/pull/77) (`3746b36`),
+  which also carried the lane's last two record commits; its tree differs from
+  the lane head in `.githooks/pre-push` alone, and in no Rust source.
 
 ## AEQ-PY-FREE-THREADED-2026-09-11 — The binding re-enables the GIL on a free-threaded interpreter [minor] — done 2026-09-11 <a id="aeq-py-free-threaded-2026-09-11"></a>
 

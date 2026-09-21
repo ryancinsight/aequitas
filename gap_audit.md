@@ -182,6 +182,24 @@ reports all four artifacts current; the same gate set green. Limits: this is
 restructuring, so it adds no coverage and changes no behaviour, and the Python
 side remains untested here as before.
 
+The remainder of this lane landed as
+[#77](https://github.com/ryancinsight/aequitas/pull/77) (`3746b36`), which also
+carried the read's last allocation and the floor move; the composed-unit work
+beside it landed as [#78](https://github.com/ryancinsight/aequitas/pull/78)
+(`b159a32`). The merged tree differs from #77's own head in exactly one file,
+`.githooks/pre-push`, which the stack's hook sync had moved on, and in no Rust
+source -- so the pull request's gates and the merged tree's gates cover the same
+source. **Composed units are not a gap being closed but a capability added to a
+boundary that was already documented as deferred:** `src/unit/{expression,power,
+product,quotient}.rs` plus `UnitDimension` on the named markers, with the design
+and its claims the authoring session's ([ADR 0018](docs/adr/0018-unit-composition.md)).
+What is verified here is narrower and stated as such: the combined tree passes
+fmt, `clippy -D warnings` over `--workspace --all-targets --all-features`,
+nextest `252/252`, doctests, `cargo doc -D warnings`,
+`--no-default-features`, `generate-surface.py check` and the SemVer check. No
+performance improvement is claimed, and the 208 lines of value tests are the
+ones that came with the change.
+
 ## Deferred (documented boundary — see backlog.md)
 
 - Affine unit kinds and quantity kinds beyond the linear-unit slice.
@@ -199,6 +217,7 @@ remains a development-only differential oracle.
 | --- | --- | --- |
 | Compile-time dimensional analysis | Mature, broad implementation | Required; implemented through one generic dimension algebra |
 | Type-level rational/integer powers | Integer exponents only; `sqrt`/`powi` hardcoded per quantity | `SqrtDimension`, `CbrtDimension`, and generic `PowDimension<P>` raise the dimension itself at the type level (`powi::<P2>` of `Length` is `Area`) |
+| Composed units | One `Unit` type parameter per quantity, picked from generated markers | `Unit<D>` with `Product`, `Quotient` and integer `Power`: const-evaluated scale, allocation-free symbol, and no marker added to the catalog. The private named-marker bound requires `UnitDimension`, so a named unit cannot ship without its composition dimension |
 | SI and non-SI breadth | Extensive | Deliberately limited to current Atlas consumers |
 | Storage types | Closed macro-generated set of primitive, integer, rational, and complex types | Real quantities over Eunomia's `UnitScalar` implementations; complex phasors over `eunomia::Complex32`/`Complex64` |
 | Atlas datatype SSOT | Uses `num-traits` storage contracts | Uses Eunomia directly; defines no scalar vocabulary |
