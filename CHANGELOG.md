@@ -6,6 +6,18 @@ All externally observable changes are recorded here.
 
 ### Changed
 
+- The structural quantity read allocates once per call instead of twice. The
+  protocol tag's exponents are read straight into the fixed-width axis array,
+  where unpacking the tag as `(Vec<i64>, String)` built a seven-element vector
+  only to copy it and drop it. Nothing observable changes: the admitted input is
+  the same (any iterable of integers, not merely a sequence, which is why
+  pyo3's array extractor was rejected), and every error message this function
+  raises is unchanged, with the malformed-tag cases that assert them extended to
+  cover an over-long tag and an out-of-range exponent. Measured 2.000 -> 1.000
+  allocations per call on both the read and the `Dimensioned` path. The
+  remaining allocation is the semantic marker's name, which cannot be borrowed
+  under this crate's `abi3-py38` floor.
+
 - Split the law crate's dimensional-identity tests into one leaf per SI unit
   domain (kinematics, mechanics, thermal, transport, hydraulics, electrical,
   radiation), moved the complex-valued identities into the leaf that already

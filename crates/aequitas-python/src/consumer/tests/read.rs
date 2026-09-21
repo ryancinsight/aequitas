@@ -30,6 +30,15 @@ fn read_rejects_a_malformed_tag() {
         ("((1, 0, 0), 'base')", "exactly 7"),
         ("((1, 0, 0, 0, 0, 0, 0), 'vibes')", "vibes"),
         ("'not a tuple'", "must be"),
+        // The exponent count is read by hand rather than by extracting a
+        // vector, so both directions of the arity check are pinned: the count
+        // reported has to be the one the tag actually carried.
+        (
+            "((1, 0, 0, 0, 0, 0, 0, 0, 0), 'base')",
+            "exactly 7 exponents, got 9",
+        ),
+        ("((1, 0, 0, 0, 0, 0, 'x'), 'base')", "must be"),
+        ("((200, 0, 0, 0, 0, 0, 0), 'base')", "out of range"),
     ];
     Python::attach(|py| {
         for (tag, expected) in cases {

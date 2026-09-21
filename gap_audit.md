@@ -212,16 +212,24 @@ three passes was 1.70-1.79 ns (`tag_multiply`), 296-315 ns (`read`) and
 | Path | Rust heap allocations | Time |
 | --- | --- | --- |
 | `DimensionTag::multiply` | 0.000 /call | 1.7-1.8 ns/call |
-| `consumer::read` (structural, 2 attribute lookups) | 2.000 /call | 296-315 ns/call |
-| `Dimensioned::<Length>::extract`, native quantity | 2.000 /call | 448-462 ns/call |
+| `consumer::read` (structural, 2 attribute lookups) | 1.000 /call (was 2.000) | 296-315 ns/call |
+| `Dimensioned::<Length>::extract`, native quantity | 1.000 /call (was 2.000) | 448-462 ns/call |
 | `units::by_tag` | 0.000 /call | 1.24 ns/call |
 | the scan `Quantity::in_unit` performs | 0.000 /call | 7.56 ns/call |
 | law crate `src/` | none -- no `Box`, `Vec`, `String` or `format!` | -- |
 
+The allocation column was re-measured; the time column was not. A second probe
+run took both read paths from 2.000 to 1.000 allocations per call -- an
+allocation count does not depend on the build profile, unlike a timing -- and
+reported 1080 -> 909 ns for `read` and 1274 -> 1097 ns for `Dimensioned` **in
+the debug profile**, where the release figures in the table do not apply.
+
 Conclusion: the boundary is where the money is, and it is the *structural read*
-that spends it, not the scans around it. `AEQ-PY-READ-COST-2026-09-21` carries
-the unreduced half; the scans are closed as not worth an index, at under 3% of
-one `read` between them.
+that spends it, not the scans around it. One of its two allocations is now gone,
+and the one that remains is the semantic marker's name, which is the price of
+the `abi3-py38` floor rather than an oversight. `AEQ-PY-READ-COST-2026-09-21`
+carries the rest; the scans are closed as not worth an index, at under 3% of one
+`read` between them.
 
 ## Verified non-gaps (do not chase)
 
@@ -251,6 +259,18 @@ one `read` between them.
 - **The binding has no `dyn`** — `crates/aequitas-python/src` contains no
   trait object; the generated class table is `&'static [Class]` of statically
   known functions.
+- **The tag's exponent vector was removable, and pyo3's array extractor was
+  not the way to do it** — unpacking the tag as `(Vec<i64>, String)` built a
+  seven-element vector per read only to copy it into `[i8; AXES]` and drop it,
+  and taking the two members as objects removes that allocation without changing
+  what the protocol admits. `([i64; AXES], String)` is the shorter edit and was
+  rejected: pyo3's array extractor goes through `PySequence_Check`, which would
+  narrow the admitted input from *any iterable* to a sequence — silently, for a
+  tag shape this crate does not produce but does accept.
+  `read_rejects_a_malformed_tag` now pins both directions of the arity check
+  (`exactly 7 exponents, got 9` as well as the short case) plus the
+  out-of-range and unknown-semantics messages, so the diagnostics the rewrite
+  had to preserve are asserted rather than assumed.
 - **Two law-crate source files are pinned by the generator, not by taste** —
   `scripts/generate-surface.py`'s `collect_quantities` reads *only*
   `src/systems/si/quantities.rs`, and returns `(alias, dimension)` pairs **in
@@ -288,9 +308,12 @@ the workspace; superseded on that axis by the snapshot below.
 
 ## Current verified state (2026-09-21)
 
-- Nextest: 239/239 (workspace, all features), 0 skipped -- unchanged across
-  both the test-tree split and the production-leaf split, each of which
-  preserves its declaration set.
+- Nextest: 239/239 (workspace, all features), 0 skipped, for the content this
+  branch commits -- unchanged across the three leaf splits, each of which
+  preserves its declaration set. The structural-read change is verified on the
+  binding crate alone (92/92, up from 89 by the three malformed-tag cases that
+  came with it), because this checkout concurrently held unrelated uncommitted
+  work whose tests are no part of this record.
 - Formatting, all-targets all-feature Clippy with `-D warnings`, doctests (28
   passed, 2 ignored) and `cargo doc` with `RUSTDOCFLAGS=-D warnings`: pass.
 - `cargo check --no-default-features`: pass. Largest file in the law crate:
