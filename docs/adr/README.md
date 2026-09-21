@@ -26,3 +26,4 @@
 | [0015](0015-mems-physical-quantities.md) | Name MEMS charge-density and flexural-rigidity quantities | Accepted |
 | [0016](0016-python-quantity-binding.md) | Expose Aequitas quantities to Python as a runtime dimension tag | Proposed |
 | [0017](0017-independent-distribution-versioning.md) | Version and tag each distribution independently | Proposed |
+| [0018](0018-unit-composition.md) | Compose linear units through dimensional algebra | Accepted |

@@ -29,6 +29,7 @@ use crate::{
 #[derive(Clone, Copy, Debug, Default)]
 pub struct DegreeCelsius;
 impl Sealed for DegreeCelsius {}
+impl crate::unit::private::Named for DegreeCelsius {}
 
 impl AffineUnit<dimensions::ThermodynamicTemperature> for DegreeCelsius {
     const SYMBOL: &'static str = "degC";
@@ -37,6 +38,10 @@ impl AffineUnit<dimensions::ThermodynamicTemperature> for DegreeCelsius {
 }
 
 /// A Celsius *difference* is a kelvin difference, offset and all absent.
+impl crate::unit::UnitDimension for DegreeCelsius {
+    type Dimension = dimensions::TemperatureDifference;
+}
+
 impl LinearUnit<dimensions::TemperatureDifference> for DegreeCelsius {
     const SYMBOL: &'static str = "degC";
     const SCALE: f64 = 1.0;
@@ -50,6 +55,7 @@ impl LinearUnit<dimensions::TemperatureDifference> for DegreeCelsius {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct DegreeFahrenheit;
 impl Sealed for DegreeFahrenheit {}
+impl crate::unit::private::Named for DegreeFahrenheit {}
 
 impl AffineUnit<dimensions::ThermodynamicTemperature> for DegreeFahrenheit {
     const SYMBOL: &'static str = "degF";
@@ -59,6 +65,10 @@ impl AffineUnit<dimensions::ThermodynamicTemperature> for DegreeFahrenheit {
 }
 
 /// A Fahrenheit *difference* carries the degree size and none of the offset.
+impl crate::unit::UnitDimension for DegreeFahrenheit {
+    type Dimension = dimensions::TemperatureDifference;
+}
+
 impl LinearUnit<dimensions::TemperatureDifference> for DegreeFahrenheit {
     const SYMBOL: &'static str = "degF";
     const SCALE: f64 = 5.0 / 9.0;

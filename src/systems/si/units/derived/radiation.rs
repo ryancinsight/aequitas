@@ -7,6 +7,11 @@ use crate::{
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Gray;
 impl Sealed for Gray {}
+impl crate::unit::private::Named for Gray {}
+impl crate::unit::UnitDimension for Gray {
+    type Dimension = dimensions::AbsorbedDose;
+}
+
 impl LinearUnit<dimensions::AbsorbedDose> for Gray {
     const SYMBOL: &'static str = "Gy";
     const SCALE: f64 = 1.0;
@@ -16,6 +21,11 @@ impl LinearUnit<dimensions::AbsorbedDose> for Gray {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct JoulePerKilogram;
 impl Sealed for JoulePerKilogram {}
+impl crate::unit::private::Named for JoulePerKilogram {}
+impl crate::unit::UnitDimension for JoulePerKilogram {
+    type Dimension = dimensions::SpecificEnergy;
+}
+
 impl LinearUnit<dimensions::SpecificEnergy> for JoulePerKilogram {
     const SYMBOL: &'static str = "J/kg";
     const SCALE: f64 = 1.0;
@@ -25,6 +35,11 @@ impl LinearUnit<dimensions::SpecificEnergy> for JoulePerKilogram {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct GrayPerSecond;
 impl Sealed for GrayPerSecond {}
+impl crate::unit::private::Named for GrayPerSecond {}
+impl crate::unit::UnitDimension for GrayPerSecond {
+    type Dimension = dimensions::AbsorbedDoseRate;
+}
+
 impl LinearUnit<dimensions::AbsorbedDoseRate> for GrayPerSecond {
     const SYMBOL: &'static str = "Gy/s";
     const SCALE: f64 = 1.0;
@@ -37,6 +52,11 @@ impl LinearUnit<dimensions::AbsorbedDoseRate> for GrayPerSecond {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct WattPerKilogram;
 impl Sealed for WattPerKilogram {}
+impl crate::unit::private::Named for WattPerKilogram {}
+impl crate::unit::UnitDimension for WattPerKilogram {
+    type Dimension = dimensions::SpecificAbsorptionRate;
+}
+
 impl LinearUnit<dimensions::SpecificAbsorptionRate> for WattPerKilogram {
     const SYMBOL: &'static str = "W/kg";
     const SCALE: f64 = 1.0;

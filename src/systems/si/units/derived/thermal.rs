@@ -7,6 +7,11 @@ use crate::{
 #[derive(Clone, Copy, Debug, Default)]
 pub struct JoulePerCubicMeter;
 impl Sealed for JoulePerCubicMeter {}
+impl crate::unit::private::Named for JoulePerCubicMeter {}
+impl crate::unit::UnitDimension for JoulePerCubicMeter {
+    type Dimension = dimensions::EnergyPerVolume;
+}
+
 impl LinearUnit<dimensions::EnergyPerVolume> for JoulePerCubicMeter {
     const SYMBOL: &'static str = "J/m³";
     const SCALE: f64 = 1.0;
@@ -16,6 +21,11 @@ impl LinearUnit<dimensions::EnergyPerVolume> for JoulePerCubicMeter {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct JoulePerMole;
 impl Sealed for JoulePerMole {}
+impl crate::unit::private::Named for JoulePerMole {}
+impl crate::unit::UnitDimension for JoulePerMole {
+    type Dimension = dimensions::MolarEnergy;
+}
+
 impl LinearUnit<dimensions::MolarEnergy> for JoulePerMole {
     const SYMBOL: &'static str = "J/mol";
     const SCALE: f64 = 1.0;
@@ -25,6 +35,11 @@ impl LinearUnit<dimensions::MolarEnergy> for JoulePerMole {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct JoulePerMoleKelvin;
 impl Sealed for JoulePerMoleKelvin {}
+impl crate::unit::private::Named for JoulePerMoleKelvin {}
+impl crate::unit::UnitDimension for JoulePerMoleKelvin {
+    type Dimension = dimensions::MolarHeatCapacity;
+}
+
 impl LinearUnit<dimensions::MolarHeatCapacity> for JoulePerMoleKelvin {
     const SYMBOL: &'static str = "J/(mol·K)";
     const SCALE: f64 = 1.0;
@@ -34,6 +49,11 @@ impl LinearUnit<dimensions::MolarHeatCapacity> for JoulePerMoleKelvin {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Watt;
 impl Sealed for Watt {}
+impl crate::unit::private::Named for Watt {}
+impl crate::unit::UnitDimension for Watt {
+    type Dimension = dimensions::Power;
+}
+
 impl LinearUnit<dimensions::Power> for Watt {
     const SYMBOL: &'static str = "W";
     const SCALE: f64 = 1.0;
@@ -43,6 +63,11 @@ impl LinearUnit<dimensions::Power> for Watt {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct JoulePerKelvin;
 impl Sealed for JoulePerKelvin {}
+impl crate::unit::private::Named for JoulePerKelvin {}
+impl crate::unit::UnitDimension for JoulePerKelvin {
+    type Dimension = dimensions::HeatCapacity;
+}
+
 impl LinearUnit<dimensions::HeatCapacity> for JoulePerKelvin {
     const SYMBOL: &'static str = "J/K";
     const SCALE: f64 = 1.0;
@@ -52,6 +77,11 @@ impl LinearUnit<dimensions::HeatCapacity> for JoulePerKelvin {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct JoulePerKilogramKelvin;
 impl Sealed for JoulePerKilogramKelvin {}
+impl crate::unit::private::Named for JoulePerKilogramKelvin {}
+impl crate::unit::UnitDimension for JoulePerKilogramKelvin {
+    type Dimension = dimensions::SpecificHeatCapacity;
+}
+
 impl LinearUnit<dimensions::SpecificHeatCapacity> for JoulePerKilogramKelvin {
     const SYMBOL: &'static str = "J/(kg·K)";
     const SCALE: f64 = 1.0;
@@ -61,6 +91,11 @@ impl LinearUnit<dimensions::SpecificHeatCapacity> for JoulePerKilogramKelvin {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct WattPerMeterKelvin;
 impl Sealed for WattPerMeterKelvin {}
+impl crate::unit::private::Named for WattPerMeterKelvin {}
+impl crate::unit::UnitDimension for WattPerMeterKelvin {
+    type Dimension = dimensions::ThermalConductivity;
+}
+
 impl LinearUnit<dimensions::ThermalConductivity> for WattPerMeterKelvin {
     const SYMBOL: &'static str = "W/(m·K)";
     const SCALE: f64 = 1.0;
@@ -70,6 +105,11 @@ impl LinearUnit<dimensions::ThermalConductivity> for WattPerMeterKelvin {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct SquareMeterPerSecond;
 impl Sealed for SquareMeterPerSecond {}
+impl crate::unit::private::Named for SquareMeterPerSecond {}
+impl crate::unit::UnitDimension for SquareMeterPerSecond {
+    type Dimension = dimensions::ThermalDiffusivity;
+}
+
 impl LinearUnit<dimensions::ThermalDiffusivity> for SquareMeterPerSecond {
     const SYMBOL: &'static str = "m²/s";
     const SCALE: f64 = 1.0;
@@ -79,6 +119,11 @@ impl LinearUnit<dimensions::ThermalDiffusivity> for SquareMeterPerSecond {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct KilogramPerCubicMeter;
 impl Sealed for KilogramPerCubicMeter {}
+impl crate::unit::private::Named for KilogramPerCubicMeter {}
+impl crate::unit::UnitDimension for KilogramPerCubicMeter {
+    type Dimension = dimensions::MassDensity;
+}
+
 impl LinearUnit<dimensions::MassDensity> for KilogramPerCubicMeter {
     const SYMBOL: &'static str = "kg/m³";
     const SCALE: f64 = 1.0;
@@ -89,6 +134,11 @@ impl LinearUnit<dimensions::MassDensity> for KilogramPerCubicMeter {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct KilogramPerCubicMeterKelvin;
 impl Sealed for KilogramPerCubicMeterKelvin {}
+impl crate::unit::private::Named for KilogramPerCubicMeterKelvin {}
+impl crate::unit::UnitDimension for KilogramPerCubicMeterKelvin {
+    type Dimension = dimensions::MassDensityPerTemperature;
+}
+
 impl LinearUnit<dimensions::MassDensityPerTemperature> for KilogramPerCubicMeterKelvin {
     const SYMBOL: &'static str = "kg/(m³·K)";
     const SCALE: f64 = 1.0;

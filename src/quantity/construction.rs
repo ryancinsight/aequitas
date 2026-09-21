@@ -1,6 +1,6 @@
 use eunomia::{RealField, UnitScalar};
 
-use crate::unit::{AffineUnit, LinearUnit};
+use crate::unit::{AffineUnit, Unit};
 
 use super::Quantity;
 
@@ -16,9 +16,9 @@ where
     #[must_use]
     pub fn from_unit<U>(value: T) -> Self
     where
-        U: LinearUnit<D>,
+        U: Unit<D>,
     {
-        Self::from_base(U::to_base(value))
+        Self::from_base(value.scale_by_f64(U::SCALE))
     }
 
     /// Return the value expressed in linear unit `U`.
@@ -28,9 +28,9 @@ where
     #[must_use]
     pub fn in_unit<U>(&self) -> T
     where
-        U: LinearUnit<D>,
+        U: Unit<D>,
     {
-        U::from_base(self.value)
+        self.value.divide_by_f64(U::SCALE)
     }
 }
 

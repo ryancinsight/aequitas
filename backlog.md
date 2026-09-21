@@ -1,5 +1,19 @@
 # Aequitas backlog
 
+<a id="AEQ-UNIT-COMPOSITION"></a>
+## AEQ-UNIT-COMPOSITION — Compose linear units [minor] [arch]
+
+- status: in-progress; integrator: codex-unit-composition
+- Outcome: product, quotient and integer-power units convert through normalized dimensions.
+- Scope: Rust unit contracts, SI marker dimensions, conversion, display, binding conversion parity, tests and documentation.
+- Non-goals: runtime parsing, Python expression API, automatic catalog-name formatting.
+- Acceptance: named/composed equality, scaled/nested/unnamed expressions, scalar-generic behavior and compile-time dimension rejection.
+- Decision: [ADR 0018](docs/adr/0018-unit-composition.md).
+- Verification: nextest, doctests, no-std, clippy, rustdoc and generated-surface freshness.
+- Baseline: 147 core tests pass at 812f35e with pre-existing local Cargo.lock changes.
+- Dependency: [native inverse scaling](../eunomia/backlog.md#EUNOMIA-UNIT-DIVISION).
+- lease: codex-unit-composition src/unit src/systems/si/units src/quantity/construction.rs src/quantity/display.rs crates/aequitas-python/src/units/registry.rs tests/unit_composition.rs README.md docs/book docs/adr/0018-unit-composition.md 2026-09-21
+
 <a id="aeq-dimensioned-accepts-non-finite-2026-09-09"></a>
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
