@@ -1,10 +1,61 @@
 # Aequitas backlog
 
+<a id="AEQ-UNIT-COMPOSITION"></a>
+## AEQ-UNIT-COMPOSITION — Compose linear units [minor] [arch]
+
+- status: review; integrator: codex-unit-composition
+- Outcome: product, quotient and integer-power units convert through normalized dimensions.
+- Scope: Rust unit contracts, SI marker dimensions, conversion, display, binding conversion parity, tests and documentation.
+- Non-goals: runtime parsing, Python expression API, automatic catalog-name formatting.
+- Acceptance: named/composed equality, scaled/nested/unnamed expressions, scalar-generic behavior and compile-time dimension rejection.
+- Decision: [ADR 0018](docs/adr/0018-unit-composition.md).
+- Verification: 252 workspace tests, doctests, no-std, clippy, rustdoc, generated-surface freshness and SemVer checks pass; independent review passes.
+- Baseline: 147 core tests pass at 812f35e with pre-existing local Cargo.lock changes.
+- Dependency: [native inverse scaling](../eunomia/backlog.md#EUNOMIA-UNIT-DIVISION).
+
 <a id="aeq-dimensioned-accepts-non-finite-2026-09-09"></a>
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
 
-## AEQ-PY-TESTS-SPLIT-2026-09-21 — The quantity test file crossed the structural target [patch] <a id="aeq-py-tests-split-2026-09-21"></a>
+## AEQ-LAW-TREE-2026-09-21 — The law crate's test aggregate and additive kernel were horizontal [patch] — done 2026-09-21 <a id="aeq-law-tree-2026-09-21"></a>
+
+- **Outcome:** `tests/dimension_laws.rs` (439 lines) held 28 dimensional
+  identities in one scope spanning seven unit domains, so a thermal-coefficient
+  law sat beside a hydraulic one and the file was the member's largest. The
+  three `#[path]` leaves beside it (`dosimetry` 81, `angle` 57, `complex` 44)
+  already showed the intended grain: one leaf per subject, six tests or fewer.
+  `src/quantity/arithmetic/additive.rs` (169) had the same defect on the
+  production side -- it held the dimension-generic `Add`/`Sub` kernel and its
+  private witness trait together with the nine affine temperature impls, the
+  one case where addition changes the dimension it started from.
+- **Acceptance:** one leaf per SI unit domain, mirroring
+  `systems::si::units::{geometry,kinematics,mechanics,thermal,transport,electrical,radiation}`;
+  every test function preserved by name and body; the generic kernel and the
+  affine laws separated; the gate green.
+- **Non-goals:** `src/systems/si/{quantities,dimensions}.rs` and
+  `src/systems/si/units/scaled.rs` -- see the limits below.
+- Implemented:
+  `tests/dimension_laws/{kinematics,mechanics,thermal,transport,hydraulics,electrical,radiation}.rs`,
+  with the three complex-valued identities moved into `complex.rs` whose
+  charter already owned them and the aggregate reduced to `#[path]` wiring;
+  `src/quantity/arithmetic/affine.rs`, and `additive.rs` reduced to the kernel.
+- Evidence: 40 test functions identical by name before and after (28 in the
+  aggregate + 6/3/3 in the leaves), none added and none removed; nextest
+  239/239 unchanged; `python scripts/generate-surface.py check` reports all
+  four generated artifacts `current`; fmt, all-targets all-feature Clippy with
+  `-D warnings`, doctests, `RUSTDOCFLAGS=-D warnings` and
+  `--no-default-features` are green.
+- Limits: the two files the generator reads in place cannot be split.
+  `collect_quantities` reads *only* `systems/si/quantities.rs` **and in source
+  order**, so a leaf split would both empty the generator's input and silently
+  reorder the generated inventory; `collect_dimension_types` reads *only*
+  `systems/si/dimensions.rs`. Unit files are free by contrast: `collect_units`
+  and `collect_affine_units` glob `units/**/*.rs` recursively and sort what
+  they find, so unit leaves are order-independent. `scaled.rs` was left whole
+  deliberately, on the evidence in `gap_audit.md`'s non-gap list rather than on
+  its size alone.
+
+## AEQ-PY-TESTS-SPLIT-2026-09-21 — The quantity test file crossed the structural target [patch] — done 2026-09-21 <a id="aeq-py-tests-split-2026-09-21"></a>
 
 - **Outcome:** `crates/aequitas-python/src/quantity/tests.rs` (576 lines) trips
   the stack's `oversized_files` class, which holds the member's pin behind the
@@ -13,6 +64,112 @@
   tests remain, each body unchanged; the gate is green.
 - **Non-goals:** the generated `.pyi` stub (5,196 lines, not scanned) and any
   behavioural change to the binding.
+- Closed in `83e7293` (`test(python): Split quantity tests by contract`),
+  merged as [#75](https://github.com/ryancinsight/aequitas/pull/75) (`e129d80`
+  on `main`). Verified at that head, independently of the commit message: the
+  576-line file is gone and the member's largest Rust file is
+  `tests/dimension_laws.rs` at 439, so the 500-line class is at zero; fmt,
+  `clippy -D warnings` over `--workspace --all-targets --all-features`, nextest
+  (239/239), doctests and rustdoc are all green. Limits: the merge landed the
+  *test-tree* half only -- the two commits after it are unlanded, and the
+  recorded atlas pin trails member `main` by more than that; advancing a
+  gitlink is the sweep's step, not this item's.
+
+## AEQ-PY-TEST-TREE-2026-09-21 — The remaining binding test modules were horizontal, not contract-shaped [patch] — done 2026-09-21 <a id="aeq-py-test-tree-2026-09-21"></a>
+
+- **Outcome:** `tag/tests.rs` (220 lines, 18 tests), `units/tests.rs` (348, 15)
+  and `consumer/tests.rs` (386, 18) each hold several contracts in one scope, so
+  a claim and the fixture that certifies it sit apart: `units/tests.rs` keeps
+  the conversion sweep where the sweep-input fixture is defined, and
+  `consumer/tests.rs` keeps the finiteness policy, the structural read and the
+  `Dimensioned` parameter together. None of the three trips `oversized_files`,
+  so no instrument reported it -- the defect is the shape, not the count.
+- **Acceptance:** one leaf per contract, each mirroring the seam it covers;
+  shared fixtures defined once; every test function preserved by name and body;
+  the gate green.
+- **Non-goals:** the production modules (no behaviour or public-surface change)
+  and the generated `.pyi` stub.
+- Implemented: `tag/tests/{derivation,semantics,algebra,rendering}.rs`,
+  `units/tests/{fixtures,inventory,lookup,conversion,affine}.rs` and
+  `consumer/tests/{fixtures,dimensioned,read,finiteness}.rs`. Evidence: the
+  51 test functions are identical by name before and after (18/15/18); nextest
+  239/239; `clippy -D warnings` over `--workspace --all-targets --all-features`;
+  fmt, doctests and rustdoc green. Limits: this is test-module restructuring, so
+  it adds no coverage and changes no behaviour; the pytest suite was not run
+  here (this checkout has no built wheel).
+
+## AEQ-PY-SEAM-2026-09-21 — The binding's production modules were horizontal, and no seam had a measured cost [patch] [perf] — done 2026-09-21 <a id="aeq-py-seam-2026-09-21"></a>
+
+- **Outcome:** `tag/model.rs` (223 lines) held the tag's identity, its algebra
+  and its two failure types in one scope, so the seven-element exponent loop
+  sat beside the rendering with nothing saying which the file was about;
+  `quantity/model.rs` (219) held the class declaration, the unit-resolution
+  constructors, every getter and the cross-extension wire form. Neither is one
+  contract: both are one value or one class whose `#[pymethods]` surface is
+  several.
+- **Acceptance:** one leaf per contract; private fields reachable only through
+  their accessors; the declaration surface preserved exactly; the gate green.
+- **Non-goals:** the generated `units/inventory.rs` and
+  `quantity/classes/inventory.rs`, the `.pyi` stubs, and any behavioural
+  change.
+- Implemented: `tag/{model,algebra,error}.rs` and
+  `quantity/{model,construct,inspect,wire}.rs`. The crate already opts into
+  `pyo3`'s `multiple-pymethods` "so neither file approaches the structural size
+  target", so this is the documented intent rather than a new pattern.
+- Evidence: 71 function definitions before and after the split -- none added,
+  none removed, names and bodies unchanged (splitting a value across sibling
+  leaves does make direct private-field access illegal, so the leaves reach the
+  magnitude and the tag through the existing accessors); 239/239 tests pass,
+  and fmt, `clippy -D warnings` over `--workspace --all-targets --all-features`,
+  doctests, `RUSTDOCFLAGS=-D warnings` and `--no-default-features` are green.
+  `cargo doc -D warnings` failed once mid-work because a public module doc
+  linked its private leaves; the links were dropped, not the lint.
+- The one codegen fix here is `DimensionTag::combine`, which took
+  `op: fn(i8, i8) -> Option<i8>` and so paid an indirect call per axis through
+  a loop the optimizer could not see into. It is generic and monomorphizes
+  now. **No speedup is claimed:** measured on a temporary release-mode probe
+  (counting global allocator, deleted after use), `tag_multiply` is 0.000
+  allocs/call at 1.70 ns before and 1.79 ns after -- a seven-element loop of
+  checked additions leaves no room for an indirect call to show, so the change
+  stands on the abstraction being zero-cost, not on a number.
+
+## AEQ-PY-READ-COST-2026-09-21 — A Python-passed quantity costs 462 ns and two heap allocations per argument [perf] [minor] <a id="aeq-py-read-cost-2026-09-21"></a>
+
+- **Outcome:** `consumer::value::read` is the path a Python-passed quantity
+  takes through a consumer's `Dimensioned<D>` parameter: `consumer` cannot
+  downcast to `PyQuantity` -- its own doc requires that a consumer which never
+  registers the class must not instantiate its type object -- so it reads the
+  object structurally instead. Measured in release mode: `read` **315 ns and
+  2.000 allocations per call**, `Dimensioned::extract` **462 ns and 2.000
+  allocations per argument**. The law crate allocates nothing at all: `src/`
+  contains no `Box`, `Vec`, `String` or `format!`, so the whole cost is at the
+  boundary.
+- **Acceptance:** the read path is allocation-free, or the alternative's cost
+  is measured before and after in release mode with the pytest suite run
+  against a built wheel.
+- **Non-goals:** the input set the wire form accepts, the abi3 floor, and the
+  two-wheel interoperability guarantee.
+- Every reduction was attempted and refused, and each reason is recorded
+  in-source on `read` rather than left implicit:
+  - *Borrow the marker instead of copying it* -- `PyStringMethods::to_str` is
+    gated on `any(Py_3_10, not(Py_LIMITED_API))` and this crate builds
+    `abi3-py38`, so the borrowed form does not exist; `to_cow` and
+    `to_string_lossy` both fall back to an owned copy under the limited API.
+    Borrowing needs the abi3 floor dropped: a distribution decision.
+  - *Replace the exponent `Vec<i64>` with a stack array* -- `Vec` accepts any
+    Python sequence of integers, a fixed-size array only its own shape, so
+    this narrows what the protocol admits. Behavioural, and the suite that
+    would justify it needs a wheel this checkout does not build.
+  - *Cache the `((int x 7), str)` tuple* -- would cut the getter's per-read
+    work, but adds shared mutable state to a crate that ships for
+    free-threaded CPython with `gil_used = false`. Needs an ADR.
+  - *Invert the dependency to give `consumer` a fast path* -- a hook
+    installed at module init keeps `PyQuantity` out of the consumer's
+    signatures, but it is the coupling that module forbids by construction.
+- Not a gap, and recorded so it is not re-measured: the linear scans around
+  this path are free. `units::by_tag` is **1.24 ns/call** and the scan
+  `Quantity::in_unit` performs is **7.56 ns/call**, both under 3% of one
+  `read`, so no lookup index is warranted.
 
 ## AEQ-PY-FREE-THREADED-2026-09-11 — The binding re-enables the GIL on a free-threaded interpreter [minor] — done 2026-09-11 <a id="aeq-py-free-threaded-2026-09-11"></a>
 

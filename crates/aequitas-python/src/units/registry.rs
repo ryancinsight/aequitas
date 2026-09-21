@@ -43,21 +43,14 @@ impl Unit {
 
     /// Convert a canonical SI base value into this unit.
     ///
-    /// Multiplies by the reciprocal rather than dividing, because that is what
-    /// `LinearUnit::from_base` does -- `value.scale_by_f64(1.0 / SCALE)`, which
-    /// Eunomia implements as a multiplication. Division rounds differently
-    /// whenever `1 / scale` is inexact, which is almost every decimal scale: a
-    /// seeded sweep of 20,009 values found 24 of the 89 units disagreeing with
-    /// the law crate by an ulp, millimetres in an eighth of all values, while
-    /// the seven hand-picked points the tests used happened to agree.
+    /// Uses native division, matching the law crate's rounding
+    /// and avoiding an overflowing intermediate reciprocal.
     #[inline]
     #[must_use]
     pub fn from_base(&self, base: f64) -> f64 {
-        // `AffineUnit::from_base` subtracts the offset first, then scales by
-        // the reciprocal, like its linear sibling.
         match self.offset {
-            None => base * (1.0 / self.scale),
-            Some(offset) => (base - offset) * (1.0 / self.scale),
+            None => base / self.scale,
+            Some(offset) => (base - offset) / self.scale,
         }
     }
 }

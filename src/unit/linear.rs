@@ -8,7 +8,7 @@ use super::private;
 /// Aequitas so the positive, finite scale invariant and symbol vocabulary have
 /// one owner. Affine units use [`AffineUnit`](super::AffineUnit), whose zero
 /// is not the base unit's zero.
-pub trait LinearUnit<D>: private::Sealed {
+pub trait LinearUnit<D>: private::Named {
     /// Unit abbreviation.
     const SYMBOL: &'static str;
 
@@ -34,6 +34,6 @@ pub trait LinearUnit<D>: private::Sealed {
     where
         T: UnitScalar,
     {
-        value.scale_by_f64(1.0 / Self::SCALE)
+        value.divide_by_f64(Self::SCALE)
     }
 }

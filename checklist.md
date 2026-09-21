@@ -27,6 +27,67 @@ Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified gree
       `127/127`, and workspace doctests (`17` pass, `9` compile-fail pass,
       `1` ignored). Restore the overlay-generated lock and leave it unchanged.
 
+## AEQ-STRUCTURE-003 — Contract-shaped binding test leaves
+
+- [x] Split `tag/tests.rs` by contract: derivation from the law crate's type
+      parameters, the semantic marker, the exponent algebra with its refusals,
+      and the wire form.
+- [x] Split `units/tests.rs` by contract: the shape of the generated inventory,
+      lookup and aliasing, the differential conversion oracle, and the affine
+      offset contract. `assert_exact`, `assert_exact_in_context` and `sweep()`
+      are defined once, in the `fixtures` leaf.
+- [x] Split `consumer/tests.rs` by seam: the shared object builder and foreign
+      quantities, `Dimensioned`, the structural read, and the finiteness policy.
+- [x] Verify the function set is unchanged -- 51 functions, identical names
+      before and after -- and run the gate: formatting, all-feature
+      all-targets Clippy with `-D warnings`, Nextest `239/239`, doctests, and
+      Rustdoc. The overlay-generated lock is restored byte-for-byte.
+
+## AEQ-STRUCTURE-004 — Production leaves and the tag algebra's indirection
+
+- [x] Split `tag/model.rs` (223 lines) into the tag's identity (`model`), its
+      exponent algebra (`algebra`) and its two refusals (`error`).
+- [x] Split `quantity/model.rs` (219 lines) by seam: the value (`model`), the
+      unit-resolution constructors (`construct`), the inspection getters
+      (`inspect`) and the cross-extension wire form with its read-back
+      (`wire`). Private fields stay private; the leaves use the accessors.
+- [x] Make `DimensionTag::combine` generic over its checked operation instead
+      of taking a `fn` pointer, so both call sites monomorphize and the
+      seven-axis loop inlines. No speedup is claimed: the probe measured
+      1.70 ns before and 1.79 ns after.
+- [x] Verify 71 function definitions before and after with none added or
+      removed, then run the gate: formatting, all-feature all-targets Clippy
+      with `-D warnings`, Nextest `239/239`, doctests, Rustdoc under
+      `-D warnings`, and `--no-default-features`.
+- [x] Record the measured cost of the structural read (`~315 ns`, 2
+      allocations per call) and of the scans around it (`by_tag` 1.24 ns,
+      `in_unit`'s scan 7.56 ns) in `gap_audit.md`; file the unreduced cost as
+      `AEQ-PY-READ-COST-2026-09-21` rather than leaving it unstated.
+
+## AEQ-STRUCTURE-005 — Law-crate domain leaves and the affine arithmetic seam
+
+- [x] Split `tests/dimension_laws.rs` (439 lines, 28 tests) into one leaf per
+      unit domain -- kinematics, mechanics, thermal, transport, hydraulics,
+      electrical, radiation -- leaving the aggregate as `#[path]` wiring so the
+      identities still compile as one integration binary.
+- [x] Move the three complex-valued identities into `complex.rs`, whose
+      existing charter already owns the value-kind axis, instead of leaving
+      them under a domain leaf that does not describe them.
+- [x] Split `src/quantity/arithmetic/additive.rs` (169 lines) into the
+      dimension-generic kernel with its private `BaseAdditiveDimension`
+      witness, and `affine.rs` holding the nine temperature impls that relate
+      two dimensions instead of preserving one.
+- [x] Verify the function set is unchanged -- 40 test functions, identical
+      names and bodies before and after -- and that the generator's own `check`
+      mode still reports all four generated artifacts current.
+- [x] Run the gate: formatting, all-feature all-targets Clippy with
+      `-D warnings`, Nextest `239/239`, doctests, Rustdoc under `-D warnings`,
+      and `--no-default-features`. The overlay-generated lock is restored
+      byte-for-byte.
+- [x] Record why `systems/si/{quantities,dimensions}.rs` and `units/scaled.rs`
+      stay whole, citing the generator's read targets, so the same split is not
+      re-attempted on a pinned file.
+
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
 
 - [x] Re-run the locked provider gate set from an isolated checkout at the

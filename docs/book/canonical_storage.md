@@ -20,8 +20,10 @@ converts a stored base value for presentation or serialization. Arithmetic
 therefore has one unambiguous representation: a solver can multiply and divide
 base values without carrying unit-specific branches through its hot path.
 
-The conversion is expressed through Eunomia's `UnitScalar::scale_by_f64`
-seam. It works for the provider's supported real and complex scalar types and
+The conversion uses Eunomia's `UnitScalar::scale_by_f64` for input and
+`UnitScalar::divide_by_f64` for output. Native division avoids overflowing
+an intermediate reciprocal for subnormal conversion coefficients. The seam
+works for the provider's supported real and complex scalar types and
 is monomorphized with the quantity. For compile-time unit constants, ordinary
 optimization can fold the scale multiplication; there is no dynamic dispatch
 or allocation.

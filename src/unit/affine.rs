@@ -60,6 +60,6 @@ pub trait AffineUnit<D>: private::Sealed {
     where
         T: UnitScalar + RealField,
     {
-        (value - T::ONE.scale_by_f64(Self::OFFSET)).scale_by_f64(1.0 / Self::SCALE)
+        (value - T::ONE.scale_by_f64(Self::OFFSET)).divide_by_f64(Self::SCALE)
     }
 }

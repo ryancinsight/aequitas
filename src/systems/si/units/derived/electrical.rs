@@ -7,6 +7,11 @@ use crate::{
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Coulomb;
 impl Sealed for Coulomb {}
+impl crate::unit::private::Named for Coulomb {}
+impl crate::unit::UnitDimension for Coulomb {
+    type Dimension = dimensions::ElectricCharge;
+}
+
 impl LinearUnit<dimensions::ElectricCharge> for Coulomb {
     const SYMBOL: &'static str = "C";
     const SCALE: f64 = 1.0;
@@ -16,6 +21,11 @@ impl LinearUnit<dimensions::ElectricCharge> for Coulomb {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct CoulombPerCubicMeter;
 impl Sealed for CoulombPerCubicMeter {}
+impl crate::unit::private::Named for CoulombPerCubicMeter {}
+impl crate::unit::UnitDimension for CoulombPerCubicMeter {
+    type Dimension = dimensions::VolumeChargeDensity;
+}
+
 impl LinearUnit<dimensions::VolumeChargeDensity> for CoulombPerCubicMeter {
     const SYMBOL: &'static str = "C/m³";
     const SCALE: f64 = 1.0;
@@ -25,6 +35,11 @@ impl LinearUnit<dimensions::VolumeChargeDensity> for CoulombPerCubicMeter {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Volt;
 impl Sealed for Volt {}
+impl crate::unit::private::Named for Volt {}
+impl crate::unit::UnitDimension for Volt {
+    type Dimension = dimensions::ElectricPotential;
+}
+
 impl LinearUnit<dimensions::ElectricPotential> for Volt {
     const SYMBOL: &'static str = "V";
     const SCALE: f64 = 1.0;
@@ -34,6 +49,11 @@ impl LinearUnit<dimensions::ElectricPotential> for Volt {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Siemens;
 impl Sealed for Siemens {}
+impl crate::unit::private::Named for Siemens {}
+impl crate::unit::UnitDimension for Siemens {
+    type Dimension = dimensions::ElectricConductance;
+}
+
 impl LinearUnit<dimensions::ElectricConductance> for Siemens {
     const SYMBOL: &'static str = "S";
     const SCALE: f64 = 1.0;
@@ -43,6 +63,11 @@ impl LinearUnit<dimensions::ElectricConductance> for Siemens {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct SiemensPerMeter;
 impl Sealed for SiemensPerMeter {}
+impl crate::unit::private::Named for SiemensPerMeter {}
+impl crate::unit::UnitDimension for SiemensPerMeter {
+    type Dimension = dimensions::ElectricalConductivity;
+}
+
 impl LinearUnit<dimensions::ElectricalConductivity> for SiemensPerMeter {
     const SYMBOL: &'static str = "S/m";
     const SCALE: f64 = 1.0;
@@ -52,6 +77,11 @@ impl LinearUnit<dimensions::ElectricalConductivity> for SiemensPerMeter {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Ohm;
 impl Sealed for Ohm {}
+impl crate::unit::private::Named for Ohm {}
+impl crate::unit::UnitDimension for Ohm {
+    type Dimension = dimensions::ElectricalImpedance;
+}
+
 impl LinearUnit<dimensions::ElectricalImpedance> for Ohm {
     const SYMBOL: &'static str = "Ω";
     const SCALE: f64 = 1.0;
@@ -61,6 +91,11 @@ impl LinearUnit<dimensions::ElectricalImpedance> for Ohm {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Farad;
 impl Sealed for Farad {}
+impl crate::unit::private::Named for Farad {}
+impl crate::unit::UnitDimension for Farad {
+    type Dimension = dimensions::Capacitance;
+}
+
 impl LinearUnit<dimensions::Capacitance> for Farad {
     const SYMBOL: &'static str = "F";
     const SCALE: f64 = 1.0;
@@ -70,6 +105,11 @@ impl LinearUnit<dimensions::Capacitance> for Farad {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct FaradSquareMeter;
 impl Sealed for FaradSquareMeter {}
+impl crate::unit::private::Named for FaradSquareMeter {}
+impl crate::unit::UnitDimension for FaradSquareMeter {
+    type Dimension = dimensions::Polarizability;
+}
+
 impl LinearUnit<dimensions::Polarizability> for FaradSquareMeter {
     const SYMBOL: &'static str = "F·m²";
     const SCALE: f64 = 1.0;
@@ -79,6 +119,11 @@ impl LinearUnit<dimensions::Polarizability> for FaradSquareMeter {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct PascalPerVolt;
 impl Sealed for PascalPerVolt {}
+impl crate::unit::private::Named for PascalPerVolt {}
+impl crate::unit::UnitDimension for PascalPerVolt {
+    type Dimension = dimensions::PressurePerElectricPotential;
+}
+
 impl LinearUnit<dimensions::PressurePerElectricPotential> for PascalPerVolt {
     const SYMBOL: &'static str = "Pa/V";
     const SCALE: f64 = 1.0;
@@ -88,6 +133,11 @@ impl LinearUnit<dimensions::PressurePerElectricPotential> for PascalPerVolt {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct VoltPerPascal;
 impl Sealed for VoltPerPascal {}
+impl crate::unit::private::Named for VoltPerPascal {}
+impl crate::unit::UnitDimension for VoltPerPascal {
+    type Dimension = dimensions::ElectricPotentialPerPressure;
+}
+
 impl LinearUnit<dimensions::ElectricPotentialPerPressure> for VoltPerPascal {
     const SYMBOL: &'static str = "V/Pa";
     const SCALE: f64 = 1.0;
@@ -97,6 +147,11 @@ impl LinearUnit<dimensions::ElectricPotentialPerPressure> for VoltPerPascal {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MeterPerVolt;
 impl Sealed for MeterPerVolt {}
+impl crate::unit::private::Named for MeterPerVolt {}
+impl crate::unit::UnitDimension for MeterPerVolt {
+    type Dimension = dimensions::LengthPerElectricPotential;
+}
+
 impl LinearUnit<dimensions::LengthPerElectricPotential> for MeterPerVolt {
     const SYMBOL: &'static str = "m/V";
     const SCALE: f64 = 1.0;
@@ -106,6 +161,11 @@ impl LinearUnit<dimensions::LengthPerElectricPotential> for MeterPerVolt {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct CoulombPerSquareMeter;
 impl Sealed for CoulombPerSquareMeter {}
+impl crate::unit::private::Named for CoulombPerSquareMeter {}
+impl crate::unit::UnitDimension for CoulombPerSquareMeter {
+    type Dimension = dimensions::SurfaceChargeDensity;
+}
+
 impl LinearUnit<dimensions::SurfaceChargeDensity> for CoulombPerSquareMeter {
     const SYMBOL: &'static str = "C/m²";
     const SCALE: f64 = 1.0;

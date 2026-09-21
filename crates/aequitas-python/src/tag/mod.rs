@@ -6,12 +6,15 @@
 //! exponents and the semantic discriminant, derived from the type parameters
 //! rather than transcribed beside them.
 
+mod algebra;
 mod derive;
+mod error;
 mod model;
 mod semantics;
 
 pub use derive::TaggedDimension;
-pub use model::{AXES, AXIS_SYMBOLS, DimensionTag, TagNotDivisible, TagOverflow};
+pub use error::{TagNotDivisible, TagOverflow};
+pub use model::{AXES, AXIS_SYMBOLS, DimensionTag};
 pub use semantics::{SemanticTag, TaggedSemantics};
 
 #[cfg(test)]

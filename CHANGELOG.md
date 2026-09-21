@@ -6,6 +6,36 @@ All externally observable changes are recorded here.
 
 ### Changed
 
+- The semantic wire name resolves to its marker through
+  `SemanticTag::from_name`, beside `name()` in the file that owns the
+  vocabulary, instead of a scan of `SemanticTag::ALL` that both the consumer and
+  the round-trip test wrote out separately. Not observable — the same names map
+  to the same markers and an unknown name raises the same `ValueError` — but the
+  mapping now has one owner, and the read path resolves it by `match` rather
+  than by comparing every earlier name.
+
+- The structural quantity read allocates once per call instead of twice. The
+  protocol tag's exponents are read straight into the fixed-width axis array,
+  where unpacking the tag as `(Vec<i64>, String)` built a seven-element vector
+  only to copy it and drop it. Nothing observable changes: the admitted input is
+  the same (any iterable of integers, not merely a sequence, which is why
+  pyo3's array extractor was rejected), and every error message this function
+  raises is unchanged, with the malformed-tag cases that assert them extended to
+  cover an over-long tag and an out-of-range exponent. Measured 2.000 -> 1.000
+  allocations per call on both the read and the `Dimensioned` path. The
+  remaining allocation is the semantic marker's name, which cannot be borrowed
+  under this crate's `abi3-py38` floor.
+
+- Split the law crate's dimensional-identity tests into one leaf per SI unit
+  domain (kinematics, mechanics, thermal, transport, hydraulics, electrical,
+  radiation), moved the complex-valued identities into the leaf that already
+  owns the value-kind axis, and reduced the aggregate file to `#[path]` wiring.
+  The affine temperature arithmetic is likewise separated from the
+  dimension-generic additive kernel it was mixed with. Nothing observable
+  changes: the 40 test functions are identical by name, the public quantity and
+  unit paths are untouched, and `scripts/generate-surface.py check` still
+  reports all four generated artifacts current.
+
 - Enable executable mdBook samples through the shared Atlas Pages workflow.
   The nine existing Rust fences now compile against the packaged `aequitas`
   library under the pinned Rust 1.97.0 gate instead of being silently ignored.
@@ -15,6 +45,18 @@ All externally observable changes are recorded here.
 - Split the derived SI unit implementations into domain-named modules while
   retaining the existing public unit paths and transport boundary. The
   `derived` manifest now contains only module declarations and re-exports.
+
+- Split the binding's test files and production modules into one leaf per
+  contract, with shared fixtures defined once instead of per leaf. Nothing
+  observable changes: the declaration surface is identical (71 function
+  definitions, none added and none removed), the generated classes, stubs and
+  method behaviour are untouched, and the suite still reports 239 tests.
+
+- `DimensionTag::combine` takes its checked operation as a generic parameter
+  instead of a `fn` pointer, so both call sites monomorphize and the seven-axis
+  loop inlines. Not observable, and no speedup is claimed: the measured change
+  (1.70 ns to 1.79 ns per call) is noise for a loop of seven checked
+  additions, so the justification is that the abstraction is now zero-cost.
 
 ### Added
 

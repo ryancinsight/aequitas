@@ -14,7 +14,8 @@ use pyo3::prelude::*;
 use pyo3::types::{PyAny, PyFloat, PyInt};
 
 use super::classes::Classed;
-use super::model::{PyQuantity, extract_quantity};
+use super::model::PyQuantity;
+use super::wire::extract_quantity;
 use crate::consumer::carries_protocol;
 use crate::tag::DimensionTag;
 

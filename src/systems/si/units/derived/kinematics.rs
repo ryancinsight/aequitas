@@ -7,6 +7,11 @@ use crate::{
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MolePerCubicMeter;
 impl Sealed for MolePerCubicMeter {}
+impl crate::unit::private::Named for MolePerCubicMeter {}
+impl crate::unit::UnitDimension for MolePerCubicMeter {
+    type Dimension = dimensions::MolarConcentration;
+}
+
 impl LinearUnit<dimensions::MolarConcentration> for MolePerCubicMeter {
     const SYMBOL: &'static str = "mol/m³";
     const SCALE: f64 = 1.0;
@@ -17,6 +22,11 @@ impl LinearUnit<dimensions::MolarConcentration> for MolePerCubicMeter {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MolePerCubicMeterSecond;
 impl Sealed for MolePerCubicMeterSecond {}
+impl crate::unit::private::Named for MolePerCubicMeterSecond {}
+impl crate::unit::UnitDimension for MolePerCubicMeterSecond {
+    type Dimension = dimensions::ReactionRate;
+}
+
 impl LinearUnit<dimensions::ReactionRate> for MolePerCubicMeterSecond {
     const SYMBOL: &'static str = "mol/(m³·s)";
     const SCALE: f64 = 1.0;
@@ -26,6 +36,11 @@ impl LinearUnit<dimensions::ReactionRate> for MolePerCubicMeterSecond {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MolePerSquareMeterSecond;
 impl Sealed for MolePerSquareMeterSecond {}
+impl crate::unit::private::Named for MolePerSquareMeterSecond {}
+impl crate::unit::UnitDimension for MolePerSquareMeterSecond {
+    type Dimension = dimensions::MolarFlux;
+}
+
 impl LinearUnit<dimensions::MolarFlux> for MolePerSquareMeterSecond {
     const SYMBOL: &'static str = "mol/(m²·s)";
     const SCALE: f64 = 1.0;
@@ -35,6 +50,11 @@ impl LinearUnit<dimensions::MolarFlux> for MolePerSquareMeterSecond {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MeterPerSecond;
 impl Sealed for MeterPerSecond {}
+impl crate::unit::private::Named for MeterPerSecond {}
+impl crate::unit::UnitDimension for MeterPerSecond {
+    type Dimension = dimensions::Velocity;
+}
+
 impl LinearUnit<dimensions::Velocity> for MeterPerSecond {
     const SYMBOL: &'static str = "m/s";
     const SCALE: f64 = 1.0;
@@ -45,6 +65,11 @@ impl LinearUnit<dimensions::Velocity> for MeterPerSecond {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MeterPerSecondKelvin;
 impl Sealed for MeterPerSecondKelvin {}
+impl crate::unit::private::Named for MeterPerSecondKelvin {}
+impl crate::unit::UnitDimension for MeterPerSecondKelvin {
+    type Dimension = dimensions::VelocityPerTemperature;
+}
+
 impl LinearUnit<dimensions::VelocityPerTemperature> for MeterPerSecondKelvin {
     const SYMBOL: &'static str = "m/(s·K)";
     const SCALE: f64 = 1.0;
@@ -54,6 +79,11 @@ impl LinearUnit<dimensions::VelocityPerTemperature> for MeterPerSecondKelvin {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MeterPerSecondSquared;
 impl Sealed for MeterPerSecondSquared {}
+impl crate::unit::private::Named for MeterPerSecondSquared {}
+impl crate::unit::UnitDimension for MeterPerSecondSquared {
+    type Dimension = dimensions::Acceleration;
+}
+
 impl LinearUnit<dimensions::Acceleration> for MeterPerSecondSquared {
     const SYMBOL: &'static str = "m/s²";
     const SCALE: f64 = 1.0;
@@ -63,6 +93,11 @@ impl LinearUnit<dimensions::Acceleration> for MeterPerSecondSquared {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Hertz;
 impl Sealed for Hertz {}
+impl crate::unit::private::Named for Hertz {}
+impl crate::unit::UnitDimension for Hertz {
+    type Dimension = dimensions::Frequency;
+}
+
 impl LinearUnit<dimensions::Frequency> for Hertz {
     const SYMBOL: &'static str = "Hz";
     const SCALE: f64 = 1.0;
@@ -72,6 +107,11 @@ impl LinearUnit<dimensions::Frequency> for Hertz {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct PerSecond;
 impl Sealed for PerSecond {}
+impl crate::unit::private::Named for PerSecond {}
+impl crate::unit::UnitDimension for PerSecond {
+    type Dimension = dimensions::ReciprocalTime;
+}
+
 impl LinearUnit<dimensions::ReciprocalTime> for PerSecond {
     const SYMBOL: &'static str = "s⁻¹";
     const SCALE: f64 = 1.0;

@@ -7,6 +7,23 @@ monomorphizes arithmetic over `T: eunomia::FloatElement`.
 The name refers to Aequitas, the Roman personification of equity and fair
 measure.
 
+Named units and compound expressions construct the same quantity type:
+
+```rust
+use aequitas::{
+    systems::si::{quantities::Intensity, units::{Watt, Meter, WattPerSquareMeter}},
+    unit::{Product, Quotient},
+};
+
+let intensity = Intensity::from_unit::<Quotient<Watt, Product<Meter, Meter>>>(12.0_f64);
+assert_eq!(intensity, Intensity::from_unit::<WattPerSquareMeter>(12.0));
+```
+
+`Product`, `Quotient` and `Power<Unit, typenum::P2>` compose dimensions and
+conversion factors, including expressions without catalog names. Compound
+formatting preserves the expression; it does not select a named-unit spelling.
+See [linear units](docs/book/linear_units.md) and [the composition decision](docs/adr/0018-unit-composition.md).
+
 ## Boundary
 
 Aequitas owns:
@@ -14,10 +31,11 @@ Aequitas owns:
 - type-level SI dimensions;
 - transparent physical quantities;
 - linear SI units and conversion factors;
+- compound unit expressions and unit-aware quantity display;
 - dimensional arithmetic over Eunomia scalar types.
 
 Aequitas does not own scalar representations, arrays, solvers, material laws,
-domain validation, formatting, persistence, or accelerator execution. Those
+domain validation, application presentation, persistence, or accelerator execution. Those
 remain with Eunomia, Leto, domain packages, Consus, and Hephaestus.
 
 The SI surface includes thermophysical dimensions needed by material
