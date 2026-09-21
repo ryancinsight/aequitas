@@ -27,6 +27,22 @@ Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified gree
       `127/127`, and workspace doctests (`17` pass, `9` compile-fail pass,
       `1` ignored). Restore the overlay-generated lock and leave it unchanged.
 
+## AEQ-STRUCTURE-003 — Contract-shaped binding test leaves
+
+- [x] Split `tag/tests.rs` by contract: derivation from the law crate's type
+      parameters, the semantic marker, the exponent algebra with its refusals,
+      and the wire form.
+- [x] Split `units/tests.rs` by contract: the shape of the generated inventory,
+      lookup and aliasing, the differential conversion oracle, and the affine
+      offset contract. `assert_exact`, `assert_exact_in_context` and `sweep()`
+      are defined once, in the `fixtures` leaf.
+- [x] Split `consumer/tests.rs` by seam: the shared object builder and foreign
+      quantities, `Dimensioned`, the structural read, and the finiteness policy.
+- [x] Verify the function set is unchanged -- 51 functions, identical names
+      before and after -- and run the gate: formatting, all-feature
+      all-targets Clippy with `-D warnings`, Nextest `239/239`, doctests, and
+      Rustdoc. The overlay-generated lock is restored byte-for-byte.
+
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
 
 - [x] Re-run the locked provider gate set from an isolated checkout at the

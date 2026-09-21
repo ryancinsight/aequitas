@@ -109,6 +109,32 @@ path). Semantics-marked variants (`Angle::sqrt` → dimensionless,
 `ReciprocalVolume::cbrt` → reciprocal length) now compile with
 `BaseSemantics`-normalized output; no open rational-power gap remains.
 
+### Contract-shaped test leaves
+
+The binding's test surface was horizontal: one `tests.rs` per module holding
+every contract for that module. `units/tests.rs` kept the conversion sweep, the
+sweep-input fixture and the affine offset contract in one scope, so the fixture
+that certifies the oracle sat beside the claim it certifies rather than beneath
+it; `consumer/tests.rs` kept the finiteness policy, the structural read and the
+`Dimensioned` parameter together, which is how a `NaN` arm and a sentinel arm
+that must never unify end up ordered by nothing. A 576-line
+`quantity/tests.rs` was the same shape and crossed the stack's 500-line
+structural target, which is what made the shape visible at all -- the other
+three are 220, 348 and 386 lines, so no instrument reported them.
+
+Resolved by splitting each file into one leaf per contract, with shared
+fixtures held once: `quantity/tests/{arithmetic,comparison,construction,protocol,fixtures}`
+(`83e7293`), `tag/tests/{derivation,semantics,algebra,rendering}`,
+`units/tests/{inventory,lookup,conversion,affine,fixtures}` and
+`consumer/tests/{dimensioned,read,finiteness,fixtures}`. Evidence: 51 test
+functions identical by name before and after the second split (18/15/18);
+nextest 239/239; `clippy -D warnings` over `--workspace --all-targets
+--all-features`; fmt, doctests and rustdoc green; no Rust file in the member
+exceeds 500 lines. Limits, stated rather than implied: this is test-module
+restructuring, so it adds no coverage, changes no behaviour and does not touch
+the generated surface; the pytest suite did not run in this checkout because no
+wheel is built here, so the Python-side tests are unverified by this increment.
+
 ## Deferred (documented boundary — see backlog.md)
 
 - Affine unit kinds and quantity kinds beyond the linear-unit slice.
@@ -160,3 +186,18 @@ The architectural decision and source-level comparison are recorded in
   re-verified in the Atlas foundation gate sweep.
 - Doctests and rustdoc: pass; `cargo deny check`: clean.
 - No `TODO`/`FIXME`/`unimplemented!` markers remain in `src/`.
+
+The 59/59 above is a default-feature count from an older head and understates
+the workspace; superseded on that axis by the snapshot below.
+
+## Current verified state (2026-09-21)
+
+- Nextest: 239/239 (workspace, all features), 0 skipped -- unchanged by the
+test-tree split, which preserves the function set.
+- Formatting, all-targets all-feature Clippy with `-D warnings`, doctests (28
+  passed, 2 ignored) and `cargo doc` with `RUSTDOCFLAGS=-D warnings`: pass.
+- `cargo check --no-default-features`: pass. Largest Rust file in the member:
+  439 lines (`tests/dimension_laws.rs`); no file exceeds 500.
+- Not run here: the pytest suite and the wheel build (no interpreter-side
+  environment in this checkout), and `cargo deny` -- so supply-chain and
+  Python-side claims are not evidenced by this snapshot.

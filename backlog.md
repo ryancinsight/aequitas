@@ -4,7 +4,7 @@
 
 <a id="aeq-recurseml-permanently-red-2026-09-09"></a>
 
-## AEQ-PY-TESTS-SPLIT-2026-09-21 — The quantity test file crossed the structural target [patch] <a id="aeq-py-tests-split-2026-09-21"></a>
+## AEQ-PY-TESTS-SPLIT-2026-09-21 — The quantity test file crossed the structural target [patch] — done 2026-09-21 <a id="aeq-py-tests-split-2026-09-21"></a>
 
 - **Outcome:** `crates/aequitas-python/src/quantity/tests.rs` (576 lines) trips
   the stack's `oversized_files` class, which holds the member's pin behind the
@@ -13,6 +13,36 @@
   tests remain, each body unchanged; the gate is green.
 - **Non-goals:** the generated `.pyi` stub (5,196 lines, not scanned) and any
   behavioural change to the binding.
+- Closed in `83e7293` (`test(python): Split quantity tests by contract`).
+  Verified at that head, independently of the commit message: the 576-line file
+  is gone and the member's largest Rust file is `tests/dimension_laws.rs` at 439,
+  so the 500-line class is at zero; fmt, `clippy -D warnings` over
+  `--workspace --all-targets --all-features`, nextest (239/239), doctests and
+  rustdoc are all green. The recorded atlas pin still trails this head by one
+  commit; advancing a gitlink is the sweep's step, not this item's.
+
+## AEQ-PY-TEST-TREE-2026-09-21 — The remaining binding test modules were horizontal, not contract-shaped [patch] — done 2026-09-21 <a id="aeq-py-test-tree-2026-09-21"></a>
+
+- **Outcome:** `tag/tests.rs` (220 lines, 18 tests), `units/tests.rs` (348, 15)
+  and `consumer/tests.rs` (386, 18) each hold several contracts in one scope, so
+  a claim and the fixture that certifies it sit apart: `units/tests.rs` keeps
+  the conversion sweep where the sweep-input fixture is defined, and
+  `consumer/tests.rs` keeps the finiteness policy, the structural read and the
+  `Dimensioned` parameter together. None of the three trips `oversized_files`,
+  so no instrument reported it -- the defect is the shape, not the count.
+- **Acceptance:** one leaf per contract, each mirroring the seam it covers;
+  shared fixtures defined once; every test function preserved by name and body;
+  the gate green.
+- **Non-goals:** the production modules (no behaviour or public-surface change)
+  and the generated `.pyi` stub.
+- Implemented: `tag/tests/{derivation,semantics,algebra,rendering}.rs`,
+  `units/tests/{fixtures,inventory,lookup,conversion,affine}.rs` and
+  `consumer/tests/{fixtures,dimensioned,read,finiteness}.rs`. Evidence: the
+  51 test functions are identical by name before and after (18/15/18); nextest
+  239/239; `clippy -D warnings` over `--workspace --all-targets --all-features`;
+  fmt, doctests and rustdoc green. Limits: this is test-module restructuring, so
+  it adds no coverage and changes no behaviour; the pytest suite was not run
+  here (this checkout has no built wheel).
 
 ## AEQ-PY-FREE-THREADED-2026-09-11 — The binding re-enables the GIL on a free-threaded interpreter [minor] — done 2026-09-11 <a id="aeq-py-free-threaded-2026-09-11"></a>
 
