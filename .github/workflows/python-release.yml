@@ -67,7 +67,17 @@ jobs:
       # A release matrix reports every target's failure in one run.
       fail-fast: false
       matrix:
-        platform: [linux-x86_64, linux-aarch64, macos-arm64, windows-x86_64]
+        platform:
+          - linux-x86_64
+          - linux-aarch64
+          - macos-arm64
+          # The last x86_64 macOS image Actions publishes, and the only
+          # standard-runner label for it: `macos-13` was retired 2025-12-04 and
+          # this whole architecture leaves Actions when the macOS 15 image
+          # retires in August 2027. Without a cell here, pip on Intel macOS
+          # falls back to the sdist and needs a Rust toolchain.
+          - macos-x86_64
+          - windows-x86_64
         # abi3 serves every GIL build from 3.10. Free-threaded CPython needs a
         # version-specific wheel until abi3t (3.15), and PyO3 supports it from
         # 3.14.
@@ -82,6 +92,9 @@ jobs:
           - platform: macos-arm64
             runner: macos-14
             target: aarch64
+          - platform: macos-x86_64
+            runner: macos-15-intel
+            target: x86_64
           - platform: windows-x86_64
             runner: windows-latest
             target: x64

@@ -71,6 +71,17 @@ All externally observable changes are recorded here.
 
 ### Added
 
+- `aequitas-python` publishes an x86_64 macOS wheel per ABI. The release matrix
+  ran four native runners and Intel macOS was not among them, so `pip` there
+  fell back to the sdist and needed a Rust toolchain. The cell uses
+  `macos-15-intel`, the only standard-runner label for that architecture
+  (`macos-13` and its larger siblings were retired on 2025-12-04), and that
+  label is itself the last x86_64 image Actions publishes, retiring with the
+  macOS 15 image in August 2027 -- so the architecture's end date is recorded
+  in the matrix rather than discovered at that point. Both ABIs are built and
+  smoke-tested there: `setup-python` serves the free-threaded interpreter on
+  Intel macOS as well as the GIL build.
+
 - Compose SI units without adding a named marker per derived unit: `Unit<D>`
   owns conversion scale and allocation-free symbol formatting, a blanket impl
   derives it from `LinearUnit<D>`, and explicit impls cover `Product`,
