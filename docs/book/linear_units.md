@@ -49,6 +49,9 @@ multiplying dimension exponents and composing their scale factors. `P` is
 a Typenum integer: `P2` squares, `N1` inverts and `Z0` yields dimensionless.
 
 ```rust
+extern crate aequitas;
+extern crate typenum;
+
 use aequitas::{Quantity, systems::si::{quantities::Intensity,
     units::{Watt, Meter, Centimeter, WattPerSquareMeter}},
     unit::{Product, Quotient, Power}};

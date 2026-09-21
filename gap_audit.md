@@ -46,6 +46,18 @@ performance, memory usage, hardware behavior, or hosted release readiness.
   `default-members` kept them on the law crate. Check: #67 adds `--workspace`
   and the PR's `verify` log lists the binding's tests. Pattern: confirm a
   crate's tests appear in the CI run before naming them as a guard.
+- **A book sample no local gate compiles.** The `linear_units.md` fence added
+  with the unit-composition change opened with `use aequitas::...` and named
+  `typenum::P2` inline, where every other Rust fence in the book opens with
+  `extern crate aequitas;`. The book compiles under an edition with no extern
+  prelude -- `book.toml` sets no `[rust] edition` -- so `mdbook test` failed
+  with `E0433: cannot find module or crate 'aequitas'`, and the `Deploy mdBook`
+  job, which triggers on `src/**`, would have failed on the same commit. Check:
+  the fence now carries the prelude its seven siblings have, and
+  `mdbook test docs/book` exits 0. Pattern: the Rust gates cannot see the book,
+  so a sample is verified only by running the book's own gate -- the blind spot
+  the workflow's `paths:` comment already describes from 82ec9b5. Caught by
+  reproducing the job locally, because the hosted runs had not started.
 
 ## Closed gaps
 
