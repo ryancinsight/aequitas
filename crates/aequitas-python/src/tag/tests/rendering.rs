@@ -17,12 +17,15 @@ fn semantic_names_are_unique_and_round_trip() {
     names.dedup();
     assert_eq!(names.len(), count, "two markers share a wire name");
 
+    // The two directions of the vocabulary are proven against each other:
+    // `ALL` enumerates, `name` maps out, `from_name` maps back, and the
+    // mapping is a bijection only if every enumeration round-trips.
     for tag in SemanticTag::ALL {
-        let found = SemanticTag::ALL
-            .into_iter()
-            .find(|candidate| candidate.name() == tag.name());
-        assert_eq!(found, Some(tag));
+        assert_eq!(SemanticTag::from_name(tag.name()), Some(tag), "{tag:?}");
     }
+
+    assert_eq!(SemanticTag::from_name("vibes"), None);
+    assert_eq!(SemanticTag::from_name(""), None);
 }
 
 #[test]

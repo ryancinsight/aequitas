@@ -271,6 +271,29 @@ carries the rest; the scans are closed as not worth an index, at under 3% of one
   (`exactly 7 exponents, got 9` as well as the short case) plus the
   out-of-range and unknown-semantics messages, so the diagnostics the rewrite
   had to preserve are asserted rather than assumed.
+- **The read's remaining allocation is the `abi3-py38` floor, and three ways
+  around it are refuted rather than untried** — the semantic name is read
+  through `String` because every allocation-free route is closed.
+  `PyStringMethods::to_str` is gated on `any(Py_3_10, not(Py_LIMITED_API))` and
+  this crate builds `abi3-py38`, so the borrowed form does not exist here;
+  `to_cow` and `to_string_lossy` fall back to an owned copy, which copies
+  *twice*. pyo3's `PartialEq<str> for Bound<PyString>` is the route that looks
+  free and is not: under `not(Py_3_13)`, which abi3-py38 always is, it routes
+  through `to_cow()`, so comparing the eleven candidate names would convert the
+  string up to eleven times, each conversion allocating a Python bytes object —
+  strictly worse than the one `String`. The route that would work is a cached
+  Python mapping from wire name to marker, so the lookup uses the string's own
+  hash instead of a Rust copy; it needs a static holding interpreter-bound
+  objects, which this crate's free-threaded build turns into a correctness
+  question rather than a saving. Removing the floor itself means dropping the
+  abi3 floor, a distribution decision this crate does not own.
+- **The name-to-marker resolution has one owner** — it used to be a scan of
+  `SemanticTag::ALL` written out in the consumer *and* again in the test that
+  certifies the vocabulary. It is now `SemanticTag::from_name`, beside
+  `name()` in the file that owns the wire names, so a renamed variant moves one
+  mapping in one place; the round-trip test proves the bijection through it
+  rather than reproducing it, and it resolves by `match` on the read path
+  instead of comparing every earlier name first.
 - **Two law-crate source files are pinned by the generator, not by taste** —
   `scripts/generate-surface.py`'s `collect_quantities` reads *only*
   `src/systems/si/quantities.rs`, and returns `(alias, dimension)` pairs **in
@@ -313,7 +336,10 @@ the workspace; superseded on that axis by the snapshot below.
   preserves its declaration set. The structural-read change is verified on the
   binding crate alone (92/92, up from 89 by the three malformed-tag cases that
   came with it), because this checkout concurrently held unrelated uncommitted
-  work whose tests are no part of this record.
+  work whose tests are no part of this record. That work is additive to
+  `src/systems/si/units/**` -- 445 insertions across ten files, no deletions --
+  so the `units/derived/` domain taxonomy the law-crate leaves mirror is
+  unchanged by it.
 - Formatting, all-targets all-feature Clippy with `-D warnings`, doctests (28
   passed, 2 ignored) and `cargo doc` with `RUSTDOCFLAGS=-D warnings`: pass.
 - `cargo check --no-default-features`: pass. Largest file in the law crate:

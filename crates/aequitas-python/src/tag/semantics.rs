@@ -64,6 +64,33 @@ impl SemanticTag {
         }
     }
 
+    /// The marker a wire name names, or `None` when it names none.
+    ///
+    /// The inverse of [`Self::name`], kept beside it so both directions of one
+    /// vocabulary live in one place: renaming a variant's string moves this
+    /// mapping too, and the round-trip test that pairs them covers both.
+    ///
+    /// A `match` rather than a scan of [`Self::ALL`] because this resolves on
+    /// the read path of every Python-passed quantity, where a scan compares
+    /// every earlier name before it reaches the right one.
+    #[must_use]
+    pub fn from_name(name: &str) -> Option<Self> {
+        match name {
+            "base" => Some(Self::Base),
+            "absolute_temperature" => Some(Self::AbsoluteTemperature),
+            "temperature_difference" => Some(Self::TemperatureDifference),
+            "surface_tension" => Some(Self::SurfaceTension),
+            "spring_stiffness" => Some(Self::SpringStiffness),
+            "mechanical_impedance" => Some(Self::MechanicalImpedance),
+            "flexural_rigidity" => Some(Self::FlexuralRigidity),
+            "angle" => Some(Self::Angle),
+            "reciprocal_volume" => Some(Self::ReciprocalVolume),
+            "stress" => Some(Self::Stress),
+            "molar_concentration" => Some(Self::MolarConcentration),
+            _ => None,
+        }
+    }
+
     /// Small stable integer image, for hashing and compact encodings.
     ///
     /// Distinct per variant; the wire form remains [`Self::name`], so this

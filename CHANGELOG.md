@@ -6,6 +6,14 @@ All externally observable changes are recorded here.
 
 ### Changed
 
+- The semantic wire name resolves to its marker through
+  `SemanticTag::from_name`, beside `name()` in the file that owns the
+  vocabulary, instead of a scan of `SemanticTag::ALL` that both the consumer and
+  the round-trip test wrote out separately. Not observable — the same names map
+  to the same markers and an unknown name raises the same `ValueError` — but the
+  mapping now has one owner, and the read path resolves it by `match` rather
+  than by comparing every earlier name.
+
 - The structural quantity read allocates once per call instead of twice. The
   protocol tag's exponents are read straight into the fixed-width axis array,
   where unpacking the tag as `(Vec<i64>, String)` built a seven-element vector

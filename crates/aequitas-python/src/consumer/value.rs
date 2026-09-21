@@ -87,12 +87,9 @@ pub fn read(value: &Bound<'_, PyAny>) -> PyResult<(f64, DimensionTag)> {
 
     let semantics: String = semantics.extract().map_err(|_| malformed_tag())?;
 
-    let semantics = SemanticTag::ALL
-        .into_iter()
-        .find(|candidate| candidate.name() == semantics)
-        .ok_or_else(|| {
-            PyValueError::new_err(format!("unknown dimension semantics '{semantics}'"))
-        })?;
+    let semantics = SemanticTag::from_name(&semantics).ok_or_else(|| {
+        PyValueError::new_err(format!("unknown dimension semantics '{semantics}'"))
+    })?;
 
     Ok((base, DimensionTag::new(axes, semantics)))
 }
