@@ -6,6 +6,17 @@ All externally observable changes are recorded here.
 
 ### Changed
 
+- The Python floor moves from 3.8 to 3.10, and the structural read allocates
+  nothing. `abi3-py310` is the lowest stable-ABI level that exposes
+  `PyUnicode_AsUTF8AndSize`, so it is the lowest at which the tag's marker name
+  can be borrowed rather than copied into a `String` on every call; that is the
+  read's last Rust heap allocation, now gone (measured 1.0000 -> 0.0000 per
+  call, with the floor and the code change separated so neither alone accounts
+  for it). Observable to a Python user twice over: `requires-python` is now
+  `>=3.10` and the abi3 wheel is tagged `cp310-abi3`. Python 3.8 and 3.9 are
+  past end of life, and `kwavers-python` still publishes the 3.8 floor, so a
+  user on either version can install that distribution but not this one.
+
 - The semantic wire name resolves to its marker through
   `SemanticTag::from_name`, beside `name()` in the file that owns the
   vocabulary, instead of a scan of `SemanticTag::ALL` that both the consumer and

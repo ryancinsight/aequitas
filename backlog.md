@@ -147,8 +147,9 @@
 - **Acceptance:** the read path is allocation-free, or the alternative's cost
   is measured before and after in release mode with the pytest suite run
   against a built wheel.
-- **Non-goals:** the input set the wire form accepts, the abi3 floor, and the
-  two-wheel interoperability guarantee.
+- **Non-goals (as filed):** the input set the wire form accepts, the abi3 floor,
+  and the two-wheel interoperability guarantee. The floor was later taken up as
+  its own item and moved: `AEQ-PY-FLOOR-2026-09-21`.
 - Every reduction was attempted and refused, and each reason is recorded
   in-source on `read` rather than left implicit:
   - *Borrow the marker instead of copying it* -- `PyStringMethods::to_str` is
@@ -188,16 +189,41 @@
   outcome above belong to the previous implementation -- and that wheel was a
   debug build, built outside the stack's overlay because `--locked` cannot run
   inside it.
-- The allocation that remains is the semantic marker's name, and it is the
-  `abi3-py38` floor rather than an open question. `to_str` does not exist under
-  the limited API; `to_cow` copies twice; and pyo3's
-  `PartialEq<str> for Bound<PyString>` -- the route that looks free -- routes
-  through `to_cow()` under `not(Py_3_13)`, so comparing eleven candidate names
-  would mean eleven conversions, each allocating a Python bytes object. A
-  cached Python name-to-marker mapping would remove it, at the price of a
-  static holding interpreter-bound objects, which the free-threaded build turns
-  into a correctness question rather than a saving. Removing it for real means
-  dropping the abi3 floor: a distribution decision this item does not own.
+- The last allocation went too, once the floor was moved out from under it:
+  `AEQ-PY-FLOOR-2026-09-21` took the crate to `abi3-py310` and the marker name
+  is now borrowed, so `read` allocates **nothing** (1.0000 -> 0.0000 per call).
+  The three routes that would have held the floor at 3.8 stay refuted rather
+  than untried, in `src/consumer/value.rs` and in the gap audit.
+
+## AEQ-PY-FLOOR-2026-09-21 — The Python floor is abi3-py38, and the read's last allocation is its price [api] [minor] — done 2026-09-21 <a id="aeq-py-floor-2026-09-21"></a>
+
+- **Outcome:** the structural read copied the tag's marker name into a `String`
+  on every call, because no borrowing read exists below the limited API's 3.10
+  level. `abi3-py310` is the lowest stable-ABI level that exposes
+  `PyUnicode_AsUTF8AndSize` -- pyo3 says so on the method itself -- so moving
+  the floor one step is what lets the name be borrowed instead of copied.
+- **Acceptance:** the read allocates nothing, and the change is separated from
+  the floor so that neither alone explains the result.
+- **Decision:** raise the floor to `abi3-py310` rather than drop abi3. One
+  wheel per platform is preserved: the release matrix stays 4 platforms x 2
+  abi, where a non-abi3 build needs a wheel per interpreter version and still
+  cannot serve free-threaded CPython before `abi3t`.
+- **Cost, stated:** Python 3.8 (end of life 2024-10) and 3.9 (end of life
+  2025-10) can no longer install this distribution, and `kwavers-python` still
+  publishes the 3.8 floor, so a user on either version can install that
+  distribution but not this one.
+- **Verification:** the floor and the code change were separated with a probe
+  holding every other variable fixed -- `abi3-py310` with the name still
+  extracted through `String` measured **1.0000** allocations per call, and the
+  same floor with the name borrowed measured **0.0000**. Then fmt, clippy
+  `-D warnings`, and 92 binding tests pass; `maturin build` tags the wheel
+  `cp310-abi3` ("Built wheel for abi3 Python ≥ 3.10"); and the suite against
+  that wheel is **2365 passed, 1 skipped**, unchanged from the py38 wheel.
+- **Rejected:** dropping abi3 entirely (same allocation removed, at one wheel
+  per interpreter version, and no help for free-threading before `abi3t`);
+  keeping 3.8 via `to_cow`, `to_string_lossy`, or `PartialEq<str>` (each
+  copies, the last one up to eleven times per call).
+- No non-goals: this item is the floor itself.
 
 ## AEQ-PY-FREE-THREADED-2026-09-11 — The binding re-enables the GIL on a free-threaded interpreter [minor] — done 2026-09-11 <a id="aeq-py-free-threaded-2026-09-11"></a>
 

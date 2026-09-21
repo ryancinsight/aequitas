@@ -3,6 +3,7 @@
 use pyo3::Borrowed;
 use pyo3::exceptions::{PyTypeError, PyValueError};
 use pyo3::prelude::*;
+use pyo3::types::{PyString, PyStringMethods};
 
 use crate::protocol::{BASE_ATTR, DIMENSION_ATTR};
 use crate::tag::{AXES, DimensionTag, SemanticTag};
@@ -20,17 +21,19 @@ use crate::tag::{AXES, DimensionTag, SemanticTag};
 /// Rust heap allocations and ~296 ns per call, and the Python-passed-quantity
 /// path through [`crate::consumer::Dimensioned`] cost ~448 ns per argument
 /// because a native quantity takes this structural read rather than a
-/// downcast. It is one allocation per call now. An allocation count does not
-/// depend on the build profile; the times are magnitudes from one run on one
-/// machine, not benchmarks, and they were not re-measured for this revision.
+/// downcast. It allocates nothing now. An allocation count does not depend on
+/// the build profile; the times are magnitudes from one run on one machine,
+/// not benchmarks, and they were not re-measured for this revision.
 ///
-/// One allocation remains, and it cannot be removed without a decision this
-/// crate does not own: the marker name cannot be borrowed, because
-/// `PyStringMethods::to_str` is gated on
-/// `any(Py_3_10, not(Py_LIMITED_API))` and this crate builds `abi3-py38`, so
-/// the borrowed form does not exist here; `to_cow` and `to_string_lossy` both
-/// fall back to an owned copy under the limited API, which copies *twice*.
-/// Borrowing it means dropping the abi3 floor -- a distribution decision.
+/// Nothing is allocated. The marker name is borrowed rather than copied, and
+/// that is what fixes this crate's Python floor: `PyStringMethods::to_str` is
+/// gated on `any(Py_3_10, not(Py_LIMITED_API))`, and `abi3-py310` is the
+/// lowest stable-ABI level that satisfies the first disjunct, which is the one
+/// that keeps a single wheel per platform. Every alternative that would have
+/// held the floor at 3.8 copies: `to_cow` and `to_string_lossy` both fall back
+/// to an owned `String` under the limited API, and `PartialEq<str>` routes
+/// through `to_cow` below 3.13, so comparing eleven candidate names would
+/// copy eleven times rather than once. Below 3.10 no borrowing read exists.
 ///
 /// The second allocation was the exponent vector, and it is gone: the tag's
 /// members are taken as objects and the exponents are read straight into the
@@ -85,9 +88,13 @@ pub fn read(value: &Bound<'_, PyAny>) -> PyResult<(f64, DimensionTag)> {
         )));
     }
 
-    let semantics: String = semantics.extract().map_err(|_| malformed_tag())?;
+    // Borrowed, not extracted: a `String` here would be a heap copy of a
+    // marker name that is immediately compared and dropped, and the floor
+    // above exists so that this read can be the borrowed one.
+    let semantics = semantics.cast::<PyString>().map_err(|_| malformed_tag())?;
+    let semantics = semantics.to_str().map_err(|_| malformed_tag())?;
 
-    let semantics = SemanticTag::from_name(&semantics).ok_or_else(|| {
+    let semantics = SemanticTag::from_name(semantics).ok_or_else(|| {
         PyValueError::new_err(format!("unknown dimension semantics '{semantics}'"))
     })?;
 

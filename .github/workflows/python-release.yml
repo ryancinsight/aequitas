@@ -68,7 +68,7 @@ jobs:
       fail-fast: false
       matrix:
         platform: [linux-x86_64, linux-aarch64, macos-arm64, windows-x86_64]
-        # abi3 serves every GIL build from 3.8. Free-threaded CPython needs a
+        # abi3 serves every GIL build from 3.10. Free-threaded CPython needs a
         # version-specific wheel until abi3t (3.15), and PyO3 supports it from
         # 3.14.
         abi: [abi3, free-threaded]
