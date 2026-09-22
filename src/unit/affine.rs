@@ -50,7 +50,7 @@ pub trait AffineUnit<D>: private::Sealed {
     where
         T: UnitScalar + RealField,
     {
-        value.scale_by_f64(Self::SCALE) + T::ONE.scale_by_f64(Self::OFFSET)
+        value.scale_by_factor(Self::SCALE) + T::ONE.scale_by_factor(Self::OFFSET)
     }
 
     /// Convert a value from the canonical SI base unit to this unit.
@@ -60,6 +60,6 @@ pub trait AffineUnit<D>: private::Sealed {
     where
         T: UnitScalar + RealField,
     {
-        (value - T::ONE.scale_by_f64(Self::OFFSET)).divide_by_f64(Self::SCALE)
+        (value - T::ONE.scale_by_factor(Self::OFFSET)).divide_by_factor(Self::SCALE)
     }
 }

@@ -52,7 +52,7 @@ The initial package is one `no_std` crate:
 - linear units are sealed zero-sized markers with one default conversion
   implementation;
 - unit coefficient metadata is `f64`, but each coefficient is applied once
-  through Eunomia's `UnitScalar::scale_by_f64` seam and all quantity
+  through Eunomia's `UnitScalar::scale_by_factor` seam and all quantity
   arithmetic executes in `T`;
 - Eunomia owns scalar representations and numeric laws;
 - `uom` is a development-only differential oracle and is absent from the

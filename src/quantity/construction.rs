@@ -18,7 +18,7 @@ where
     where
         U: Unit<D>,
     {
-        Self::from_base(value.scale_by_f64(U::SCALE))
+        Self::from_base(value.scale_by_factor(U::SCALE))
     }
 
     /// Return the value expressed in linear unit `U`.
@@ -30,7 +30,7 @@ where
     where
         U: Unit<D>,
     {
-        self.value.divide_by_f64(U::SCALE)
+        self.value.divide_by_factor(U::SCALE)
     }
 }
 

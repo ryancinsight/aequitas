@@ -23,7 +23,7 @@ do not expose complex contracts, respectively.
 Aequitas supports `Quantity<T, D>` for every Eunomia `UnitScalar` implementation,
 including `Complex32` and `Complex64`. Linear unit conversion scales the real
 and imaginary components by the same real coefficient through Eunomia's
-provider-owned `UnitScalar::scale_by_f64` operation. The existing
+provider-owned `UnitScalar::scale_by_factor` operation. The existing
 `FloatElement` arithmetic path remains unchanged for real quantities and
 reduced-precision storage types.
 
