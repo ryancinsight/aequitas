@@ -33,7 +33,7 @@ impl Unit {
     #[inline]
     #[must_use]
     pub fn to_base(&self, value: f64) -> f64 {
-        // `AffineUnit::to_base` adds `T::ONE.scale_by_f64(OFFSET)`, which in
+        // `AffineUnit::to_base` adds `T::ONE.scale_by_factor(OFFSET)`, which in
         // `f64` is `1.0 * OFFSET` -- exactly `OFFSET`.
         match self.offset {
             None => value * self.scale,

@@ -24,7 +24,7 @@ pub trait LinearUnit<D>: private::Named {
     where
         T: UnitScalar,
     {
-        value.scale_by_f64(Self::SCALE)
+        value.scale_by_factor(Self::SCALE)
     }
 
     /// Convert a value from the canonical SI base unit to this unit.
@@ -34,6 +34,6 @@ pub trait LinearUnit<D>: private::Named {
     where
         T: UnitScalar,
     {
-        value.divide_by_f64(Self::SCALE)
+        value.divide_by_factor(Self::SCALE)
     }
 }
