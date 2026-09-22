@@ -378,7 +378,7 @@ domain layer.
   `worktrees/aequitas-python-typing`. PyPI name re-checked: `aequitas-python`
   is unregistered (404), `aequitas` taken (200).
 - **Pipeline landed** in [#72](https://github.com/ryancinsight/aequitas/pull/72) (`d81c9fb`): `python-release.yml`
-  builds 8 wheels (abi3 and 3.14t on four native runners) plus an sdist, each smoke-tested;
+  builds 10 wheels (abi3 and 3.14t on five native runners) plus an sdist, each smoke-tested;
   its PR run 34618118204 passed every build job. Affine units and typed classes landed too.
 - **Blocker:** the PyPI trusted publisher is not registered (project `aequitas-python`,
   owner `ryancinsight`, repo `aequitas`, workflow `python-release.yml`, environment `pypi`);
@@ -390,15 +390,24 @@ domain layer.
   `MultiplyDimension`/`DivideDimension`; codegen regenerate-and-diff clean;
   `pytest` green against the built wheel.
 
-## AEQ-PY-WHEEL-MACOS-X86-2026-09-11 — The wheel matrix has no Intel macOS wheel [patch] [ci] — todo <a id="aeq-py-wheel-macos-x86-2026-09-11"></a>
+## AEQ-PY-WHEEL-MACOS-X86-2026-09-11 — The wheel matrix has no Intel macOS wheel [patch] [ci] — done 2026-09-21 <a id="aeq-py-wheel-macos-x86-2026-09-11"></a>
 
-- **Gap:** `python-release.yml` builds and smoke-tests on four native
-  runners; Intel macOS is absent, so pip there falls back to the sdist and
-  needs a Rust toolchain.
-- **Open question:** which GitHub-hosted label provides x86_64 macOS now, or
-  whether the wheel cross-builds on arm64 and smoke-tests under Rosetta.
-- **Acceptance:** an x86_64 macOS wheel per ABI, smoke-tested by running the
-  Python suite on x86_64, in the same matrix.
+- **Gap:** `python-release.yml` built and smoke-tested on four native
+  runners; Intel macOS was absent, so pip there fell back to the sdist and
+  needed a Rust toolchain.
+- **Answered:** `macos-15-intel` is the standard-runner label for x86_64 macOS --
+  `macos-13` and its `-large`/`-xlarge` siblings were retired 2025-12-04 -- and
+  it is itself the last x86_64 image Actions publishes, retiring with the macOS
+  15 image in August 2027. Native, not Rosetta: the cell is another macOS build
+  and smoke-test, so the wheel is produced and exercised on x86_64 rather than
+  cross-built on arm64 and emulated.
+- **Acceptance met:** `macos-x86_64` is a fifth platform in the wheel matrix
+  (`runner: macos-15-intel`, `target: x86_64`), so a release builds ten wheels --
+  two ABIs on five native runners -- plus the sdist, each smoke-tested by the
+  Python suite on its own platform. Both ABIs resolve there:
+  `setup-python`'s manifest carries
+  `python-3.14.7-darwin-x64-freethreaded.tar.gz` beside the GIL build, so the
+  free-threaded cell is served on Intel macOS too.
 - **Found by:** [AEQ-PY-BINDING-001](#aeq-py-binding-001), PR #72.
 
 ## AEQ-RELEASE-TAG-FORM-2026-09-11 — The crate release workflow keys on a `crate-` tag prefix [patch] [ci] — done 2026-09-11 <a id="aeq-release-tag-form-2026-09-11"></a>
