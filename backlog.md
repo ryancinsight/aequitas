@@ -409,6 +409,10 @@ domain layer.
   `python-3.14.7-darwin-x64-freethreaded.tar.gz` beside the GIL build, so the
   free-threaded cell is served on Intel macOS too.
 - **Found by:** [AEQ-PY-BINDING-001](#aeq-py-binding-001), PR #72.
+- **Landed:** [#80](https://github.com/ryancinsight/aequitas/pull/80) (`5646137`);
+  both new cells pass in the pull request's own release run (run 35669742270),
+  `abi3` at 2362 passed / 4 skipped and free-threaded at 2363 passed / 3
+  skipped, and the wheels are tagged `macosx_10_12_x86_64`.
 
 ## AEQ-RELEASE-TAG-FORM-2026-09-11 — The crate release workflow keys on a `crate-` tag prefix [patch] [ci] — done 2026-09-11 <a id="aeq-release-tag-form-2026-09-11"></a>
 
