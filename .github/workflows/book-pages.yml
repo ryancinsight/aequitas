@@ -66,8 +66,6 @@ jobs:
 
     uses: ryancinsight/atlas/.github/workflows/book-pages.yml@20c93980f7c98f2e23a89c4a0540f16c8f2d7239
 
-    timeout-minutes: 20
-
     permissions:
 
       contents: read
