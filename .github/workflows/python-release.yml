@@ -6,7 +6,11 @@ name: Python Release
 # carry their own tag, `aequitas-python-v<version>`; any other release event
 # does nothing here. A pull request that edits this workflow or the package
 # metadata runs everything except the publish, so the pipeline is proven where
-# it changes rather than first on a release.
+# it changes rather than first on a release. The wheel matrix itself narrows
+# to one platform on that PR proof run (below): the full 5-platform x 2-abi
+# matrix seizes ten runners at once -- including the scarce macOS and Windows
+# labels -- from the account's shared pool, and none of its cells are a
+# required check, so a PR only needs one cell to prove the pipeline builds.
 on:
   release:
     types: [published]
@@ -21,8 +25,10 @@ permissions:
 
 concurrency:
   group: python-release-${{ github.event.release.tag_name || github.ref }}
-  # A half-cancelled publish is worse than a superseded one.
-  cancel-in-progress: false
+  # A half-cancelled publish is worse than a superseded one; a PR proof run
+  # cancels its own superseded pushes so it never holds ten runner slots for
+  # a commit nobody will look at again.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   version:
@@ -63,6 +69,13 @@ jobs:
     needs: version
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
+    # A pull request proves the pipeline builds, not that every platform
+    # does -- that is what `release` checks. Narrowed to the one cell that
+    # needs no cross-compiled or scarce runner label, so a PR touching this
+    # workflow or pyproject.toml seizes one shared-pool runner instead of ten.
+    if: >-
+      github.event_name != 'pull_request' ||
+      (matrix.platform == 'linux-x86_64' && matrix.abi == 'abi3')
     strategy:
       # A release matrix reports every target's failure in one run.
       fail-fast: false

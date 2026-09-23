@@ -44,11 +44,13 @@ permissions:
 
 concurrency:
 
-  group: book-pages-${{ github.ref }}
-
-  # Deploys queue behind one another; a half-cancelled deploy is worse than a
-  # superseded one, and a cancelled default-branch run leaves that merge undeployed.
-  cancel-in-progress: false
+  # Pull requests share one group per ref and cancel superseded runs, so a
+  # rapid push series releases its queued runner slot in the account's
+  # shared pool; default-branch runs get one group per commit and never
+  # cancel, since a half-cancelled deploy is worse than a superseded one and
+  # a cancelled default-branch run leaves that merge undeployed.
+  group: book-pages-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 
 
@@ -63,6 +65,8 @@ jobs:
     # Settings -> Pages -> Source: GitHub Actions.
 
     uses: ryancinsight/atlas/.github/workflows/book-pages.yml@20c93980f7c98f2e23a89c4a0540f16c8f2d7239
+
+    timeout-minutes: 20
 
     permissions:
 
