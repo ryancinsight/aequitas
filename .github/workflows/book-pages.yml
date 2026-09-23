@@ -44,12 +44,12 @@ permissions:
 
 concurrency:
 
-  # Pull requests share one group per ref and cancel superseded runs, so a
+  # One group per ref: each pull request cancels its superseded runs, so a
   # rapid push series releases its queued runner slot in the account's
-  # shared pool; default-branch runs get one group per commit and never
+  # shared pool; default-branch runs still queue behind one another and never
   # cancel, since a half-cancelled deploy is worse than a superseded one and
-  # a cancelled default-branch run leaves that merge undeployed.
-  group: book-pages-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  # concurrent deploys could publish an older commit after a newer one.
+  group: book-pages-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 
