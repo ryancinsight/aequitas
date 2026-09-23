@@ -6,7 +6,11 @@ name: Python Release
 # carry their own tag, `aequitas-python-v<version>`; any other release event
 # does nothing here. A pull request that edits this workflow or the package
 # metadata runs everything except the publish, so the pipeline is proven where
-# it changes rather than first on a release.
+# it changes rather than first on a release. The wheel matrix itself narrows
+# to one platform on that PR proof run (below): the full 5-platform x 2-abi
+# matrix seizes ten runners at once -- including the scarce macOS and Windows
+# labels -- from the account's shared pool, and none of its cells are a
+# required check, so a PR only needs one cell to prove the pipeline builds.
 on:
   release:
     types: [published]
@@ -21,8 +25,10 @@ permissions:
 
 concurrency:
   group: python-release-${{ github.event.release.tag_name || github.ref }}
-  # A half-cancelled publish is worse than a superseded one.
-  cancel-in-progress: false
+  # A half-cancelled publish is worse than a superseded one; a PR proof run
+  # cancels its own superseded pushes so it never holds ten runner slots for
+  # a commit nobody will look at again.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   version:
@@ -34,6 +40,7 @@ jobs:
     timeout-minutes: 5
     outputs:
       version: ${{ steps.read.outputs.version }}
+      wheel-matrix: ${{ steps.plan.outputs.matrix }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
@@ -57,6 +64,45 @@ jobs:
               output.write(f"version={version}\n")
           print(f"aequitas-python {version}")
           PY
+      - name: Plan the wheel matrix
+        id: plan
+        # The matrix context is unavailable in a job-level `if`, and narrowing
+        # a static matrix through `include` re-adds unmatched rows as new
+        # jobs, so the row set is computed here. A pull request proves the
+        # pipeline builds with the one row that needs no cross-compiled or
+        # scarce runner label; release and workflow_dispatch build all ten.
+        # None of these rows is a required check.
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+
+          # abi3 serves every GIL build from 3.10; free-threaded CPython needs
+          # a version-specific wheel until abi3t (3.15), which PyO3 supports
+          # from 3.14. macos-15-intel is the last x86_64 macOS label Actions
+          # publishes (macos-13 retired 2025-12-04); without it, pip on Intel
+          # macOS falls back to the sdist and needs a Rust toolchain.
+          platforms = [
+              ("linux-x86_64", "ubuntu-latest", "x86_64"),
+              ("linux-aarch64", "ubuntu-24.04-arm", "aarch64"),
+              ("macos-arm64", "macos-14", "aarch64"),
+              ("macos-x86_64", "macos-15-intel", "x86_64"),
+              ("windows-x86_64", "windows-latest", "x64"),
+          ]
+          abis = [("abi3", "3.12", "python3.12"), ("free-threaded", "3.14t", "python3.14t")]
+          rows = [
+              {"platform": p, "runner": r, "target": t, "abi": a, "python": py, "interpreter": i}
+              for p, r, t in platforms
+              for a, py, i in abis
+          ]
+          if os.environ["EVENT"] == "pull_request":
+              rows = [row for row in rows if row["platform"] == "linux-x86_64" and row["abi"] == "abi3"]
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write("matrix=" + json.dumps({"include": rows}) + "\n")
+          print(json.dumps(rows, indent=2))
+          PY
 
   wheels:
     name: Wheel (${{ matrix.platform }}, ${{ matrix.abi }})
@@ -66,44 +112,7 @@ jobs:
     strategy:
       # A release matrix reports every target's failure in one run.
       fail-fast: false
-      matrix:
-        platform:
-          - linux-x86_64
-          - linux-aarch64
-          - macos-arm64
-          # The last x86_64 macOS image Actions publishes, and the only
-          # standard-runner label for it: `macos-13` was retired 2025-12-04 and
-          # this whole architecture leaves Actions when the macOS 15 image
-          # retires in August 2027. Without a cell here, pip on Intel macOS
-          # falls back to the sdist and needs a Rust toolchain.
-          - macos-x86_64
-          - windows-x86_64
-        # abi3 serves every GIL build from 3.10. Free-threaded CPython needs a
-        # version-specific wheel until abi3t (3.15), and PyO3 supports it from
-        # 3.14.
-        abi: [abi3, free-threaded]
-        include:
-          - platform: linux-x86_64
-            runner: ubuntu-latest
-            target: x86_64
-          - platform: linux-aarch64
-            runner: ubuntu-24.04-arm
-            target: aarch64
-          - platform: macos-arm64
-            runner: macos-14
-            target: aarch64
-          - platform: macos-x86_64
-            runner: macos-15-intel
-            target: x86_64
-          - platform: windows-x86_64
-            runner: windows-latest
-            target: x64
-          - abi: abi3
-            python: "3.12"
-            interpreter: python3.12
-          - abi: free-threaded
-            python: "3.14t"
-            interpreter: python3.14t
+      matrix: ${{ fromJSON(needs.version.outputs.wheel-matrix) }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:

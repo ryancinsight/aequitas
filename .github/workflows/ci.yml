@@ -12,6 +12,14 @@ env:
   CARGO_TERM_COLOR: always
   CARGO_INCREMENTAL: "0"
 
+concurrency:
+  # Pull requests share one group per ref and cancel superseded runs, so a
+  # rapid push series releases its queued runner slots in the account's
+  # shared pool instead of holding them; default-branch runs get one group
+  # per commit so a landed gate is never cancelled by the next push.
+  group: ci-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   # Runs first and alone: it needs no toolchain, no cache and no build, and it
   # guards the one artifact whose correctness cannot be checked from inside the
@@ -50,6 +58,9 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: "3.12"
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        with:
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - name: Verify the committed lock graph
         shell: bash
         run: cargo metadata --locked --format-version 1 --all-features > /dev/null
@@ -102,6 +113,10 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: ${{ matrix.python }}
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        with:
+          key: ${{ matrix.python }}
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - name: Confirm the pinned toolchain is the one running
         # A committed `rust-toolchain.toml` outranks the action's own
         # selection, so the version is printed rather than assumed.
