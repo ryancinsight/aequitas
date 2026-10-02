@@ -1,6 +1,6 @@
 [package]
 name = "aequitas"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2024"
 rust-version = "1.95"
 authors = ["Ryan Clanton <ryanclanton@outlook.com>"]
@@ -37,7 +37,7 @@ resolver = "3"
 # must cover it pass `--workspace`.
 
 [workspace.dependencies]
-aequitas = { path = ".", version = "0.2.0", default-features = false }
+aequitas = { path = ".", version = "0.2.1", default-features = false }
 
 [lints]
 workspace = true

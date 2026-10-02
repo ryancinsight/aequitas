@@ -11,7 +11,7 @@ The workspace ships two distributions to two registries:
 
 | distribution | registry | version | consumer |
 |---|---|---|---|
-| `aequitas` | crates.io | 0.2.0 | Rust crates across the Atlas stack |
+| `aequitas` | crates.io | 0.2.1 | Rust crates across the Atlas stack |
 | `aequitas-python` | PyPI | 0.1.0 | Python code, including `kwavers-python` |
 
 `aequitas-python` sets `publish = false` for crates.io; its deliverable is the
