@@ -69,6 +69,13 @@ All externally observable changes are recorded here.
   (1.70 ns to 1.79 ns per call) is noise for a loop of seven checked
   additions, so the justification is that the abstraction is now zero-cost.
 
+- The Eunomia manifest requirement moves to 0.9. Nothing observable changes
+  in this crate's surface — the quantity and unit seams route through
+  Eunomia's renamed `UnitScalar::scale_by_factor`/`divide_by_factor` methods
+  internally — but a consumer workspace now resolves `eunomia 0.9.0`, the
+  first Eunomia to carry the `eunomia-derive` derive macros, and the
+  registry floor for the renamed seam is that version.
+
 ### Added
 
 - `aequitas-python` publishes an x86_64 macOS wheel per ABI. The release matrix
