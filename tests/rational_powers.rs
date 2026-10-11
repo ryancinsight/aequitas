@@ -11,6 +11,7 @@
 //! `Angle`) and `ReciprocalVolume::cbrt` yields reciprocal length (not
 //! `ReciprocalVolume`) — is locked the same way.
 
+use aequitas::dimension::{BaseSemantics, Dimension};
 use aequitas::quantity::{Quantity, UnitDisplay};
 use aequitas::systems::si::dimensions::{
     Dimensionless, ReciprocalTemperature, ReciprocalTemperatureSquared, Velocity,
@@ -20,6 +21,19 @@ use aequitas::systems::si::quantities::{
     ReciprocalTime as RecipTimeQuantity, Volume as VolQuantity,
 };
 use aequitas::systems::si::units::Meter;
+use typenum::{N3, N6, P3, P4, P8, P9, Z0};
+
+/// Exponent shapes the root tests use. `LengthToTheEighth`, `InverseSixthLength`
+/// and `LengthToTheNinth` are roots' inputs absent from the old enumerated
+/// tables, so these tests witness the generic rule through them.
+/// `LengthToTheFourth` is a square root's output, and `LengthToTheCubic` and
+/// `InverseCubicLength` are shipped dimensions (volume and number density).
+type LengthToTheEighth = Dimension<P8, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics>;
+type LengthToTheFourth = Dimension<P4, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics>;
+type InverseSixthLength = Dimension<N6, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics>;
+type InverseCubicLength = Dimension<N3, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics>;
+type LengthToTheNinth = Dimension<P9, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics>;
+type LengthToTheCubic = Dimension<P3, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics>;
 
 #[test]
 fn sqrt_of_area_is_length() {
@@ -161,4 +175,41 @@ fn cbrt_of_reciprocal_volume_is_reciprocal_length() {
     let reciprocal_volume = ReciprocalVolume::from_base(27.0);
     let reciprocal_length: ReciprocalLength = reciprocal_volume.cbrt();
     assert!((*reciprocal_length.as_base() - 3.0).abs() < f64::EPSILON);
+}
+
+#[test]
+fn cbrt_of_angle_normalizes_to_dimensionless() {
+    use aequitas::systems::si::quantities::{Angle, Dimensionless as DimensionlessQuantity};
+    // cbrt(8 rad) = 2: the angle marker normalizes away, as it does for sqrt.
+    // The root is within one ulp of 2, and ulp(2) = 2·EPSILON.
+    let angle = Angle::from_base(8.0);
+    let rooted: DimensionlessQuantity = angle.cbrt();
+    assert!((*rooted.as_base() - 2.0).abs() <= 2.0 * f64::EPSILON);
+}
+
+#[test]
+fn sqrt_of_an_unshipped_shape_halves_every_exponent() {
+    // (m⁸)^(1/2) = m⁴: 256 m⁸ -> 16 m⁴. The scalar root is within one ulp of
+    // the exact value, and ulp(16) = 16·EPSILON.
+    let eighth = Quantity::<f64, LengthToTheEighth>::from_base(256.0);
+    let fourth: Quantity<f64, LengthToTheFourth> = eighth.sqrt();
+    assert!((fourth.into_base() - 16.0).abs() <= 16.0 * f64::EPSILON);
+}
+
+#[test]
+fn sqrt_of_a_negative_unshipped_shape_halves_every_exponent() {
+    // (m⁻⁶)^(1/2) = m⁻³: 1/64 m⁻⁶ -> 1/8 m⁻³. Both values are exact in
+    // binary, and the root is within one ulp of 0.125, ulp(0.125) = 0.125·EPSILON.
+    let inverse_sixth = Quantity::<f64, InverseSixthLength>::from_base(1.0 / 64.0);
+    let inverse_cubic: Quantity<f64, InverseCubicLength> = inverse_sixth.sqrt();
+    assert!((inverse_cubic.into_base() - 0.125).abs() <= 0.125 * f64::EPSILON);
+}
+
+#[test]
+fn cbrt_of_an_unshipped_shape_thirds_every_exponent() {
+    // (m⁹)^(1/3) = m³: 1728 m⁹ -> 12 m³. The scalar root is within one ulp of
+    // the exact value, and ulp(12) = 8·EPSILON, so 8·EPSILON is the bound.
+    let ninth = Quantity::<f64, LengthToTheNinth>::from_base(1728.0);
+    let cubic: Quantity<f64, LengthToTheCubic> = ninth.cbrt();
+    assert!((cubic.into_base() - 12.0).abs() <= 8.0 * f64::EPSILON);
 }
