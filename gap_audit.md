@@ -112,15 +112,22 @@ paths completed in the rational-power increment).
 ### Rational-power dimension gap
 
 `uom` cannot express fractional dimensions generically, so `sqrt`/`cbrt` could
-not carry the halved/thirded dimension. Resolved by `SqrtDimension`/
-`CbrtDimension` with concrete exponent-tuple impls plus `Quantity::sqrt`/
-`cbrt` through the `FloatElement` scalar surface (commit `72ef8b4`; 12
-value-semantic tests). The eunomia-owned sign-preserving `cbrt`
-(`FloatElement::cbrt`, `libm::cbrtf`/`libm::cbrt`) has since landed as the
-scalar-math SSOT and `Quantity::cbrt` now uses it (dropping the `powf(1/3)`
-path). Semantics-marked variants (`Angle::sqrt` → dimensionless,
-`ReciprocalVolume::cbrt` → reciprocal length) now compile with
-`BaseSemantics`-normalized output; no open rational-power gap remains.
+not carry the halved/thirded dimension. Resolved by `SqrtDimension` and
+`CbrtDimension`, which are implemented once over every typenum exponent. Each
+base exponent is divided through `typenum::PartialDiv`, so an exponent that
+does not divide exactly has no impl for any shape. The earlier enumeration of
+nine square-root and four cube-root exponent tuples is removed; a shape
+outside the SI inventory, such as length to the eighth power, roots to length
+to the fourth. Semantics-marked variants (`Angle::sqrt` and `Angle::cbrt` →
+dimensionless, which the Python `Angle` surface already declares;
+`ReciprocalVolume::cbrt` → reciprocal length) keep their `BaseSemantics`
+normalization. The eunomia-owned sign-preserving `cbrt` (`FloatElement::cbrt`)
+is the scalar root; `Quantity::cbrt` uses it, and `Quantity::sqrt` uses
+`powf(1/2)`.
+
+What remains is a property of the type system, not an open gap: the impls are
+proven per concrete exponent shape by trait resolution, and the group laws
+those shapes rely on come from typenum, not from a proof here.
 
 ### Horizontal files split into leaves
 

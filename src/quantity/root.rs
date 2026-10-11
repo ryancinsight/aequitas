@@ -34,6 +34,18 @@ where
     /// let root = side.sqrt(); // `Length` has exponent `P1` (not even)
     /// ```
     ///
+    /// The rule holds for every exponent shape, not only the shipped ones: a
+    /// fifth power has an odd exponent, so it has no square root either:
+    ///
+    /// ```compile_fail,E0599
+    /// use aequitas::dimension::{BaseSemantics, Dimension};
+    /// use aequitas::quantity::Quantity;
+    /// use typenum::{P5, Z0};
+    ///
+    /// let fifth = Quantity::<f64, Dimension<P5, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics>>::from_base(32.0);
+    /// let _root = fifth.sqrt(); // exponent `P5` is odd
+    /// ```
+    ///
     /// Semantics-marked dimensions normalize their marker away: `Angle::sqrt`
     /// is dimensionless, so assigning the result back to an `Angle` fails:
     ///
@@ -81,6 +93,19 @@ where
     ///
     /// let t = Time::from_base(8.0);
     /// let root = t.cbrt(); // `Time` has exponent `P1` (not divisible by 3)
+    /// ```
+    ///
+    /// An even exponent does not make a cube root exist: each exponent must
+    /// be divisible by three, and the square-rootable length to the eighth
+    /// power is not:
+    ///
+    /// ```compile_fail,E0599
+    /// use aequitas::dimension::{BaseSemantics, Dimension};
+    /// use aequitas::quantity::Quantity;
+    /// use typenum::{P8, Z0};
+    ///
+    /// let eighth = Quantity::<f64, Dimension<P8, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics>>::from_base(256.0);
+    /// let _root = eighth.cbrt(); // exponent `P8` is not divisible by three
     /// ```
     ///
     /// Semantics-marked dimensions normalize their marker away:

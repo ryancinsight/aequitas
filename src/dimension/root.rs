@@ -7,25 +7,36 @@
 //! length and `cbrt(volume)` is a length. The general `uom` crate cannot
 //! express fractional dimensions, so this is a strict capability extension.
 //!
-//! Implementations are generated for the concrete exponent combinations used
-//! by the SI dimension inventory. A generic impl over arbitrary typenum
-//! integers would need an explicit `Div` bound for the `Quot` projection
-//! (typenum `PartialDiv` is exact-only but does not expose `Div`), so the
-//! tuples enumerate the shipped exponent shapes explicitly — all exponents
-//! even for `SqrtDimension`, divisible by three for `CbrtDimension` — to
-//! keep the trait-resolution surface small.
+//! Both traits are implemented once, generically over every typenum integer
+//! exponent. Each base exponent is divided through [`typenum::PartialDiv`],
+//! which is defined only when the division leaves no remainder. A dimension
+//! with any exponent that is odd (for `sqrt`) or not a multiple of three (for
+//! `cbrt`) therefore has no impl, and trait resolution rejects it for every
+//! shape, not only the shapes the SI inventory ships. Plain `typenum::Div` is
+//! not used because it truncates: `P1 / P2` would be zero, which would admit
+//! `sqrt(length)` silently.
 //!
-//! Semantics-marked dimensions (`Angle`, `ReciprocalVolume`) are covered too;
-//! the root output normalizes the semantic marker to `BaseSemantics`, matching
-//! `MultiplyDimension` / `DivideDimension`.
+//! A rejected dimension is reported through typenum's `Rem` requirement, not
+//! through the `on_unimplemented` message below. The generic impl matches
+//! every shape by its head, so rustc reports the nested exponent obligation
+//! and never the trait-level message. That message appears only when no impl
+//! matches at all: a non-dimension type shows it on a direct trait bound
+//! (E0277), but not through a method call, which reports only the unmet
+//! `SqrtDimension` bound.
+//!
+//! The root output normalizes the semantic marker to `BaseSemantics`, matching
+//! `MultiplyDimension` / `DivideDimension`. `Angle` has all exponents zero, so
+//! it roots to dimensionless under both traits, matching the Python `Angle`
+//! surface. `ReciprocalVolume` roots through `CbrtDimension` to a reciprocal
+//! length.
 
-use typenum::{N2, N3, N4, P2, P3, Quot, Z0};
+use typenum::{Integer, P2, P3, PartialDiv};
 
-use super::{AngleSemantics, BaseSemantics, Dimension, ReciprocalVolumeSemantics};
+use super::{BaseSemantics, Dimension};
 
 /// Type-level square root of a physical dimension.
 #[diagnostic::on_unimplemented(
-    message = "this Aequitas dimension has no even-exponent square root",
+    message = "this type has no even-exponent square root",
     note = "SqrtDimension requires every SI exponent to be divisible by two"
 )]
 pub trait SqrtDimension {
@@ -35,7 +46,7 @@ pub trait SqrtDimension {
 
 /// Type-level cube root of a physical dimension.
 #[diagnostic::on_unimplemented(
-    message = "this Aequitas dimension has no third-exponent cube root",
+    message = "this type has no third-exponent cube root",
     note = "CbrtDimension requires every SI exponent to be divisible by three"
 )]
 pub trait CbrtDimension {
@@ -43,68 +54,60 @@ pub trait CbrtDimension {
     type Output;
 }
 
-/// Square root of a single concrete type-level integer exponent.
-type SqrtExp<Exp> = Quot<Exp, P2>;
-/// Cube root of a single concrete type-level integer exponent.
-type CbrtExp<Exp> = Quot<Exp, P3>;
-
-macro_rules! impl_sqrt {
-    ($(($l:ty, $m:ty, $t:ty, $i:ty, $th:ty, $n:ty, $j:ty, $sem:ty)),* $(,)?) => {
-        $(
-            impl SqrtDimension for Dimension<$l, $m, $t, $i, $th, $n, $j, $sem> {
-                type Output = Dimension<
-                    SqrtExp<$l>,
-                    SqrtExp<$m>,
-                    SqrtExp<$t>,
-                    SqrtExp<$i>,
-                    SqrtExp<$th>,
-                    SqrtExp<$n>,
-                    SqrtExp<$j>,
-                    BaseSemantics,
-                >;
-            }
-        )*
-    };
+impl<L, M, T, I, Th, N, J, Semantics> SqrtDimension for Dimension<L, M, T, I, Th, N, J, Semantics>
+where
+    L: Integer + PartialDiv<P2>,
+    M: Integer + PartialDiv<P2>,
+    T: Integer + PartialDiv<P2>,
+    I: Integer + PartialDiv<P2>,
+    Th: Integer + PartialDiv<P2>,
+    N: Integer + PartialDiv<P2>,
+    J: Integer + PartialDiv<P2>,
+    <L as PartialDiv<P2>>::Output: Integer,
+    <M as PartialDiv<P2>>::Output: Integer,
+    <T as PartialDiv<P2>>::Output: Integer,
+    <I as PartialDiv<P2>>::Output: Integer,
+    <Th as PartialDiv<P2>>::Output: Integer,
+    <N as PartialDiv<P2>>::Output: Integer,
+    <J as PartialDiv<P2>>::Output: Integer,
+{
+    type Output = Dimension<
+        <L as PartialDiv<P2>>::Output,
+        <M as PartialDiv<P2>>::Output,
+        <T as PartialDiv<P2>>::Output,
+        <I as PartialDiv<P2>>::Output,
+        <Th as PartialDiv<P2>>::Output,
+        <N as PartialDiv<P2>>::Output,
+        <J as PartialDiv<P2>>::Output,
+        BaseSemantics,
+    >;
 }
 
-macro_rules! impl_cbrt {
-    ($(($l:ty, $m:ty, $t:ty, $i:ty, $th:ty, $n:ty, $j:ty, $sem:ty)),* $(,)?) => {
-        $(
-            impl CbrtDimension for Dimension<$l, $m, $t, $i, $th, $n, $j, $sem> {
-                type Output = Dimension<
-                    CbrtExp<$l>,
-                    CbrtExp<$m>,
-                    CbrtExp<$t>,
-                    CbrtExp<$i>,
-                    CbrtExp<$th>,
-                    CbrtExp<$n>,
-                    CbrtExp<$j>,
-                    BaseSemantics,
-                >;
-            }
-        )*
-    };
+impl<L, M, T, I, Th, N, J, Semantics> CbrtDimension for Dimension<L, M, T, I, Th, N, J, Semantics>
+where
+    L: Integer + PartialDiv<P3>,
+    M: Integer + PartialDiv<P3>,
+    T: Integer + PartialDiv<P3>,
+    I: Integer + PartialDiv<P3>,
+    Th: Integer + PartialDiv<P3>,
+    N: Integer + PartialDiv<P3>,
+    J: Integer + PartialDiv<P3>,
+    <L as PartialDiv<P3>>::Output: Integer,
+    <M as PartialDiv<P3>>::Output: Integer,
+    <T as PartialDiv<P3>>::Output: Integer,
+    <I as PartialDiv<P3>>::Output: Integer,
+    <Th as PartialDiv<P3>>::Output: Integer,
+    <N as PartialDiv<P3>>::Output: Integer,
+    <J as PartialDiv<P3>>::Output: Integer,
+{
+    type Output = Dimension<
+        <L as PartialDiv<P3>>::Output,
+        <M as PartialDiv<P3>>::Output,
+        <T as PartialDiv<P3>>::Output,
+        <I as PartialDiv<P3>>::Output,
+        <Th as PartialDiv<P3>>::Output,
+        <N as PartialDiv<P3>>::Output,
+        <J as PartialDiv<P3>>::Output,
+        BaseSemantics,
+    >;
 }
-
-// Concrete dimension exponent tuples that support square roots (all exponents
-// even). Z0 halves to Z0; P2/N2 to P1/N1; P4/N4 to P2/N2.
-impl_sqrt!(
-    (P2, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics), // area -> length
-    (Z0, P2, Z0, Z0, Z0, Z0, Z0, BaseSemantics),
-    (P2, Z0, N2, Z0, Z0, Z0, Z0, BaseSemantics), // energy/mass (speed-squared) -> velocity
-    (P2, Z0, N4, Z0, Z0, Z0, Z0, BaseSemantics), // acceleration-squared -> acceleration
-    (Z0, Z0, N2, Z0, Z0, Z0, Z0, BaseSemantics), // reciprocal-time-squared -> reciprocal-time
-    (Z0, Z0, N4, Z0, Z0, Z0, Z0, BaseSemantics),
-    (Z0, Z0, Z0, Z0, N2, Z0, Z0, BaseSemantics), // reciprocal-temperature-squared -> reciprocal-temperature
-    (Z0, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics), // dimensionless
-    (Z0, Z0, Z0, Z0, Z0, Z0, Z0, AngleSemantics), // angle -> dimensionless
-);
-
-// Concrete dimension exponent tuples that support cube roots (all exponents
-// divisible by three).
-impl_cbrt!(
-    (P3, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics), // volume -> length
-    (N3, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics), // number-density -> reciprocal-length
-    (N3, Z0, Z0, Z0, Z0, Z0, Z0, ReciprocalVolumeSemantics), // reciprocal-volume -> reciprocal-length
-    (Z0, Z0, Z0, Z0, Z0, Z0, Z0, BaseSemantics),             // dimensionless
-);
