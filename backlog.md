@@ -473,6 +473,25 @@ domain layer.
   working lock during local gates; it was restored unchanged and is not part
   of the provider increment.
 
+## AEQ-LEAN-SPIKE-001 — Decide a machine-checked proof tool for numeric laws [arch] — blocked <a id="aeq-lean-spike-001"></a>
+
+- **Question:** can a numeric law of aequitas, such as the thermal-diffusivity
+  identity in the README, be stated and proved by a machine checker? Which tool
+  should carry it: Verus, which proves Rust programs with SMT, or Aeneas, which
+  translates safe Rust into Lean 4 for proof there?
+- **Why:** the type system checks dimensional consistency (`src/dimension/`).
+  Value identities are only runtime-tested. The dimension group laws are assumed
+  from typenum and nothing in the stack checks them.
+- **Method:** a throwaway pilot outside the repository states and proves one law
+  in the chosen tool. The pilot records what the tool covers: the typenum
+  projections, the external `FloatElement::powf`, and the `Quantity` wrappers.
+- **Deliverable:** a Proposed ADR that records the tool choice, its coverage,
+  its CI cost, and its install footprint on dev hosts, with the pilot result.
+- **Blocker:** either toolchain adds a proof dependency to dev hosts and CI.
+  That needs the owner's approval before anything is installed.
+- **Re-open trigger:** the owner names a tool, or declines proof tooling and the
+  gap is recorded as accepted.
+
 ## Active
 
 - [x] [patch] Make CI verify the committed lock graph with
