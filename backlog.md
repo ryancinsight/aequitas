@@ -2,7 +2,7 @@
 
 ## AEQ-BOOK-PUBLICATION-AUTHORIZATION [patch] — review
 
-- Owner: `codex/book-publication-authorization`; base main `f9c84f8c`.
+- Owner: `codex/book-publication-authorization`; initial base `f9c84f8c`; integrated main `84c5f035`.
 - Deliverable: keep book compilation/sample tests and artifacts on dependency
   changes; publish only on a main-branch manual run with `publish: true`.
 - Design: [book publication](docs/design/book-publication.md); Atlas adds the
@@ -16,36 +16,6 @@
   caller in [#138](https://github.com/ryancinsight/aequitas/pull/138), dependent on
   [Atlas #541](https://github.com/ryancinsight/atlas/pull/541). Merge and
   publication require their applicable authorization.
-
-<a id="aeq-eunomia-010-cohort"></a>
-## AEQ-EUNOMIA-010-COHORT — Adopt the current datatype contract [major]
-
-- Status: blocked; priority: verification; owner: coordinated Coeus release integrator.
-- Finding: the current 0.9 Git requirement excludes the reviewed Eunomia 0.10
-  contract. Public quantity bounds expose the provider's scalar identities.
-- Change: version the Rust law crate as 0.3.0 and require Eunomia 0.10.0; keep
-  one canonical Git source with a Cargo-managed exact candidate lock. The
-  independently versioned Python distribution stays 0.1.0; no Python API changes.
-- Decision: [ADR 0019](docs/adr/0019-eunomia-010-cohort.md).
-- Acceptance: unchanged native/Python tests, all-target strict Clippy, no-std,
-  docs/doctests, package/API gates and exact-head required CI.
-- Evidence: 256 unchanged native tests pass with zero skips; 38 doctests pass
-  with one existing ignore. Strict all-target/all-feature Clippy, no-std and
-  warning-denied docs pass against the published provider source. The standard
-  publish dry-run and automatic API release classification pass; the minor
-  boundary skips breaking rules and makes no backward-compatibility claim.
-  Hosted native, Python standard/free-threaded, lock integrity and supply-chain
-  checks pass at [verified PR source](https://github.com/ryancinsight/aequitas/commit/a466b1d065c467cad2245eddd9c76c2c1e0d66c4); PR book build passes and deployment skips.
-- Prerequisite: Eunomia/derive 0.10.0 are registry-verified from the
-  [published provider source](https://github.com/ryancinsight/eunomia/commit/a231e54dd3311bc916e78c91d994b00d651c1646); the lock selects that exact merge.
-- Pending: final cohort/default-source
-  integration. The existing Pages workflow deploys on Cargo manifest/lock
-  merges. The user now authorizes documentation deployment, but main pushes
-  also invoke the immutable package publisher. The user now authorizes package
-  publication after all exact-head gates/reviews pass, so normal merge may
-  proceed once those checks complete.
-  No workflow, review gate, fixture or timeout changes are proposed.
-
 
 <a id="AEQ-UNIT-COMPOSITION"></a>
 ## AEQ-UNIT-COMPOSITION — Compose linear units [minor] [arch]

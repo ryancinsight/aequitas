@@ -4,7 +4,7 @@ Target version: 0.3.0
 
 Workflow target: Unreleased infrastructure correction [patch]; package version unchanged.
 
-Sprint phase: Closure — book publication authorization; review pending
+Sprint phase: Closure — book publication authorization; completed cohort receipts retained
 
 ## AEQ-BOOK-PUBLICATION-AUTHORIZATION [patch]
 
@@ -26,7 +26,8 @@ Sprint phase: Closure — book publication authorization; review pending
 
 No merge, package publication or Pages deployment is authorized by this item.
 
-Executed locally against the candidate based on `f9c84f8c`:
+Original regression baseline: `f9c84f8c`. Integrated receipt-closure base: `84c5f035`.
+Executed locally against the integrated workflow candidate:
 `python3 -m unittest discover -s scripts/tests -p 'test_book_pages_workflow.py' -v`,
 `actionlint .github/workflows/book-pages.yml`, and `git diff --check`.
 The event matrix uses GitHub's evaluator on predicates read from both actual
@@ -37,18 +38,23 @@ changes, so those package suites are not rerun as local workflow evidence.
 
 ## AEQ-EUNOMIA-010-COHORT [major]
 
-- [x] Check current main and owner PRs; use an isolated checkout.
-- [x] Record the public datatype boundary and align Rust/internal versions.
-- [x] Pass candidate native/Python-Rust tests, no-std, strict lint and docs.
-- [x] Pass hosted native, standard/free-threaded Python, lock integrity and
-      supply-chain checks at [verified PR source](https://github.com/ryancinsight/aequitas/commit/a466b1d065c467cad2245eddd9c76c2c1e0d66c4); the PR build passes and Pages upload skips.
-- [x] Pass the standard publish dry-run and automatic API release classification
-      against published Eunomia 0.10; the minor boundary skips breaking rules.
-- [ ] Complete final default/registry cohort acceptance after the merge blocker.
-- [x] Obtain authorization for automatic documentation deployment.
-- [x] Obtain authorization for normal package publication after exact-head gates.
-- [ ] Complete ready-state checks/review, normal guarded merge, documentation
-      deployment and exact registry/source receipt verification.
+- [x] Inspect current default/owners, isolate work and preserve Rust/test sources.
+- [x] Version public Eunomia 0.10 identities as Rust 0.3.0; keep Python 0.1.0.
+- [x] Pass 256 source native cases (164 law + 92 binding), zero skips, no-std, strict
+      all-target/all-feature Clippy, warning-denied docs and 38 doctests (one ignore).
+- [x] Pass exact reviewed-head required CI, standard/free-threaded Python and
+      ADR gates; [blocking API/package validation](https://github.com/ryancinsight/aequitas/actions/runs/38744275804)
+      succeeds. Minor-boundary classification makes no compatibility claim.
+- [x] Merge reviewed source normally in [PR #136](https://github.com/ryancinsight/aequitas/pull/136);
+      [published source](https://github.com/ryancinsight/aequitas/commit/f9c84f8c3965fa58a71d95a2f9de975abae3a0b5)
+      has the exact reviewed tree. Default CI passes.
+- [x] Verify [publisher](https://github.com/ryancinsight/aequitas/actions/runs/38744751314)
+      and [documentation deployment](https://github.com/ryancinsight/aequitas/actions/runs/38744751088).
+- [x] Verify registry 0.3.0 is not yanked; downloaded SHA256 is
+      `18b05003076db4767bd4c721421fea137a8b06b305d6ec45b45b6487f931fd24` and
+      archive VCS source matches the merge. All 164 archived Rust tests pass on
+      registry Eunomia 0.10, zero skips, with the unchanged 60-second deadline.
+- [x] Retire the completed own backlog item; preserve all unrelated entries.
 
 
 ## AEQ-STRUCTURE-001 — Oversized unit and law-test leaves

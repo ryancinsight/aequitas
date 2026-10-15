@@ -2,7 +2,7 @@
 
 All externally observable changes are recorded here.
 
-## [0.3.0] - unreleased
+## [0.3.0] - 2026-10-15
 
 ### Breaking
 

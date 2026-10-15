@@ -2,7 +2,7 @@
 
 ## AEQ-BOOK-PUBLICATION-AUTHORIZATION [patch] — review
 
-The default book workflow at main `f9c84f8c` publishes on dependency pushes.
+The default book workflow at main `84c5f035` publishes on dependency pushes.
 The candidate preserves validation/artifacts and supplies Atlas's publication
 input only for a manual main run with `publish: true`; a static prerequisite
 protects that contract. Owner: `codex/book-publication-authorization`.
@@ -11,27 +11,26 @@ Local static contracts, syntax and 90 expression scenarios pass. Draft
 [Atlas #541](https://github.com/ryancinsight/atlas/pull/541). Hosted review/checks
 and authorized integration remain. See [design](docs/design/book-publication.md).
 
-GitHub reports #136 merged at `f9c84f8c` on 2026-10-15. The cohort record below
-is its pre-merge snapshot; registry and deployment receipts are not re-audited
-by this workflow correction, and its prior grants do not expand this scope.
+PR #137 receipt closure is integrated from main `84c5f035`; its completed
+cohort record is preserved below. This correction performs no release action
+and does not extend any prior publication authorization.
 
-## AEQ-EUNOMIA-010-COHORT [major] — final integration blocked
+## AEQ-EUNOMIA-010-COHORT [major] — verified published 2026-10-15
 
-The Rust 0.3.0 candidate selects published Eunomia/derive 0.10.0 source a231e54d.
-All Rust implementations and test contracts are unchanged; Python distribution
-0.1.0 keeps its independent version. At [verified PR source](https://github.com/ryancinsight/aequitas/commit/a466b1d065c467cad2245eddd9c76c2c1e0d66c4), 256 native cases pass with
-zero skips, 38 doctests pass with one existing ignore, and no-std, strict
-all-target/all-feature Clippy, warning-denied docs, standard publish dry-run and
-automatic API release classification pass. The minor boundary skips breaking
-rules by tool design. Hosted native/Python standard and free-threaded,
-lock-integrity and supply-chain checks also pass. The PR book build succeeds
-with Pages deployment skipped. A default merge would deploy Pages under the
-existing workflow, now authorized by the user. The same default push also starts
-the immutable pending-package publisher while registry 0.3.0 is absent. Package
-publication is now authorized after all exact-head checks/reviews pass. Finish
-ready-state gates, merge normally and verify registry/source receipts. No
-workflow or gate is weakened.
-
+Aequitas 0.3.0 adopts published Eunomia/derive 0.10.0 source a231e54d without
+Rust algorithm/test or Python API changes; Python distribution 0.1.0 remains
+independent. Exact reviewed CI/API/package/ADR gates pass before normal PR136
+merge. [Published source](https://github.com/ryancinsight/aequitas/commit/f9c84f8c3965fa58a71d95a2f9de975abae3a0b5)
+is tree-identical to review. Publisher 38744751314 and docs deployment 38744751088
+succeed; registry 0.3.0 is not yanked. Its downloaded checksum is
+`18b05003076db4767bd4c721421fea137a8b06b305d6ec45b45b6487f931fd24` and
+embedded VCS names that merge. Source inventory is164 law + 92 binding tests;
+all 256 source cases and all 164 unchanged published law cases pass, zero skips.
+The real archive resolves one registry Eunomia 0.10 identity. Strict lint/docs,
+no-std and 38 doctests pass (one existing ignore); API major-sensitive rules skip
+at this minor boundary, with no backward-compatibility claim. No gate, workflow,
+fixture, assertion, timeout, credential or security setting changes. The
+completed own backlog item is removed; other provider cohort work remains separate.
 
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
 
