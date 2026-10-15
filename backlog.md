@@ -1,5 +1,26 @@
 # Aequitas backlog
 
+<a id="aeq-eunomia-010-cohort"></a>
+## AEQ-EUNOMIA-010-COHORT — Adopt the current datatype contract [major]
+
+- Status: blocked; priority: verification; owner: coordinated Coeus release integrator.
+- Finding: the current 0.9 Git requirement excludes the reviewed Eunomia 0.10
+  contract. Public quantity bounds expose the provider's scalar identities.
+- Change: version the Rust law crate as 0.3.0 and require Eunomia 0.10.0; keep
+  one canonical Git source with a Cargo-managed exact candidate lock. The
+  independently versioned Python distribution stays 0.1.0; no Python API changes.
+- Decision: [ADR 0019](docs/adr/0019-eunomia-010-cohort.md).
+- Acceptance: unchanged native/Python tests, all-target strict Clippy, no-std,
+  docs/doctests, package/API gates and exact-head required CI.
+- Evidence: 256 unchanged native tests pass with zero skips; 38 doctests pass
+  with one existing ignore. Strict all-target/all-feature Clippy, no-std and
+  warning-denied docs pass against the precise reviewed provider candidate.
+- Pending: hosted Python/final cohort gates, prerequisite publication and default-source
+  integration. The existing Pages workflow deploys on Cargo manifest/lock
+  merges; deployment remains unauthorized, so a normal default merge is held.
+  No workflow, review gate, fixture or timeout changes are proposed.
+
+
 <a id="AEQ-UNIT-COMPOSITION"></a>
 ## AEQ-UNIT-COMPOSITION — Compose linear units [minor] [arch]
 

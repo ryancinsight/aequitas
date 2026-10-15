@@ -1,8 +1,18 @@
 # Aequitas checklist
 
-Target version: 0.2.0
+Target version: 0.3.0
 
-Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified green)
+Sprint phase: Execution — Eunomia 0.10 cohort; historical closure entries retained
+
+## AEQ-EUNOMIA-010-COHORT [major]
+
+- [x] Check current main and owner PRs; use an isolated checkout.
+- [x] Record the public datatype boundary and align Rust/internal versions.
+- [x] Pass candidate native/Python-Rust tests, no-std, strict lint and docs.
+- [ ] Collect hosted standard/free-threaded Python and final cohort gates.
+- [ ] Verify registry package/API gates after Eunomia 0.10 is published.
+- [ ] Resolve the prohibited Pages side effect before any default merge.
+
 
 ## AEQ-STRUCTURE-001 — Oversized unit and law-test leaves
 
