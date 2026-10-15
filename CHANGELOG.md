@@ -2,6 +2,22 @@
 
 All externally observable changes are recorded here.
 
+## [0.3.0] - unreleased
+
+### Breaking
+
+- Require Eunomia 0.10 for the public quantity scalar bounds and conversion
+  surface. Provider scalar identities must come from that same version line;
+  this adopts the provider's CastFrom/CastTo retirement without adding aliases.
+
+### Migration
+
+- Advance Rust consumers to `aequitas = "0.3"` and Eunomia 0.10, retaining a
+  single reviewed provider identity in the lock. Use the provider's named
+  conversion contracts. Rust algorithms, tests and Python API behavior remain
+  unchanged; the independently versioned Python distribution stays 0.1.0.
+  See [ADR 0019](docs/adr/0019-eunomia-010-cohort.md).
+
 ## [Unreleased]
 
 ### Changed

@@ -1,8 +1,24 @@
 # Aequitas checklist
 
-Target version: 0.2.0
+Target version: 0.3.0
 
-Sprint phase: Closed — delivered 2026-08-12 (all committed scope verified green)
+Sprint phase: Execution — Eunomia 0.10 cohort; historical closure entries retained
+
+## AEQ-EUNOMIA-010-COHORT [major]
+
+- [x] Check current main and owner PRs; use an isolated checkout.
+- [x] Record the public datatype boundary and align Rust/internal versions.
+- [x] Pass candidate native/Python-Rust tests, no-std, strict lint and docs.
+- [x] Pass hosted native, standard/free-threaded Python, lock integrity and
+      supply-chain checks at [verified PR source](https://github.com/ryancinsight/aequitas/commit/a466b1d065c467cad2245eddd9c76c2c1e0d66c4); the PR build passes and Pages upload skips.
+- [x] Pass the standard publish dry-run and automatic API release classification
+      against published Eunomia 0.10; the minor boundary skips breaking rules.
+- [ ] Complete final default/registry cohort acceptance after the merge blocker.
+- [x] Obtain authorization for automatic documentation deployment.
+- [x] Obtain authorization for normal package publication after exact-head gates.
+- [ ] Complete ready-state checks/review, normal guarded merge, documentation
+      deployment and exact registry/source receipt verification.
+
 
 ## AEQ-STRUCTURE-001 — Oversized unit and law-test leaves
 
