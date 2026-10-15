@@ -6,7 +6,9 @@ The default book workflow at main `84c5f035` publishes on dependency pushes.
 The candidate preserves validation/artifacts and supplies Atlas's publication
 input only for a manual main run with `publish: true`; a static prerequisite
 protects that contract. Owner: `codex/book-publication-authorization`.
-Local static contracts, syntax and 90 expression scenarios pass. Draft
+Local static contracts, syntax and 90 expression scenarios pass;
+[hosted book](https://github.com/ryancinsight/aequitas/actions/runs/38751731220)
+and package CI pass while Pages skips. Draft
 [Aequitas #138](https://github.com/ryancinsight/aequitas/pull/138) depends on
 [Atlas #541](https://github.com/ryancinsight/atlas/pull/541). Hosted review/checks
 and authorized integration remain. See [design](docs/design/book-publication.md).

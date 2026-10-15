@@ -22,6 +22,11 @@ Sprint phase: Closure — book publication authorization; completed cohort recei
 - [x] [patch] Complete exact-diff review and open
   [Aequitas #138](https://github.com/ryancinsight/aequitas/pull/138), dependent on
   the pinned implementation in [Atlas #541](https://github.com/ryancinsight/atlas/pull/541).
+- [x] [patch] [Hosted book](https://github.com/ryancinsight/aequitas/actions/runs/38751731220)
+  and [package CI](https://github.com/ryancinsight/aequitas/actions/runs/38751731059)
+  pass contract, book, native, both Python variants, lock integrity, supply chain
+  and informational SemVer; Pages skips.
+  The following planning-only update adds required anchor/status/priority fields.
 - [ ] [patch] Complete hosted checks and separately authorized integration.
 
 No merge, package publication or Pages deployment is authorized by this item.

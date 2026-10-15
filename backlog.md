@@ -1,7 +1,9 @@
 # Aequitas backlog
 
-## AEQ-BOOK-PUBLICATION-AUTHORIZATION [patch] — review
+<a id="aeq-book-publication-authorization"></a>
+## AEQ-BOOK-PUBLICATION-AUTHORIZATION — Separate book validation from Pages publication [patch] — todo
 
+- Priority: correctness; basis: dependency validation must not imply publication.
 - Owner: `codex/book-publication-authorization`; initial base `f9c84f8c`; integrated main `84c5f035`.
 - Deliverable: keep book compilation/sample tests and artifacts on dependency
   changes; publish only on a main-branch manual run with `publish: true`.
