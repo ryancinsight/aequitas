@@ -14,7 +14,9 @@ Sprint phase: Execution — Eunomia 0.10 cohort; historical closure entries reta
 - [x] Pass the standard publish dry-run and automatic API release classification
       against published Eunomia 0.10; the minor boundary skips breaking rules.
 - [ ] Complete final default/registry cohort acceptance after the merge blocker.
-- [ ] Resolve the prohibited Pages side effect before any default merge.
+- [x] Obtain authorization for automatic documentation deployment.
+- [ ] Resolve the package-publication side effect before any default merge;
+      this turn expressly forbids package publishing and workflow changes.
 
 
 ## AEQ-STRUCTURE-001 — Oversized unit and law-test leaves

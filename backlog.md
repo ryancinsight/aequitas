@@ -23,7 +23,9 @@
   [published provider source](https://github.com/ryancinsight/eunomia/commit/a231e54dd3311bc916e78c91d994b00d651c1646); the lock selects that exact merge.
 - Pending: final cohort/default-source
   integration. The existing Pages workflow deploys on Cargo manifest/lock
-  merges; deployment remains unauthorized, so a normal default merge is held.
+  merges. The user now authorizes documentation deployment, but main pushes
+  also invoke the immutable package publisher. Package publication is forbidden
+  in this resumed turn, so default merge remains pending that separate scope.
   No workflow, review gate, fixture or timeout changes are proposed.
 
 

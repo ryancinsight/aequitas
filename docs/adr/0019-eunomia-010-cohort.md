@@ -31,6 +31,9 @@ exact-head CI. Local candidate validation is distinct from final cohort
 acceptance while the prerequisite and consumer defaults are not integrated.
 
 The existing book workflow triggers on Cargo.toml/Cargo.lock merges and deploys
-Pages on a default-branch push. Deployment remains outside the authorized scope;
-keep the default merge held rather than changing that workflow or its gates.
-Miri remains deferred and unverified, and no performance experiments occur.
+Pages on a default-branch push; the user now authorizes this documentation
+deployment. The same push selects the immutable pending-package publisher, and
+registry Aequitas 0.3.0 is absent. This resumed turn forbids package publication;
+keep default merge pending separate publication scope rather than changing the
+workflow or gates. Required provider Miri CI is now authorized with actual
+results pending; no held safety work or performance experiments are resumed.

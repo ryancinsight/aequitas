@@ -11,8 +11,10 @@ automatic API release classification pass. The minor boundary skips breaking
 rules by tool design. Hosted native/Python standard and free-threaded,
 lock-integrity and supply-chain checks also pass. The PR book build succeeds
 with Pages deployment skipped. A default merge would deploy Pages under the
-existing workflow, outside this task's authority; keep PR #136 draft/open and
-publication/default acceptance blocked. No workflow or gate is weakened.
+existing workflow, now authorized by the user. The same default push also starts
+the immutable pending-package publisher while registry 0.3.0 is absent. Package
+publication remains forbidden in this resumed turn; hold the default merge and
+finish ready-state gates. No workflow or gate is weakened.
 
 
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
