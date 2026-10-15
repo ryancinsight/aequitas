@@ -20,6 +20,7 @@ on:
       - "Cargo.lock"
 
       - ".github/workflows/book-pages.yml"
+      - "scripts/tests/test_book_pages_workflow.py"
 
   pull_request:
 
@@ -31,8 +32,15 @@ on:
       - "Cargo.lock"
 
       - ".github/workflows/book-pages.yml"
+      - "scripts/tests/test_book_pages_workflow.py"
 
   workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish Pages from main (requires publication authorization)
+        type: boolean
+        required: false
+        default: false
 
 
 
@@ -56,15 +64,30 @@ concurrency:
 
 jobs:
 
+  contract:
+    name: Book publication contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - name: Install workflow parser
+        run: python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
+      - name: Verify book publication contract
+        run: python3 -m unittest discover -s scripts/tests -p 'test_book_pages_workflow.py' -v
+
   deploy:
 
-    # Body owned once by Atlas (ADR 0035); the caller passes only the
+    needs: contract
 
-    # built output directory. Enable Pages once per repository under
+    # Body owned once by Atlas (ADR 0035). Every run validates the book;
 
-    # Settings -> Pages -> Source: GitHub Actions.
+    # only a main-branch dispatch with publish selected authorizes Pages.
 
-    uses: ryancinsight/atlas/.github/workflows/book-pages.yml@20c93980f7c98f2e23a89c4a0540f16c8f2d7239
+    # Existing Pages environment protection and permissions still apply.
+
+    uses: ryancinsight/atlas/.github/workflows/book-pages.yml@89f24d96c340ac0989145d058beececaac43a3ad
 
     permissions:
 
@@ -77,6 +100,8 @@ jobs:
     with:
 
       output-path: target/book/aequitas
+
+      deploy: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.publish }}
 
       mdbook-test: true
 

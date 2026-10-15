@@ -1,5 +1,24 @@
 # Aequitas backlog
 
+<a id="aeq-book-publication-authorization"></a>
+## AEQ-BOOK-PUBLICATION-AUTHORIZATION — Separate book validation from Pages publication [patch] — todo
+
+- Priority: correctness; basis: dependency validation must not imply publication.
+- Owner: `codex/book-publication-authorization`; initial base `f9c84f8c`; integrated main `84c5f035`.
+- Deliverable: keep book compilation/sample tests and artifacts on dependency
+  changes; publish only on a main-branch manual run with `publish: true`.
+- Design: [book publication](docs/design/book-publication.md); Atlas adds the
+  optional gate without changing existing consumers' defaults or pins.
+- Evidence: the unchanged caller fails the authorization regression because
+  it supplies no deployment input; candidate static contracts run before the
+  shared book job. Exact verification state is in `checklist.md`.
+- Scope: workflow, focused static tests and their documentation. Package APIs,
+  versions, manifests, locks, security settings and other callers are excluded.
+- Next: review the Atlas provider first, then this independently reviewable
+  caller in [#138](https://github.com/ryancinsight/aequitas/pull/138), dependent on
+  [Atlas #541](https://github.com/ryancinsight/atlas/pull/541). Merge and
+  publication require their applicable authorization.
+
 <a id="AEQ-UNIT-COMPOSITION"></a>
 ## AEQ-UNIT-COMPOSITION — Compose linear units [minor] [arch]
 

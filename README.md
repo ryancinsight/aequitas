@@ -388,6 +388,22 @@ RUSTDOCFLAGS="-D warnings" cargo doc --locked --no-deps --all-features
 cargo deny check
 ```
 
+### Book validation and publication
+
+The book workflow compiles the book, tests its Rust samples and uploads the
+Pages artifact on relevant pull requests and main pushes, including changes to
+`Cargo.toml` or `Cargo.lock`. These automatic runs do not publish documentation.
+For an authorized publication, select **Deploy mdBook → Run workflow**, choose
+`main` and enable **publish**. A manual run without that checkbox, or on another
+branch or tag, validates without publishing. The existing `github-pages`
+environment and protections continue to govern deployment.
+
+The [publication design](docs/design/book-publication.md) records the gate,
+Atlas pin and verification. Its static contract runs before the shared book job
+and can be checked locally with
+`python3 -m unittest discover -s scripts/tests -p 'test_book_pages_workflow.py' -v`
+after installing `PyYAML==6.0.3`.
+
 ### Pre-push hook
 
 Install the hooks once per clone:
