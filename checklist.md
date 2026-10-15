@@ -7,7 +7,9 @@ Target for this slice: Aequitas 0.3.1.
 - [x] Inspect current default, open PR ownership and repository instructions.
 - [x] Widen only the provider range; preserve all Rust/test/workflow bytes and
       every external lock record. Record the compatible patch package targets.
-- [ ] Pass exact-head native, lint/docs, standard-package and API gates.
+- [x] Pass source-head [3e11b88](https://github.com/ryancinsight/aequitas/commit/3e11b884ab917546b61f4f83137b1ceab57eec1d) native (256 native cases, zero skips),
+      strict lint/docs/doctests, standard-package and API gates.
+      All external locked records and implementation bytes remain unchanged.
 - [ ] Pass applicable hosted checks and review; verify merge side effects.
 - [ ] Merge normally and verify actual registry archives; revalidate Coeus on
       one canonical published Eunomia 0.11 source before closing this item.
