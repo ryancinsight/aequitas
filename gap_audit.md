@@ -1,5 +1,18 @@
 # Aequitas gap audit
 
+## AEQ-BOOK-PUBLICATION-AUTHORIZATION [patch] — review
+
+The default book workflow at main `f9c84f8c` publishes on dependency pushes.
+The candidate preserves validation/artifacts and supplies Atlas's publication
+input only for a manual main run with `publish: true`; a static prerequisite
+protects that contract. Owner: `codex/book-publication-authorization`.
+Remaining: exact candidate verification, hosted review/checks and authorized
+integration. See [design](docs/design/book-publication.md).
+
+GitHub reports #136 merged at `f9c84f8c` on 2026-10-15. The cohort record below
+is its pre-merge snapshot; registry and deployment receipts are not re-audited
+by this workflow correction, and its prior grants do not expand this scope.
+
 ## AEQ-EUNOMIA-010-COHORT [major] — final integration blocked
 
 The Rust 0.3.0 candidate selects published Eunomia/derive 0.10.0 source a231e54d.

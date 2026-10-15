@@ -2,7 +2,36 @@
 
 Target version: 0.3.0
 
-Sprint phase: Execution — Eunomia 0.10 cohort; historical closure entries retained
+Workflow target: Unreleased infrastructure correction [patch]; package version unchanged.
+
+Sprint phase: Closure — book publication authorization; review pending
+
+## AEQ-BOOK-PUBLICATION-AUTHORIZATION [patch]
+
+- [x] [patch] Audit the real caller and Atlas provider; isolate this correction
+  from the existing cohort work and its release authorization.
+- [x] [patch] Reproduce the caller's missing deployment input on base `f9c84f8c`.
+- [x] [patch] Keep automatic book/sample validation and artifact upload; require
+  a main-branch dispatch with an explicit true publication input for Pages.
+- [x] [patch] Preserve permissions and per-ref serialization; pin the tested
+  Atlas workflow and record inherited changes since the previous pin.
+- [x] [patch] Pass six focused static contracts and actionlint 1.7.12. Evaluate
+  the real caller/shared expressions with `@actions/expressions` 0.3.61:
+  45 Aequitas event/ref/input scenarios and 45 legacy/opt-out compatibility
+  scenarios pass. PRs and ordinary main dependency pushes never authorize Pages.
+- [ ] [patch] Complete exact-diff review and independent draft review changes.
+- [ ] [patch] Complete hosted checks and separately authorized integration.
+
+No merge, package publication or Pages deployment is authorized by this item.
+
+Executed locally against the candidate based on `f9c84f8c`:
+`python3 -m unittest discover -s scripts/tests -p 'test_book_pages_workflow.py' -v`,
+`actionlint .github/workflows/book-pages.yml`, and `git diff --check`.
+The event matrix uses GitHub's evaluator on predicates read from both actual
+workflow files. Atlas's six focused contracts, 56 workflow regressions and 17
+book-audit cases pass; no publication executes. Shellcheck/pyflakes are
+unavailable locally; no Rust, binding, dependency or package-release code
+changes, so those package suites are not rerun as local workflow evidence.
 
 ## AEQ-EUNOMIA-010-COHORT [major]
 

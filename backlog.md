@@ -1,5 +1,20 @@
 # Aequitas backlog
 
+## AEQ-BOOK-PUBLICATION-AUTHORIZATION [patch] — review
+
+- Owner: `codex/book-publication-authorization`; base main `f9c84f8c`.
+- Deliverable: keep book compilation/sample tests and artifacts on dependency
+  changes; publish only on a main-branch manual run with `publish: true`.
+- Design: [book publication](docs/design/book-publication.md); Atlas adds the
+  optional gate without changing existing consumers' defaults or pins.
+- Evidence: the unchanged caller fails the authorization regression because
+  it supplies no deployment input; candidate static contracts run before the
+  shared book job. Exact verification state is in `checklist.md`.
+- Scope: workflow, focused static tests and their documentation. Package APIs,
+  versions, manifests, locks, security settings and other callers are excluded.
+- Next: review the Atlas provider first, then this independently reviewable
+  caller. Merge and publication require their applicable authorization.
+
 <a id="aeq-eunomia-010-cohort"></a>
 ## AEQ-EUNOMIA-010-COHORT — Adopt the current datatype contract [major]
 

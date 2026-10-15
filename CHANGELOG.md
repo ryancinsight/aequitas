@@ -22,6 +22,13 @@ All externally observable changes are recorded here.
 
 ### Changed
 
+- [patch] Separate automatic book validation from Pages publication. Source,
+  dependency and book changes still compile/test and upload the book artifact;
+  deployment requires a manual main-branch run with `publish: true` and the
+  existing Pages environment protection. Add a static workflow-contract gate
+  and pin the Atlas provider's optional publication input. Package versions,
+  manifests, locks and release workflows remain unchanged.
+
 - The Python floor moves from 3.8 to 3.10, and the structural read allocates
   nothing. `abi3-py310` is the lowest stable-ABI level that exposes
   `PyUnicode_AsUTF8AndSize`, so it is the lowest at which the tag's marker name
