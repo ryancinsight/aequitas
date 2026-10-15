@@ -1,5 +1,20 @@
 # Aequitas gap audit
 
+## AEQ-EUNOMIA-010-COHORT [major] — final integration blocked
+
+The Rust 0.3.0 candidate selects published Eunomia/derive 0.10.0 source a231e54d.
+All Rust implementations and test contracts are unchanged; Python distribution
+0.1.0 keeps its independent version. At a466b1d0, 256 native cases pass with
+zero skips, 38 doctests pass with one existing ignore, and no-std, strict
+all-target/all-feature Clippy, warning-denied docs, standard publish dry-run and
+automatic API release classification pass. The minor boundary skips breaking
+rules by tool design. Hosted native/Python standard and free-threaded,
+lock-integrity and supply-chain checks also pass. The PR book build succeeds
+with Pages deployment skipped. A default merge would deploy Pages under the
+existing workflow, outside this task's authority; keep PR #136 draft/open and
+publication/default acceptance blocked. No workflow or gate is weakened.
+
+
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
 
 The current provider head is `4ab0eb4` (`chore(aequitas): Promote the lint

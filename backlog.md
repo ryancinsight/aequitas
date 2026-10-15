@@ -14,10 +14,14 @@
   docs/doctests, package/API gates and exact-head required CI.
 - Evidence: 256 unchanged native tests pass with zero skips; 38 doctests pass
   with one existing ignore. Strict all-target/all-feature Clippy, no-std and
-  warning-denied docs pass against the precise reviewed provider candidate.
+  warning-denied docs pass against the published provider source. The standard
+  publish dry-run and automatic API release classification pass; the minor
+  boundary skips breaking rules and makes no backward-compatibility claim.
+  Hosted native, Python standard/free-threaded, lock integrity and supply-chain
+  checks pass at a466b1d0; PR book build passes and deployment skips.
 - Prerequisite: Eunomia/derive 0.10.0 are registry-verified from the
   [published provider source](https://github.com/ryancinsight/eunomia/commit/a231e54dd3311bc916e78c91d994b00d651c1646); the lock selects that exact merge.
-- Pending: hosted Python/final cohort gates and default-source
+- Pending: final cohort/default-source
   integration. The existing Pages workflow deploys on Cargo manifest/lock
   merges; deployment remains unauthorized, so a normal default merge is held.
   No workflow, review gate, fixture or timeout changes are proposed.

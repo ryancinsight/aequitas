@@ -9,8 +9,11 @@ Sprint phase: Execution — Eunomia 0.10 cohort; historical closure entries reta
 - [x] Check current main and owner PRs; use an isolated checkout.
 - [x] Record the public datatype boundary and align Rust/internal versions.
 - [x] Pass candidate native/Python-Rust tests, no-std, strict lint and docs.
-- [ ] Collect hosted standard/free-threaded Python and final cohort gates.
-- [ ] Verify registry package/API gates after Eunomia 0.10 is published.
+- [x] Pass hosted native, standard/free-threaded Python, lock integrity and
+      supply-chain checks at a466b1d0; the PR build passes and Pages upload skips.
+- [x] Pass the standard publish dry-run and automatic API release classification
+      against published Eunomia 0.10; the minor boundary skips breaking rules.
+- [ ] Complete final default/registry cohort acceptance after the merge blocker.
 - [ ] Resolve the prohibited Pages side effect before any default merge.
 
 

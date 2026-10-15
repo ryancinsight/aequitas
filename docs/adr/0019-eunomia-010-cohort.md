@@ -6,8 +6,8 @@
 
 ## Context and decision
 
-Eunomia's current default implementation removes CastFrom/CastTo, but its
-manifest still declares 0.9.1. The published compatible 0.9.2 maintenance source
+At the start of this increment, Eunomia's default implementation removed
+CastFrom/CastTo while its manifest still declared 0.9.1. The compatible 0.9.2 maintenance source
 retains those traits. The reviewed provider correction versions the current
 contract as 0.10.0. Aequitas exposes Eunomia scalar bounds in its public quantity
 APIs, so adopting the new nominal provider identities requires a pre-1.0 minor
