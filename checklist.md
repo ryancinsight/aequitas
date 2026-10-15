@@ -15,8 +15,9 @@ Sprint phase: Execution — Eunomia 0.10 cohort; historical closure entries reta
       against published Eunomia 0.10; the minor boundary skips breaking rules.
 - [ ] Complete final default/registry cohort acceptance after the merge blocker.
 - [x] Obtain authorization for automatic documentation deployment.
-- [ ] Resolve the package-publication side effect before any default merge;
-      this turn expressly forbids package publishing and workflow changes.
+- [x] Obtain authorization for normal package publication after exact-head gates.
+- [ ] Complete ready-state checks/review, normal guarded merge, documentation
+      deployment and exact registry/source receipt verification.
 
 
 ## AEQ-STRUCTURE-001 — Oversized unit and law-test leaves

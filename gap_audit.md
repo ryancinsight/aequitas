@@ -13,8 +13,9 @@ lock-integrity and supply-chain checks also pass. The PR book build succeeds
 with Pages deployment skipped. A default merge would deploy Pages under the
 existing workflow, now authorized by the user. The same default push also starts
 the immutable pending-package publisher while registry 0.3.0 is absent. Package
-publication remains forbidden in this resumed turn; hold the default merge and
-finish ready-state gates. No workflow or gate is weakened.
+publication is now authorized after all exact-head checks/reviews pass. Finish
+ready-state gates, merge normally and verify registry/source receipts. No
+workflow or gate is weakened.
 
 
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16

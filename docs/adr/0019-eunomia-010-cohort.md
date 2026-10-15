@@ -33,7 +33,8 @@ acceptance while the prerequisite and consumer defaults are not integrated.
 The existing book workflow triggers on Cargo.toml/Cargo.lock merges and deploys
 Pages on a default-branch push; the user now authorizes this documentation
 deployment. The same push selects the immutable pending-package publisher, and
-registry Aequitas 0.3.0 is absent. This resumed turn forbids package publication;
-keep default merge pending separate publication scope rather than changing the
-workflow or gates. Required provider Miri CI is now authorized with actual
+registry Aequitas 0.3.0 is absent. The user now authorizes package publication
+after all exact-head checks/reviews pass; merge normally and verify its source,
+publication and documentation receipts without workflow or gate changes.
+Required provider Miri CI is now authorized with actual
 results pending; no held safety work or performance experiments are resumed.
