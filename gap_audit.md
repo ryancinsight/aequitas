@@ -4,7 +4,7 @@
 
 The Rust 0.3.0 candidate selects published Eunomia/derive 0.10.0 source a231e54d.
 All Rust implementations and test contracts are unchanged; Python distribution
-0.1.0 keeps its independent version. At a466b1d0, 256 native cases pass with
+0.1.0 keeps its independent version. At [verified PR source](https://github.com/ryancinsight/aequitas/commit/a466b1d065c467cad2245eddd9c76c2c1e0d66c4), 256 native cases pass with
 zero skips, 38 doctests pass with one existing ignore, and no-std, strict
 all-target/all-feature Clippy, warning-denied docs, standard publish dry-run and
 automatic API release classification pass. The minor boundary skips breaking

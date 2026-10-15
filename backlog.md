@@ -18,7 +18,7 @@
   publish dry-run and automatic API release classification pass; the minor
   boundary skips breaking rules and makes no backward-compatibility claim.
   Hosted native, Python standard/free-threaded, lock integrity and supply-chain
-  checks pass at a466b1d0; PR book build passes and deployment skips.
+  checks pass at [verified PR source](https://github.com/ryancinsight/aequitas/commit/a466b1d065c467cad2245eddd9c76c2c1e0d66c4); PR book build passes and deployment skips.
 - Prerequisite: Eunomia/derive 0.10.0 are registry-verified from the
   [published provider source](https://github.com/ryancinsight/eunomia/commit/a231e54dd3311bc916e78c91d994b00d651c1646); the lock selects that exact merge.
 - Pending: final cohort/default-source

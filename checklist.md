@@ -10,7 +10,7 @@ Sprint phase: Execution — Eunomia 0.10 cohort; historical closure entries reta
 - [x] Record the public datatype boundary and align Rust/internal versions.
 - [x] Pass candidate native/Python-Rust tests, no-std, strict lint and docs.
 - [x] Pass hosted native, standard/free-threaded Python, lock integrity and
-      supply-chain checks at a466b1d0; the PR build passes and Pages upload skips.
+      supply-chain checks at [verified PR source](https://github.com/ryancinsight/aequitas/commit/a466b1d065c467cad2245eddd9c76c2c1e0d66c4); the PR build passes and Pages upload skips.
 - [x] Pass the standard publish dry-run and automatic API release classification
       against published Eunomia 0.10; the minor boundary skips breaking rules.
 - [ ] Complete final default/registry cohort acceptance after the merge blocker.
