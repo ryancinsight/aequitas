@@ -19,7 +19,9 @@ Sprint phase: Closure — book publication authorization; review pending
   the real caller/shared expressions with `@actions/expressions` 0.3.61:
   45 Aequitas event/ref/input scenarios and 45 legacy/opt-out compatibility
   scenarios pass. PRs and ordinary main dependency pushes never authorize Pages.
-- [ ] [patch] Complete exact-diff review and independent draft review changes.
+- [x] [patch] Complete exact-diff review and open
+  [Aequitas #138](https://github.com/ryancinsight/aequitas/pull/138), dependent on
+  the pinned implementation in [Atlas #541](https://github.com/ryancinsight/atlas/pull/541).
 - [ ] [patch] Complete hosted checks and separately authorized integration.
 
 No merge, package publication or Pages deployment is authorized by this item.

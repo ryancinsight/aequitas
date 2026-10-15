@@ -6,8 +6,10 @@ The default book workflow at main `f9c84f8c` publishes on dependency pushes.
 The candidate preserves validation/artifacts and supplies Atlas's publication
 input only for a manual main run with `publish: true`; a static prerequisite
 protects that contract. Owner: `codex/book-publication-authorization`.
-Remaining: exact candidate verification, hosted review/checks and authorized
-integration. See [design](docs/design/book-publication.md).
+Local static contracts, syntax and 90 expression scenarios pass. Draft
+[Aequitas #138](https://github.com/ryancinsight/aequitas/pull/138) depends on
+[Atlas #541](https://github.com/ryancinsight/atlas/pull/541). Hosted review/checks
+and authorized integration remain. See [design](docs/design/book-publication.md).
 
 GitHub reports #136 merged at `f9c84f8c` on 2026-10-15. The cohort record below
 is its pre-merge snapshot; registry and deployment receipts are not re-audited

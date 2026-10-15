@@ -13,7 +13,9 @@
 - Scope: workflow, focused static tests and their documentation. Package APIs,
   versions, manifests, locks, security settings and other callers are excluded.
 - Next: review the Atlas provider first, then this independently reviewable
-  caller. Merge and publication require their applicable authorization.
+  caller in [#138](https://github.com/ryancinsight/aequitas/pull/138), dependent on
+  [Atlas #541](https://github.com/ryancinsight/atlas/pull/541). Merge and
+  publication require their applicable authorization.
 
 <a id="aeq-eunomia-010-cohort"></a>
 ## AEQ-EUNOMIA-010-COHORT — Adopt the current datatype contract [major]
