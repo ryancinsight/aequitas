@@ -12,7 +12,7 @@
 - Target: Aequitas 0.3.1. Existing implementation, tests, features, native deadlines
   and every external locked package remain unchanged. No adapter is added.
 - Evidence: the unmodified Coeus resolver rejects the 0.11 candidate against
-  current `^0.10` requirements. Source-head [3e11b88](https://github.com/ryancinsight/aequitas/commit/3e11b884ab917546b61f4f83137b1ceab57eec1d) passes
+  current `^0.10` requirements. Source-head [validated source](https://github.com/ryancinsight/aequitas/commit/3e11b884ab917546b61f4f83137b1ceab57eec1d) passes
   256 native cases, zero skips, strict lint/docs/doctests, standard packages and API checks.
   Final-head hosted CI/review and publication remain pending.
 - Acceptance: exact-source native, strict lint/docs, standard packages and API
