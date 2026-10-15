@@ -1,5 +1,25 @@
 # Aequitas backlog
 
+<a id="AEQ-EUNOMIA-011-RANGE"></a>
+## AEQ-EUNOMIA-011-RANGE — Admit the additive Eunomia provider line [patch] — todo
+
+- priority: correctness; status: todo; owner: Codex.
+- Scope: canonical Eunomia requirement and affected package versions only;
+  prerequisite for [Eunomia #182](https://github.com/ryancinsight/eunomia/pull/182)
+  and [Coeus #528](https://github.com/ryancinsight/Coeus/pull/528).
+- Outcome: accept `>=0.10.0, <0.12.0`, retaining the current 0.10 provider
+  and admitting its additive 0.11 const-construction API with one Git identity.
+- Target: Aequitas 0.3.1. Existing implementation, tests, features, native deadlines
+  and every external locked package remain unchanged. No adapter is added.
+- Evidence: the unmodified Coeus resolver rejects the 0.11 candidate against
+  current `^0.10` requirements. Source-head [validated source](https://github.com/ryancinsight/aequitas/commit/3e11b884ab917546b61f4f83137b1ceab57eec1d) passes
+  256 native cases, zero skips, strict lint/docs/doctests, standard packages and API checks.
+  Final-head hosted CI/review and publication remain pending.
+- Acceptance: exact-source native, strict lint/docs, standard packages and API
+  comparisons pass; existing applicable CI/reviews pass before normal merge.
+  Revalidate the actual 0.11 consumer after that provider is published.
+
+
 <a id="AEQ-UNIT-COMPOSITION"></a>
 ## AEQ-UNIT-COMPOSITION — Compose linear units [minor] [arch]
 
