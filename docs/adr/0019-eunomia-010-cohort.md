@@ -15,8 +15,9 @@ boundary even though Aequitas's Rust algorithms do not change.
 
 Require Eunomia 0.10.0 and advance the Rust law crate and its internal binding
 edge to 0.3.0. Use the canonical Git URL with no manifest revision alias; Cargo
-locks the reviewed candidate source. The final cohort must select the merged,
-published provider source before release acceptance. No older-source fallback,
+locks the reviewed merged provider source. Eunomia and derive 0.10.0 are
+registry-verified from [the published merge](https://github.com/ryancinsight/eunomia/commit/a231e54dd3311bc916e78c91d994b00d651c1646).
+Final consumer acceptance still requires all own package/API and hosted gates. No older-source fallback,
 conversion shim or numerical implementation change is introduced.
 
 ADR 0017 gives Python independent distribution versioning. The Python API has
