@@ -1,5 +1,44 @@
 # Aequitas gap audit
 
+## Current reconciliation — 2026-10-19 — review candidate
+
+Base: [`84c5f035`](https://github.com/ryancinsight/aequitas/commit/84c5f03514ebe69473bbaa7cd51828f1ed3ca068),
+law 0.3.0 / binding 0.1.0. The newest chronological release is 0.3.0;
+GitHub's older `Latest` label is not version evidence. Candidate targets are
+law 0.4.0 / binding 0.2.0; proposed [ADR 0020](docs/adr/0020-exact-exponent-boundaries.md)
+records the public bound changes and required review. Historical results below
+remain evidence for their named revisions, not final-head acceptance.
+
+| Gap | Reconciled status and evidence |
+| --- | --- |
+| AEQ-NATIVE-SQRT [patch] | Fixed: native provider root preserves `sqrt(-0) = -0`; the new special-value regression fails on unchanged production. Both primitive widths and 11,510 binade boundary samples compare against native roots. |
+| AEQ-COMPLEX-DIV [patch] | Fixed: provider component division replaces reciprocal multiplication for `/` and `/=`. Baseline yields NaN for zero divided by the smallest positive subnormal; tests cover 288 scalar pairs, both components and operators. |
+| AEQ-TAG-ROOT [patch] | Fixed: checked exact division rejects `-128 / -1` without panic. Exhaustive 458,752 axis/exponent/root cases compare against exact widened integer arithmetic; range diagnostic has a value assertion. |
+| AEQ-EXPONENT-RANGE [major] | Fixed in draft: power exponents must fit `i32`; wire-tag exponents must fit `i8`. Four finalized compile-fail regressions compile incorrectly on unchanged production; signed endpoint tests pass after bounds. Dimension algebra itself remains unbounded. |
+| AEQ-EXTREMA-DOC [patch] | Corrected: min/max already ignore a single NaN and distinguish opposite signed zeros. New cross-product tests verify existing behavior; no numeric change. |
+| AEQ-MAC-WHEEL [patch] | Fixed in draft: symbol stripping creates a malformed Mach-O LINKEDIT string pool on this Mac. Preserve the extension's symbol table; optimized code and disabled debug information remain. Actual release-wheel import and full pytest validate the output. |
+| Dependencies [minor] | Refreshed: Eunomia/derive 0.10 source `15fbb94c`, PyO3 0.30.1, proptest 1.12.0 and current compatible transitives. `cargo update --dry-run --verbose` reports zero remaining updates. No path/patch overlay. |
+| Affine temperature / composed units | Already implemented: `AffineUnit`, temperature point/interval arithmetic, composed `Unit` and their native/Python tests. General affine kinds remain consumer-gated, not an implementation stub. |
+| Source stubs | No `TODO`, `FIXME`, `todo!` or `unimplemented!` markers in either production source tree. This scan alone does not establish correctness. |
+| Python publication | Partial: binding and local wheel are implemented and tested. Historical PyPI trusted-publisher configuration is unverified; no publication attempt or account setting change occurs here. |
+| Proof tooling / recurseml | Historical owner/tooling blockers remain unverified. Current #140 has no commit-status contexts; that does not establish app removal. No account permission or proof-tool decision is inferred. |
+| Deferred storage / formatting | Integer/rational storage, broader kind systems and formatting beyond current named/composed `UnitDisplay` stay consumer-gated; no new consumer requirement is established here. |
+
+Verification: original baseline 256/256 native tests; candidate 264/264,
+zero skips, unchanged 60-second native deadline. Strict Clippy, no-std tests,
+warning-denied docs/doctests, generated surface and locked graph are checked.
+Natural 0.3-to-0.4 API classification skips 253 rules; an additional patch-class
+comparison passes 223 checks with 30 skips **but does not detect these new
+generic bounds**. It is not proof of backward compatibility. Exact final-head
+CI, ADR acceptance, independent review and publication receipts remain required.
+
+Ownership: preserve [#138](https://github.com/ryancinsight/aequitas/pull/138)
+book controls and [#140](https://github.com/ryancinsight/aequitas/pull/140)
+Eunomia-range work. Parent-thread messaging returns `thread not found`, including
+an explicit-host retry; review/dependency coordination must be handed back.
+Main merge can invoke pending-crate publication and Pages, including legacy
+`main:/` Pages settings. No merge, tag, publication or deployment occurs here.
+
 ## AEQ-EUNOMIA-010-COHORT [major] — verified published 2026-10-15
 
 Aequitas 0.3.0 adopts published Eunomia/derive 0.10.0 source a231e54d without
@@ -19,7 +58,7 @@ completed own backlog item is removed; other provider cohort work remains separa
 
 ## ATLAS-AEQUITAS-AUDIT-075 — Isolated provider re-verification — closed 2026-08-16
 
-The current provider head is `4ab0eb4` (`chore(aequitas): Promote the lint
+The historical provider head is `4ab0eb4` (`chore(aequitas): Promote the lint
 floor to a denied workspace table`). The isolated checkout passed the
 provider-owned gates from outside the Atlas umbrella overlay:
 
@@ -139,8 +178,8 @@ to the fourth. Semantics-marked variants (`Angle::sqrt` and `Angle::cbrt` →
 dimensionless, which the Python `Angle` surface already declares;
 `ReciprocalVolume::cbrt` → reciprocal length) keep their `BaseSemantics`
 normalization. The eunomia-owned sign-preserving `cbrt` (`FloatElement::cbrt`)
-is the scalar root; `Quantity::cbrt` uses it, and `Quantity::sqrt` uses
-`powf(1/2)`.
+is the scalar cube root; `Quantity::sqrt` now uses provider-native `sqrt`
+(AEQ-NATIVE-SQRT above).
 
 What remains is a property of the type system, not an open gap: the impls are
 proven per concrete exponent shape by trait resolution, and the group laws
@@ -226,7 +265,7 @@ ones that came with the change.
 
 ## Deferred (documented boundary — see backlog.md)
 
-- Affine unit kinds and quantity kinds beyond the linear-unit slice.
+- General affine kinds beyond the delivered temperature point/interval slice.
 - Integer and rational quantity storage.
 - Formatting breadth beyond `UnitDisplay`.
 
@@ -237,7 +276,7 @@ Each is gated on a driving Atlas consumer; no consumer currently needs them.
 [`uom` 0.38.0](https://docs.rs/uom/0.38.0/uom/) is the comparison baseline and
 remains a development-only differential oracle.
 
-| Capability | `uom` 0.38.0 | Aequitas 0.2 scope |
+| Capability | `uom` 0.38.0 | Current Aequitas scope |
 | --- | --- | --- |
 | Compile-time dimensional analysis | Mature, broad implementation | Required; implemented through one generic dimension algebra |
 | Type-level rational/integer powers | Integer exponents only; `sqrt`/`powi` hardcoded per quantity | `SqrtDimension`, `CbrtDimension`, and generic `PowDimension<P>` raise the dimension itself at the type level (`powi::<P2>` of `Length` is `Area`) |
@@ -247,7 +286,7 @@ remains a development-only differential oracle.
 | Atlas datatype SSOT | Uses `num-traits` storage contracts | Uses Eunomia directly; defines no scalar vocabulary |
 | API variation | Generates storage-specific modules such as `si::f32` and `si::f64` | One `Quantity<T, D>` API with inferred or defaulted `T` |
 | `no_std` | Supported | Supported |
-| Affine units and quantity kinds | Supported | Not in the initial linear-unit slice |
+| Affine units and quantity kinds | Supported | Temperature point/interval slice delivered; general kinds consumer-gated |
 | Formatting and serialization | Supported | `UnitDisplay` (unit-aware `Display`/`Debug`) and optional serde (canonical scalar) supported |
 | Integer and rational storage | Supported | Outside the floating-point simulation boundary |
 
@@ -387,18 +426,7 @@ index, at under 3% of one `read` between them.
   cheaper to read than either, and `AEQ-STRUCTURE-002` already made the
   domain-leaf decision for the implementations that carry behaviour.
 
-## Current verified state (2026-08-12)
-
-- Strict all-targets check: pass (warning-denied).
-- Nextest: 59/59 (default features) at the provider head; all-feature gate
-  re-verified in the Atlas foundation gate sweep.
-- Doctests and rustdoc: pass; `cargo deny check`: clean.
-- No `TODO`/`FIXME`/`unimplemented!` markers remain in `src/`.
-
-The 59/59 above is a default-feature count from an older head and understates
-the workspace; superseded on that axis by the snapshot below.
-
-## Current verified state (2026-09-21)
+## Historical verification (2026-09-21)
 
 - Nextest: 239/239 (workspace, all features), 0 skipped, for the content this
   branch commits -- unchanged across the three leaf splits, each of which

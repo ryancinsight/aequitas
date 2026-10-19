@@ -9,7 +9,7 @@
 //! through the type system.
 
 use eunomia::FloatElement;
-use typenum::Integer;
+use typenum::{B1, Integer, IsGreaterOrEqual, IsLessOrEqual, N2147483648, P2147483647};
 
 use crate::dimension::PowDimension;
 
@@ -35,12 +35,28 @@ where
     /// let angle = Angle::from_base(3.0);
     /// let squared: Angle = angle.powi::<typenum::P2>(); // yields squared angle, not Angle
     /// ```
+    ///
+    /// The exponent must fit the scalar operation's signed 32-bit input;
+    /// larger values cannot silently truncate while the dimension stays large:
+    ///
+    /// ```compile_fail,E0277
+    /// use aequitas::systems::si::quantities::Length;
+    /// let _ = Length::from_base(2.0_f64).powi::<typenum::P4294967296>();
+    /// ```
+    ///
+    /// ```compile_fail,E0277
+    /// use aequitas::systems::si::quantities::Length;
+    /// type TooNegative = typenum::NInt<typenum::Sum<typenum::U4294967296, typenum::U1>>;
+    /// let _ = Length::from_base(2.0_f64).powi::<TooNegative>();
+    /// ```
     #[inline]
     #[must_use]
     pub fn powi<P>(self) -> Quantity<T, <D as PowDimension<P>>::Output>
     where
         D: PowDimension<P>,
-        P: Integer,
+        P: Integer
+            + IsGreaterOrEqual<N2147483648, Output = B1>
+            + IsLessOrEqual<P2147483647, Output = B1>,
     {
         Quantity::from_base(self.value.powi(P::to_i32()))
     }

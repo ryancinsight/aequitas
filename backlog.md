@@ -1,5 +1,26 @@
 # Aequitas backlog
 
+## AEQ-AUDIT-2026-10-19 — Exact scalar and exponent boundaries [major]
+
+- Status: implemented review candidate; law 0.4.0, binding 0.2.0. Proposed
+  [ADR 0020](docs/adr/0020-exact-exponent-boundaries.md) carries the migration.
+- [patch] Native roots, componentwise complex scalar division and checked tag
+  roots close reproduced boundary failures. Min/max docs now describe their
+  verified existing NaN/signed-zero behavior. Preserve release-wheel symbols
+  after reproducing a malformed Mach-O string pool with both stripping modes.
+- [major] Require power exponents in `i32` and wire exponents in `i8`; four
+  compile-fail contracts fail on original production, and signed endpoints pass.
+- [minor] Refresh compatible dependencies, adopting current PyO3 0.30.1 and
+  proptest 1.12; Eunomia stays on current default 0.10 source `15fbb94c`.
+- Evidence: baseline 256 native tests; candidate 264. Exhaustive runtime roots
+  cover 458,752 inputs; scalar tests cover both primitive precisions, IEEE
+  boundaries and native arithmetic. The stricter API tool passes 223 rules but
+  misses the added bounds, so this is deliberately classified as breaking.
+- Remaining: final exact-head CI/package gates, ADR acceptance, independent
+  review and coordination with dependency-owner #140. Book-owner #138 stays
+  separate. Parent messaging fails `thread not found`; final handoff supplies
+  the review target. No merge or publication occurs before those gates.
+
 <a id="AEQ-UNIT-COMPOSITION"></a>
 ## AEQ-UNIT-COMPOSITION — Compose linear units [minor] [arch]
 

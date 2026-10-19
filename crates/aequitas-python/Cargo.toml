@@ -1,6 +1,6 @@
 [package]
 name = "aequitas-python"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.95"
 authors = ["Ryan Clanton <ryanclanton@outlook.com>"]
@@ -22,11 +22,13 @@ aequitas = { workspace = true, features = ["std"] }
 # `multiple-pymethods`: the quantity surface is split across `model` and
 # `arithmetic` so neither file approaches the structural size target; both
 # contribute `#[pymethods]` to one class.
-pyo3 = { version = "0.29", features = ["abi3-py310", "multiple-pymethods"] }
+pyo3 = { version = "0.30", features = ["abi3-py310", "multiple-pymethods"] }
 typenum = "1.20.1"
 
 [dev-dependencies]
-pyo3 = { version = "0.29", features = ["abi3-py310", "multiple-pymethods", "auto-initialize"] }
+pyo3 = { version = "0.30", features = ["abi3-py310", "multiple-pymethods", "auto-initialize"] }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
 
 # This crate does not inherit `[workspace.lints]`. The workspace forbids
 # `unsafe_code`, which is correct for the law crate and unreachable here: the

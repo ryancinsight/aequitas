@@ -70,8 +70,8 @@ where
     /// assert!((*min.as_base() - 2.0).abs() < f64::EPSILON);
     /// ```
     ///
-    /// The scalar comparison follows `FloatElement::min` semantics — the IEEE
-    /// 754 `min`, which propagates `NaN` when either operand is `NaN`.
+    /// The scalar comparison follows `NumericElement::min_scalar`: a single
+    /// NaN is ignored, two NaNs yield NaN, and opposite signed zeros yield -0.
     #[inline]
     #[must_use]
     pub fn min(self, other: Quantity<T, D>) -> Quantity<T, D> {
@@ -92,8 +92,8 @@ where
     /// assert!((*max.as_base() - 5.0).abs() < f64::EPSILON);
     /// ```
     ///
-    /// The scalar comparison follows `FloatElement::max` semantics — the IEEE
-    /// 754 `max`, which propagates `NaN` when either operand is `NaN`.
+    /// The scalar comparison follows `NumericElement::max_scalar`: a single
+    /// NaN is ignored, two NaNs yield NaN, and opposite signed zeros yield +0.
     #[inline]
     #[must_use]
     pub fn max(self, other: Quantity<T, D>) -> Quantity<T, D> {

@@ -1,8 +1,30 @@
 # Aequitas checklist
 
-Target version: 0.3.0
+Target versions: aequitas 0.4.0; aequitas-python 0.2.0
 
-Sprint phase: Closure — Aequitas 0.3.0 published; historical entries retained
+Sprint phase: Closure — correctness candidate under review; historical entries retained
+
+## AEQ-AUDIT-2026-10-19 [major]
+
+- [x] Inspect current main, releases, owners, instructions and deployment settings;
+      isolate from #138/#140 and the Atlas overlay.
+- [x] [patch] Reproduce and fix native square-root, complex-division and
+      runtime-root failures with computed-value boundary regressions.
+- [x] [major] Reject truncated power and tag exponents; preserve signed endpoints
+      and unbounded dimension algebra. Proposed ADR 0020 and changelog carry migration.
+- [x] [patch] Correct min/max documentation and test existing special-value behavior.
+- [x] [minor] Refresh compatible dependencies, including current PyO3 0.30.1;
+      preserve the separate proposed Eunomia 0.11 migration owner.
+- [x] [patch] Diagnose malformed release-wheel symbol tables and preserve the
+      extension's table while retaining release optimization and disabled debug info.
+- [x] Reconcile gap statuses; retain historical evidence and consumer-gated boundaries.
+- [ ] Confirm final exact-head native, Python, no-std, strict docs/lints, package,
+      supply-chain, lock, generated-surface and hosted acceptance gates.
+- [ ] Obtain ADR acceptance and independent code review through the parent;
+      parent-message routing currently returns `thread not found`.
+- [ ] Coordinate final version/range integration with #140 before any merge;
+      inspect automatic publication and both legacy/Actions Pages effects again.
+- [ ] Verify post-merge registry/consumer receipts only after review and gates.
 
 ## AEQ-EUNOMIA-010-COHORT [major]
 

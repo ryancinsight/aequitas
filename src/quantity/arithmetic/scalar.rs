@@ -68,7 +68,9 @@ where
 
     #[inline]
     fn div(self, rhs: T) -> Self::Output {
-        Self::from_base(self.value.scale(rhs.recip()))
+        // The provider divides each component directly. A reciprocal can
+        // overflow for a subnormal divisor even when the quotient is finite.
+        Self::from_base(self.value / rhs)
     }
 }
 
@@ -88,7 +90,7 @@ where
 {
     #[inline]
     fn div_assign(&mut self, rhs: T) {
-        self.value = self.value.scale(rhs.recip());
+        self.value /= rhs;
     }
 }
 

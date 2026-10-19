@@ -28,3 +28,4 @@
 | [0017](0017-independent-distribution-versioning.md) | Version and tag each distribution independently | Proposed |
 | [0018](0018-unit-composition.md) | Compose linear units through dimensional algebra | Accepted |
 | [0019](0019-eunomia-010-cohort.md) | Adopt the Eunomia 0.10 datatype contract | Accepted |
+| [0020](0020-exact-exponent-boundaries.md) | Preserve exact scalar and runtime exponent boundaries | Proposed |
