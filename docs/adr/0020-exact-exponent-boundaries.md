@@ -1,8 +1,12 @@
 # ADR 0020: Preserve exact scalar and runtime exponent boundaries
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-10-19
 - Item: AEQ-EXPONENT-RANGE [major]
+
+The user accepts this ADR and the coordinated version plan on 2026-10-19:
+Eunomia 0.11, Aequitas 0.4, binding 0.2, NumPy/PyO3 0.30, compatibility
+bridge first, with tests and reviews mandatory before release.
 
 ## Context
 
@@ -15,7 +19,7 @@ Both violate the existing requirement that runtime values describe their
 type-level dimensions exactly. `unit::Power` already proves its signed
 32-bit bound with Typenum comparisons.
 
-## Decision for the review candidate
+## Decision
 
 Apply that same comparison pattern to quantity powers. Require
 `P: Integer + IsGreaterOrEqual<N2147483648, Output = B1> +
@@ -36,10 +40,11 @@ The binding's Rust dependency advances to current PyO3 0.30.1 with the same
 ABI floor and method surface; Rust extension consumers must coordinate that
 nominal dependency identity. Its wheel does not require consumer Rust types.
 
-Keep this ADR proposed and the PR draft until independent review accepts
-the bounds and migration. Do not infer release approval from local checks.
-This candidate does not adopt Eunomia's separate proposed 0.11 line or edit
-the owner branches for that migration or book publication controls.
+Keep the PR draft until the compatibility bridge lands, coordinated provider
+and consumer updates are ready, and final exact-head review and gates pass.
+Eunomia 0.11 and NumPy/PyO3 0.30 are the approved shared target; the final
+range/lock rebase follows the owner bridge. This acceptance does not override
+access denials, held publication actions, or the book owner's separate work.
 
 ## Runtime and numerical contracts
 

@@ -20,7 +20,9 @@ All externally observable changes are recorded here.
   Rust tag producers require each axis in `[-128, 127]`; concrete valid
   exponents and callers bounded on `D: TaggedDimension` keep working.
   Consumers linking the binding as a Rust library adopt PyO3 0.30 with it.
-  See proposed [ADR 0020](docs/adr/0020-exact-exponent-boundaries.md).
+  See accepted [ADR 0020](docs/adr/0020-exact-exponent-boundaries.md). The user
+  approves Eunomia 0.11 / Aequitas 0.4 / binding 0.2 with NumPy/PyO3 0.30
+  and bridge-first integration; final checks and review still gate release.
 
 ### Fixed
 

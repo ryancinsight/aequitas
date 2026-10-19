@@ -2,8 +2,8 @@
 
 ## AEQ-AUDIT-2026-10-19 — Exact scalar and exponent boundaries [major]
 
-- Status: implemented review candidate; provisional law 0.4.0, binding 0.2.0. Proposed
-  [ADR 0020](docs/adr/0020-exact-exponent-boundaries.md) carries the migration.
+- Status: implemented review candidate; user-approved law 0.4.0, binding 0.2.0.
+  Accepted [ADR 0020](docs/adr/0020-exact-exponent-boundaries.md) carries migration.
 - [patch] Native roots, componentwise complex scalar division and checked tag
   roots close reproduced boundary failures. Min/max docs now describe their
   verified existing NaN/signed-zero behavior. Preserve release-wheel symbols
@@ -18,10 +18,11 @@
   cover 458,752 inputs; scalar tests cover both primitive precisions, IEEE
   boundaries and native arithmetic. The stricter API tool passes 223 rules but
   misses the added bounds, so this is deliberately classified as breaking.
-- Remaining: final exact-head CI/package gates, ADR acceptance, independent
-  review and coordination with dependency-owner #140. Book-owner #138 stays
-  separate. Parent confirms review of initial `8c50883` and shared dependency
-  coordination; final-head review remains pending. Automatic approval review
+- The user accepts Eunomia 0.11 / law 0.4 / binding 0.2 / NumPy-PyO3 0.30,
+  bridge first, on 2026-10-19. Independent review clears `9a015229`.
+- Remaining: bridge-first integration, final rebased-head review, CI/package
+  gates and authorized resolution of denied required-gate configuration access.
+  Dependency-owner #140 and book-owner #138 remain separate. Automatic approval review
   denies validation-only release dispatch before final gates/review; it never
   executes. No merge or publication occurs before those gates.
 

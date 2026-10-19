@@ -1,6 +1,6 @@
 # Aequitas checklist
 
-Provisional target versions: aequitas 0.4.0; aequitas-python 0.2.0
+Approved unreleased targets: aequitas 0.4.0; aequitas-python 0.2.0
 
 Sprint phase: Closure — correctness candidate under review; historical entries retained
 
@@ -23,8 +23,11 @@ Sprint phase: Closure — correctness candidate under review; historical entries
 - [x] Pass local Rust/Python/package/book, supply-chain, lock, generated-surface
       and MSRV gates; record exact final revisions separately from hosted status.
 - [ ] Confirm final exact-head hosted acceptance gates; jobs await runners.
-- [ ] Obtain ADR acceptance and independent code review through the parent;
-      parent arranges review of initial `8c50883`; final-head acceptance remains.
+- [x] Record the user's 2026-10-19 acceptance of ADR 0020 and the coordinated
+      Eunomia 0.11 / law 0.4 / binding 0.2 / NumPy-PyO3 0.30, bridge-first plan.
+- [x] Independent review clears `9a015229` with no actionable defects.
+- [ ] Rebase after the bridge lands and obtain final exact-head review/gates;
+      denied branch-protection configuration access still needs authorized resolution.
 - [ ] Complete validation-only release checks after approval review denied the
       dispatch for possible publication side effects; no dispatch executes.
 - [ ] Coordinate final version/range integration with #140 before any merge;

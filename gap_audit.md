@@ -5,8 +5,8 @@
 Base: [`84c5f035`](https://github.com/ryancinsight/aequitas/commit/84c5f03514ebe69473bbaa7cd51828f1ed3ca068),
 law 0.3.0 / binding 0.1.0. The newest chronological release is 0.3.0;
 GitHub's older `Latest` label is not version evidence. Candidate targets are
-provisional law 0.4.0 / binding 0.2.0; proposed [ADR 0020](docs/adr/0020-exact-exponent-boundaries.md)
-records the public bound changes and required review. Historical results below
+user-approved law 0.4.0 / binding 0.2.0; accepted [ADR 0020](docs/adr/0020-exact-exponent-boundaries.md)
+records the coordinated bridge-first plan and review gates. Historical results below
 remain evidence for their named revisions, not final-head acceptance.
 
 | Gap | Reconciled status and evidence |
@@ -34,13 +34,13 @@ sample tests and HTML build pass with its compiler pinned to Rust 1.97.
 Natural 0.3-to-0.4 API classification skips 253 rules; an additional patch-class
 comparison passes 223 checks with 30 skips **but does not detect these new
 generic bounds**. It is not proof of backward compatibility. Exact final-head
-CI, ADR acceptance, independent review and publication receipts remain required.
+CI, final rebased-head review and publication receipts remain required.
 
 Ownership: preserve [#138](https://github.com/ryancinsight/aequitas/pull/138)
 book controls and [#140](https://github.com/ryancinsight/aequitas/pull/140)
-Eunomia-range work. Parent confirms independent review of initial head
-`8c50883` is arranged and shared-version coordination is underway; final-head
-review and ADR acceptance remain pending. Validation-only release dispatch
+Eunomia-range work. The user accepts ADR 0020 and the coordinated version plan
+on 2026-10-19; independent review clears `9a015229`. Final bridge-first rebase,
+review and denied gate-configuration access remain unresolved. Validation-only release dispatch
 was denied by automatic approval review for possible publication effects
 before final gates/review. It did not execute and is not retried.
 Main merge can invoke pending-crate publication and Pages, including legacy
