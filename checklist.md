@@ -1,8 +1,38 @@
 # Aequitas checklist
 
-Target version: 0.3.0
+Approved unreleased targets: aequitas 0.4.0; aequitas-python 0.2.0
 
-Sprint phase: Closure — Aequitas 0.3.0 published; historical entries retained
+Sprint phase: Closure — correctness candidate under review; historical entries retained
+
+## AEQ-AUDIT-2026-10-19 [major]
+
+- [x] Inspect current main, releases, owners, instructions and deployment settings;
+      isolate from #138/#140 and the Atlas overlay.
+- [x] [patch] Reproduce and fix native square-root, complex-division and
+      runtime-root failures with computed-value boundary regressions.
+- [x] [major] Reject truncated power and tag exponents; preserve signed endpoints
+      and unbounded dimension algebra. Proposed ADR 0020 and changelog carry migration.
+- [x] [patch] Correct min/max documentation and test existing special-value behavior.
+- [x] [minor] Refresh compatible dependencies, including current PyO3 0.30.1;
+      preserve the separate proposed Eunomia 0.11 migration owner.
+- [x] [patch] Diagnose malformed release-wheel symbol tables and preserve the
+      extension's table while retaining release optimization and disabled debug info.
+- [x] Reconcile gap statuses; retain historical evidence and consumer-gated boundaries.
+- [x] [patch] Correct false uom capability claims against pinned 0.38 source and
+      differential dimension-changing power/root tests; 265 native tests pass.
+- [x] Pass local Rust/Python/package/book, supply-chain, lock, generated-surface
+      and MSRV gates; record exact final revisions separately from hosted status.
+- [ ] Confirm final exact-head hosted acceptance gates; jobs await runners.
+- [x] Record the user's 2026-10-19 acceptance of ADR 0020 and the coordinated
+      Eunomia 0.11 / law 0.4 / binding 0.2 / NumPy-PyO3 0.30, bridge-first plan.
+- [x] Independent review clears `9a015229` with no actionable defects.
+- [ ] Rebase after the bridge lands and obtain final exact-head review/gates;
+      denied branch-protection configuration access still needs authorized resolution.
+- [ ] Complete validation-only release checks after approval review denied the
+      dispatch for possible publication side effects; no dispatch executes.
+- [ ] Coordinate final version/range integration with #140 before any merge;
+      inspect automatic publication and both legacy/Actions Pages effects again.
+- [ ] Verify post-merge registry/consumer receipts only after review and gates.
 
 ## AEQ-EUNOMIA-010-COHORT [major]
 

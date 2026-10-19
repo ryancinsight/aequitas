@@ -19,19 +19,28 @@ impl fmt::Display for TagOverflow {
     }
 }
 
-/// A root was requested of a dimension whose exponents do not divide exactly.
+/// A dimension root has no exact, representable signed-byte exponent vector.
+///
+/// This includes zero roots, inexact division, and the `-128 / -1` overflow.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct TagNotDivisible {
     /// The dimension the root was requested of.
     pub tag: DimensionTag,
     /// The requested root.
     pub root: i8,
-    /// Index of the first axis that does not divide.
+    /// Index of the first axis without an exact, representable quotient.
     pub axis: usize,
 }
 
 impl fmt::Display for TagNotDivisible {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if self.root == -1 && self.tag.exponents()[self.axis] == i8::MIN {
+            return write!(
+                formatter,
+                "cannot take root -1 of `{}`: the {} exponent quotient 128 is outside the representable range",
+                self.tag, AXIS_SYMBOLS[self.axis],
+            );
+        }
         write!(
             formatter,
             "cannot take root {} of `{}`: the {} exponent {} is not a multiple of {}",

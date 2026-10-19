@@ -1,6 +1,6 @@
 //! Value-semantic checks for rational-dimension operations (sqrt/cbrt).
 //!
-//! These verify the beyond-`uom` capability: `sqrt` halves and `cbrt` thirds
+//! These verify that `sqrt` halves and `cbrt` thirds
 //! the type-level dimension while applying the scalar root. Coverage locks
 //! the value behavior, unit-aware display, round-trips through quantity
 //! arithmetic, and the sign-preserving `cbrt` of negative operands. The

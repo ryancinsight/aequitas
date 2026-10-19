@@ -2,6 +2,50 @@
 
 All externally observable changes are recorded here.
 
+## [0.4.0] - Unreleased
+
+### Breaking
+
+- Require the type-level exponent of `Quantity::powi` to fit `i32`, matching
+  Eunomia's scalar operation. Out-of-range exponents previously truncated,
+  so the computed scalar could disagree with its dimension.
+- The independently versioned `aequitas-python` 0.2.0 requires every exponent
+  in a `TaggedDimension` blanket implementation to fit the signed-byte wire
+  format. Its Rust API adopts PyO3 0.30.1. Python names and protocol stay stable.
+
+### Migration
+
+- Generic power callers propagate `IsGreaterOrEqual<N2147483648, Output = B1>`
+  and `IsLessOrEqual<P2147483647, Output = B1>` alongside `Integer`. Generic
+  Rust tag producers require each axis in `[-128, 127]`; concrete valid
+  exponents and callers bounded on `D: TaggedDimension` keep working.
+  Consumers linking the binding as a Rust library adopt PyO3 0.30 with it.
+  See accepted [ADR 0020](docs/adr/0020-exact-exponent-boundaries.md). The user
+  approves Eunomia 0.11 / Aequitas 0.4 / binding 0.2 with NumPy/PyO3 0.30
+  and bridge-first integration; final checks and review still gate release.
+
+### Fixed
+
+- Square root uses the provider's native root, preserving negative zero.
+- Complex quantities divide by real scalars through the provider's component
+  division, preserving representable quotients for subnormal divisors.
+- Runtime tag roots reject zero, inexact and overflowing quotients without
+  panicking. Overflow diagnostics identify the unrepresentable quotient.
+- Clarify the existing NaN and signed-zero behavior of quantity min/max.
+- Correct unsupported claims that `uom` 0.38 lacks generic dimension-changing
+  powers and exact roots; differential coverage verifies those capabilities.
+- Preserve release symbol tables so optimized Python wheels load;
+  both symbol and debug-only stripping create a malformed Mach-O string pool
+  on this Mac. The release profile still builds without debug information.
+  Release import and full pytest gates
+  exercise the resulting binary.
+
+### Changed
+
+- Refresh all compatible dependencies, including Eunomia 0.10 source
+  `15fbb94c`, PyO3 0.30.1 and proptest 1.12.0. The separate proposed Eunomia
+  0.11 migration remains owned by its existing draft PRs.
+
 ## [0.3.0] - 2026-10-15
 
 ### Breaking

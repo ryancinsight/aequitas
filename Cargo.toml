@@ -1,6 +1,6 @@
 [package]
 name = "aequitas"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2024"
 rust-version = "1.95"
 authors = ["Ryan Clanton <ryanclanton@outlook.com>"]
@@ -19,7 +19,9 @@ typenum = "1.20.1"
 serde = { version = "1.0", default-features = false, optional = true }
 
 [dev-dependencies]
-proptest = "1.11.0"
+proptest = "1.12.0"
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
 uom = { version = "0.38.0", default-features = false, features = ["f32", "f64", "si", "std"] }
 
 [features]
@@ -37,7 +39,9 @@ resolver = "3"
 # must cover it pass `--workspace`.
 
 [workspace.dependencies]
-aequitas = { path = ".", version = "0.3.0", default-features = false }
+aequitas = { path = ".", version = "0.4.0", default-features = false }
+tracing = { version = "0.1.44", default-features = false, features = ["std"] }
+tracing-subscriber = { version = "0.3.23", default-features = false, features = ["fmt"] }
 
 [lints]
 workspace = true
@@ -83,5 +87,8 @@ overflow-checks = true
 
 [profile.release]
 debug = false
-strip = "symbols"
+# Keep symbol tables: both symbol and debug-only stripping
+# produce a misaligned Mach-O LINKEDIT string pool with this Apple linker.
+# The release profile already builds without debug information.
+strip = "none"
 overflow-checks = true

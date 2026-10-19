@@ -68,21 +68,24 @@ impl DimensionTag {
     ///
     /// # Errors
     ///
-    /// Returns [`TagNotDivisible`] when any exponent is not a multiple of
-    /// `root`.
+    /// Returns [`TagNotDivisible`] for a zero root, an inexact quotient, or
+    /// a quotient outside `i8` (the `-128 / -1` case).
     pub fn root(self, root: i8) -> Result<Self, TagNotDivisible> {
         let axes = self.exponents();
         let mut divided = [0_i8; AXES];
         for (axis, slot) in divided.iter_mut().enumerate() {
             let exponent = axes[axis];
-            if root == 0 || exponent % root != 0 {
+            let Some(quotient) = exponent
+                .checked_div(root)
+                .filter(|_| exponent.checked_rem(root) == Some(0))
+            else {
                 return Err(TagNotDivisible {
                     tag: self,
                     root,
                     axis,
                 });
-            }
-            *slot = exponent / root;
+            };
+            *slot = quotient;
         }
         Ok(Self::new(divided, SemanticTag::Base))
     }

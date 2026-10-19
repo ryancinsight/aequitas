@@ -1,11 +1,10 @@
 //! Value-semantic checks for type-level integer powers (`Quantity::powi`).
 //!
-//! These verify the beyond-`uom` capability: `powi::<P>()` raises every SI
+//! These verify that `powi::<P>()` raises every SI
 //! dimension exponent at the type level while applying the scalar power, so
 //! `Length::powi::<P2>()` is an `Area` and `Time::powi::<N1>()` is a
-//! `ReciprocalTime`. `uom`'s `powi` only scales the value at runtime with a
-//! hardcoded per-quantity dimension, so this is a strict capability
-//! extension. The semantics-marked normalization — `Angle::powi` yields a
+//! `ReciprocalTime`. `uom` 0.38 also changes dimensions through its generic
+//! power operation. The semantics-marked normalization — `Angle::powi` yields a
 //! plain dimensionless result, not `Angle` — is locked by a `compile_fail`
 //! doctest on `Quantity::powi` in `src/quantity/pow.rs`.
 

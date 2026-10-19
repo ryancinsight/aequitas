@@ -1,5 +1,31 @@
 # Aequitas backlog
 
+## AEQ-AUDIT-2026-10-19 — Exact scalar and exponent boundaries [major]
+
+- Status: implemented review candidate; user-approved law 0.4.0, binding 0.2.0.
+  Accepted [ADR 0020](docs/adr/0020-exact-exponent-boundaries.md) carries migration.
+- [patch] Native roots, componentwise complex scalar division and checked tag
+  roots close reproduced boundary failures. Min/max docs now describe their
+  verified existing NaN/signed-zero behavior. Preserve release-wheel symbols
+  after reproducing a malformed Mach-O string pool with both stripping modes.
+- [major] Require power exponents in `i32` and wire exponents in `i8`; four
+  compile-fail contracts fail on original production, and signed endpoints pass.
+- [minor] Refresh compatible dependencies, adopting current PyO3 0.30.1 and
+  proptest 1.12; Eunomia stays on current default 0.10 source `15fbb94c`.
+- [patch] Correct the false uom power/root comparison using pinned source and
+  computed-value differential tests; both libraries change dimensions generically.
+- Evidence: baseline 256 native tests; candidate 265. Exhaustive runtime roots
+  cover 458,752 inputs; scalar tests cover both primitive precisions, IEEE
+  boundaries and native arithmetic. The stricter API tool passes 223 rules but
+  misses the added bounds, so this is deliberately classified as breaking.
+- The user accepts Eunomia 0.11 / law 0.4 / binding 0.2 / NumPy-PyO3 0.30,
+  bridge first, on 2026-10-19. Independent review clears `9a015229`.
+- Remaining: bridge-first integration, final rebased-head review, CI/package
+  gates and authorized resolution of denied required-gate configuration access.
+  Dependency-owner #140 and book-owner #138 remain separate. Automatic approval review
+  denies validation-only release dispatch before final gates/review; it never
+  executes. No merge or publication occurs before those gates.
+
 <a id="AEQ-UNIT-COMPOSITION"></a>
 ## AEQ-UNIT-COMPOSITION — Compose linear units [minor] [arch]
 

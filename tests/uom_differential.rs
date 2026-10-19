@@ -34,6 +34,37 @@ use uom::si::{
 };
 
 #[test]
+fn dimension_changing_powers_and_roots_are_supported_by_both_libraries() {
+    use aequitas::systems::si::quantities::{Area, Length, Volume};
+    use tracing::info_span;
+    use uom::si::{area::square_meter, length::meter, volume::cubic_meter};
+
+    let _trace =
+        tracing::subscriber::set_default(tracing_subscriber::fmt().with_test_writer().finish());
+    let _arrange = info_span!("arrange").entered();
+    let _act = info_span!("act").entered();
+    for value in [-3.0_f64, -1.0, 0.0, 1.0, 3.0] {
+        let ours: Area = Length::from_base(value).powi::<typenum::P2>();
+        let oracle: uom::si::f64::Area =
+            uom::si::f64::Length::new::<meter>(value).powi(typenum::P2::new());
+        let _assert = info_span!("assert", value).entered();
+        assert_eq!(
+            ours.into_base().to_bits(),
+            oracle.get::<square_meter>().to_bits()
+        );
+        let ours: Length = ours.sqrt();
+        let oracle: uom::si::f64::Length = oracle.sqrt();
+        assert_eq!(ours.into_base().to_bits(), oracle.get::<meter>().to_bits());
+    }
+    for value in [-27.0_f64, -8.0, -1.0, 0.0, 1.0, 8.0, 27.0] {
+        let ours: Length = Volume::from_base(value).cbrt();
+        let oracle: uom::si::f64::Length = uom::si::f64::Volume::new::<cubic_meter>(value).cbrt();
+        let _assert = info_span!("assert", value).entered();
+        assert_eq!(ours.into_base().to_bits(), oracle.get::<meter>().to_bits());
+    }
+}
+
+#[test]
 fn linear_conversions_match_uom() {
     let length = 12.5_f64;
     let pressure = 3.25_f64;

@@ -1,11 +1,10 @@
 //! Rational-power operations on quantities.
 //!
 //! [`Quantity::sqrt`] and [`Quantity::cbrt`] apply the scalar square/cube root
-//! through the [`FloatElement`] scalar surface (native `cbrt`; `sqrt` via
-//! `powf(1/2)`) while carrying the correct half/third dimension at the type
-//! level. This is the capability `uom` cannot
-//! express generically (its dimensions are integer-exponent only and its
-//! `sqrt` is hardcoded per quantity).
+//! through the [`FloatElement`] scalar surface (native `cbrt` and `sqrt`)
+//! while carrying the correct half/third dimension at the type
+//! level. Output exponents must remain integers, matching the exact-root
+//! requirement also implemented by `uom` 0.38.
 
 use eunomia::FloatElement;
 
@@ -21,8 +20,8 @@ where
     /// Square root of this quantity, halving every dimension exponent.
     ///
     /// For example `sqrt(area)` yields a length and `sqrt(speed_squared)`
-    /// yields a speed. The scalar root uses the `FloatElement` power surface
-    /// at the native scalar precision.
+    /// yields a speed. The scalar root uses `NumericElement::sqrt` at the
+    /// native scalar precision, preserving IEEE signed-zero and NaN behavior.
     ///
     /// Dimensions with an odd exponent have no square root by construction,
     /// so the call fails to compile:
@@ -69,7 +68,7 @@ where
     #[inline]
     #[must_use]
     pub fn sqrt(self) -> Quantity<T, <D as SqrtDimension>::Output> {
-        Quantity::from_base(self.value.powf(T::from_f64(0.5)))
+        Quantity::from_base(self.value.sqrt())
     }
 }
 
