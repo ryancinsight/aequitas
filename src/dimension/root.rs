@@ -4,8 +4,8 @@
 //! squared quantity), and [`CbrtDimension`] thirds them (the cube root of a
 //! cubed quantity). These let `Quantity::sqrt()` and `Quantity::cbrt()` carry
 //! the correct half/third dimension at the type level — e.g. `sqrt(area)` is a
-//! length and `cbrt(volume)` is a length. The general `uom` crate cannot
-//! express fractional dimensions, so this is a strict capability extension.
+//! length and `cbrt(volume)` is a length. As in `uom` 0.38, the resulting
+//! exponents remain integers; roots require exact divisibility.
 //!
 //! Both traits are implemented once, generically over every typenum integer
 //! exponent. Each base exponent is divided through [`typenum::PartialDiv`],

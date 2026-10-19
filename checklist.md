@@ -1,6 +1,6 @@
 # Aequitas checklist
 
-Target versions: aequitas 0.4.0; aequitas-python 0.2.0
+Provisional target versions: aequitas 0.4.0; aequitas-python 0.2.0
 
 Sprint phase: Closure — correctness candidate under review; historical entries retained
 
@@ -18,10 +18,15 @@ Sprint phase: Closure — correctness candidate under review; historical entries
 - [x] [patch] Diagnose malformed release-wheel symbol tables and preserve the
       extension's table while retaining release optimization and disabled debug info.
 - [x] Reconcile gap statuses; retain historical evidence and consumer-gated boundaries.
-- [ ] Confirm final exact-head native, Python, no-std, strict docs/lints, package,
-      supply-chain, lock, generated-surface and hosted acceptance gates.
+- [x] [patch] Correct false uom capability claims against pinned 0.38 source and
+      differential dimension-changing power/root tests; 265 native tests pass.
+- [x] Pass local Rust/Python/package/book, supply-chain, lock, generated-surface
+      and MSRV gates; record exact final revisions separately from hosted status.
+- [ ] Confirm final exact-head hosted acceptance gates; jobs await runners.
 - [ ] Obtain ADR acceptance and independent code review through the parent;
-      parent-message routing currently returns `thread not found`.
+      parent arranges review of initial `8c50883`; final-head acceptance remains.
+- [ ] Complete validation-only release checks after approval review denied the
+      dispatch for possible publication side effects; no dispatch executes.
 - [ ] Coordinate final version/range integration with #140 before any merge;
       inspect automatic publication and both legacy/Actions Pages effects again.
 - [ ] Verify post-merge registry/consumer receipts only after review and gates.

@@ -30,6 +30,8 @@ All externally observable changes are recorded here.
 - Runtime tag roots reject zero, inexact and overflowing quotients without
   panicking. Overflow diagnostics identify the unrepresentable quotient.
 - Clarify the existing NaN and signed-zero behavior of quantity min/max.
+- Correct unsupported claims that `uom` 0.38 lacks generic dimension-changing
+  powers and exact roots; differential coverage verifies those capabilities.
 - Preserve release symbol tables so optimized Python wheels load;
   both symbol and debug-only stripping create a malformed Mach-O string pool
   on this Mac. The release profile still builds without debug information.

@@ -2,11 +2,8 @@
 //!
 //! [`Quantity::powi`] raises a quantity to a type-level integer power `P`,
 //! scaling the value through the [`FloatElement`] scalar surface while raising
-//! every SI dimension exponent at the type level. This is the capability
-//! `uom` cannot express generically: its `powi` only scales the *value* at
-//! runtime and hardcodes a per-quantity result dimension, so it cannot square
-//! a `Length` into an `Area` or invert a `Time` into a `ReciprocalTime`
-//! through the type system.
+//! every SI dimension exponent at the type level, as `uom` 0.38 also does.
+//! A length squared is an area and an inverted time is a reciprocal time.
 
 use eunomia::FloatElement;
 use typenum::{B1, Integer, IsGreaterOrEqual, IsLessOrEqual, N2147483648, P2147483647};

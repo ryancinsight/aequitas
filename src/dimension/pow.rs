@@ -2,11 +2,10 @@
 //!
 //! [`PowDimension`] multiplies every SI base exponent by a type-level integer
 //! `P`, so `powi::<P2>()` squares a dimension and `powi::<N1>()` takes the
-//! reciprocal. Unlike `uom`, whose `powi` only scales the *value* at runtime
-//! and hardcodes a per-quantity dimension, Aequitas raises the dimension
-//! itself at the type level — `Length::powi::<P2>()` is an `Area`, and
-//! `Time::powi::<N1>()` is a `ReciprocalTime`. This is a strict capability
-//! extension over `uom`'s integer-exponent model.
+//! reciprocal. The dimension itself changes at the type level —
+//! `Length::powi::<P2>()` is an `Area`, and `Time::powi::<N1>()` is a
+//! `ReciprocalTime`. `uom` 0.38 also supports dimension-changing powers;
+//! Aequitas expresses the operation over its Eunomia scalar boundary.
 //!
 //! The semantics marker is normalized to [`BaseSemantics`], matching
 //! [`MultiplyDimension`] / [`DivideDimension`] and the root traits.

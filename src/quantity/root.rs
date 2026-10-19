@@ -3,9 +3,8 @@
 //! [`Quantity::sqrt`] and [`Quantity::cbrt`] apply the scalar square/cube root
 //! through the [`FloatElement`] scalar surface (native `cbrt` and `sqrt`)
 //! while carrying the correct half/third dimension at the type
-//! level. This is the capability `uom` cannot
-//! express generically (its dimensions are integer-exponent only and its
-//! `sqrt` is hardcoded per quantity).
+//! level. Output exponents must remain integers, matching the exact-root
+//! requirement also implemented by `uom` 0.38.
 
 use eunomia::FloatElement;
 
