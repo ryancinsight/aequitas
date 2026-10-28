@@ -73,3 +73,19 @@ impl LinearUnit<dimensions::TemperatureDifference> for DegreeFahrenheit {
     const SYMBOL: &'static str = "degF";
     const SCALE: f64 = 5.0 / 9.0;
 }
+
+/// Degree Rankine: the absolute Fahrenheit-scale degree. Like the kelvin it
+/// has no offset — 0 °R is absolute zero — and one degree is 5/9 kelvin, the
+/// same size as the Fahrenheit degree.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Rankine;
+impl Sealed for Rankine {}
+impl crate::unit::private::Named for Rankine {}
+impl crate::unit::UnitDimension for Rankine {
+    type Dimension = dimensions::ThermodynamicTemperature;
+}
+
+impl LinearUnit<dimensions::ThermodynamicTemperature> for Rankine {
+    const SYMBOL: &'static str = "degR";
+    const SCALE: f64 = 5.0 / 9.0;
+}

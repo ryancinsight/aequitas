@@ -284,6 +284,143 @@ impl LinearUnit<dimensions::Stress> for Megapascal {
     const SCALE: f64 = 1.0e6;
 }
 
+/// Bar: exactly 100 000 Pa by definition.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Bar;
+impl Sealed for Bar {}
+impl crate::unit::private::Named for Bar {}
+impl crate::unit::UnitDimension for Bar {
+    type Dimension = dimensions::Pressure;
+}
+
+impl LinearUnit<dimensions::Pressure> for Bar {
+    const SYMBOL: &'static str = "bar";
+    const SCALE: f64 = 1.0e5;
+}
+
+impl LinearUnit<dimensions::Stress> for Bar {
+    const SYMBOL: &'static str = "bar";
+    const SCALE: f64 = 1.0e5;
+}
+
+/// Standard atmosphere: exactly 101 325 Pa by definition.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct StandardAtmosphere;
+impl Sealed for StandardAtmosphere {}
+impl crate::unit::private::Named for StandardAtmosphere {}
+impl crate::unit::UnitDimension for StandardAtmosphere {
+    type Dimension = dimensions::Pressure;
+}
+
+impl LinearUnit<dimensions::Pressure> for StandardAtmosphere {
+    const SYMBOL: &'static str = "atm";
+    const SCALE: f64 = 101_325.0;
+}
+
+impl LinearUnit<dimensions::Stress> for StandardAtmosphere {
+    const SYMBOL: &'static str = "atm";
+    const SCALE: f64 = 101_325.0;
+}
+
+/// Pound per square inch: 1 lbf is exactly 0.45359237 kg times standard
+/// gravity 9.80665 m/s² (= 4.4482216152605 N) and 1 in is exactly 0.0254 m,
+/// so 1 psi is that force over the square inch (= 6894.757293168... Pa).
+#[derive(Clone, Copy, Debug, Default)]
+pub struct PoundPerSquareInch;
+impl Sealed for PoundPerSquareInch {}
+impl crate::unit::private::Named for PoundPerSquareInch {}
+impl crate::unit::UnitDimension for PoundPerSquareInch {
+    type Dimension = dimensions::Pressure;
+}
+
+impl LinearUnit<dimensions::Pressure> for PoundPerSquareInch {
+    const SYMBOL: &'static str = "psi";
+    const SCALE: f64 = (0.453_592_37 * 9.806_65) / (0.025_4 * 0.025_4);
+}
+
+impl LinearUnit<dimensions::Stress> for PoundPerSquareInch {
+    const SYMBOL: &'static str = "psi";
+    const SCALE: f64 = (0.453_592_37 * 9.806_65) / (0.025_4 * 0.025_4);
+}
+
+/// Conventional millimetre of mercury: the pressure of a 1 mm column of
+/// mercury with conventional density 13 595.1 kg/m³ under standard gravity
+/// 9.80665 m/s², i.e. 133.322387415 Pa exactly. This is not the torr
+/// (1 Torr = 101325/760 Pa); the two differ in the seventh digit.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct MillimeterOfMercury;
+impl Sealed for MillimeterOfMercury {}
+impl crate::unit::private::Named for MillimeterOfMercury {}
+impl crate::unit::UnitDimension for MillimeterOfMercury {
+    type Dimension = dimensions::Pressure;
+}
+
+impl LinearUnit<dimensions::Pressure> for MillimeterOfMercury {
+    const SYMBOL: &'static str = "mmHg";
+    const SCALE: f64 = 13_595.1 * 9.80665 / 1000.0;
+}
+
+impl LinearUnit<dimensions::Stress> for MillimeterOfMercury {
+    const SYMBOL: &'static str = "mmHg";
+    const SCALE: f64 = 13_595.1 * 9.80665 / 1000.0;
+}
+
+/// Kilometre per hour: 1000 m per 3600 s.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct KilometerPerHour;
+impl Sealed for KilometerPerHour {}
+impl crate::unit::private::Named for KilometerPerHour {}
+impl crate::unit::UnitDimension for KilometerPerHour {
+    type Dimension = dimensions::Velocity;
+}
+
+impl LinearUnit<dimensions::Velocity> for KilometerPerHour {
+    const SYMBOL: &'static str = "km/h";
+    const SCALE: f64 = 1000.0 / 3600.0;
+}
+
+/// Mile per hour: the international mile is exactly 1609.344 m.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct MilePerHour;
+impl Sealed for MilePerHour {}
+impl crate::unit::private::Named for MilePerHour {}
+impl crate::unit::UnitDimension for MilePerHour {
+    type Dimension = dimensions::Velocity;
+}
+
+impl LinearUnit<dimensions::Velocity> for MilePerHour {
+    const SYMBOL: &'static str = "mph";
+    const SCALE: f64 = 1609.344 / 3600.0;
+}
+
+/// Knot: one international nautical mile (exactly 1852 m) per hour.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Knot;
+impl Sealed for Knot {}
+impl crate::unit::private::Named for Knot {}
+impl crate::unit::UnitDimension for Knot {
+    type Dimension = dimensions::Velocity;
+}
+
+impl LinearUnit<dimensions::Velocity> for Knot {
+    const SYMBOL: &'static str = "kn";
+    const SCALE: f64 = 1852.0 / 3600.0;
+}
+
+/// Foot per second: the international foot is exactly 0.3048 m.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct FootPerSecond;
+impl Sealed for FootPerSecond {}
+impl crate::unit::private::Named for FootPerSecond {}
+impl crate::unit::UnitDimension for FootPerSecond {
+    type Dimension = dimensions::Velocity;
+}
+
+impl LinearUnit<dimensions::Velocity> for FootPerSecond {
+    const SYMBOL: &'static str = "ft/s";
+    const SCALE: f64 = 0.3048;
+}
+
 /// Electronvolt.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct ElectronVolt;

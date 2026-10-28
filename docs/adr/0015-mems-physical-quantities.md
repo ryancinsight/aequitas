@@ -37,3 +37,11 @@ or the Python serialization boundary.
 `dimension_laws` verifies real and complex conversion through both coherent
 units. Kwavers' MEMS tests verify the typed CMUT, PMUT, plate, comparison, and
 Python boundary contracts.
+
+## Revision note (2026-10-27)
+
+`FlexuralRigidity` stays plate rigidity `D = E h³/(12(1−ν²))` in `J`
+(`Pa·m³ = N·m`); beam bending stiffness `EI` (`N·m²`) is a different quantity
+and must not be folded into this alias — a 2026-10-27 cross-repo audit
+misflagged the dimension on beam semantics and was refuted against the plate
+formula above and `kwavers-transducer/src/mems/plate.rs:34-45`.

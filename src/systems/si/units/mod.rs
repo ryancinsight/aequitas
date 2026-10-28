@@ -23,11 +23,13 @@ pub use derived::{
     Volt, VoltPerPascal, Watt, WattPerCubicMeter, WattPerKilogram, WattPerMeterFourth,
     WattPerMeterKelvin, WattPerSquareMeter,
 };
-pub use temperature::{DegreeCelsius, DegreeFahrenheit};
+pub use temperature::{DegreeCelsius, DegreeFahrenheit, Rankine};
 
 pub use scaled::{
-    Centimeter, CubicMillimeter, Degree, ElectronVolt, Gram, GramPerCubicCentimeter,
-    JoulePerMilliliter, Kilohertz, Kilometer, Kilopascal, MegaElectronVolt, Megahertz, Megapascal,
-    MicromolePerLiter, Microsecond, Millimeter, MillipascalSecond, Millisecond, MolePerLiter,
-    Nanometer, PerCentimeter, SquareCentimeter, SquareCentimeterPerGram,
+    Bar, Centimeter, CubicMillimeter, Degree, ElectronVolt, FootPerSecond, Gram,
+    GramPerCubicCentimeter, JoulePerMilliliter, Kilohertz, Kilometer, KilometerPerHour, Kilopascal,
+    Knot, MegaElectronVolt, Megahertz, Megapascal, MicromolePerLiter, Microsecond, MilePerHour,
+    Millimeter, MillimeterOfMercury, MillipascalSecond, Millisecond, MolePerLiter, Nanometer,
+    PerCentimeter, PoundPerSquareInch, SquareCentimeter, SquareCentimeterPerGram,
+    StandardAtmosphere,
 };

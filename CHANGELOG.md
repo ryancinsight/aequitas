@@ -2,6 +2,15 @@
 
 ## Eunomia 0.11 compatibility — Unreleased
 
+### Added
+
+- [minor] Non-SI pressure units `Bar`, `StandardAtmosphere`,
+  `PoundPerSquareInch`, and `MillimeterOfMercury` (conventional, distinct
+  from the torr), velocity units `KilometerPerHour`, `MilePerHour`, `Knot`,
+  and `FootPerSecond`, and the linear `Rankine` temperature unit, each with
+  `Pressure`/`Stress`, `Velocity`, or `ThermodynamicTemperature` impls and
+  derivation-proving tests (`tests/non_si_pressure_velocity.rs`).
+
 ### Changed
 
 - [patch] Aequitas 0.3.1: admit Eunomia `>=0.10.0, <0.12.0` without
