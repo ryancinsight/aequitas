@@ -8,7 +8,7 @@ mod transport;
 
 pub use electrical::{
     Coulomb, CoulombPerCubicMeter, CoulombPerSquareMeter, Farad, FaradSquareMeter, MeterPerVolt,
-    Ohm, PascalPerVolt, Siemens, SiemensPerMeter, Volt, VoltPerPascal,
+    Ohm, PascalPerVolt, Siemens, SiemensPerMeter, Tesla, Volt, VoltPerPascal,
 };
 pub use geometry::{CubicMeter, PerCubicMeter, PerMeter, SquareMeter, SquareMeterPerKilogram};
 pub use kinematics::{

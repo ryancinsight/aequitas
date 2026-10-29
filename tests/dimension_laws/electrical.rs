@@ -4,11 +4,12 @@
 use aequitas::systems::si::{
     quantities::{
         Capacitance, ElectricCharge, ElectricConductance, ElectricCurrent, ElectricPotential,
-        ElectricalConductivity, Length, MassDensity, SpecificAbsorptionRate, Time,
+        ElectricalConductivity, Force, Length, MagneticFluxDensity, MassDensity,
+        SpecificAbsorptionRate, Time,
     },
     units::{
-        Ampere, Coulomb, Farad, KilogramPerCubicMeter, Meter, Second, Siemens, SiemensPerMeter,
-        Volt, WattPerKilogram,
+        Ampere, Coulomb, Farad, KilogramPerCubicMeter, Meter, Newton, Second, Siemens,
+        SiemensPerMeter, Tesla, Volt, WattPerKilogram,
     },
 };
 
@@ -26,6 +27,24 @@ fn electrical_dimensions_compose_from_base_quantities() {
     assert_eq!(
         conductance.in_unit::<Siemens>().to_bits(),
         0.4_f64.to_bits()
+    );
+}
+
+#[test]
+fn lorentz_force_defines_magnetic_flux_density() {
+    // F = B·I·L: 6 N on 1 m of wire carrying 2 A implies B = 3 T.
+    let force = Force::from_unit::<Newton>(6.0_f64);
+    let current = ElectricCurrent::from_unit::<Ampere>(2.0_f64);
+    let length = Length::from_unit::<Meter>(1.0_f64);
+
+    let field: MagneticFluxDensity = force / (current * length);
+
+    assert_eq!(field.in_unit::<Tesla>().to_bits(), 3.0_f64.to_bits());
+    assert_eq!(
+        MagneticFluxDensity::from_unit::<Tesla>(3.0_f64)
+            .in_unit::<Tesla>()
+            .to_bits(),
+        3.0_f64.to_bits()
     );
 }
 

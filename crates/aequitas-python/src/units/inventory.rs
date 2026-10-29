@@ -64,8 +64,12 @@ crate::quantity_inventory! {
     polarizability => Polarizability, dimensions::Polarizability {
         FaradSquareMeter: units::FaradSquareMeter,
     },
+    magnetic_flux_density => MagneticFluxDensity, dimensions::MagneticFluxDensity {
+        Tesla: units::Tesla,
+    },
     thermodynamic_temperature => ThermodynamicTemperature, dimensions::ThermodynamicTemperature {
         Kelvin: units::Kelvin,
+        Rankine: units::Rankine,
     } affine {
         DegreeCelsius: units::DegreeCelsius,
         DegreeFahrenheit: units::DegreeFahrenheit,
@@ -116,7 +120,11 @@ crate::quantity_inventory! {
         MolePerSquareMeterSecond: units::MolePerSquareMeterSecond,
     },
     velocity => Velocity, dimensions::Velocity {
+        FootPerSecond: units::FootPerSecond,
+        KilometerPerHour: units::KilometerPerHour,
+        Knot: units::Knot,
         MeterPerSecond: units::MeterPerSecond,
+        MilePerHour: units::MilePerHour,
     },
     velocity_per_temperature => VelocityPerTemperature, dimensions::VelocityPerTemperature {
         MeterPerSecondKelvin: units::MeterPerSecondKelvin,
@@ -135,14 +143,22 @@ crate::quantity_inventory! {
     reciprocal_time_squared => ReciprocalTimeSquared, dimensions::ReciprocalTimeSquared {
     },
     pressure => Pressure, dimensions::Pressure {
+        Bar: units::Bar,
         Kilopascal: units::Kilopascal,
         Megapascal: units::Megapascal,
+        MillimeterOfMercury: units::MillimeterOfMercury,
         Pascal: units::Pascal,
+        PoundPerSquareInch: units::PoundPerSquareInch,
+        StandardAtmosphere: units::StandardAtmosphere,
     },
     stress => Stress, dimensions::Stress {
+        Bar: units::Bar,
         Kilopascal: units::Kilopascal,
         Megapascal: units::Megapascal,
+        MillimeterOfMercury: units::MillimeterOfMercury,
         Pascal: units::Pascal,
+        PoundPerSquareInch: units::PoundPerSquareInch,
+        StandardAtmosphere: units::StandardAtmosphere,
     },
     pressure_rate => PressureRate, dimensions::PressureRate {
         PascalPerSecond: units::PascalPerSecond,

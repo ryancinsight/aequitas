@@ -32,6 +32,8 @@ pub type ElectricalImpedance<T = f64> = Quantity<T, dimensions::ElectricalImpeda
 pub type Capacitance<T = f64> = Quantity<T, dimensions::Capacitance>;
 /// Electric polarizability quantity, including complex phasors.
 pub type Polarizability<T = f64> = Quantity<T, dimensions::Polarizability>;
+/// Magnetic flux density quantity, the `B` field of the Lorentz force law.
+pub type MagneticFluxDensity<T = f64> = Quantity<T, dimensions::MagneticFluxDensity>;
 /// Thermodynamic-temperature quantity.
 pub type ThermodynamicTemperature<T = f64> = Quantity<T, dimensions::ThermodynamicTemperature>;
 /// Temperature-difference quantity.

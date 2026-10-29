@@ -37,6 +37,11 @@ pub type ElectricalImpedance = Dimension<P2, P1, N3, N2, Z0, Z0, Z0>;
 pub type Capacitance = Dimension<N2, N1, P4, P2, Z0, Z0, Z0>;
 /// Electric polarizability, dipole moment per electric field.
 pub type Polarizability = Dimension<Z0, N1, P4, P2, Z0, Z0, Z0>;
+/// Magnetic flux density, force per electric current per length.
+///
+/// `B` in the Lorentz force law `F = B·I·L`; coherent unit Tesla,
+/// `kg·s⁻²·A⁻¹`.
+pub type MagneticFluxDensity = Dimension<Z0, P1, N2, N1, Z0, Z0, Z0>;
 /// Absolute thermodynamic temperature.
 pub type ThermodynamicTemperature =
     Dimension<Z0, Z0, Z0, Z0, P1, Z0, Z0, AbsoluteTemperatureSemantics>;

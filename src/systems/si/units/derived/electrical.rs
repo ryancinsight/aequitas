@@ -115,6 +115,20 @@ impl LinearUnit<dimensions::Polarizability> for FaradSquareMeter {
     const SCALE: f64 = 1.0;
 }
 
+/// Tesla, the coherent SI unit of magnetic flux density.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Tesla;
+impl Sealed for Tesla {}
+impl crate::unit::private::Named for Tesla {}
+impl crate::unit::UnitDimension for Tesla {
+    type Dimension = dimensions::MagneticFluxDensity;
+}
+
+impl LinearUnit<dimensions::MagneticFluxDensity> for Tesla {
+    const SYMBOL: &'static str = "T";
+    const SCALE: f64 = 1.0;
+}
+
 /// Pascal per volt, the coherent SI unit of voltage-driven pressure gain.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct PascalPerVolt;
