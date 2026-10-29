@@ -24,6 +24,7 @@ crate::quantity_classes! {
     ElectricalImpedance: dimensions::ElectricalImpedance,
     Capacitance: dimensions::Capacitance,
     Polarizability: dimensions::Polarizability,
+    MagneticFluxDensity: dimensions::MagneticFluxDensity,
     ThermodynamicTemperature: dimensions::ThermodynamicTemperature,
     TemperatureDifference: dimensions::TemperatureDifference,
     ReciprocalTemperature: dimensions::ReciprocalTemperature,

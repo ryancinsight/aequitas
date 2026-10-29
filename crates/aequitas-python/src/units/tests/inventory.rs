@@ -13,9 +13,9 @@ use crate::units::{all, by_name};
 
 #[test]
 fn the_inventory_covers_every_named_quantity() {
-    // 81 aliases in `systems::si::quantities`. A new alias that never reached
+    // 82 aliases in `systems::si::quantities`. A new alias that never reached
     // the generator fails here as well as in the generator's `check` mode.
-    assert_eq!(all().len(), 81);
+    assert_eq!(all().len(), 82);
 }
 
 #[test]

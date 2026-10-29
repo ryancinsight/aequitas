@@ -20,7 +20,7 @@ pub use derived::{
     MolePerSquareMeterSecond, Newton, NewtonPerMeter, Ohm, Pascal, PascalPerSecond, PascalPerVolt,
     PascalSecond, PerCubicMeter, PerKelvin, PerMeter, PerMeterKelvin, PerSecond, PerSquareKelvin,
     Rayl, Siemens, SiemensPerMeter, SquareMeter, SquareMeterPerKilogram, SquareMeterPerSecond,
-    Volt, VoltPerPascal, Watt, WattPerCubicMeter, WattPerKilogram, WattPerMeterFourth,
+    Tesla, Volt, VoltPerPascal, Watt, WattPerCubicMeter, WattPerKilogram, WattPerMeterFourth,
     WattPerMeterKelvin, WattPerSquareMeter,
 };
 pub use temperature::{DegreeCelsius, DegreeFahrenheit, Rankine};

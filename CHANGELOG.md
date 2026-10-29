@@ -4,6 +4,8 @@
 
 ### Added
 
+- [minor] `MagneticFluxDensity` quantity with coherent `Tesla` unit
+  (`F = B·I·L` Lorentz law, proven in `tests/dimension_laws/electrical.rs`).
 - [minor] Non-SI pressure units `Bar`, `StandardAtmosphere`,
   `PoundPerSquareInch`, and `MillimeterOfMercury` (conventional, distinct
   from the torr), velocity units `KilometerPerHour`, `MilePerHour`, `Knot`,
