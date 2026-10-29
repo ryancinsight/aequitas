@@ -18,7 +18,7 @@ import pyaequitas as aq
 
 def test_every_named_quantity_has_a_constructor() -> None:
     names = aq.quantity_names()
-    assert len(names) == 81
+    assert len(names) == 82
     for name in names:
         assert callable(getattr(aq, name)), name
 
@@ -27,6 +27,7 @@ def test_construction_scales_into_base_units() -> None:
     assert aq.length(2.5, "mm").base == 0.0025
     assert aq.length(1.0, "km").base == 1000.0
     assert aq.mass(250.0, "g").base == 0.25
+    assert aq.magnetic_flux_density(3.0, "T").base == 3.0
 
 
 def test_construction_without_a_unit_takes_base_units() -> None:
