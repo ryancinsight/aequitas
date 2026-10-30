@@ -1,6 +1,15 @@
 # Changelog
 
-## Eunomia 0.11 compatibility — Unreleased
+## Aequitas 0.3.2 — Unreleased
+
+### Changed
+
+- [patch] The Eunomia requirement widens to `>=0.10.0, <0.13.0`, admitting the
+  published Eunomia 0.12 const-float factory while retaining the 0.10 and 0.11
+  provider lines. No quantity, unit, dimensional-law or numeric behavior
+  changes.
+
+## Eunomia 0.11 compatibility — 0.3.1 (2026-10-19)
 
 ### Added
 
