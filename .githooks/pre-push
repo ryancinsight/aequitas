@@ -5,10 +5,9 @@
 # Guards, in order: the lockfile must resolve under `--locked`; the pushed
 # range must stay within the artifact budgets, add no credential, and raise no
 # debt class above the member's recorded baseline; shared artifacts must match
-# their source identity; and the packages the push changes must pass fmt, Clippy,
-# Nextest, and warning-denied Rustdoc. A candidate workspace may move Rustdoc
-# to this entry point's explicit documentation phase through the metadata
-# contract below. CI confirms both phases.
+# their source identity; and the packages the push changes must pass fmt, clippy,
+# tests, and documentation. CI confirms what this found; it should not be where a
+# defect is discovered.
 #
 # Refuse a push whose Cargo.lock cannot resolve under `--locked`.
 #
@@ -59,48 +58,6 @@
 # cold cargo cache now fails loudly instead of passing unverified.
 set -euo pipefail
 
-# Git invokes the push phase with the remote name and location. Local pull
-# request readiness invokes the same owned entry point as
-# `pre-push documentation <candidate> [<base>]`; that phase runs the real
-# warning-denied public documentation command on the same prepared export.
-# `--bounded-phase` is the runner-owned re-entry and still runs every guard.
-gate_phase="push"
-gate_bounded=0
-gate_needs_deadline=0
-documentation_tip=""
-documentation_base=""
-bounded_prepared_selected=0
-bounded_prepared_tools=""
-case "${1:-}" in
-  documentation)
-    gate_phase="documentation"
-    gate_needs_deadline=1
-    shift
-    documentation_tip="${1:-}"
-    documentation_base="${2:-}"
-    [ "$#" -le 2 ] || {
-      echo "pre-push: usage: pre-push documentation <candidate> [<base>]" >&2
-      exit 2
-    }
-    ;;
-  --bounded-phase)
-    gate_bounded=1
-    gate_phase="${2:-}"
-    bounded_prepared_selected="${3:-0}"
-    bounded_prepared_tools="${4:-}"
-    shift 4
-    case "$gate_phase" in
-      push | documentation) ;;
-      *) echo "pre-push: BLOCKED -- invalid bounded phase $gate_phase" >&2; exit 2 ;;
-    esac
-    ;;
-  *)
-    # Git supplies at least the remote name. A direct no-argument invocation is
-    # retained for the hook's fixture harness; production pushes are bounded.
-    [ "$#" -eq 0 ] || gate_needs_deadline=1
-    ;;
-esac
-
 # The lockfile section below still runs unconditionally; only the
 # no-manifest-in-range skip further down (evidence, not a bypass) can
 # shorten it.
@@ -123,15 +80,10 @@ unset MSYS_NO_PATHCONV
 
 # Capture the one-command prepared-tools selection before replacing inherited
 # command configuration with the safe-directory setting child Git calls need.
+prepared_tools_config="$(git -c safe.directory="$PWD" config --show-scope --get-all atlas.preparedTools 2>/dev/null || true)"
 prepared_tools=""
 prepared_tools_selected=0
-if [ "$gate_bounded" -eq 1 ] && [ "$bounded_prepared_selected" = 1 ]; then
-  prepared_tools_selected=1
-  prepared_tools="$bounded_prepared_tools"
-else
-  prepared_tools_config="$(git -c safe.directory="$PWD" config --show-scope --get-all atlas.preparedTools 2>/dev/null || true)"
-fi
-if [ "$prepared_tools_selected" -eq 0 ] && [ -n "${prepared_tools_config:-}" ]; then
+if [ -n "$prepared_tools_config" ]; then
   if [[ "$prepared_tools_config" == *$'\n'* ]] \
     || [ "${prepared_tools_config%%$'\t'*}" != "command" ]; then
     echo "pre-push: BLOCKED -- atlas.preparedTools must be set once with git -c for this push." >&2
@@ -371,22 +323,7 @@ default_branch_base() {
 # leading to it. Judging the first ref alone let a later ref carry anything.
 zero="$(printf '0%.0s' $(seq 40))"
 push_lines=()
-if [ "$gate_phase" = "documentation" ] && [ "$gate_bounded" -eq 0 ]; then
-  if [ -z "$documentation_tip" ] \
-    || ! documentation_tip="$(git rev-parse --verify --quiet "$documentation_tip^{commit}")"; then
-    echo "pre-push: BLOCKED -- documentation candidate does not resolve to a commit" >&2
-    exit 2
-  fi
-  if [ -n "$documentation_base" ]; then
-    if ! documentation_base="$(git rev-parse --verify --quiet "$documentation_base^{commit}")"; then
-      echo "pre-push: BLOCKED -- documentation base does not resolve to a commit" >&2
-      exit 2
-    fi
-  else
-    documentation_base="$zero"
-  fi
-  push_lines+=("refs/heads/atlas-documentation $documentation_tip refs/heads/atlas-documentation $documentation_base")
-elif [ ! -t 0 ]; then
+if [ ! -t 0 ]; then
   while IFS= read -r push_line; do
     [ -n "$push_line" ] && push_lines+=("$push_line")
   done
@@ -467,6 +404,18 @@ if [ "${ATLAS_RESCUE_MIXED:-0}" != 1 ] && [ "${#push_lines[@]}" -gt 0 ]; then
         "$rescue_allowlist_ref" "${push_lines[@]}" || rescue_status=$?
     [ "$rescue_status" -eq 0 ] && exit 0
     [ "$rescue_status" -eq 3 ] || exit "$rescue_status"
+  fi
+fi
+
+if [ "${#push_lines[@]}" -gt 0 ]; then
+  if [ "${#push_lines[@]}" -gt 1 ]; then
+    export ATLAS_RESCUE_MIXED=1
+    refs_status=0
+    for push_line in "${content_lines[@]}"; do
+      echo "pre-push: judging ${push_line%% *}" >&2
+      printf '%s\n' "$push_line" | bash "${BASH_SOURCE[0]}" "$@" || refs_status=1
+    done
+    exit "$refs_status"
   fi
 fi
 
@@ -733,97 +682,6 @@ stack_scripts=""
 if [ -n "$stack_baseline" ]; then
   extract_stack_scripts "$stack_baseline"
   stack_scripts="$extracted_stack_scripts"
-fi
-
-# The actual production push and documentation phases own a committed
-# ten-minute wall bound. The stack's process-tree runner gives every descendant
-# one Windows Job Object or POSIX process group, so timeout and interruption
-# retire Cargo, rustc, rustdoc, and Git children together. The bounded child
-# receives the exact ref protocol already validated above and repeats every
-# source, dependency, export, selection, and identity guard.
-if [ "$gate_needs_deadline" -eq 1 ] && [ "$gate_bounded" -eq 0 ]; then
-  process_tree_module="${stack_scripts:+$stack_scripts/process_tree.py}"
-  if [ -z "$python_bin" ] || [ ! -f "$process_tree_module" ]; then
-    echo "pre-push: BLOCKED -- the stack process-tree runner is unavailable; $gate_phase was not run" >&2
-    exit 1
-  fi
-  new_run_temp phase_progress pg-progress
-  phase_input="$(printf '%s\n' "${content_lines[@]}")"
-  set +e
-  "$python_bin" -I -c '
-import os
-import pathlib
-import sys
-
-sys.path.insert(0, sys.argv[1])
-import process_tree
-
-phase, hook, progress, prepared_selected, prepared_tools = sys.argv[2:7]
-payload = sys.argv[7].encode("utf-8") + b"\n"
-environment = os.environ.copy()
-environment["ATLAS_GATE_PROGRESS_DIR"] = progress
-command = [
-    "bash", hook, "--bounded-phase", phase, prepared_selected, prepared_tools,
-]
-
-def emit(value, stream):
-    if value:
-        stream.buffer.write(value)
-        stream.flush()
-
-def progress_report():
-    marker = pathlib.Path(progress, "stages.log")
-    if marker.is_file():
-        print("pre-push: bounded stage timings:", file=sys.stderr)
-        print(marker.read_text(encoding="utf-8", errors="replace"), end="", file=sys.stderr)
-
-try:
-    result = process_tree.run(command, input=payload, timeout=600, env=environment)
-except process_tree.ProcessTreeTimeout as error:
-    emit(error.output, sys.stdout)
-    emit(error.stderr, sys.stderr)
-    progress_report()
-    log = pathlib.Path(progress, "gate.log")
-    if log.is_file():
-        tail = log.read_bytes()[-32768:]
-        print("pre-push: final bounded gate log bytes:", file=sys.stderr)
-        emit(tail, sys.stderr)
-    print(f"pre-push: BLOCKED -- {phase} phase exceeded 600 seconds; its process tree was retired", file=sys.stderr)
-    raise SystemExit(124)
-except process_tree.ProcessTreeCleanupError as error:
-    print(f"pre-push: BLOCKED -- {phase} phase cleanup failed: {error}", file=sys.stderr)
-    raise SystemExit(1)
-emit(result.stdout, sys.stdout)
-emit(result.stderr, sys.stderr)
-progress_report()
-raise SystemExit(result.returncode)
-' "$stack_scripts" "$gate_phase" "${BASH_SOURCE[0]}" "$phase_progress" \
-    "$prepared_tools_selected" "$prepared_tools" "$phase_input"
-  bounded_status=$?
-  set -e
-  exit "$bounded_status"
-fi
-
-# A production multi-ref push enters the process-tree supervisor once with
-# every ref still present. The bounded re-entry then judges each ref
-# independently inside that one aggregate ten-minute lifetime. Supervising
-# each recursive ref instead gave an N * 600 second push budget. Preserve the
-# prepared-tools selection explicitly because the outer invocation replaces
-# command-scoped Git configuration before this dispatch.
-if [ "${#push_lines[@]}" -gt 1 ]; then
-  export ATLAS_RESCUE_MIXED=1
-  refs_status=0
-  for push_line in "${content_lines[@]}"; do
-    echo "pre-push: judging ${push_line%% *}" >&2
-    if [ "$gate_bounded" -eq 1 ]; then
-      printf '%s\n' "$push_line" | bash "${BASH_SOURCE[0]}" \
-        --bounded-phase "$gate_phase" "$prepared_tools_selected" "$prepared_tools" \
-        || refs_status=1
-    else
-      printf '%s\n' "$push_line" | bash "${BASH_SOURCE[0]}" "$@" || refs_status=1
-    fi
-  done
-  exit "$refs_status"
 fi
 prepared_stack_scripts=""
 if [ "$prepared_tools_selected" -eq 1 ]; then
@@ -1128,7 +986,7 @@ fi
 #
 #     SKIP_LOCAL_GATE=1 git push
 
-if [ "$gate_phase" = "push" ] && [ "${SKIP_LOCAL_GATE:-0}" = "1" ]; then
+if [ "${SKIP_LOCAL_GATE:-0}" = "1" ]; then
   echo "pre-push: local gate skipped by SKIP_LOCAL_GATE" >&2
   exit 0
 fi
@@ -1136,10 +994,6 @@ fi
 if ! command -v cargo >/dev/null 2>&1; then
   # No toolchain on this machine (docs-only checkout, bare CI image without
   # Rust): say so rather than failing every push on a missing binary.
-  if [ "$gate_phase" = "documentation" ]; then
-    echo "pre-push: BLOCKED -- no cargo toolchain found; documentation was not run" >&2
-    exit 1
-  fi
   echo "pre-push: no cargo toolchain found; local gate not run" >&2
   exit 0
 fi
@@ -1331,43 +1185,6 @@ run_cargo_workspace_gate() {
     echo "pre-push: BLOCKED -- selected Cargo workspace manifest $workspace_manifest is missing from $gate_sha" >&2
     exit 1
   fi
-  # Rustdoc remains push-owned unless the exported candidate opts into the
-  # pre-merge documentation phase. Reading the live checkout or an environment
-  # variable would let peer dirt or the invoking shell change which gate the
-  # pushed revision receives.
-  local documentation_ownership="pre-push"
-  if [ -n "$python_bin" ]; then
-    if ! documentation_ownership="$("$python_bin" - "$gate_manifest_path" <<'PY'
-import pathlib
-import sys
-import tomllib
-
-manifest = pathlib.Path(sys.argv[1])
-try:
-    with manifest.open("rb") as stream:
-        document = tomllib.load(stream)
-except tomllib.TOMLDecodeError:
-    # Cargo metadata below owns malformed-manifest diagnostics. This parser
-    # decides only the Atlas metadata value in an otherwise valid manifest.
-    print("pre-push")
-    raise SystemExit(0)
-workspace = document.get("workspace", {})
-metadata = workspace.get("metadata", {}) if isinstance(workspace, dict) else {}
-atlas = metadata.get("atlas", {}) if isinstance(metadata, dict) else {}
-if not isinstance(atlas, dict):
-    raise SystemExit("workspace.metadata.atlas must be a table")
-value = atlas.get("documentation-phase", "pre-push")
-if value not in {"pre-push", "pre-merge"}:
-    raise SystemExit(
-        "workspace.metadata.atlas.documentation-phase must be 'pre-push' or 'pre-merge'"
-    )
-print(value)
-PY
-    )"; then
-      echo "pre-push: BLOCKED -- invalid documentation phase in $workspace_manifest" >&2
-      exit 1
-    fi
-  fi
   # Leading space: the steps render as `cargo doc --no-deps$gate_specs`, and
   # without it the flag joins the subcommand ("--no-deps--manifest-path").
   gate_manifest=" --manifest-path $gate_manifest_path"
@@ -1384,26 +1201,14 @@ PY
     fi
   fi
 
-# Package selection, testability, and documentation ownership all read the
-# same exported workspace graph. Cargo metadata is an input discovery step,
-# not a per-question command; repeating it serializes identical Cargo work and
-# can consume the bounded gate before a build begins.
-local workspace_metadata
-if ! workspace_metadata="$(
-  cd "$gate_command_cwd" && cargo metadata --no-deps --format-version 1 $gate_manifest
-)"; then
-  echo "pre-push: cargo metadata could not establish testable packages" >&2
-  echo "pre-push: push anyway with SKIP_LOCAL_GATE=1 git push" >&2
-  exit 1
-fi
-
 # Packages with no target nextest can run (a `test = false` cdylib such as a
 # PyO3 extension) produce no test artifact, so the source-identity checker would
 # report "no artifact found" for a package the tests stage has nothing to build.
 # Cargo metadata marks each target with `test`; a package none of whose targets
 # has it is skipped by the tests stage only. Its clippy and rustdoc stages stay.
 if ! untestable_packages="$(
-  printf '%s\n' "$workspace_metadata" | "$python_bin" -c 'import json, sys
+  cd "$gate_command_cwd" && cargo metadata --no-deps --format-version 1 $gate_manifest |
+    "$python_bin" -c 'import json, sys
 sys.stdout.reconfigure(newline="\n")
 metadata = json.load(sys.stdin)
 members = set(metadata["workspace_members"])
@@ -1423,7 +1228,8 @@ fi
 # `--no-deps` reads membership without resolving dependencies or changing the
 # lockfile. Each output record is `<repo-relative manifest><tab><package name>`.
 if ! workspace_members="$(
-  printf '%s\n' "$workspace_metadata" | "$python_bin" -c 'import json, os, sys
+  cd "$gate_command_cwd" && cargo metadata --no-deps --format-version 1 $gate_manifest |
+    "$python_bin" -c 'import json, os, sys
 # LF records: text-mode stdout on Windows writes CRLF, and bash keeps the CR
 # in the package name, so a new-member push gated `helios-core<CR>` beside
 # `helios-core` and the identity checker found no such package.
@@ -1546,7 +1352,7 @@ fi
 # (cast_check_packages, cast_check_sites, cast_base_sites): each workspace
 # appends to them, and run_cast_check judges them once, in the tail, after
 # every workspace has contributed.
-if [ "$gate_phase" = "push" ] && [ -n "$stack_member" ]; then
+if [ -n "$stack_member" ]; then
   cast_gate="${stack_scripts:+$stack_scripts/atlas_cast_gate.py}"
   if [ ! -f "$cast_gate" ] || [ -z "$python_bin" ]; then
     echo "pre-push: BLOCKED -- the stack's cast gate is missing at ${stack_baseline:0:12}." >&2
@@ -1778,7 +1584,8 @@ if [ -f "$identity_checker" ]; then
     exit 1
   fi
   if ! identity_target_dir="$(
-    printf '%s\n' "$workspace_metadata" | "$python_bin" -c 'import json, sys
+    cd "$gate_command_cwd" && cargo metadata --no-deps --format-version 1 $gate_manifest |
+      "$python_bin" -c 'import json, sys
 value = json.load(sys.stdin).get("target_directory")
 if not isinstance(value, str) or not value:
     raise SystemExit("cargo metadata did not provide target_directory")
@@ -1795,10 +1602,10 @@ else
   echo "pre-push: source identity checker not reachable from this clone; CI enforces it" >&2
 fi
 
-# The source-identity checker executes each phase's complete sequence as one
-# command, so its package leases stay held through that phase's Cargo commands
-# and final source/dependency checks. Releasing them between commands allowed a
-# peer to replace the shared artifacts after Clippy or tests had accepted them.
+# The source-identity checker executes this complete sequence as one command,
+# so its package leases stay held from clippy through rustdoc and the final
+# source/dependency checks. Releasing them between stages allowed a peer to
+# replace the shared artifacts after clippy or tests had accepted them.
 #
 # A step over another tree -- normally this workspace's export -- sets
 # step_root, step_manifest, step_selection and step_key for its call, and
@@ -1807,7 +1614,7 @@ fi
 # With the cast gate in play the clippy stage runs through it, which records
 # this selection's cast sites beside the build.
 run_identity_sequence() {
-  local run_clippy="$1" run_tests="$2" run_rustdoc="$3" stage_file="$4"
+  local run_tests="$1" run_rustdoc="$2" stage_file="$3"
   local root="${step_root:-$gate_export}"
   local manifest="${step_manifest:-$gate_manifest_path}"
   local chosen="${step_selection-$gate_packages}"
@@ -1836,47 +1643,32 @@ run_identity_sequence() {
     bash -c '
 stage_file="$1"
 manifest="$2"
-run_clippy="$3"
-run_tests="$4"
-run_rustdoc="$5"
-command_root="$6"
-cast_python="$7"
-cast_gate="$8"
-cast_sites="$9"
-manifest_relative="${10}"
-progress="${11}"
-shift 11
+run_tests="$3"
+run_rustdoc="$4"
+command_root="$5"
+cast_python="$6"
+cast_gate="$7"
+cast_sites="$8"
+manifest_relative="$9"
+shift 9
 cargo_command="${CARGO:-cargo}"
-record_stage() {
-  printf "%s\n" "$1" >"$stage_file"
-  [ -z "$progress" ] || printf "%s started %s\n" "$1" "$SECONDS" >>"$progress/stages.log"
-}
-complete_stage() {
-  [ -z "$progress" ] || printf "%s completed %s\n" "$1" "$SECONDS" >>"$progress/stages.log"
-}
-if [ "$run_clippy" = 1 ]; then
-  record_stage clippy
-  if [ -n "$cast_gate" ]; then
-    "$cast_python" "$cast_gate" clippy --export "$command_root" --manifest "$manifest_relative" --sites "$cast_sites" "$@" || exit $?
-  else
-    "$cargo_command" clippy --manifest-path "$manifest" --all-targets --locked "$@" || exit $?
-  fi
-  complete_stage clippy
+printf "%s\n" clippy >"$stage_file"
+if [ -n "$cast_gate" ]; then
+  "$cast_python" "$cast_gate" clippy --export "$command_root" --manifest "$manifest_relative" --sites "$cast_sites" "$@" || exit $?
+else
+  "$cargo_command" clippy --manifest-path "$manifest" --all-targets --locked "$@" || exit $?
 fi
 if [ "$run_tests" = 1 ]; then
-  record_stage tests
+  printf "%s\n" tests >"$stage_file"
   "$cargo_command" nextest run --manifest-path "$manifest" --locked --no-tests=pass "$@" || exit $?
-  complete_stage tests
 fi
 if [ "$run_rustdoc" = 1 ]; then
-  record_stage rustdoc
-  env -u CARGO_ENCODED_RUSTDOCFLAGS RUSTDOCFLAGS="-D warnings" \
-    "$cargo_command" doc --no-deps --manifest-path "$manifest" --locked "$@" || exit $?
-  complete_stage rustdoc
+  printf "%s\n" rustdoc >"$stage_file"
+  env RUSTDOCFLAGS="-D warnings" "$cargo_command" doc --no-deps --manifest-path "$manifest" --locked "$@" || exit $?
 fi
-record_stage verification
-' atlas-pre-push-sequence "$stage_file" "$manifest" "$run_clippy" "$run_tests" "$run_rustdoc" \
-    "$root" "$python_bin" "${cast_gate:-}" "${cast_sites:-}" "$manifest_relative" "${phase_progress:-}"
+printf "%s\n" verification >"$stage_file"
+' atlas-pre-push-sequence "$stage_file" "$manifest" "$run_tests" "$run_rustdoc" \
+    "$root" "$python_bin" "${cast_gate:-}" "${cast_sites:-}" "$manifest_relative"
     "${selection[@]}"
   )
   local verdict step_name
@@ -1884,10 +1676,7 @@ record_stage verification
   step_name="$(cat "$stage_file" 2>/dev/null || true)"
   [ -n "$step_name" ] || step_name="source identity sequence"
   case "$verdict" in
-    ok)
-      [ -z "${phase_progress:-}" ] \
-        || printf "verification completed %s\n" "$SECONDS" >>"$phase_progress/stages.log"
-      ;;
+    ok) ;;
     identity)
       cat >&2 <<MESSAGE
 
@@ -2139,8 +1928,7 @@ echo "pre-push: gating${gate_packages}" >&2
 
 # Formatting is workspace-wide and near-instant, and its failure is the
 # cheapest one to find here rather than on a runner.
-if [ "$gate_phase" = "push" ] \
-  && ! (cd "$gate_command_cwd" && cargo fmt --all $gate_manifest -- --check >/dev/null); then
+if ! (cd "$gate_command_cwd" && cargo fmt --all $gate_manifest -- --check >/dev/null); then
   cat >&2 <<MESSAGE
 
 pre-push: \`cargo fmt --check\` fails on $gate_sha, so the architecture validation would.
@@ -2156,7 +1944,7 @@ fi
 # nothing here ran the ratchet. It is text-only and fast, so it runs before the
 # compile steps; a member without the script has no ratchet to run.
 safety_ratchet="$gate_command_cwd/scripts/safety_ratchet.py"
-if [ "$gate_phase" = "push" ] && [ -f "$safety_ratchet" ]; then
+if [ -f "$safety_ratchet" ]; then
   if [ -z "$python_bin" ]; then
     echo "pre-push: scripts/safety_ratchet.py present but no python interpreter found" >&2
     echo "pre-push: push anyway with SKIP_LOCAL_GATE=1 git push" >&2
@@ -2183,23 +1971,12 @@ fi
 # without extra flags: adding `-D warnings` here would fail on the
 # pre-existing per-crate debt the ratchet exists to burn down, and a gate
 # that fails on debt you did not write is a gate that gets bypassed.
-if [ "$gate_bounded" -eq 1 ] && [ -n "${ATLAS_GATE_PROGRESS_DIR:-}" ]; then
-  phase_progress="$ATLAS_GATE_PROGRESS_DIR"
-  gate_log="$phase_progress/gate.log"
-  : > "$gate_log"
-else
-  phase_progress=""
-  gate_log="$(mktemp "$tmp_base/pg-log.XXXXXX")"
-  run_temps+=("$gate_log")
-fi
+gate_log="$(mktemp "$tmp_base/pg-log.XXXXXX")"
+run_temps+=("$gate_log")
 
 if [ "$identity_enabled" -eq 1 ]; then
-  run_clippy=0
   run_tests=0
-  if [ "$gate_phase" = "push" ]; then
-    run_clippy=1
-  fi
-  if [ "$gate_phase" = "push" ] && command -v cargo-nextest >/dev/null 2>&1; then
+  if command -v cargo-nextest >/dev/null 2>&1; then
     testable_packages=""
     for package_name in $gate_packages; do
       case $'\n'"$untestable_packages"$'\n' in
@@ -2208,7 +1985,7 @@ if [ "$identity_enabled" -eq 1 ]; then
       testable_packages="$testable_packages $package_name"
     done
     [ -z "${testable_packages// /}" ] || run_tests=1
-  elif [ "$gate_phase" = "push" ]; then
+  else
     echo "pre-push: cargo-nextest not installed; tests not run" >&2
   fi
 
@@ -2216,14 +1993,9 @@ if [ "$identity_enabled" -eq 1 ]; then
   # bin target. A bench-only package (moirai-benchmarks) or a `[lib] doc =
   # false` one (consus-python) writes none, so an all-undocumented selection
   # skips the stage; cargo's own target list is the authority.
-  documented_packages=""
-  run_documentation=0
-  if [ "$gate_phase" = "documentation" ] \
-    || [ "$documentation_ownership" = "pre-push" ]; then
-    run_documentation=1
-  fi
-  if [ "$run_documentation" -eq 1 ] && ! documented_packages="$(
-    printf '%s\n' "$workspace_metadata" | "$python_bin" -c 'import json, sys
+  if ! documented_packages="$(
+    cd "$gate_command_cwd" && cargo metadata --no-deps --format-version 1 $gate_manifest |
+      "$python_bin" -c 'import json, sys
 sys.stdout.reconfigure(newline="\n")
 documented = {"lib", "rlib", "dylib", "cdylib", "staticlib", "proc-macro", "bin"}
 for package in json.load(sys.stdin)["packages"]:
@@ -2239,7 +2011,6 @@ for package in json.load(sys.stdin)["packages"]:
   fi
   rustdoc_packages=""
   for package_name in $gate_packages; do
-    [ "$run_documentation" -eq 1 ] || continue
     case "
 $documented_packages
 " in
@@ -2252,13 +2023,8 @@ $package_name
   run_rustdoc=0
   [ -z "${rustdoc_packages// /}" ] || run_rustdoc=1
 
-  if [ -n "$phase_progress" ]; then
-    gate_stage="$phase_progress/stage"
-    : > "$gate_stage"
-  else
-    gate_stage="$(mktemp "$tmp_base/pg-stage.XXXXXX")"
-    run_temps+=("$gate_stage")
-  fi
+  gate_stage="$(mktemp "$tmp_base/pg-stage.XXXXXX")"
+  run_temps+=("$gate_stage")
   # With the cast gate in play, the sequence's clippy stage records this
   # workspace's tip sites; they join the rows run_cast_check judges once,
   # after every workspace has contributed.
@@ -2267,20 +2033,14 @@ $package_name
     cast_sites="$(mktemp "$tmp_base/pg-casts.XXXXXX")"
     run_temps+=("$cast_sites")
   fi
-  if [ "$gate_phase" = "documentation" ]; then
-    if [ "$run_rustdoc" -eq 1 ]; then
-      step_selection="$rustdoc_packages" run_identity_sequence 0 0 1 "$gate_stage"
-    fi
-  else
-    run_identity_sequence "$run_clippy" "$run_tests" "$run_rustdoc" "$gate_stage"
-  fi
+  run_identity_sequence "$run_tests" "$run_rustdoc" "$gate_stage"
   if [ -n "$cast_gate" ]; then
     cast_check_sites+=(--sites "$cast_sites")
     for package_name in $gate_packages; do
       cast_check_packages+=(--package "$package_name")
     done
   fi
-elif [ "$gate_phase" = "push" ]; then
+else
   case "$(classify_gate_step "$gate_log" cargo clippy $gate_specs --all-targets)" in
     ours)
       cat >&2 <<MESSAGE
@@ -2302,7 +2062,7 @@ MESSAGE
   esac
 fi
 
-if [ "$identity_enabled" -eq 0 ] && [ "$gate_phase" = "push" ]; then
+if [ "$identity_enabled" -eq 0 ]; then
   if command -v cargo-nextest >/dev/null 2>&1; then
     case "$(classify_gate_step "$gate_log" cargo nextest run $gate_specs --no-tests=pass)" in
       ours)
@@ -2332,11 +2092,8 @@ fi
 # redundant intra-doc link that clippy and the tests never see turns main red
 # after the merge (a redundant link target from apollo#508 did). The changed
 # packages are documented here the same way.
-if [ "$identity_enabled" -eq 0 ] \
-  && { [ "$gate_phase" = "documentation" ] \
-    || [ "$documentation_ownership" = "pre-push" ]; }; then
-  case "$(classify_gate_step "$gate_log" env -u CARGO_ENCODED_RUSTDOCFLAGS \
-    RUSTDOCFLAGS="-D warnings" cargo doc --no-deps $gate_specs)" in
+if [ "$identity_enabled" -eq 0 ]; then
+  case "$(classify_gate_step "$gate_log" env RUSTDOCFLAGS="-D warnings" cargo doc --no-deps $gate_specs)" in
     ours)
       cat >&2 <<MESSAGE
 
@@ -2357,7 +2114,7 @@ MESSAGE
   esac
 fi
 
-echo "pre-push: $gate_phase phase passed" >&2
+echo "pre-push: local gate passed" >&2
 }
 
 select_meta_cargo_owners() {
