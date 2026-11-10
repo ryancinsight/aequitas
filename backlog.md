@@ -327,6 +327,8 @@
   uninstalls the app or disables its checks.
 - **Re-open trigger:** the app is removed, or it starts reporting a real
   verdict.
+- milestone: none (third-party verdict; fleet-level if a third member shows
+  it; does not gate 1.0 per ADR 0020).
 - Same class as kwavers `KW-CI-094`; if a third member shows it, this belongs
   on the meta board as one fleet item rather than per-member copies.
 
@@ -389,6 +391,7 @@ domain layer.
   `Quantity::in_unit`; semantic normalization matches
   `MultiplyDimension`/`DivideDimension`; codegen regenerate-and-diff clean;
   `pytest` green against the built wheel.
+- milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
 
 ## AEQ-PY-WHEEL-MACOS-X86-2026-09-11 — The wheel matrix has no Intel macOS wheel [patch] [ci] — done 2026-09-21 <a id="aeq-py-wheel-macos-x86-2026-09-11"></a>
 
@@ -491,6 +494,7 @@ domain layer.
   That needs the owner's approval before anything is installed.
 - **Re-open trigger:** the owner names a tool, or declines proof tooling and the
   gap is recorded as accepted.
+- milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
 
 ## Active
 
@@ -626,7 +630,7 @@ domain layer.
   `BaseSemantics`, matching `MultiplyDimension`/`DivideDimension`. Evidence:
   2 value-semantic tests (angle and reciprocal-volume paths).
 
-## Deferred (documented boundary)
+## Deferred (documented boundary — outside the 1.0 ladder per ADR 0020)
 
 - [ ] [minor] Affine unit kinds and quantity kinds beyond the linear-unit
   slice (`uom`-style `Kind` system). The temperature slice landed in
