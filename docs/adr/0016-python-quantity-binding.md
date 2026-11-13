@@ -110,8 +110,8 @@ after its first alias, with the other aliases bound as further names of the
 same class (`aq.ThermalDiffusivity is aq.AreaPerTime`). A dimension no alias
 names, such as `m^5`, stays a plain `Quantity`. Evidence: the runtime tags of
 the 81 aliases (73 distinct, 7 shared) and the compile-time assertions in the
-generated class inventory. Driving item:
-[AEQ-PY-TYPING-001](../../backlog.md#aeq-py-typing-001).
+generated class inventory. Driving item: AEQ-PY-TYPING-001, delivered in
+[#68](https://github.com/ryancinsight/aequitas/pull/68) and [#70](https://github.com/ryancinsight/aequitas/pull/70).
 
 ### Cross-extension interop
 
@@ -186,8 +186,8 @@ free-threaded version PyO3 supports, against a version-specific wheel,
 asserting in a fresh interpreter that the import
 leaves the GIL off. Until the floor reaches 3.15, the release matrix adds
 one `cp3XXt` wheel per supported free-threaded version beside the abi3 wheel.
-Driving item:
-[AEQ-PY-FREE-THREADED-2026-09-11](../../backlog.md#aeq-py-free-threaded-2026-09-11).
+Driving item: AEQ-PY-FREE-THREADED-2026-09-11, delivered in
+[#71](https://github.com/ryancinsight/aequitas/pull/71).
 
 The distribution name is constrained. `aequitas` on PyPI is taken by an
 unrelated project at v1.1.0, and that project's top-level import is also
