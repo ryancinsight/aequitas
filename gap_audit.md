@@ -224,13 +224,15 @@ nextest `252/252`, doctests, `cargo doc -D warnings`,
 performance improvement is claimed, and the 208 lines of value tests are the
 ones that came with the change.
 
-## Deferred (documented boundary — see backlog.md)
+## Deferred (documented boundary)
 
 - Affine unit kinds and quantity kinds beyond the linear-unit slice.
 - Integer and rational quantity storage.
 - Formatting breadth beyond `UnitDisplay`.
 
-Each is gated on a driving Atlas consumer; no consumer currently needs them.
+Each is gated on a driving Atlas consumer; no consumer currently needs them, and each
+becomes a backlog item when one does. The temperature slice of the first landed in
+[#66](https://github.com/ryancinsight/aequitas/pull/66).
 
 ## uom gap analysis
 

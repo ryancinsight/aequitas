@@ -3,7 +3,7 @@
 ## Status
 
 Proposed — 2026-09-06. Mandated by
-[AEQ-PY-BINDING-001](../../backlog.md#aeq-py-binding-001).
+[AEQ-PY-BINDING-001](../../backlog.md#AEQ-PY-BINDING-001).
 
 Revised 2026-09-06: the first revision asserted that `kwavers-python` was
 absent from PyPI and left the distribution name unstated. A registry check
