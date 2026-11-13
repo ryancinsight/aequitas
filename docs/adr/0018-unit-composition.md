@@ -6,7 +6,7 @@ Accepted — 2026-09-21.
 
 ## Context
 
-[AEQ-UNIT-COMPOSITION](../../backlog.md#AEQ-UNIT-COMPOSITION) requires users
+AEQ-UNIT-COMPOSITION (delivered in [#78](https://github.com/ryancinsight/aequitas/pull/78)) requires users
 to express derived units without adding named markers to the SI catalog.
 Quantity multiplication and division already normalize seven SI exponents.
 `LinearUnit<D>` carries a static symbol and can describe several semantic

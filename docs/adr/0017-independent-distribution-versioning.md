@@ -3,7 +3,7 @@
 ## Status
 
 Proposed — 2026-09-11. Mandated by
-[AEQ-RELEASE-TAG-FORM-2026-09-11](../../backlog.md#aeq-release-tag-form-2026-09-11).
+AEQ-RELEASE-TAG-FORM-2026-09-11, delivered in [#73](https://github.com/ryancinsight/aequitas/pull/73).
 
 ## Context
 
