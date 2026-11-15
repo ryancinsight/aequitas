@@ -26,5 +26,6 @@
 | [0015](0015-mems-physical-quantities.md) | Name MEMS charge-density and flexural-rigidity quantities | Accepted |
 | [0016](0016-python-quantity-binding.md) | Expose Aequitas quantities to Python as a runtime dimension tag | Proposed |
 | [0017](0017-independent-distribution-versioning.md) | Version and tag each distribution independently | Proposed |
-| [0018](0018-unit-composition.md) | Compose linear units through dimensional algebra | Accepted | | [0019](0019-eunomia-010-cohort.md) | Adopt the Eunomia 0.10 datatype contract | Accepted |
- | [0020](0020-release-scope-1-0.md) | Aequitas release scope for 1.0 | Accepted |
+| [0018](0018-unit-composition.md) | Compose linear units through dimensional algebra | Accepted |
+| [0019](0019-eunomia-010-cohort.md) | Adopt the Eunomia 0.10 datatype contract | Accepted |
+| [0020](0020-release-scope-1-0.md) | Aequitas release scope for 1.0 | Accepted |
