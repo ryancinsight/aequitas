@@ -15,6 +15,7 @@
   repo `aequitas`, workflow `python-release.yml`, environment `pypi`); `pypi.org/pypi/aequitas-python/json` was 404 on 2026-11-13.
 - re-open trigger: the publisher is registered.
 - next step: tag `aequitas-python-v0.1.0` under release authority.
+- milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
 
 <a id="AEQ-LEAN-SPIKE-001"></a>
 ## AEQ-LEAN-SPIKE-001 — Decide a machine-checked proof tool for numeric laws
@@ -31,3 +32,4 @@
   install.
 - re-open trigger: the owner names a tool, or declines proof tooling and the gap is recorded as accepted.
 - next step: draft the Proposed ADR with the recommended tool once the owner answers.
+- milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
