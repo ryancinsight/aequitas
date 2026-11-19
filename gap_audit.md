@@ -1,8 +1,8 @@
 # Aequitas gap audit
 
-## AEQ-040-REGISTRY-EUNOMIA [minor] — release candidate
+## AEQ-040-REGISTRY-EUNOMIA [minor] — published and verified 2026-11-19
 
-The 0.4.0 candidate resolves Eunomia and Eunomia Derive 0.12.0 from crates.io.
+Aequitas 0.4.0 resolves Eunomia and Eunomia Derive 0.12.0 from crates.io.
 Eunomia's default branch declares 0.12.0 at `9ab3beda`. Its published crate
 records `b2477bd8`, an ancestor of that branch. The candidate selects the
 published archive. [ADR 0020](docs/adr/0020-release-scope-1-0.md) records
@@ -10,6 +10,20 @@ the release contract. The old lockfile check rejected the valid registry
 lock because it required a Git source. The revised check enforces a single
 checksummed registry identity for each provider crate and still runs
 Cargo's locked metadata check outside the Atlas overlay.
+
+
+The pre-merge release checks and required CI pass on `83419b8`. Main CI and
+the [publisher](https://github.com/ryancinsight/aequitas/actions/runs/44618171100)
+pass on `e28c83a`. The [release tag](https://github.com/ryancinsight/aequitas/releases/tag/crate-aequitas-v0.4.0)
+and the uploaded archive both name that merge. The registry entry is active
+and the downloaded archive matches its SHA-256
+`469b307baf5d2068d8f2952692ab1398aecfb9eb09503c17e111ce88eb527a8f`.
+
+A registry-only consumer with an empty Cargo cache runs on Rust 1.95.0 both
+with and without default features. Its graph contains one crates.io identity
+each for Aequitas 0.4.0, Eunomia 0.12.0 and Eunomia Derive 0.12.0. The consumer
+asserts that 250 mV equals 0.25 V in both scalar precisions, 1250 m°C equals
+a 1.25 K interval, and a 10:1 amplitude ratio yields 20 dB under the square law.
 
 ## AEQ-SI-BROCHURE [minor] — integration candidate
 

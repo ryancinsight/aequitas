@@ -1,5 +1,5 @@
 # Milestone ladder ([ADR 0020](../docs/adr/0020-release-scope-1-0.md))
-<a id="M-published-eunomia"></a> **M-published-eunomia** (0.4.0) needs: (none) — quantities over the published Eunomia release on its current main version.
+<a id="M-published-eunomia"></a> **M-published-eunomia** (0.4.0) — complete. [Release checks and consumer verification](../checklist.md).
 - exit: resolve Eunomia and Eunomia Derive 0.12.0 from crates.io with one package identity each. Record the published artifact revision and verify a fresh registry consumer.
 - exit: `cargo fmt --check`, strict clippy, native/binding tests, doctests, rustdoc, no-std and default-off edges pass against the published provider.
 <a id="M-1.0"></a> **M-1.0** (1.0.0) needs: M-published-eunomia — stable quantity-law release (authority-gated): gates as above plus SemVer and publish dry-run, current book/rustdoc, no open correctness item.
