@@ -25,6 +25,15 @@ each for Aequitas 0.4.0, Eunomia 0.12.0 and Eunomia Derive 0.12.0. The consumer
 asserts that 250 mV equals 0.25 V in both scalar precisions, 1250 m°C equals
 a 1.25 K interval, and a 10:1 amplitude ratio yields 20 dB under the square law.
 
+The workspace lock now selects Eunomia and Eunomia Derive 0.12.1. Both
+registry archives match their checksums and record release source
+`b05dc06`. The new lock passes all 190 Aequitas Rust tests on Rust
+1.95. A fresh registry-only consumer also verifies the shared
+`UnitScalar` contract and the corrected complex fold, real maximum, and
+negative power behavior. The Aequitas 0.4.0 manifest already accepts
+this patch release.
+[Eunomia publisher](https://github.com/ryancinsight/eunomia/actions/runs/44627714350).
+
 ### Aequitas 0.4.0 release acceptance
 
 - [x] [minor] Implement the current SI Brochure catalog, conversion laws,
