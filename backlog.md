@@ -4,7 +4,7 @@
 
 - Target 0.4.0 under [ADR 0020](docs/adr/0020-release-scope-1-0.md).
 - Catalog and conversion laws follow [ADR 0022](docs/adr/0022-si-brochure-units.md).
-- Release target uses the published Eunomia 0.12 line. Acceptance and release status are recorded in the [checklist](checklist.md).
+- Aequitas 0.4.0 is published with Eunomia 0.12. The [checklist](checklist.md) records release acceptance and registry consumer verification.
 
 <a id="AEQ-PY-BINDING-001"></a>
 ## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel
