@@ -24,6 +24,8 @@ use crate::{protocol, units};
 #[pymodule(gil_used = false)]
 fn _pyaequitas(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<PyQuantity>()?;
+    module.add_class::<crate::levels::PyAmplitudeLevel>()?;
+    module.add_class::<crate::levels::PyPowerLevel>()?;
     crate::quantity::classes::register(module)?;
     module.add_function(wrap_pyfunction!(quantity_names, module)?)?;
     module.add_function(wrap_pyfunction!(unit_symbols, module)?)?;

@@ -30,6 +30,8 @@ from __future__ import annotations
 from typing import Callable, Optional
 
 from ._pyaequitas import (
+    AmplitudeLevel,
+    PowerLevel,
     BASE_ATTR,
     CLASSES,
     DIMENSION_ATTR,
@@ -43,6 +45,8 @@ from ._pyaequitas import (
 )
 
 __all__ = [
+    "AmplitudeLevel",
+    "PowerLevel",
     "BASE_ATTR",
     "CLASSES",
     "DIMENSION_ATTR",

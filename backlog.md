@@ -1,5 +1,11 @@
 # Aequitas backlog
 
+## AEQ-SI-BROCHURE [minor]
+
+- Target 0.4.0 under [ADR 0020](docs/adr/0020-release-scope-1-0.md).
+- Catalog and conversion laws follow [ADR 0022](docs/adr/0022-si-brochure-units.md).
+- Acceptance and release status are recorded in the [checklist](checklist.md).
+
 <a id="AEQ-PY-BINDING-001"></a>
 ## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel
 

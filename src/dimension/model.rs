@@ -82,3 +82,63 @@ pub struct Dimension<
         Semantics,
     )>,
 );
+
+/// Semantic marker for activity.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct ActivitySemantics;
+
+/// Semantic marker for activity concentration.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct ActivityConcentrationSemantics;
+
+/// Semantic marker for dose equivalent.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct DoseEquivalentSemantics;
+
+/// Semantic marker for dose equivalent rate.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct DoseEquivalentRateSemantics;
+
+/// Semantic marker for ionizing radiation exposure.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct RadiationExposureSemantics;
+
+/// Semantic marker for angular acceleration in radians per second squared.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct AngularAccelerationSemantics;
+
+/// Semantic marker for angular velocity or angular frequency in radians per second.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct AngularVelocitySemantics;
+
+/// Semantic marker for an amount of information.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct InformationSemantics;
+
+/// Semantic marker for luminous intensity per projected area.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct LuminanceSemantics;
+
+/// Semantic marker for luminous flux in lumens.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct LuminousFluxSemantics;
+
+/// Semantic marker for radiant flux per projected area per solid angle.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct RadianceSemantics;
+
+/// Semantic marker for radiant flux per solid angle.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct RadiantIntensitySemantics;
+
+/// Semantic marker for reactive power in var.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct ReactivePowerSemantics;
+
+/// Semantic marker for solid angle in steradians.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct SolidAngleSemantics;
+
+/// Semantic marker for moment of force.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct TorqueSemantics;

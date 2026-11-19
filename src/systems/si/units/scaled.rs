@@ -3,9 +3,9 @@ use crate::{
     unit::{LinearUnit, private::Sealed},
 };
 
-/// Degree of arc, the non-SI angle unit accepted for use with the SI.
+/// Degree of arc, expressed with the ASCII symbol `deg`.
 ///
-/// `SCALE` is the exact defining ratio `pi / 180`: one degree is that many
+/// `SCALE` is the binary64 rounding of the defining ratio `pi / 180`: one degree is that many
 /// radians, so `to_base` multiplies by it and `in_unit::<Degree>` divides.
 /// `Angle` carries its own dimension semantics, so a degree value cannot be
 /// mistaken for a bare scalar or for radians once it is inside a `Quantity`.
@@ -376,7 +376,7 @@ impl crate::unit::UnitDimension for KilometerPerHour {
 
 impl LinearUnit<dimensions::Velocity> for KilometerPerHour {
     const SYMBOL: &'static str = "km/h";
-    const SCALE: f64 = 1000.0 / 3600.0;
+    const SCALE: f64 = 1000.0 / super::non_si::HOUR_IN_SECONDS;
 }
 
 /// Mile per hour: the international mile is exactly 1609.344 m.
@@ -390,7 +390,7 @@ impl crate::unit::UnitDimension for MilePerHour {
 
 impl LinearUnit<dimensions::Velocity> for MilePerHour {
     const SYMBOL: &'static str = "mph";
-    const SCALE: f64 = 1609.344 / 3600.0;
+    const SCALE: f64 = 1609.344 / super::non_si::HOUR_IN_SECONDS;
 }
 
 /// Knot: one international nautical mile (exactly 1852 m) per hour.
@@ -404,7 +404,7 @@ impl crate::unit::UnitDimension for Knot {
 
 impl LinearUnit<dimensions::Velocity> for Knot {
     const SYMBOL: &'static str = "kn";
-    const SCALE: f64 = 1852.0 / 3600.0;
+    const SCALE: f64 = super::non_si::NAUTICAL_MILE_IN_METERS / super::non_si::HOUR_IN_SECONDS;
 }
 
 /// Foot per second: the international foot is exactly 0.3048 m.
@@ -432,7 +432,7 @@ impl crate::unit::UnitDimension for ElectronVolt {
 
 impl LinearUnit<dimensions::Energy> for ElectronVolt {
     const SYMBOL: &'static str = "eV";
-    const SCALE: f64 = 1.602_176_634e-19;
+    const SCALE: f64 = *crate::systems::si::constants::ELEMENTARY_CHARGE.as_base();
 }
 
 /// Megaelectronvolt.

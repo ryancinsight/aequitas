@@ -47,6 +47,18 @@ impl LinearUnit<dimensions::TemperatureDifference> for DegreeCelsius {
     const SCALE: f64 = 1.0;
 }
 
+linear_units! {
+    /// Degree Celsius with the SI Brochure symbol. An interval equals a kelvin interval.
+    Celsius, TemperatureDifference, "°C",
+        <DegreeCelsius as LinearUnit<dimensions::TemperatureDifference>>::SCALE;
+}
+
+impl AffineUnit<dimensions::ThermodynamicTemperature> for Celsius {
+    const SYMBOL: &'static str = <Self as LinearUnit<dimensions::TemperatureDifference>>::SYMBOL;
+    const SCALE: f64 = <DegreeCelsius as AffineUnit<dimensions::ThermodynamicTemperature>>::SCALE;
+    const OFFSET: f64 = DegreeCelsius::OFFSET;
+}
+
 /// Degree Fahrenheit.
 ///
 /// `t/°F = T/K × 9/5 − 459.67`, so the degree is 5/9 kelvin and the scale

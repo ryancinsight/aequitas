@@ -81,3 +81,13 @@ def test_every_class_is_a_quantity_bound_under_its_name() -> None:
         assert getattr(aq, name) is cls
     assert isinstance(aq.length(1.0), aq.Quantity)
     assert aq.base_value_of(aq.length(3.0), "length") == 3.0
+
+
+def test_radiation_units_keep_their_meaning_and_scale() -> None:
+    assert aq.activity(1.0, "mCi").in_unit("MBq") == pytest.approx(37.0)
+    assert aq.activity_concentration(1.0, "Bq/mL").in_unit("Bq/m³") == 1e6
+    assert aq.dose_equivalent(1.0, "rem").in_unit("mSv") == 10.0
+    assert aq.absorbed_dose(1.0, "rad").in_unit("mGy") == 10.0
+    assert aq.radiation_exposure(1.0, "R").in_unit("C/kg") == 2.58e-4
+    assert aq.Activity is not aq.Frequency
+    assert aq.DoseEquivalent is not aq.AbsorbedDose

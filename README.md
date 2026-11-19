@@ -24,13 +24,23 @@ conversion factors, including expressions without catalog names. Compound
 formatting preserves the expression; it does not select a named-unit spelling.
 See [linear units](docs/book/linear_units.md) and [the composition decision](docs/adr/0018-unit-composition.md).
 
+## SI Brochure coverage
+
+Aequitas covers the seven SI base units, 22 specially named SI derived
+units, the coherent examples in Tables 5–6, and all 23 entries in Table 8
+of the BIPM SI Brochure (9th edition, version 4.01). Rust
+`Prefixed<P, U>` composes with `Product`, `Quotient` and `Power`.
+The generated Python registry accepts the named units and their valid
+prefixed symbols. See the [conversion laws and examples](docs/book/scaled_units.md)
+and the [BIPM SI Brochure](https://doi.org/10.59161/AUEZ1291).
+
 ## Boundary
 
 Aequitas owns:
 
 - type-level SI dimensions;
 - transparent physical quantities;
-- linear SI units and conversion factors;
+- SI and non-SI conversions, affine temperature units, and logarithmic ratio levels;
 - compound unit expressions and unit-aware quantity display;
 - dimensional arithmetic over Eunomia scalar types.
 
