@@ -30,6 +30,16 @@ impl<T, D> Quantity<T, D> {
         &self.value
     }
 
+    /// Mutably borrow the value in its canonical SI base unit.
+    ///
+    /// For an array or buffer, this gives a numerical kernel direct access to
+    /// its existing storage. Each write must use the canonical unit for `D`.
+    #[inline]
+    #[must_use]
+    pub const fn as_base_mut(&mut self) -> &mut T {
+        &mut self.value
+    }
+
     /// Move the value out in its canonical SI base unit.
     #[inline]
     #[must_use]

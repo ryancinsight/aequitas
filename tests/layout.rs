@@ -82,3 +82,22 @@ fn dimension_and_unit_markers_occupy_no_storage() {
         0
     );
 }
+
+#[test]
+fn mutating_canonical_samples_preserves_the_typed_buffer() {
+    use aequitas::systems::si::quantities::Pressure;
+
+    let _trace = tracing::subscriber::set_default(
+        tracing_subscriber::fmt()
+            .with_span_events(tracing_subscriber::fmt::format::FmtSpan::FULL)
+            .with_test_writer()
+            .finish(),
+    );
+    let mut pressure =
+        tracing::info_span!("arrange").in_scope(|| Pressure::from_base(vec![2.0_f32, -1.0, 0.5]));
+    let before = pressure.as_base().as_ptr();
+    tracing::info_span!("act").in_scope(|| pressure.as_base_mut()[1] = -3.0);
+    let _assert = tracing::info_span!("assert").entered();
+    assert_eq!(pressure.as_base().as_ptr(), before);
+    assert_eq!(pressure.into_base(), [2.0, -3.0, 0.5]);
+}

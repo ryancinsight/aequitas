@@ -57,3 +57,16 @@ impl LinearUnit<dimensions::MagneticPermeability> for HenryPerMeter {
     const SYMBOL: &'static str = "H/m";
     const SCALE: f64 = 1.0;
 }
+
+/// W/(m²·K⁴), the coherent SI unit for [`StefanBoltzmannCoefficient`](dimensions::StefanBoltzmannCoefficient).
+#[derive(Clone, Copy, Debug, Default)]
+pub struct WattPerSquareMeterKelvinToFourth;
+impl Sealed for WattPerSquareMeterKelvinToFourth {}
+impl Named for WattPerSquareMeterKelvinToFourth {}
+impl UnitDimension for WattPerSquareMeterKelvinToFourth {
+    type Dimension = dimensions::StefanBoltzmannCoefficient;
+}
+impl LinearUnit<dimensions::StefanBoltzmannCoefficient> for WattPerSquareMeterKelvinToFourth {
+    const SYMBOL: &'static str = "W/(m²·K⁴)";
+    const SCALE: f64 = 1.0;
+}

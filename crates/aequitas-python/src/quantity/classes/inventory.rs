@@ -147,4 +147,5 @@ crate::quantity_classes! {
     ReactivePower: dimensions::ReactivePower,
     LuminousEfficacy: dimensions::LuminousEfficacy,
     Information: dimensions::Information,
+    StefanBoltzmannCoefficient: dimensions::StefanBoltzmannCoefficient,
 }

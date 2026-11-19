@@ -272,3 +272,6 @@ pub type SpecificEntropy<T = f64> = Quantity<T, dimensions::SpecificHeatCapacity
 pub type MolarEntropy<T = f64> = Quantity<T, dimensions::MolarHeatCapacity>;
 /// Electric displacement, electric flux per area.
 pub type ElectricDisplacement<T = f64> = Quantity<T, dimensions::SurfaceChargeDensity>;
+
+/// Ratio of radiant exitance to the fourth power of absolute temperature.
+pub type StefanBoltzmannCoefficient<T = f64> = Quantity<T, dimensions::StefanBoltzmannCoefficient>;
