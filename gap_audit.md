@@ -1,5 +1,16 @@
 # Aequitas gap audit
 
+## AEQ-040-REGISTRY-EUNOMIA [minor] — release candidate
+
+The 0.4.0 candidate resolves Eunomia and Eunomia Derive 0.12.0 from crates.io.
+Eunomia's default branch declares 0.12.0 at `9ab3beda`. Its published crate
+records `b2477bd8`, an ancestor of that branch. The candidate selects the
+published archive. [ADR 0020](docs/adr/0020-release-scope-1-0.md) records
+the release contract. The old lockfile check rejected the valid registry
+lock because it required a Git source. The revised check enforces a single
+checksummed registry identity for each provider crate and still runs
+Cargo's locked metadata check outside the Atlas overlay.
+
 ## AEQ-SI-BROCHURE [minor] — integration candidate
 
 The SI Brochure 9th edition, version 4.01 catalog covers seven base units,
