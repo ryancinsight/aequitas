@@ -51,3 +51,65 @@ fn photon_interaction_dimensions_close() {
     assert_eq!(optical_depth.into_base().to_bits(), 9.0_f64.to_bits());
     assert_eq!(exposure.into_base().to_bits(), 4.0_f64.to_bits());
 }
+
+#[test]
+fn radioactivity_and_dose_units_have_their_defined_scales() {
+    use aequitas::systems::si::{
+        quantities::{
+            Activity, ActivityConcentration, DoseEquivalent, DoseEquivalentRate, RadiationExposure,
+        },
+        units::{
+            Becquerel, BecquerelPerCubicMeter, BecquerelPerMilliliter, Centigray, Curie,
+            Megabecquerel, MicrosievertPerHour, Millicurie, Millisievert, Rem, Roentgen, Sievert,
+            SievertPerSecond,
+        },
+    };
+    assert_eq!(
+        Activity::from_unit::<Curie>(1.0_f64)
+            .in_unit::<Becquerel>()
+            .to_bits(),
+        37_000_000_000.0_f64.to_bits()
+    );
+    assert_eq!(
+        Activity::from_unit::<Millicurie>(10.0_f64)
+            .in_unit::<Megabecquerel>()
+            .to_bits(),
+        370.0_f64.to_bits()
+    );
+    assert_eq!(
+        ActivityConcentration::from_unit::<BecquerelPerMilliliter>(52.0_f64)
+            .in_unit::<BecquerelPerCubicMeter>()
+            .to_bits(),
+        52_000_000.0_f64.to_bits()
+    );
+    assert_eq!(
+        AbsorbedDose::from_unit::<Centigray>(100.0_f64)
+            .in_unit::<Gray>()
+            .to_bits(),
+        1.0_f64.to_bits()
+    );
+    assert_eq!(
+        DoseEquivalent::from_unit::<Rem>(100.0_f64)
+            .in_unit::<Sievert>()
+            .to_bits(),
+        1.0_f64.to_bits()
+    );
+    assert_eq!(
+        DoseEquivalent::from_unit::<Millisievert>(1000.0_f64)
+            .into_base()
+            .to_bits(),
+        1.0_f64.to_bits()
+    );
+    assert_eq!(
+        DoseEquivalentRate::from_unit::<MicrosievertPerHour>(3600.0_f64)
+            .in_unit::<SievertPerSecond>()
+            .to_bits(),
+        1e-6_f64.to_bits()
+    );
+    assert_eq!(
+        RadiationExposure::from_unit::<Roentgen>(1.0_f64)
+            .into_base()
+            .to_bits(),
+        2.58e-4_f64.to_bits()
+    );
+}

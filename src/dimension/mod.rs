@@ -7,10 +7,16 @@ mod root;
 
 pub use algebra::{DivideDimension, MultiplyDimension};
 pub use model::{
-    AbsoluteTemperatureSemantics, AngleSemantics, BaseSemantics, Dimension,
+    AbsoluteTemperatureSemantics, ActivityConcentrationSemantics, ActivitySemantics,
+    AngleSemantics, BaseSemantics, Dimension, DoseEquivalentRateSemantics, DoseEquivalentSemantics,
     FlexuralRigiditySemantics, MechanicalImpedanceSemantics, MolarConcentrationSemantics,
-    ReciprocalVolumeSemantics, SpringStiffnessSemantics, StressSemantics, SurfaceTensionSemantics,
-    TemperatureDifferenceSemantics,
+    RadiationExposureSemantics, ReciprocalVolumeSemantics, SpringStiffnessSemantics,
+    StressSemantics, SurfaceTensionSemantics, TemperatureDifferenceSemantics,
+};
+pub use model::{
+    AngularAccelerationSemantics, AngularVelocitySemantics, InformationSemantics,
+    LuminanceSemantics, LuminousFluxSemantics, RadianceSemantics, RadiantIntensitySemantics,
+    ReactivePowerSemantics, SolidAngleSemantics, TorqueSemantics,
 };
 pub use pow::PowDimension;
 pub use root::{CbrtDimension, SqrtDimension};

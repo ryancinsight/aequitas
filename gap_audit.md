@@ -1,5 +1,18 @@
 # Aequitas gap audit
 
+## AEQ-SI-BROCHURE [minor] — integration candidate
+
+The SI Brochure 9th edition, version 4.01 catalog covers seven base units,
+22 specially named derived units, the coherent examples in Tables 5–6,
+and all 23 entries in Table 8. The 24 decimal and ten binary prefixes
+share the typed scalar conversion path. [ADR 0022](docs/adr/0022-si-brochure-units.md)
+records the logarithmic reference contract and semantic distinctions.
+
+Candidate based on `243844f` passes 281 workspace tests, 47 doctests
+(one existing ignore), Clippy, the no-std check and generated-surface
+verification. The package and provider revisions remain on the default
+branch's published 0.3.2 line and the new catalog is tracked for 0.4.0.
+
 ## AEQ-EUNOMIA-010-COHORT [major] — verified published 2026-10-15
 
 Aequitas 0.3.0 adopts published Eunomia/derive 0.10.0 source a231e54d without

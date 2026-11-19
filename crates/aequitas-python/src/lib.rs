@@ -25,6 +25,7 @@
 #![deny(missing_docs)]
 
 pub mod consumer;
+mod levels;
 mod module;
 pub mod protocol;
 pub mod quantity;

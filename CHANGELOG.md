@@ -1,5 +1,14 @@
 # Changelog
 
+## Aequitas 0.4.0 — Unreleased
+
+### Added
+
+- [minor] Implement the current BIPM SI Brochure catalog with its seven
+  defining constants, all named SI and Table 8 units, typed logarithmic
+  levels, and decimal and binary prefix composition. Expose named and
+  prefixed units and logarithmic levels in Python.
+
 ## Aequitas 0.3.2 — Unreleased
 
 ### Changed

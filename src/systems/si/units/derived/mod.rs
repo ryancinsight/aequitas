@@ -18,7 +18,13 @@ pub use kinematics::{
 pub use mechanics::{
     Joule, JoulePerSquareMeter, KilogramPerSecond, Newton, NewtonPerMeter, Pascal, PascalPerSecond,
 };
-pub use radiation::{Gray, GrayPerSecond, JoulePerKilogram, WattPerKilogram};
+pub use radiation::{
+    Becquerel, BecquerelPerCubicMeter, BecquerelPerMilliliter, Centigray, CoulombPerKilogram,
+    Curie, Gigabecquerel, Gray, GrayPerSecond, JoulePerKilogram, Kilobecquerel,
+    KilobecquerelPerMilliliter, Megabecquerel, Microcurie, Microgray, Microsievert,
+    MicrosievertPerHour, Millicurie, Milligray, Millisievert, Rad, Rem, Roentgen, Sievert,
+    SievertPerSecond, WattPerKilogram,
+};
 pub use thermal::{
     JoulePerCubicMeter, JoulePerKelvin, JoulePerKilogramKelvin, JoulePerMole, JoulePerMoleKelvin,
     KilogramPerCubicMeter, KilogramPerCubicMeterKelvin, SquareMeterPerSecond, Watt,

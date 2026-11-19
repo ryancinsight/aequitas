@@ -2,12 +2,7 @@
 
 //! Generated inventory of every Aequitas quantity and its units.
 //!
-//! Each entry names a quantity alias, its dimension, and the unit
-//! markers implementing `LinearUnit` for that dimension, plus any
-//! implementing `AffineUnit` under `affine`. Symbols, scale factors,
-//! offsets and dimension exponents are read from the Rust
-//! associated constants at expansion time, never copied here, so this
-//! file records *which* units exist and never *what they mean*.
+//! The registry obtains symbols, scales, offsets and exponents from Rust.
 
 use aequitas::systems::si::{dimensions, units};
 
@@ -15,69 +10,106 @@ use crate::units::registry::Quantities;
 
 crate::quantity_inventory! {
     dimensionless => Dimensionless, dimensions::Dimensionless {
+        One: units::One,
+        PartsPerMillion: units::PartsPerMillion,
+        Percent: units::Percent,
     },
     angle => Angle, dimensions::Angle {
+        Arcminute: units::Arcminute,
+        Arcsecond: units::Arcsecond,
+        ArcsecondAs: units::ArcsecondAs,
         Degree: units::Degree,
+        DegreeOfArc: units::DegreeOfArc,
         Radian: units::Radian,
+        @prefixed ArcsecondAs: units::ArcsecondAs => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+        @prefixed Radian: units::Radian => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     length => Length, dimensions::Length {
+        Angstrom: units::Angstrom,
+        AstronomicalUnit: units::AstronomicalUnit,
         Centimeter: units::Centimeter,
         Kilometer: units::Kilometer,
         Meter: units::Meter,
         Millimeter: units::Millimeter,
         Nanometer: units::Nanometer,
+        NauticalMile: units::NauticalMile,
+        @prefixed Meter: units::Meter => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Hecto, Deca, Deci, Micro, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     reciprocal_length => ReciprocalLength, dimensions::ReciprocalLength {
         PerCentimeter: units::PerCentimeter,
         PerMeter: units::PerMeter,
     },
     mass => Mass, dimensions::Mass {
+        AtomicMassUnit: units::AtomicMassUnit,
+        Dalton: units::Dalton,
         Gram: units::Gram,
         Kilogram: units::Kilogram,
+        Tonne: units::Tonne,
+        @prefixed AtomicMassUnit: units::AtomicMassUnit => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+        @prefixed Dalton: units::Dalton => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+        @prefixed Gram: units::Gram => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+        @prefixed Tonne: units::Tonne => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     time => Time, dimensions::Time {
+        Day: units::Day,
+        Hour: units::Hour,
         Microsecond: units::Microsecond,
         Millisecond: units::Millisecond,
+        Minute: units::Minute,
         Second: units::Second,
+        @prefixed Second: units::Second => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     electric_current => ElectricCurrent, dimensions::ElectricCurrent {
         Ampere: units::Ampere,
+        @prefixed Ampere: units::Ampere => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     electric_charge => ElectricCharge, dimensions::ElectricCharge {
         Coulomb: units::Coulomb,
+        @prefixed Coulomb: units::Coulomb => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     electric_potential => ElectricPotential, dimensions::ElectricPotential {
         Volt: units::Volt,
+        @prefixed Volt: units::Volt => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     electric_conductance => ElectricConductance, dimensions::ElectricConductance {
         Siemens: units::Siemens,
+        @prefixed Siemens: units::Siemens => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     electrical_conductivity => ElectricalConductivity, dimensions::ElectricalConductivity {
         SiemensPerMeter: units::SiemensPerMeter,
     },
     electrical_impedance => ElectricalImpedance, dimensions::ElectricalImpedance {
         Ohm: units::Ohm,
+        @prefixed Ohm: units::Ohm => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     capacitance => Capacitance, dimensions::Capacitance {
         Farad: units::Farad,
+        @prefixed Farad: units::Farad => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     polarizability => Polarizability, dimensions::Polarizability {
         FaradSquareMeter: units::FaradSquareMeter,
     },
     magnetic_flux_density => MagneticFluxDensity, dimensions::MagneticFluxDensity {
         Tesla: units::Tesla,
+        @prefixed Tesla: units::Tesla => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     thermodynamic_temperature => ThermodynamicTemperature, dimensions::ThermodynamicTemperature {
         Kelvin: units::Kelvin,
         Rankine: units::Rankine,
+        @prefixed Kelvin: units::Kelvin => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     } affine {
+        Celsius: units::Celsius,
         DegreeCelsius: units::DegreeCelsius,
         DegreeFahrenheit: units::DegreeFahrenheit,
+        @prefixed_affine Celsius: units::Celsius => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     temperature_difference => TemperatureDifference, dimensions::TemperatureDifference {
+        Celsius: units::Celsius,
         DegreeCelsius: units::DegreeCelsius,
         DegreeFahrenheit: units::DegreeFahrenheit,
         Kelvin: units::Kelvin,
+        @prefixed Celsius: units::Celsius => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+        @prefixed Kelvin: units::Kelvin => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     reciprocal_temperature => ReciprocalTemperature, dimensions::ReciprocalTemperature {
         PerKelvin: units::PerKelvin,
@@ -87,13 +119,19 @@ crate::quantity_inventory! {
     },
     amount_of_substance => AmountOfSubstance, dimensions::AmountOfSubstance {
         Mole: units::Mole,
+        @prefixed Mole: units::Mole => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     luminous_intensity => LuminousIntensity, dimensions::LuminousIntensity {
         Candela: units::Candela,
+        @prefixed Candela: units::Candela => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     area => Area, dimensions::Area {
+        Are: units::Are,
+        Barn: units::Barn,
+        Hectare: units::Hectare,
         SquareCentimeter: units::SquareCentimeter,
         SquareMeter: units::SquareMeter,
+        @prefixed Barn: units::Barn => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     area_per_mass => AreaPerMass, dimensions::AreaPerMass {
         SquareCentimeterPerGram: units::SquareCentimeterPerGram,
@@ -102,6 +140,10 @@ crate::quantity_inventory! {
     volume => Volume, dimensions::Volume {
         CubicMeter: units::CubicMeter,
         CubicMillimeter: units::CubicMillimeter,
+        Liter: units::Liter,
+        LiterLowercase: units::LiterLowercase,
+        @prefixed Liter: units::Liter => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+        @prefixed LiterLowercase: units::LiterLowercase => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     number_density => NumberDensity, dimensions::NumberDensity {
         PerCubicMeter: units::PerCubicMeter,
@@ -130,12 +172,15 @@ crate::quantity_inventory! {
         MeterPerSecondKelvin: units::MeterPerSecondKelvin,
     },
     acceleration => Acceleration, dimensions::Acceleration {
+        Gal: units::Gal,
         MeterPerSecondSquared: units::MeterPerSecondSquared,
+        @prefixed Gal: units::Gal => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     frequency => Frequency, dimensions::Frequency {
         Hertz: units::Hertz,
         Kilohertz: units::Kilohertz,
         Megahertz: units::Megahertz,
+        @prefixed Hertz: units::Hertz => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     reciprocal_time => ReciprocalTime, dimensions::ReciprocalTime {
         PerSecond: units::PerSecond,
@@ -150,6 +195,8 @@ crate::quantity_inventory! {
         Pascal: units::Pascal,
         PoundPerSquareInch: units::PoundPerSquareInch,
         StandardAtmosphere: units::StandardAtmosphere,
+        @prefixed Bar: units::Bar => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+        @prefixed Pascal: units::Pascal => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     stress => Stress, dimensions::Stress {
         Bar: units::Bar,
@@ -159,12 +206,15 @@ crate::quantity_inventory! {
         Pascal: units::Pascal,
         PoundPerSquareInch: units::PoundPerSquareInch,
         StandardAtmosphere: units::StandardAtmosphere,
+        @prefixed Bar: units::Bar => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+        @prefixed Pascal: units::Pascal => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     pressure_rate => PressureRate, dimensions::PressureRate {
         PascalPerSecond: units::PascalPerSecond,
     },
     force => Force, dimensions::Force {
         Newton: units::Newton,
+        @prefixed Newton: units::Newton => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     pressure_per_electric_current => PressurePerElectricCurrent, dimensions::PressurePerElectricCurrent {
     },
@@ -194,6 +244,7 @@ crate::quantity_inventory! {
     },
     flexural_rigidity => FlexuralRigidity, dimensions::FlexuralRigidity {
         Joule: units::Joule,
+        @prefixed Joule: units::Joule => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     pressure_gradient => PressureGradient, dimensions::PressureGradient {
     },
@@ -211,6 +262,8 @@ crate::quantity_inventory! {
         ElectronVolt: units::ElectronVolt,
         Joule: units::Joule,
         MegaElectronVolt: units::MegaElectronVolt,
+        @prefixed ElectronVolt: units::ElectronVolt => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+        @prefixed Joule: units::Joule => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     energy_per_area => EnergyPerArea, dimensions::EnergyPerArea {
         JoulePerSquareMeter: units::JoulePerSquareMeter,
@@ -219,7 +272,12 @@ crate::quantity_inventory! {
         NewtonPerMeter: units::NewtonPerMeter,
     },
     absorbed_dose => AbsorbedDose, dimensions::AbsorbedDose {
+        Centigray: units::Centigray,
         Gray: units::Gray,
+        Microgray: units::Microgray,
+        Milligray: units::Milligray,
+        Rad: units::Rad,
+        @prefixed Gray: units::Gray => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     specific_energy => SpecificEnergy, dimensions::SpecificEnergy {
         JoulePerKilogram: units::JoulePerKilogram,
@@ -238,6 +296,7 @@ crate::quantity_inventory! {
     },
     power => Power, dimensions::Power {
         Watt: units::Watt,
+        @prefixed Watt: units::Watt => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     heat_capacity => HeatCapacity, dimensions::HeatCapacity {
         JoulePerKelvin: units::JoulePerKelvin,
@@ -290,5 +349,148 @@ crate::quantity_inventory! {
     },
     reciprocal_length_per_temperature => ReciprocalLengthPerTemperature, dimensions::ReciprocalLengthPerTemperature {
         PerMeterKelvin: units::PerMeterKelvin,
+    },
+    action => Action, dimensions::Action {
+        JouleSecond: units::JouleSecond,
+    },
+    reciprocal_amount_of_substance => ReciprocalAmountOfSubstance, dimensions::ReciprocalAmountOfSubstance {
+        PerMole: units::PerMole,
+    },
+    permittivity => Permittivity, dimensions::Permittivity {
+        FaradPerMeter: units::FaradPerMeter,
+    },
+    magnetic_permeability => MagneticPermeability, dimensions::MagneticPermeability {
+        HenryPerMeter: units::HenryPerMeter,
+    },
+    activity => Activity, dimensions::Activity {
+        Becquerel: units::Becquerel,
+        Curie: units::Curie,
+        Gigabecquerel: units::Gigabecquerel,
+        Kilobecquerel: units::Kilobecquerel,
+        Megabecquerel: units::Megabecquerel,
+        Microcurie: units::Microcurie,
+        Millicurie: units::Millicurie,
+        @prefixed Becquerel: units::Becquerel => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+    },
+    activity_concentration => ActivityConcentration, dimensions::ActivityConcentration {
+        BecquerelPerCubicMeter: units::BecquerelPerCubicMeter,
+        BecquerelPerMilliliter: units::BecquerelPerMilliliter,
+        KilobecquerelPerMilliliter: units::KilobecquerelPerMilliliter,
+    },
+    dose_equivalent => DoseEquivalent, dimensions::DoseEquivalent {
+        Microsievert: units::Microsievert,
+        Millisievert: units::Millisievert,
+        Rem: units::Rem,
+        Sievert: units::Sievert,
+        @prefixed Sievert: units::Sievert => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+    },
+    dose_equivalent_rate => DoseEquivalentRate, dimensions::DoseEquivalentRate {
+        MicrosievertPerHour: units::MicrosievertPerHour,
+        SievertPerSecond: units::SievertPerSecond,
+    },
+    radiation_exposure => RadiationExposure, dimensions::RadiationExposure {
+        CoulombPerKilogram: units::CoulombPerKilogram,
+        Roentgen: units::Roentgen,
+    },
+    solid_angle => SolidAngle, dimensions::SolidAngle {
+        Steradian: units::Steradian,
+        @prefixed Steradian: units::Steradian => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+    },
+    magnetic_flux => MagneticFlux, dimensions::MagneticFlux {
+        Weber: units::Weber,
+        @prefixed Weber: units::Weber => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+    },
+    inductance => Inductance, dimensions::Inductance {
+        Henry: units::Henry,
+        @prefixed Henry: units::Henry => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+    },
+    luminous_flux => LuminousFlux, dimensions::LuminousFlux {
+        Lumen: units::Lumen,
+        @prefixed Lumen: units::Lumen => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+    },
+    illuminance => Illuminance, dimensions::Illuminance {
+        Lux: units::Lux,
+        @prefixed Lux: units::Lux => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+    },
+    catalytic_activity => CatalyticActivity, dimensions::CatalyticActivity {
+        Katal: units::Katal,
+        @prefixed Katal: units::Katal => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+    },
+    surface_density => SurfaceDensity, dimensions::SurfaceDensity {
+        KilogramPerSquareMeter: units::KilogramPerSquareMeter,
+    },
+    specific_volume => SpecificVolume, dimensions::SpecificVolume {
+        CubicMeterPerKilogram: units::CubicMeterPerKilogram,
+    },
+    current_density => CurrentDensity, dimensions::CurrentDensity {
+        AmperePerSquareMeter: units::AmperePerSquareMeter,
+    },
+    magnetic_field_strength => MagneticFieldStrength, dimensions::MagneticFieldStrength {
+        AmperePerMeter: units::AmperePerMeter,
+    },
+    luminance => Luminance, dimensions::Luminance {
+        CandelaPerSquareMeter: units::CandelaPerSquareMeter,
+    },
+    torque => Torque, dimensions::Torque {
+        NewtonMeter: units::NewtonMeter,
+    },
+    angular_velocity => AngularVelocity, dimensions::AngularVelocity {
+        RadianPerSecond: units::RadianPerSecond,
+    },
+    angular_acceleration => AngularAcceleration, dimensions::AngularAcceleration {
+        RadianPerSecondSquared: units::RadianPerSecondSquared,
+    },
+    electric_field_strength => ElectricFieldStrength, dimensions::ElectricFieldStrength {
+        VoltPerMeter: units::VoltPerMeter,
+    },
+    radiant_intensity => RadiantIntensity, dimensions::RadiantIntensity {
+        WattPerSteradian: units::WattPerSteradian,
+    },
+    radiance => Radiance, dimensions::Radiance {
+        WattPerSquareMeterSteradian: units::WattPerSquareMeterSteradian,
+    },
+    catalytic_activity_concentration => CatalyticActivityConcentration, dimensions::CatalyticActivityConcentration {
+        KatalPerCubicMeter: units::KatalPerCubicMeter,
+    },
+    reactive_power => ReactivePower, dimensions::ReactivePower {
+        Var: units::Var,
+        VoltAmpere: units::VoltAmpere,
+        @prefixed Var: units::Var => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
+    },
+    luminous_efficacy => LuminousEfficacy, dimensions::LuminousEfficacy {
+        LumenPerWatt: units::LumenPerWatt,
+    },
+    information => Information, dimensions::Information {
+        Bit: units::Bit,
+        @prefixed Bit: units::Bit => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto, Kibi, Mebi, Gibi, Tebi, Pebi, Exbi, Zebi, Yobi, Robi, Quebi],
+    },
+    wavenumber => Wavenumber, dimensions::ReciprocalLength {
+        PerCentimeter: units::PerCentimeter,
+        PerMeter: units::PerMeter,
+    },
+    mass_concentration => MassConcentration, dimensions::MassDensity {
+        GramPerCubicCentimeter: units::GramPerCubicCentimeter,
+        KilogramPerCubicMeter: units::KilogramPerCubicMeter,
+    },
+    angular_frequency => AngularFrequency, dimensions::AngularVelocity {
+        RadianPerSecond: units::RadianPerSecond,
+    },
+    heat_flux_density => HeatFluxDensity, dimensions::Intensity {
+        WattPerSquareMeter: units::WattPerSquareMeter,
+    },
+    irradiance => Irradiance, dimensions::Intensity {
+        WattPerSquareMeter: units::WattPerSquareMeter,
+    },
+    entropy => Entropy, dimensions::HeatCapacity {
+        JoulePerKelvin: units::JoulePerKelvin,
+    },
+    specific_entropy => SpecificEntropy, dimensions::SpecificHeatCapacity {
+        JoulePerKilogramKelvin: units::JoulePerKilogramKelvin,
+    },
+    molar_entropy => MolarEntropy, dimensions::MolarHeatCapacity {
+        JoulePerMoleKelvin: units::JoulePerMoleKelvin,
+    },
+    electric_displacement => ElectricDisplacement, dimensions::SurfaceChargeDensity {
+        CoulombPerSquareMeter: units::CoulombPerSquareMeter,
     },
 }

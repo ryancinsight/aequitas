@@ -175,3 +175,100 @@ pub type EnergyPerVolume<T = f64> = Quantity<T, dimensions::EnergyPerVolume>;
 /// Temperature derivative of reciprocal length, expressed in 1/(m·K).
 pub type ReciprocalLengthPerTemperature<T = f64> =
     Quantity<T, dimensions::ReciprocalLengthPerTemperature>;
+
+/// Action, the product of energy and time.
+pub type Action<T = f64> = Quantity<T, dimensions::Action>;
+/// Reciprocal amount of substance.
+pub type ReciprocalAmountOfSubstance<T = f64> =
+    Quantity<T, dimensions::ReciprocalAmountOfSubstance>;
+/// Electric permittivity, capacitance per length.
+pub type Permittivity<T = f64> = Quantity<T, dimensions::Permittivity>;
+/// Magnetic permeability, inductance per length.
+pub type MagneticPermeability<T = f64> = Quantity<T, dimensions::MagneticPermeability>;
+
+/// Activity of a radionuclide in decays per second.
+///
+/// ```compile_fail
+/// use aequitas::systems::si::{quantities::Frequency, units::Becquerel};
+/// let _ = Frequency::from_unit::<Becquerel>(800.0_f64);
+/// ```
+pub type Activity<T = f64> = Quantity<T, dimensions::Activity>;
+
+/// Activity per volume.
+pub type ActivityConcentration<T = f64> = Quantity<T, dimensions::ActivityConcentration>;
+
+/// Radiation-weighted dose, dimensionally energy per mass.
+///
+/// ```compile_fail
+/// use aequitas::systems::si::{quantities::AbsorbedDose, units::Sievert};
+/// let _ = AbsorbedDose::from_unit::<Sievert>(1.0_f64);
+/// ```
+pub type DoseEquivalent<T = f64> = Quantity<T, dimensions::DoseEquivalent>;
+
+/// Radiation-weighted dose per time.
+pub type DoseEquivalentRate<T = f64> = Quantity<T, dimensions::DoseEquivalentRate>;
+
+/// Ionizing radiation exposure in charge of one sign produced per mass of air.
+pub type RadiationExposure<T = f64> = Quantity<T, dimensions::RadiationExposure>;
+
+/// Solid angle, stored in steradians.
+pub type SolidAngle<T = f64> = Quantity<T, dimensions::SolidAngle>;
+/// Magnetic flux, electric potential times time.
+pub type MagneticFlux<T = f64> = Quantity<T, dimensions::MagneticFlux>;
+/// Inductance, magnetic flux per electric current.
+pub type Inductance<T = f64> = Quantity<T, dimensions::Inductance>;
+/// Luminous flux, luminous intensity integrated over solid angle.
+pub type LuminousFlux<T = f64> = Quantity<T, dimensions::LuminousFlux>;
+/// Incident luminous flux per surface area.
+pub type Illuminance<T = f64> = Quantity<T, dimensions::Illuminance>;
+/// Catalytic activity, amount transformed per unit time.
+pub type CatalyticActivity<T = f64> = Quantity<T, dimensions::CatalyticActivity>;
+/// Surface mass density, mass per area.
+pub type SurfaceDensity<T = f64> = Quantity<T, dimensions::SurfaceDensity>;
+/// Specific volume, volume per mass.
+pub type SpecificVolume<T = f64> = Quantity<T, dimensions::SpecificVolume>;
+/// Electric current per cross-sectional area.
+pub type CurrentDensity<T = f64> = Quantity<T, dimensions::CurrentDensity>;
+/// Magnetic field strength, current per length.
+pub type MagneticFieldStrength<T = f64> = Quantity<T, dimensions::MagneticFieldStrength>;
+/// Luminance, luminous intensity per projected area.
+pub type Luminance<T = f64> = Quantity<T, dimensions::Luminance>;
+/// Moment of force, expressed in newton metres.
+pub type Torque<T = f64> = Quantity<T, dimensions::Torque>;
+/// Angular velocity or angular frequency, expressed in radians per second.
+pub type AngularVelocity<T = f64> = Quantity<T, dimensions::AngularVelocity>;
+/// Angular acceleration, change of angular velocity per unit time.
+pub type AngularAcceleration<T = f64> = Quantity<T, dimensions::AngularAcceleration>;
+/// Electric potential difference per length.
+pub type ElectricFieldStrength<T = f64> = Quantity<T, dimensions::ElectricFieldStrength>;
+/// Radiant flux per solid angle.
+pub type RadiantIntensity<T = f64> = Quantity<T, dimensions::RadiantIntensity>;
+/// Radiant flux per projected area per solid angle.
+pub type Radiance<T = f64> = Quantity<T, dimensions::Radiance>;
+/// Catalytic activity per volume.
+pub type CatalyticActivityConcentration<T = f64> =
+    Quantity<T, dimensions::CatalyticActivityConcentration>;
+/// Reactive power, expressed in var or volt amperes.
+pub type ReactivePower<T = f64> = Quantity<T, dimensions::ReactivePower>;
+/// Luminous flux per radiant power.
+pub type LuminousEfficacy<T = f64> = Quantity<T, dimensions::LuminousEfficacy>;
+/// Amount of information, stored in bits.
+pub type Information<T = f64> = Quantity<T, dimensions::Information>;
+/// Wavenumber, inverse wavelength.
+pub type Wavenumber<T = f64> = Quantity<T, dimensions::ReciprocalLength>;
+/// Mass of a constituent per volume of a mixture.
+pub type MassConcentration<T = f64> = Quantity<T, dimensions::MassDensity>;
+/// Angular frequency of a periodic phenomenon.
+pub type AngularFrequency<T = f64> = Quantity<T, dimensions::AngularVelocity>;
+/// Heat flow per unit area.
+pub type HeatFluxDensity<T = f64> = Quantity<T, dimensions::Intensity>;
+/// Incident radiant flux per unit area.
+pub type Irradiance<T = f64> = Quantity<T, dimensions::Intensity>;
+/// Thermodynamic entropy.
+pub type Entropy<T = f64> = Quantity<T, dimensions::HeatCapacity>;
+/// Entropy per mass.
+pub type SpecificEntropy<T = f64> = Quantity<T, dimensions::SpecificHeatCapacity>;
+/// Entropy per amount of substance.
+pub type MolarEntropy<T = f64> = Quantity<T, dimensions::MolarHeatCapacity>;
+/// Electric displacement, electric flux per area.
+pub type ElectricDisplacement<T = f64> = Quantity<T, dimensions::SurfaceChargeDensity>;

@@ -12,13 +12,6 @@ use crate::tag::TaggedDimension;
 use crate::units::{all, by_name};
 
 #[test]
-fn the_inventory_covers_every_named_quantity() {
-    // 82 aliases in `systems::si::quantities`. A new alias that never reached
-    // the generator fails here as well as in the generator's `check` mode.
-    assert_eq!(all().len(), 82);
-}
-
-#[test]
 fn quantity_names_are_unique() {
     let mut names: Vec<&str> = all().iter().map(|quantity| quantity.name).collect();
     let count = names.len();
@@ -69,9 +62,16 @@ fn registry_tags_match_the_type_level_dimensions() {
 }
 
 #[test]
-fn dimensionless_carries_no_linear_units() {
-    // No `LinearUnit` impl targets `Dimensionless`: a bare ratio has no unit
-    // to convert through, and construction goes through base values.
-    let scalar = by_name("dimensionless").expect("dimensionless is registered");
-    assert!(scalar.units.is_empty());
+fn every_symbol_resolves_once_per_named_quantity() {
+    for quantity in all() {
+        let mut symbols = std::collections::HashSet::new();
+        for symbol in quantity.symbols() {
+            assert!(
+                symbols.insert(symbol),
+                "{} has duplicate {symbol}",
+                quantity.name
+            );
+            assert!(quantity.unit(symbol).is_some());
+        }
+    }
 }

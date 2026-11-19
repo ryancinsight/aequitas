@@ -32,6 +32,9 @@ QUANTITY_RE = re.compile(
 UNIT_IMPL_RE = re.compile(
     r"impl LinearUnit<dimensions::(?P<dimension>\w+)> for (?P<unit>\w+)"
 )
+# Each catalog declaration expands its sealed marker and canonical LinearUnit.
+LINEAR_CATALOG_RE = re.compile(r"^linear_units! \{(?P<entries>.*?)^}", re.M | re.S)
+LINEAR_CATALOG_UNIT_RE = re.compile(r"^    (?P<unit>\w+), (?P<dimension>\w+), ", re.M)
 # Affine units are a separate contract: the same marker may be affine for one
 # dimension and linear for another (a Celsius temperature and a Celsius
 # difference), so they are collected apart and emitted under `affine`.
@@ -75,13 +78,33 @@ def collect_units(root: Path) -> dict[str, list[str]]:
     units: dict[str, list[str]] = {}
     unit_dir = root / "src" / "systems" / "si" / "units"
     for path in sorted(unit_dir.rglob("*.rs")):
-        for match in UNIT_IMPL_RE.finditer(read(path)):
+        source = read(path)
+        for match in UNIT_IMPL_RE.finditer(source):
             units.setdefault(match["dimension"], []).append(match["unit"])
+        for catalog in LINEAR_CATALOG_RE.finditer(source):
+            for match in LINEAR_CATALOG_UNIT_RE.finditer(catalog["entries"]):
+                units.setdefault(match["dimension"], []).append(match["unit"])
     if not units:
         raise SystemExit("no LinearUnit impls matched: the impl form changed")
     for markers in units.values():
         markers.sort()
     return units
+
+
+def collect_prefixes(root: Path) -> dict[str, list[str]]:
+    """Read prefix eligibility and ordered prefix types from the Rust declarations."""
+    pattern = re.compile(r"^    (?P<name>\w+)(?=,|;)", re.M)
+    catalog = re.compile(r"! \{\n    (?P<base>\w+PrefixBase);\n(?P<entries>.*?)^}", re.M | re.S)
+    prefix_source = read(root / "src" / "unit" / "prefixes" / "mod.rs")
+    base_source = read(root / "src" / "systems" / "si" / "units" / "prefix_bases.rs")
+    groups = {match["base"]: pattern.findall(match["entries"]) for match in catalog.finditer(prefix_source)}
+    eligible: dict[str, list[str]] = {}
+    for match in catalog.finditer(base_source):
+        for base in pattern.findall(match["entries"]):
+            eligible.setdefault(base, []).extend(groups[match["base"]])
+    if not eligible:
+        raise SystemExit("no prefix bases matched: the declaration form changed")
+    return eligible
 
 
 def collect_affine_units(root: Path) -> dict[str, list[str]]:
@@ -217,10 +240,26 @@ def snake(name: str) -> str:
     return re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower()
 
 
+def append_prefix_groups(
+    lines: list[str], markers: list[str], prefixes: dict[str, list[str]], family: str
+) -> None:
+    """List prefixed forms whose symbols do not already have a named marker."""
+    named = {marker.casefold() for marker in markers}
+    for marker in markers:
+        available = [
+            prefix for prefix in prefixes.get(marker, ())
+            if (prefix + marker).casefold() not in named
+        ]
+        if available:
+            listed = ", ".join(available)
+            lines.append(f"        {family} {marker}: units::{marker} => [{listed}],")
+
+
 def render(
     quantities: list[tuple[str, str]],
     units: dict[str, list[str]],
     affine: dict[str, list[str]],
+    prefixes: dict[str, list[str]],
 ) -> str:
     """Render the macro invocation for the collected inventory."""
     lines = [
@@ -228,12 +267,7 @@ def render(
         "",
         "//! Generated inventory of every Aequitas quantity and its units.",
         "//!",
-        "//! Each entry names a quantity alias, its dimension, and the unit",
-        "//! markers implementing `LinearUnit` for that dimension, plus any",
-        "//! implementing `AffineUnit` under `affine`. Symbols, scale factors,",
-        "//! offsets and dimension exponents are read from the Rust",
-        "//! associated constants at expansion time, never copied here, so this",
-        "//! file records *which* units exist and never *what they mean*.",
+        "//! The registry obtains symbols, scales, offsets and exponents from Rust.",
         "",
         "use aequitas::systems::si::{dimensions, units};",
         "",
@@ -248,11 +282,13 @@ def render(
         lines.append(f"    {snake(alias)} => {alias}, dimensions::{dimension} {{")
         for marker in markers:
             lines.append(f"        {marker}: units::{marker},")
+        append_prefix_groups(lines, markers, prefixes, "@prefixed")
         affine_markers = affine.get(dimension, [])
         if affine_markers:
             lines.append("    } affine {")
             for marker in affine_markers:
                 lines.append(f"        {marker}: units::{marker},")
+            append_prefix_groups(lines, affine_markers, prefixes, "@prefixed_affine")
         lines.append("    },")
     lines.append("}")
 
@@ -293,77 +329,6 @@ def render_classes(classes: list[tuple[str, str, list[tuple[str, str]]]]) -> str
     return "\n".join(lines) + "\n"
 
 
-EXTENSION_STUB = '''# Generated by scripts/generate-surface.py; do not edit.
-"""Typed surface of the compiled extension."""
-
-from typing import Dict, List, Literal, Optional, Tuple, Type, TypeVar, Union, overload
-
-Dimension = Tuple[Tuple[int, int, int, int, int, int, int], str]
-
-_Q = TypeVar("_Q", bound="Quantity")
-
-BASE_ATTR: str
-DIMENSION_ATTR: str
-PROTOCOL_VERSION: int
-UNITS: Dict[str, List[str]]
-
-class Quantity:
-    """A magnitude in canonical SI base units and the dimension it belongs to.
-
-    Each named dimension is a subclass -- `Length`, `Area`, `AreaPerTime` --
-    and every operation returns an instance of the class for its result's
-    dimension, or `Quantity` itself when no class names it. The subclasses'
-    overloads carry that algebra to a type checker: `Length * Length` is an
-    `Area`, and `Length + Time` is a type error as well as a `ValueError`.
-    `Length + q` is rejected when `q` is typed as plain `Quantity`; narrow it
-    with `isinstance` first.
-    """
-
-    @staticmethod
-    def from_unit(value: float, unit: str, *, quantity: str) -> "Quantity": ...
-    @staticmethod
-    def from_base_of(value: float, quantity: str) -> "Quantity": ...
-    @property
-    def base(self) -> float: ...
-    @property
-    def dimension(self) -> Dimension: ...
-    @property
-    def quantity(self) -> Optional[str]: ...
-    @property
-    def quantities(self) -> List[str]: ...
-    @property
-    def is_dimensionless(self) -> bool: ...
-    @property
-    def __aequitas_base__(self) -> float: ...
-    @property
-    def __aequitas_dimension__(self) -> Dimension: ...
-    def in_unit(self, unit: str) -> float: ...
-    def sqrt(self) -> "Quantity": ...
-    def cbrt(self) -> "Quantity": ...
-    def reciprocal(self) -> "Quantity": ...
-    def __add__(self: _Q, other: _Q) -> _Q: ...
-    def __sub__(self: _Q, other: _Q) -> _Q: ...
-    def __mul__(self, other: Union["Quantity", float]) -> "Quantity": ...
-    def __rmul__(self, other: Union["Quantity", float]) -> "Quantity": ...
-    def __truediv__(self, other: Union["Quantity", float]) -> "Quantity": ...
-    def __rtruediv__(self, other: Union["Quantity", float]) -> "Quantity": ...
-    def __pow__(self, exponent: int, modulo: None = ...) -> "Quantity": ...
-    def __neg__(self: _Q) -> _Q: ...
-    def __pos__(self: _Q) -> _Q: ...
-    def __abs__(self: _Q) -> _Q: ...
-    def __lt__(self: _Q, other: _Q) -> bool: ...
-    def __le__(self: _Q, other: _Q) -> bool: ...
-    def __gt__(self: _Q, other: _Q) -> bool: ...
-    def __ge__(self: _Q, other: _Q) -> bool: ...
-    def __hash__(self) -> int: ...
-
-def quantity_names() -> List[str]: ...
-def unit_symbols(quantity: str) -> List[str]: ...
-def dimension_of(quantity: str) -> Dimension: ...
-def base_value_of(value: object, expected: str) -> float: ...
-'''
-
-
 def overloads(method: str, precise: list[tuple[str, str]]) -> list[str]:
     """One method's overloads: the precise cases, then the catch-all.
 
@@ -390,7 +355,7 @@ def render_extension_stub(
     """
     tags = {name: parse_tag(dimension_types[dimension]) for name, dimension, _ in classes}
     named = {tag: name for name, tag in tags.items()}
-    lines = [EXTENSION_STUB.rstrip("\n"), "", "CLASSES: Dict[str, Type[Quantity]]", ""]
+    lines = [read(Path(__file__).parent / "surface" / "extension.pyi").rstrip("\n"), "", "CLASSES: Dict[str, Type[Quantity]]", ""]
     for name, _dimension, aliases in classes:
         tag = tags[name]
         products = [(other, named[t]) for other in tags if (t := combine(tag, tags[other], 1)) in named]
@@ -437,6 +402,8 @@ def render_package_stub(
         "from typing import Dict, List, Optional",
         "",
         "from ._pyaequitas import (",
+        "    AmplitudeLevel as AmplitudeLevel,",
+        "    PowerLevel as PowerLevel,",
         "    BASE_ATTR as BASE_ATTR,",
         "    CLASSES as CLASSES,",
         "    DIMENSION_ATTR as DIMENSION_ATTR,",
@@ -487,12 +454,13 @@ def main() -> int:
     root = repo_root(Path(__file__))
     quantities = collect_quantities(root)
     units = collect_units(root)
+    prefixes = collect_prefixes(root)
     affine = collect_affine_units(root)
     dimension_types = collect_dimension_types(root)
     classes = group_classes(quantities, dimension_types)
 
     rendered = {
-        "inventory": render(quantities, units, affine),
+        "inventory": render(quantities, units, affine, prefixes),
         "classes": render_classes(classes),
         "extension_stub": render_extension_stub(classes, dimension_types),
         "package_stub": render_package_stub(quantities, units, affine),

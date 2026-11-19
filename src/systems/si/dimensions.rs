@@ -3,10 +3,17 @@
 use typenum::{N1, N2, N3, N4, N7, P1, P2, P3, P4, Z0};
 
 use crate::dimension::{
-    AbsoluteTemperatureSemantics, AngleSemantics, Dimension, FlexuralRigiditySemantics,
-    MechanicalImpedanceSemantics, MolarConcentrationSemantics, ReciprocalVolumeSemantics,
-    SpringStiffnessSemantics, StressSemantics, SurfaceTensionSemantics,
-    TemperatureDifferenceSemantics,
+    AbsoluteTemperatureSemantics, ActivityConcentrationSemantics, ActivitySemantics,
+    AngleSemantics, Dimension, DoseEquivalentRateSemantics, DoseEquivalentSemantics,
+    FlexuralRigiditySemantics, MechanicalImpedanceSemantics, MolarConcentrationSemantics,
+    RadiationExposureSemantics, ReciprocalVolumeSemantics, SpringStiffnessSemantics,
+    StressSemantics, SurfaceTensionSemantics, TemperatureDifferenceSemantics,
+};
+
+use crate::dimension::{
+    AngularAccelerationSemantics, AngularVelocitySemantics, InformationSemantics,
+    LuminanceSemantics, LuminousFluxSemantics, RadianceSemantics, RadiantIntensitySemantics,
+    ReactivePowerSemantics, SolidAngleSemantics, TorqueSemantics,
 };
 
 /// Dimensionless quantity.
@@ -195,3 +202,90 @@ pub type EnergyPerVolume = Dimension<N1, P1, N2, Z0, Z0, Z0, Z0>;
 /// Temperature derivative of reciprocal length, expressed as inverse
 /// metre-kelvin.
 pub type ReciprocalLengthPerTemperature = Dimension<N1, Z0, Z0, Z0, N1, Z0, Z0>;
+
+/// Action, the product of energy and time.
+pub type Action = Dimension<P2, P1, N1, Z0, Z0, Z0, Z0>;
+/// Reciprocal amount of substance.
+pub type ReciprocalAmountOfSubstance = Dimension<Z0, Z0, Z0, Z0, Z0, N1, Z0>;
+/// Electric permittivity, capacitance per length.
+pub type Permittivity = Dimension<N3, N1, P4, P2, Z0, Z0, Z0>;
+/// Magnetic permeability, inductance per length.
+pub type MagneticPermeability = Dimension<P1, P1, N2, N2, Z0, Z0, Z0>;
+
+/// Activity of a radionuclide in decays per second.
+pub type Activity = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0, ActivitySemantics>;
+
+/// Activity per volume.
+pub type ActivityConcentration =
+    Dimension<N3, Z0, N1, Z0, Z0, Z0, Z0, ActivityConcentrationSemantics>;
+
+/// Radiation-weighted dose, dimensionally energy per mass.
+pub type DoseEquivalent = Dimension<P2, Z0, N2, Z0, Z0, Z0, Z0, DoseEquivalentSemantics>;
+
+/// Radiation-weighted dose per time.
+pub type DoseEquivalentRate = Dimension<P2, Z0, N3, Z0, Z0, Z0, Z0, DoseEquivalentRateSemantics>;
+
+/// Ionizing radiation exposure in charge of one sign produced per mass of air.
+pub type RadiationExposure = Dimension<Z0, N1, P1, P1, Z0, Z0, Z0, RadiationExposureSemantics>;
+
+/// Solid angle, stored in steradians.
+pub type SolidAngle = Dimension<Z0, Z0, Z0, Z0, Z0, Z0, Z0, SolidAngleSemantics>;
+/// Magnetic flux, electric potential times time.
+pub type MagneticFlux = Dimension<P2, P1, N2, N1, Z0, Z0, Z0>;
+/// Inductance, magnetic flux per electric current.
+pub type Inductance = Dimension<P2, P1, N2, N2, Z0, Z0, Z0>;
+/// Luminous flux, luminous intensity integrated over solid angle.
+pub type LuminousFlux = Dimension<Z0, Z0, Z0, Z0, Z0, Z0, P1, LuminousFluxSemantics>;
+/// Incident luminous flux per surface area.
+pub type Illuminance = Dimension<N2, Z0, Z0, Z0, Z0, Z0, P1>;
+/// Catalytic activity, amount transformed per unit time.
+pub type CatalyticActivity = Dimension<Z0, Z0, N1, Z0, Z0, P1, Z0>;
+/// Surface mass density, mass per area.
+pub type SurfaceDensity = Dimension<N2, P1, Z0, Z0, Z0, Z0, Z0>;
+/// Specific volume, volume per mass.
+pub type SpecificVolume = Dimension<P3, N1, Z0, Z0, Z0, Z0, Z0>;
+/// Electric current per cross-sectional area.
+pub type CurrentDensity = Dimension<N2, Z0, Z0, P1, Z0, Z0, Z0>;
+/// Magnetic field strength, current per length.
+pub type MagneticFieldStrength = Dimension<N1, Z0, Z0, P1, Z0, Z0, Z0>;
+/// Luminance, luminous intensity per projected area.
+pub type Luminance = Dimension<N2, Z0, Z0, Z0, Z0, Z0, P1, LuminanceSemantics>;
+/// Moment of force, expressed in newton metres.
+pub type Torque = Dimension<P2, P1, N2, Z0, Z0, Z0, Z0, TorqueSemantics>;
+/// Angular velocity or angular frequency, expressed in radians per second.
+pub type AngularVelocity = Dimension<Z0, Z0, N1, Z0, Z0, Z0, Z0, AngularVelocitySemantics>;
+/// Angular acceleration, change of angular velocity per unit time.
+pub type AngularAcceleration = Dimension<Z0, Z0, N2, Z0, Z0, Z0, Z0, AngularAccelerationSemantics>;
+/// Electric potential difference per length.
+pub type ElectricFieldStrength = Dimension<P1, P1, N3, N1, Z0, Z0, Z0>;
+/// Radiant flux per solid angle.
+pub type RadiantIntensity = Dimension<P2, P1, N3, Z0, Z0, Z0, Z0, RadiantIntensitySemantics>;
+/// Radiant flux per projected area per solid angle.
+pub type Radiance = Dimension<Z0, P1, N3, Z0, Z0, Z0, Z0, RadianceSemantics>;
+/// Catalytic activity per volume.
+pub type CatalyticActivityConcentration = Dimension<N3, Z0, N1, Z0, Z0, P1, Z0>;
+/// Reactive power, expressed in var or volt amperes.
+pub type ReactivePower = Dimension<P2, P1, N3, Z0, Z0, Z0, Z0, ReactivePowerSemantics>;
+/// Luminous flux per radiant power.
+pub type LuminousEfficacy = Dimension<N2, N1, P3, Z0, Z0, Z0, P1>;
+/// Amount of information, stored in bits.
+pub type Information = Dimension<Z0, Z0, Z0, Z0, Z0, Z0, Z0, InformationSemantics>;
+
+/// Wavenumber, inverse wavelength.
+pub type Wavenumber = ReciprocalLength;
+/// Mass of a constituent per volume of a mixture.
+pub type MassConcentration = MassDensity;
+/// Angular frequency of a periodic phenomenon.
+pub type AngularFrequency = AngularVelocity;
+/// Heat flow per unit area.
+pub type HeatFluxDensity = Intensity;
+/// Incident radiant flux per unit area.
+pub type Irradiance = Intensity;
+/// Thermodynamic entropy.
+pub type Entropy = HeatCapacity;
+/// Entropy per mass.
+pub type SpecificEntropy = SpecificHeatCapacity;
+/// Entropy per amount of substance.
+pub type MolarEntropy = MolarHeatCapacity;
+/// Electric displacement, electric flux per area.
+pub type ElectricDisplacement = SurfaceChargeDensity;

@@ -26,6 +26,28 @@ pub struct Unit {
 }
 
 impl Unit {
+    /// Build a registry entry from a linear law-crate marker.
+    #[must_use]
+    pub const fn linear<D, U: aequitas::unit::LinearUnit<D>>(name: &'static str) -> Self {
+        Self {
+            name,
+            symbol: U::SYMBOL,
+            scale: U::SCALE,
+            offset: None,
+        }
+    }
+
+    /// Build a registry entry from an affine law-crate marker.
+    #[must_use]
+    pub const fn affine<D, U: aequitas::unit::AffineUnit<D>>(name: &'static str) -> Self {
+        Self {
+            name,
+            symbol: U::SYMBOL,
+            scale: U::SCALE,
+            offset: Some(U::OFFSET),
+        }
+    }
+
     /// Convert a value in this unit to canonical SI base units.
     ///
     /// One multiplication by `scale`: the operation `LinearUnit::to_base`
@@ -106,8 +128,23 @@ pub trait Quantities {
 /// units exist, which the generator's `check` mode gates.
 #[macro_export]
 macro_rules! quantity_inventory {
-    ($($py_name:ident => $alias:ident, $dimension:ty { $($unit_name:ident: $unit:ty,)* } $(affine { $($affine_name:ident: $affine_unit:ty,)* })?),+ $(,)?) => {
-        /// Generated inventory of every Aequitas quantity.
+    (
+        $(
+            $py_name:ident => $alias:ident, $dimension:ty {
+                $($unit_name:ident: $unit:ty,)*
+                $(@prefixed $root_name:ident: $root:ty => [$($prefix:ident),+],)*
+            }
+            $(affine {
+                $($affine_name:ident: $affine_unit:ty,)*
+                $(@prefixed_affine $affine_root_name:ident: $affine_root:ty => [$($affine_prefix:ident),+],)*
+            })?
+        ,)+
+    ) => {
+        // Each generated root appears once per dimension. Each prefix's
+        // symbol, scale and affine conversion come from the law crate.
+        use aequitas::unit::{Prefixed, prefixes};
+
+        /// The generated unit catalog, with conversion metadata supplied by Aequitas.
         pub struct Inventory;
 
         impl Quantities for Inventory {
@@ -119,21 +156,23 @@ macro_rules! quantity_inventory {
                         tag: <$dimension as $crate::tag::TaggedDimension>::TAG,
                         units: &[
                             $(
-                                $crate::units::registry::Unit {
-                                    name: stringify!($unit_name),
-                                    symbol: <$unit as ::aequitas::unit::LinearUnit<$dimension>>::SYMBOL,
-                                    scale: <$unit as ::aequitas::unit::LinearUnit<$dimension>>::SCALE,
-                                    offset: None,
-                                },
+                                $crate::units::registry::Unit::linear::<$dimension, $unit>(stringify!($unit_name)),
                             )*
                             $($(
-                                $crate::units::registry::Unit {
-                                    name: stringify!($affine_name),
-                                    symbol: <$affine_unit as ::aequitas::unit::AffineUnit<$dimension>>::SYMBOL,
-                                    scale: <$affine_unit as ::aequitas::unit::AffineUnit<$dimension>>::SCALE,
-                                    offset: Some(<$affine_unit as ::aequitas::unit::AffineUnit<$dimension>>::OFFSET),
-                                },
-                            )*)?
+                                $crate::units::registry::Unit::linear::<$dimension, Prefixed<prefixes::$prefix, $root>>(
+                                    concat!(stringify!($prefix), stringify!($root_name)),
+                                ),
+                            )+)*
+                            $(
+                                $(
+                                    $crate::units::registry::Unit::affine::<$dimension, $affine_unit>(stringify!($affine_name)),
+                                )*
+                                $($(
+                                    $crate::units::registry::Unit::affine::<$dimension, Prefixed<prefixes::$affine_prefix, $affine_root>>(
+                                        concat!(stringify!($affine_prefix), stringify!($affine_root_name)),
+                                    ),
+                                )+)*
+                            )?
                         ],
                     },
                 )+

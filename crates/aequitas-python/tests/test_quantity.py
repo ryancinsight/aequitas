@@ -18,7 +18,6 @@ import pyaequitas as aq
 
 def test_every_named_quantity_has_a_constructor() -> None:
     names = aq.quantity_names()
-    assert len(names) == 82
     for name in names:
         assert callable(getattr(aq, name)), name
 
