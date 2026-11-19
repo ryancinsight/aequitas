@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.5.0] - 2026-11-19
+
+### Added
+
+- [minor] Publish typed standard atmosphere, gravity, molar gas, reduced
+  Planck, Stefan–Boltzmann, vacuum electromagnetic, and electron mass
+  constants. Values follow CODATA 2022 and NIST reference definitions.
+- [minor] Add dimension-preserving scalar materialization through
+  `Quantity::cast` and mutable canonical storage access through
+  `Quantity::as_base_mut`.
+
+### Fixed
+
+- [minor] Preserve the surface tension dimension through additive
+  arithmetic, including assignment.
+
 ## [0.4.0] - 2026-11-19
 
 ### Added

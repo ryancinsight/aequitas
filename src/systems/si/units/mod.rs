@@ -28,7 +28,9 @@ pub use scaled::{
 };
 
 mod physical_constants;
-pub use physical_constants::{FaradPerMeter, HenryPerMeter, JouleSecond, PerMole};
+pub use physical_constants::{
+    FaradPerMeter, HenryPerMeter, JouleSecond, PerMole, WattPerSquareMeterKelvinToFourth,
+};
 
 pub use brochure::{
     AmperePerMeter, AmperePerSquareMeter, CandelaPerSquareMeter, CubicMeterPerKilogram, Henry,

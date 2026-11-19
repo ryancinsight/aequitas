@@ -289,3 +289,6 @@ pub type SpecificEntropy = SpecificHeatCapacity;
 pub type MolarEntropy = MolarHeatCapacity;
 /// Electric displacement, electric flux per area.
 pub type ElectricDisplacement = SurfaceChargeDensity;
+
+/// Ratio of radiant exitance to the fourth power of absolute temperature.
+pub type StefanBoltzmannCoefficient = Dimension<Z0, P1, N3, Z0, N4, Z0, Z0>;

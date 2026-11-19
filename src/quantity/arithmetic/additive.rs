@@ -1,9 +1,9 @@
 //! Additive arithmetic for quantities whose dimension composes additively.
 //!
-//! `BaseAdditiveDimension` is the private witness that admits a dimension to
-//! addition at all. Every base dimension implements it, while a semantic
-//! dimension such as `Angle` deliberately does not, so an angle can be
-//! converted between units but not summed. The one pair of dimensions that
+//! `AdditiveDimension` admits linear quantities to addition and subtraction.
+//! Base dimensions and surface tension have this contract. A
+//! surface-tension difference retains force per length and its semantic marker.
+//! The pair of dimensions that
 //! addition relates across -- absolute temperature and a temperature
 //! difference -- is the exception the kernel cannot express, and lives in
 //! `affine`.
@@ -13,18 +13,22 @@ use core::ops::{Add, AddAssign, Sub, SubAssign};
 use crate::{
     dimension::{BaseSemantics, Dimension},
     quantity::Quantity,
+    systems::si::dimensions::SurfaceTension,
 };
 
-trait BaseAdditiveDimension {}
+trait AdditiveDimension {}
 
-impl<Length, Mass, Time, Current, Temperature, Amount, Luminosity> BaseAdditiveDimension
+impl<Length, Mass, Time, Current, Temperature, Amount, Luminosity> AdditiveDimension
     for Dimension<Length, Mass, Time, Current, Temperature, Amount, Luminosity, BaseSemantics>
 {
 }
 
+/// Surface tension is linear under addition and subtraction of like values.
+impl AdditiveDimension for SurfaceTension {}
+
 impl<T, D> Add for Quantity<T, D>
 where
-    D: BaseAdditiveDimension,
+    D: AdditiveDimension,
     T: Add<Output = T>,
 {
     type Output = Self;
@@ -37,7 +41,7 @@ where
 
 impl<T, D> AddAssign for Quantity<T, D>
 where
-    D: BaseAdditiveDimension,
+    D: AdditiveDimension,
     T: AddAssign,
 {
     #[inline]
@@ -48,7 +52,7 @@ where
 
 impl<T, D> Sub for Quantity<T, D>
 where
-    D: BaseAdditiveDimension,
+    D: AdditiveDimension,
     T: Sub<Output = T>,
 {
     type Output = Self;
@@ -61,7 +65,7 @@ where
 
 impl<T, D> SubAssign for Quantity<T, D>
 where
-    D: BaseAdditiveDimension,
+    D: AdditiveDimension,
     T: SubAssign,
 {
     #[inline]

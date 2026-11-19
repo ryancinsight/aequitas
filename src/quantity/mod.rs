@@ -6,6 +6,7 @@ mod construction;
 mod display;
 mod model;
 mod pow;
+mod precision;
 mod reciprocal;
 mod root;
 #[cfg(feature = "serde")]

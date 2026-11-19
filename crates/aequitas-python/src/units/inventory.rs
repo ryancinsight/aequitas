@@ -493,4 +493,7 @@ crate::quantity_inventory! {
     electric_displacement => ElectricDisplacement, dimensions::SurfaceChargeDensity {
         CoulombPerSquareMeter: units::CoulombPerSquareMeter,
     },
+    stefan_boltzmann_coefficient => StefanBoltzmannCoefficient, dimensions::StefanBoltzmannCoefficient {
+        WattPerSquareMeterKelvinToFourth: units::WattPerSquareMeterKelvinToFourth,
+    },
 }

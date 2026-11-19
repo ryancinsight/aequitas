@@ -140,6 +140,7 @@ from ._pyaequitas import (
     SpecificEntropy as SpecificEntropy,
     MolarEntropy as MolarEntropy,
     ElectricDisplacement as ElectricDisplacement,
+    StefanBoltzmannCoefficient as StefanBoltzmannCoefficient,
 )
 
 __all__: List[str]
@@ -386,3 +387,5 @@ def specific_entropy(value: float, unit: Optional[str] = ...) -> SpecificEntropy
 def molar_entropy(value: float, unit: Optional[str] = ...) -> MolarEntropy: ...
 # ElectricDisplacement: CoulombPerSquareMeter
 def electric_displacement(value: float, unit: Optional[str] = ...) -> ElectricDisplacement: ...
+# StefanBoltzmannCoefficient: WattPerSquareMeterKelvinToFourth
+def stefan_boltzmann_coefficient(value: float, unit: Optional[str] = ...) -> StefanBoltzmannCoefficient: ...
