@@ -95,7 +95,7 @@ def collect_prefixes(root: Path) -> dict[str, list[str]]:
     """Read prefix eligibility and ordered prefix types from the Rust declarations."""
     pattern = re.compile(r"^    (?P<name>\w+)(?=,|;)", re.M)
     catalog = re.compile(r"! \{\n    (?P<base>\w+PrefixBase);\n(?P<entries>.*?)^}", re.M | re.S)
-    prefix_source = read(root / "src" / "unit" / "prefixes" / "mod.rs")
+    prefix_source = read(root / "src" / "unit" / "prefixes" / "catalog.rs")
     base_source = read(root / "src" / "systems" / "si" / "units" / "prefix_bases.rs")
     groups = {match["base"]: pattern.findall(match["entries"]) for match in catalog.finditer(prefix_source)}
     eligible: dict[str, list[str]] = {}
