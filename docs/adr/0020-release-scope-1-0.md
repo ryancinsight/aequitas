@@ -2,49 +2,48 @@
 
 - Status: Accepted
 - Date: 2026-11-10
+- Revised: 2026-11-19
 - Class: `[arch]` `[minor]`
 
 ## Context
 
-Aequitas (`aequitas` 0.3.2) provides the Atlas physical-quantity and
-dimensional law over the Eunomia scalar surface. The product surface is
-delivered: quantity laws through unit composition (ADRs 0001–0015, 0018),
-the Python binding pipeline (ADR 0016), and the Eunomia 0.10 cohort contract
-(ADR 0019). The manifest still bounds Eunomia to `<0.13.0`, so the stable
-Eunomia 1.0 surface requires a consumer migration here. The only open items
-are three deferred documented non-goals and three items blocked on
-owner/account actions. No milestone ladder exists to 1.0.
+Aequitas provides the Atlas physical-quantity and dimensional law over the
+Eunomia scalar surface. Aequitas 0.3.2 permits Eunomia 0.10 through 0.12 and
+locks an upstream Git commit for repository builds. Separately built crates
+need the same registry package identity to exchange Eunomia scalar values.
+
+Eunomia's `main` declares 0.12.0, its latest crates.io version. The earlier
+Aequitas 0.4.0 milestone assumed a future Eunomia 1.0 release. The 0.12.0
+archive provides the scalar operations the current Aequitas catalog uses.
 
 ## Decision
 
-Adopt a two-milestone ladder to 1.0 recorded in `backlog/milestones.md`:
-
-- **M-eunomia-1-0** (0.4.0): users build quantities over the stable Eunomia
-  1.0 scalar surface — bound, lock graph, and no-std/default-off edges moved
-  off the pre-1.0 provider with gates green.
-- **M-1.0** (1.0.0): stable quantity-law surface (authority-gated) with
-  documented contracts and release gates satisfied.
-
-Owner-gated leftovers (PyPI trusted-publisher registration and wheel
-publication per AEQ-PY-BINDING-001, the proof-tool decision per
-AEQ-LEAN-SPIKE-001, and the third-party recurseml check) move with the
-release but do not gate 1.0; they are tracked under **M-ecosystem**. The
-three deferred boundary items stay documented non-goals.
+- **M-published-eunomia** (Aequitas 0.4.0) uses the published Eunomia 0.12 line
+  from crates.io, with default features disabled in the dependency declaration.
+  The lock selects Eunomia and Eunomia Derive 0.12.0. Aequitas's `std` feature
+  opts into Eunomia's `std` feature.
+- **M-1.0** (Aequitas 1.0.0) commits to stable quantity contracts after its
+  documented gates pass and the owner authorizes the release. Evaluate later
+  provider migrations against the releases available at that time.
+- **M-ecosystem** tracks the Python wheel, proof tooling and third-party
+  recurseml work under their existing ownership and acceptance criteria.
 
 ## Alternatives
 
-- Leave progress implicit in backlog items: rejected because stack policy
-  requires a runnable capability ladder.
-- Gate 1.0 on the wheel publication: rejected because the blocker is a
-  pypi.org account action outside the merge-mechanics grant; the pipeline
-  itself is landed and verified.
-- Target 1.0 in one step: rejected because the Eunomia 1.0 consumer
-  migration must land and verify first.
+A future Eunomia 1.0 requirement would make current consumers depend on an
+unpublished package. Continuing to resolve a Git checkout in the workspace
+would preserve the source difference between repository and registry builds.
+
+## Verification
+
+The lockfile guard requires one checksummed crates.io identity for Eunomia
+and its derive crate, followed by locked Cargo resolution. The 0.4.0 gate
+includes the full workspace suite, a release SemVer check, a packaging dry
+run and a fresh consumer of the published archive with default features
+enabled and disabled.
 
 ## Consequences
 
-- Open items carry `milestone:` assignments and the migration names the exit
-  checks it serves.
-- Milestones close only when exit checks pass on fetched default commits; 1.0
-  release/publication remains authority-gated.
-- This ADR is rewritten in place as scope evidence changes.
+Open items carry milestone assignments. Close a milestone after its exit
+checks pass on the fetched default branch. The deferred boundaries keep
+their existing scope, and the Aequitas 1.0 release remains owner-authorized.

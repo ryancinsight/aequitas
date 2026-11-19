@@ -1,6 +1,6 @@
 # Changelog
 
-## Aequitas 0.4.0 — Unreleased
+## [0.4.0]
 
 ### Added
 
@@ -9,7 +9,17 @@
   levels, and decimal and binary prefix composition. Expose named and
   prefixed units and logarithmic levels in Python.
 
-## Aequitas 0.3.2 — Unreleased
+### Changed
+
+- [minor] Resolve Eunomia and Eunomia Derive from crates.io. Aequitas keeps
+  its `no_std` support with default features disabled.
+
+### Breaking
+
+- Move direct Eunomia dependencies to the 0.12 line when sharing scalar
+  types with Aequitas 0.4.0. Aequitas 0.3.2 accepts Eunomia 0.10 and 0.11.
+
+## [0.3.2] - 2026-10-30
 
 ### Changed
 

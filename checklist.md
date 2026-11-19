@@ -2,5 +2,9 @@
 
 - [x] [minor] Implement the current SI Brochure catalog, conversion laws,
   generic prefixes, and generated Python surface.
-- [ ] [minor] Verify the brochure catalog with the stable Eunomia migration
-  and run release gates on the 0.4.0 candidate per ADR 0020.
+- [x] [minor] Migrate the manifest and lock to the published Eunomia 0.12
+  line per ADR 0020.
+- [ ] [minor] Verify required CI, the blocking SemVer verdict, and the
+  packaging dry run.
+- [ ] [minor] Verify the crates.io receipt and a fresh consumer with default
+  features enabled and disabled.
