@@ -25,6 +25,18 @@ each for Aequitas 0.4.0, Eunomia 0.12.0 and Eunomia Derive 0.12.0. The consumer
 asserts that 250 mV equals 0.25 V in both scalar precisions, 1250 m°C equals
 a 1.25 K interval, and a 10:1 amplitude ratio yields 20 dB under the square law.
 
+### Aequitas 0.4.0 release acceptance
+
+- [x] [minor] Implement the current SI Brochure catalog, conversion laws,
+  generic prefixes, and generated Python surface.
+- [x] [minor] Migrate the manifest and lock to the published Eunomia 0.12
+  line per ADR 0020.
+- [x] [minor] Verify required CI, the blocking SemVer verdict, and the
+  packaging dry run. [Release PR](https://github.com/ryancinsight/aequitas/pull/164) ·
+  [Blocking release checks](https://github.com/ryancinsight/aequitas/actions/runs/44617203808)
+- [x] [minor] Verify the crates.io receipt and a fresh Rust 1.95 consumer with
+  default features enabled and disabled. [Registry release](https://crates.io/crates/aequitas/0.4.0)
+
 ## AEQ-SI-BROCHURE [minor] — integration candidate
 
 The SI Brochure 9th edition, version 4.01 catalog covers seven base units,
