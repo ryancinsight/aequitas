@@ -18,7 +18,7 @@ name = "_pyaequitas"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-aequitas = { workspace = true, features = ["std"] }
+aequitas = { version = "0.5.0", default-features = false, features = ["std"] }
 # `multiple-pymethods`: the quantity surface is split across `model` and
 # `arithmetic` so neither file approaches the structural size target; both
 # contribute `#[pymethods]` to one class.

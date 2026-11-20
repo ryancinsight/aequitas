@@ -16,10 +16,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "aequitas"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aa1c7df9ce6ddf18b2f205cc24a2d9ce665434362dd015453b63f02283c3f619"
+dependencies = [
+ "eunomia",
+ "typenum",
+]
+
+[[package]]
 name = "aequitas-python"
 version = "0.1.0"
 dependencies = [
- "aequitas",
+ "aequitas 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pyo3",
  "typenum",
 ]
