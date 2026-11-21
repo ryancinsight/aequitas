@@ -1,5 +1,12 @@
 # Changelog
 
+## [aequitas-python 0.1.0] - 2026-11-21
+
+### Added
+
+- [minor] Offer the Python quantity protocol and `Dimensioned<D>` adapter
+  to Rust extensions through crates.io. The package uses Aequitas 0.5.0.
+
 ## [0.5.0] - 2026-11-19
 
 ### Added
