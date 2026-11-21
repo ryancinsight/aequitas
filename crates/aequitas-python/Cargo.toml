@@ -10,8 +10,7 @@ license = "MIT OR Apache-2.0"
 readme = "README.md"
 keywords = ["units", "dimensional-analysis", "python", "pyo3", "si"]
 categories = ["science", "api-bindings"]
-# The wheel is the deliverable; the crate is not a crates.io artifact.
-publish = false
+publish = ["crates-io"]
 
 [lib]
 name = "_pyaequitas"

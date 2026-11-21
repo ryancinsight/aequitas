@@ -1,5 +1,11 @@
 # Aequitas gap audit
 
+## AEQ-PY-RUST-REGISTRY [minor] — first crates.io release
+
+The Rust adapter used by Kwavers previously resolved from an Aequitas Git
+revision. The normalized package resolves Aequitas 0.5.0 from crates.io
+and exposes the existing quantity protocol and dimensioned argument types.
+
 ## AEQ-040-REGISTRY-EUNOMIA [minor] — published and verified 2026-11-19
 
 Aequitas 0.4.0 resolves Eunomia and Eunomia Derive 0.12.0 from crates.io.

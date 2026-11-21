@@ -63,6 +63,14 @@ and flexural rigidity, so a bare symbol does not identify a unit.
 
 ## Interoperating with other extensions
 
+Rust extensions can use the crates.io package for the same quantity protocol
+and `Dimensioned<D>` argument types:
+
+```toml
+[dependencies]
+aequitas_python = { package = "aequitas-python", version = "0.1.0" }
+```
+
 Two independently built extension modules do not share Rust types, so this
 package publishes a structural contract rather than a class to downcast to. An
 object is a quantity when it exposes:
