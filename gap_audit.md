@@ -1,10 +1,13 @@
 # Aequitas gap audit
 
-## AEQ-PY-RUST-REGISTRY [minor] — first crates.io release
+## AEQ-PY-RUST-REGISTRY [minor] — published and verified 2026-11-21
 
-The Rust adapter used by Kwavers previously resolved from an Aequitas Git
-revision. The normalized package resolves Aequitas 0.5.0 from crates.io
-and exposes the existing quantity protocol and dimensioned argument types.
+[aequitas-python 0.1.0](https://crates.io/crates/aequitas-python/0.1.0)
+uses crates.io Aequitas 0.5.0 and Eunomia 0.12.1. The normalized package
+passes its Rust tests. [Kwavers #1130](https://github.com/ryancinsight/kwavers/pull/1130)
+uses the published adapter and passes its required checks. The fresh
+installed wheels accept physical length quantities and reject time in a
+length field.
 
 ## AEQ-040-REGISTRY-EUNOMIA [minor] — published and verified 2026-11-19
 
