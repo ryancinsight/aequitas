@@ -1,13 +1,5 @@
 # Aequitas backlog
 
-## AEQ-PY-RUST-REGISTRY — Publish the Python quantity adapter for Rust extensions [minor]
-
-- scope: `aequitas-python` 0.1.0 on crates.io
-- acceptance: package and test the normalized archive with Aequitas 0.5.0
-  and Eunomia 0.12.1, then build a fresh Kwavers wheel with the same graph
-- next step: record the registry receipt and the Kwavers cutover in the
-  Atlas rollout record
-
 <a id="AEQ-PY-BINDING-001"></a>
 ## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel
 
