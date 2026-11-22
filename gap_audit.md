@@ -8,7 +8,13 @@ orders with independent rational decoding and verify cancellation, with
 explicit subnormal, maximum-finite and one-third cases. The all-feature
 workspace passes 289 tests. The normalized runtime package builds against
 published Aequitas 0.5.0, and the no-default-features build passes.
-A fresh registry consumer cannot yet resolve runtime 0.1.0.
+crates.io published runtime 0.1.0 on 2026-11-22. The active sparse-index
+entry and the downloaded archive both have SHA-256
+`86ce35356a62344c3fc70d6ea278d6595b5af24285c8b6eb3b7148fe32b38116`.
+The archive records source `1ee67958fa4fc456c86f37ec72d31efce7dab2b0`,
+the revision named by `crate-aequitas-runtime-v0.1.0`. Kwavers resolves
+the registry package in a clean checkout without an adjacent provider.
+[Registry record](https://crates.io/crates/aequitas-runtime/0.1.0)
 
 ## AEQ-PY-RUST-REGISTRY [minor] — published and verified 2026-11-21
 
