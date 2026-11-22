@@ -275,10 +275,8 @@ def render(
         "",
         "crate::quantity_inventory! {",
     ]
-    covered = set()
     for alias, dimension in quantities:
         markers = units.get(dimension, [])
-        covered.add(dimension)
         lines.append(f"    {snake(alias)} => {alias}, dimensions::{dimension} {{")
         for marker in markers:
             lines.append(f"        {marker}: units::{marker},")
@@ -292,12 +290,6 @@ def render(
         lines.append("    },")
     lines.append("}")
 
-    orphans = sorted((set(units) | set(affine)) - covered)
-    if orphans:
-        raise SystemExit(
-            "these dimensions carry units but no quantity alias, so the binding "
-            f"could not name them: {', '.join(orphans)}"
-        )
     return "\n".join(lines) + "\n"
 
 
@@ -438,8 +430,10 @@ def targets(root: Path) -> dict[str, Path]:
     """Paths this generator owns."""
     crate = root / "crates" / "aequitas-python"
     package = crate / "python" / "pyaequitas"
+    inventory = crate / "src" / "units" / "inventory"
     return {
-        "inventory": crate / "src" / "units" / "inventory.rs",
+        "inventory_head": inventory / "head.rs",
+        "inventory_tail": inventory / "tail.rs",
         "classes": crate / "src" / "quantity" / "classes" / "inventory.rs",
         "extension_stub": package / "_pyaequitas.pyi",
         "package_stub": package / "__init__.pyi",
@@ -459,8 +453,20 @@ def main() -> int:
     dimension_types = collect_dimension_types(root)
     classes = group_classes(quantities, dimension_types)
 
+    covered = {dimension for _, dimension in quantities}
+    orphans = sorted((set(units) | set(affine)) - covered)
+    if orphans:
+        raise SystemExit(
+            "these dimensions carry units but no quantity alias, so the binding "
+            f"could not name them: {', '.join(orphans)}"
+        )
+    # Keep complete, ordered quantity rows in each generated leaf.
+    midpoint = len(quantities) // 2
+    if not midpoint:
+        raise SystemExit("two non-empty inventory leaves are required")
     rendered = {
-        "inventory": render(quantities, units, affine, prefixes),
+        "inventory_head": render(quantities[:midpoint], units, affine, prefixes),
+        "inventory_tail": render(quantities[midpoint:], units, affine, prefixes),
         "classes": render_classes(classes),
         "extension_stub": render_extension_stub(classes, dimension_types),
         "package_stub": render_package_stub(quantities, units, affine),
