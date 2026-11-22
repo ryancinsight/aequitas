@@ -130,7 +130,10 @@ crate::quantity_inventory! {
         Barn: units::Barn,
         Hectare: units::Hectare,
         SquareCentimeter: units::SquareCentimeter,
+        SquareDecimeter: units::SquareDecimeter,
+        SquareKilometer: units::SquareKilometer,
         SquareMeter: units::SquareMeter,
+        SquareMillimeter: units::SquareMillimeter,
         @prefixed Barn: units::Barn => [Quetta, Ronna, Yotta, Zetta, Exa, Peta, Tera, Giga, Mega, Kilo, Hecto, Deca, Deci, Centi, Milli, Micro, Nano, Pico, Femto, Atto, Zepto, Yocto, Ronto, Quecto],
     },
     area_per_mass => AreaPerMass, dimensions::AreaPerMass {

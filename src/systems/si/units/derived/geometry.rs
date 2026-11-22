@@ -1,7 +1,19 @@
 use crate::{
     systems::si::dimensions,
-    unit::{LinearUnit, private::Sealed},
+    unit::{LinearUnit, Power, Prefixed, Unit, prefixes::Deci, private::Sealed},
 };
+use typenum::P2;
+
+use super::super::{Kilometer, Meter, Millimeter};
+
+linear_units! {
+    /// Square millimetre, the area of a millimetre raised to the second power.
+    SquareMillimeter, Area, "mm²", <Power<Millimeter, P2> as Unit<dimensions::Area>>::SCALE;
+    /// Square decimetre, the area of a decimetre raised to the second power.
+    SquareDecimeter, Area, "dm²", <Power<Prefixed<Deci, Meter>, P2> as Unit<dimensions::Area>>::SCALE;
+    /// Square kilometre, the area of a kilometre raised to the second power.
+    SquareKilometer, Area, "km²", <Power<Kilometer, P2> as Unit<dimensions::Area>>::SCALE;
+}
 
 /// Square metre, the coherent SI unit of area.
 #[derive(Clone, Copy, Debug, Default)]

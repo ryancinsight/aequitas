@@ -75,3 +75,27 @@ fn every_symbol_resolves_once_per_named_quantity() {
         }
     }
 }
+
+#[test]
+fn a_token_has_one_conversion_per_full_dimension_tag() {
+    let mut seen = std::collections::HashMap::new();
+    for quantity in all() {
+        for unit in quantity.units {
+            let signature = (unit.scale.to_bits(), unit.offset.map(f64::to_bits));
+            for token in [unit.symbol, unit.name]
+                .into_iter()
+                .chain(unit.alternate_symbols().iter().copied())
+            {
+                if let Some((previous, quantity_name, marker)) =
+                    seen.insert((quantity.tag, token), (signature, quantity.name, unit.name))
+                {
+                    assert_eq!(
+                        previous, signature,
+                        "conflicting conversions for {token:?} in {}: {quantity_name}::{marker} and {}::{}",
+                        quantity.tag, quantity.name, unit.name
+                    );
+                }
+            }
+        }
+    }
+}

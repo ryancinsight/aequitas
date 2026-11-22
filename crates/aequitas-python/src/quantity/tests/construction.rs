@@ -74,3 +74,64 @@ fn celsius_resolves_per_quantity_through_the_python_surface() {
     assert_exact(difference.base_value(), 10.0);
     assert_exact(temperature.in_unit("degC").expect("degC reads back"), 0.0);
 }
+
+#[test]
+fn metric_power_notation_resolves_in_both_directions() {
+    let cases = [
+        ("area", "mm²", "m²", 1e-6),
+        ("area", "dm²", "m²", 1e-2),
+        ("area", "dam²", "a", 1.0),
+        ("area", "hm²", "ha", 1.0),
+        ("area", "km²", "m²", 1e6),
+        ("volume", "cm³", "mL", 1.0),
+        ("volume", "dm³", "L", 1.0),
+    ];
+    for (quantity_name, symbol, reference, expected) in cases {
+        let q = PyQuantity::from_unit(1.0, symbol, quantity_name)
+            .unwrap_or_else(|error| panic!("{quantity_name}/{symbol} must construct: {error}"));
+        let observed = q.in_unit(reference).expect("reference unit resolves");
+        assert!(
+            (observed - expected).abs() <= f64::EPSILON * expected,
+            "{symbol} in {reference}: {observed} != {expected}"
+        );
+        let q = PyQuantity::from_unit(expected, reference, quantity_name)
+            .expect("reference unit constructs");
+        let observed = q.in_unit(symbol).expect("metric power symbol reads back");
+        assert!(
+            (observed - 1.0).abs() <= f64::EPSILON,
+            "{symbol}: {observed}"
+        );
+    }
+    assert!(PyQuantity::from_unit(1.0, "cm³", "area").is_err());
+    assert!(PyQuantity::from_unit(1.0, "dm²", "volume").is_err());
+}
+
+#[test]
+fn unicode_fahrenheit_retains_absolute_and_interval_behavior() {
+    let freezing = PyQuantity::from_unit(32.0, "°F", "thermodynamic_temperature")
+        .expect("Unicode Fahrenheit resolves for an absolute temperature");
+    assert_exact(freezing.in_unit("°C").expect("Celsius reads back"), 0.0);
+    assert!(
+        (freezing
+            .in_unit("°F")
+            .expect("Unicode Fahrenheit reads back")
+            - 32.0)
+            .abs()
+            < 1e-12
+    );
+    let interval = PyQuantity::from_unit(18.0, "°F", "temperature_difference")
+        .expect("Unicode Fahrenheit resolves for an interval");
+    assert_exact(interval.in_unit("K").expect("kelvin reads back"), 10.0);
+    assert_exact(
+        interval
+            .in_unit("degF")
+            .expect("ASCII Fahrenheit still resolves"),
+        18.0,
+    );
+    assert_exact(
+        interval
+            .in_unit("°F")
+            .expect("Unicode Fahrenheit reads back"),
+        18.0,
+    );
+}
