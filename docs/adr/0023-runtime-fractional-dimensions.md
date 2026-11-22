@@ -1,6 +1,10 @@
-# Runtime fractional SI dimensions
+# ADR 0023: Represent fractional SI dimensions at runtime
 
-Accepted for the physical fractional derivative on 2026-11-22.
+## Status
+
+Accepted
+
+## Decision
 
 A value of static dimension D differentiated in time to order α has
 exponent vector D − α [0,0,1,0,0,0,0]. Store seven reduced rational
