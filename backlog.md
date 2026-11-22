@@ -1,5 +1,15 @@
 # Aequitas backlog
 
+<a id="aequitas-stable-qualification"></a>
+## AEQUITAS-STABLE-QUALIFICATION — aequitas stable-release qualification [patch] — todo
+- priority: verification; milestone: M-1.0; basis: `17c7c91e727e`.
+- Outcome: Freeze the quantity and unit boundary on the published Eunomia line. Follow the [release scope](docs/adr/0020-release-scope-1-0.md) and [milestone exits](backlog/milestones.md).
+- Representative manifest `aequitas 0.5.0`. Target 1.0.0.
+- [ ] [patch] Run dimension laws, affine-temperature, scalar arithmetic and conversion properties on the candidate. Compare composed dimensions and converted values to the independent unit oracle, including values adjacent to a rounding boundary.
+- [ ] [patch] Build fresh consumers with default features on and off and verify a single Eunomia type identity. Reconcile the fractional-dimension and Python spelling proposals ([#172](https://github.com/ryancinsight/aequitas/pull/172) and [#171](https://github.com/ryancinsight/aequitas/pull/171)) with the freeze before choosing the candidate.
+- [ ] [major] Apply ADR 0020 to the stable Rust surface. Keep the Python wheel and proof-tool decision in M-ecosystem with their existing owners.
+- [ ] [patch] Attach exact-revision evidence for the local exits and this member’s [Atlas qualification criteria](https://github.com/ryancinsight/atlas/blob/17b0124a7548ad81e817284afc5cb115c1d1bc78/docs/parity/repositories.json).
+
 <a id="AEQ-PY-BINDING-001"></a>
 ## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel
 
