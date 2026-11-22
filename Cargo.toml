@@ -28,13 +28,18 @@ std = ["eunomia/std"]
 serde = ["dep:serde"]
 
 [workspace]
-members = [".", "crates/aequitas-python"]
+members = [".", "crates/aequitas-python", "crates/aequitas-runtime"]
 default-members = ["."]
 resolver = "3"
 
 # The binding crate is excluded from `default-members` so a bare `cargo build`
 # in this repo keeps building the `no_std` law crate alone. Gate commands that
 # must cover it pass `--workspace`.
+
+# Workspace-only resolution gives the binding and runtime crate one static
+# quantity identity while testing this checkout. Consumers resolve crates.io.
+[patch.crates-io]
+aequitas = { path = "." }
 
 [workspace.dependencies]
 aequitas = { path = ".", version = "0.5.0", default-features = false }

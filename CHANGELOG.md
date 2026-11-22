@@ -1,5 +1,11 @@
 # Changelog
 
+## aequitas-runtime 0.1.0 (unreleased)
+
+- [minor] Add exact rational SI dimension algebra and dimensioned scalars
+  and buffers with a bridge from the existing Aequitas 0.5.0 quantities.
+
+
 ## [aequitas-python 0.1.0] - 2026-11-21
 
 ### Added

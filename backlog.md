@@ -1,5 +1,8 @@
 # Aequitas backlog
 
+- [minor] Runtime 0.1.0 implements exact fractional SI exponents. Registry
+  availability and a downstream registry-only build remain open.
+
 <a id="AEQ-PY-BINDING-001"></a>
 ## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel
 

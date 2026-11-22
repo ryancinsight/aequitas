@@ -1,5 +1,15 @@
 # Aequitas gap audit
 
+## Runtime 0.1.0 fractional SI exponents [minor]
+
+The local runtime crate reflects static powers into exact rationals and
+shares one dimension per buffer. Property tests compare finite binary
+orders with independent rational decoding and verify cancellation, with
+explicit subnormal, maximum-finite and one-third cases. The all-feature
+workspace passes 289 tests. The normalized runtime package builds against
+published Aequitas 0.5.0, and the no-default-features build passes.
+A fresh registry consumer cannot yet resolve runtime 0.1.0.
+
 ## AEQ-PY-RUST-REGISTRY [minor] — published and verified 2026-11-21
 
 [aequitas-python 0.1.0](https://crates.io/crates/aequitas-python/0.1.0)
