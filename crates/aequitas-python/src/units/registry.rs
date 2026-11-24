@@ -48,18 +48,6 @@ impl Unit {
         }
     }
 
-    /// Additional Python spellings for an existing marker, not new units.
-    pub(crate) fn alternate_symbols(&self) -> &'static [&'static str] {
-        match self.name {
-            "Are" => &["dam²"],
-            "Hectare" => &["hm²"],
-            "MilliLiter" => &["cm³"],
-            "Liter" => &["dm³"],
-            "DegreeFahrenheit" => &["°F"],
-            _ => &[],
-        }
-    }
-
     /// Convert a value in this unit to canonical SI base units.
     ///
     /// One multiplication by `scale`: the operation `LinearUnit::to_base`
@@ -98,7 +86,7 @@ pub struct Quantity {
     pub alias: &'static str,
     /// Runtime image of the quantity's dimension.
     pub tag: DimensionTag,
-    /// Units implementing `LinearUnit` for this dimension.
+    /// Linear units, then affine units, of this dimension in inventory order.
     pub units: &'static [Unit],
 }
 
@@ -112,18 +100,14 @@ impl Quantity {
     /// semantic marker, which is exactly what a bare symbol cannot carry.
     #[must_use]
     pub fn unit(&self, needle: &str) -> Option<&'static Unit> {
-        self.units.iter().find(|unit| {
-            unit.symbol == needle
-                || unit.name == needle
-                || unit.alternate_symbols().contains(&needle)
-        })
+        self.units
+            .iter()
+            .find(|unit| unit.symbol == needle || unit.name == needle)
     }
 
     /// Symbols this quantity accepts, for diagnostics.
     pub fn symbols(&self) -> impl Iterator<Item = &'static str> + '_ {
-        self.units.iter().flat_map(|unit| {
-            core::iter::once(unit.symbol).chain(unit.alternate_symbols().iter().copied())
-        })
+        self.units.iter().map(|unit| unit.symbol)
     }
 }
 
