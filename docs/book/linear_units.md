@@ -76,12 +76,13 @@ type-level bounds.
 
 Dimension normalization is exact type-level integer arithmetic. Scale factors
 use f64 metadata arithmetic, so noncoherent expressions can differ by rounding
-when regrouped. Decade scales `10^n` with `0 < |n| <= 22` are the exception for
-powers and prefixes: a power or prefix of them is rounded once from the
-exponent while every exponent involved stays in that range. Products and
-quotients use one floating-point operation, so a product of two decimetres can
-differ from a decimetre squared. The coefficient is then rounded to the
-selected scalar's precision; its representable range and IEEE special-value behavior still apply.
+when regrouped. Decade scales `10^n` with `0 < |n| <= 30` are the exception
+for powers and prefixes: a power or prefix of them is rounded once from the
+exponent while the result stays within 22 in magnitude. Products and quotients
+use one floating-point operation, so a product of two decimetres can differ
+from a decimetre squared. The coefficient is then rounded to the selected
+scalar's precision; its representable range and IEEE special-value behavior
+still apply.
 
 `UnitDimension` supplies each marker's dimension for composition. Multiple
 semantic readings of a named unit share its exponents. Compound operations

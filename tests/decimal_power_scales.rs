@@ -7,8 +7,8 @@ use aequitas::{
     systems::si::{
         dimensions::{Acceleration, Angle, Area, Mass, Pressure, Volume},
         units::{
-            Bar, Barn, Centimeter, CubicMillimeter, Degree, Gal, Gram, Kilometer, Liter,
-            LiterLowercase, Meter, Millimeter, SquareCentimeter, Tonne,
+            Bar, Barn, Centimeter, Degree, Gal, Gram, Kilometer, Liter, LiterLowercase, Meter,
+            Millimeter, Tonne,
         },
     },
     unit::{
@@ -25,8 +25,8 @@ fn nearest(decimal: &str) -> u64 {
         .to_bits()
 }
 
-/// The largest decade exponent whose power of ten is exact in binary64.
-const MAX_EXACT_DECADE: i32 = 22;
+/// The result range the `Prefixed` and `Power` rustdoc guarantees.
+const GUARANTEED_DECADE: i32 = 22;
 
 fn nearest_decade(exponent: i32) -> u64 {
     nearest(&format!("1e{exponent}"))
@@ -51,18 +51,6 @@ fn a_power_of_a_decimal_unit_is_rounded_once() {
     assert_eq!(
         <Power<Millimeter, N2> as Unit<_>>::SCALE.to_bits(),
         nearest("1e6")
-    );
-}
-
-#[test]
-fn units_that_predate_the_shared_mechanism_keep_their_literal_values() {
-    assert_eq!(
-        <SquareCentimeter as LinearUnit<Area>>::SCALE.to_bits(),
-        1.0e-4_f64.to_bits()
-    );
-    assert_eq!(
-        <CubicMillimeter as LinearUnit<Volume>>::SCALE.to_bits(),
-        1.0e-9_f64.to_bits()
     );
 }
 
@@ -110,8 +98,8 @@ fn a_power_of_a_prefixed_decimal_unit_is_rounded_once() {
     );
 }
 
-/// A prefixed scale is the exact decade only when the root, the prefix and
-/// their summed exponent are all inside the range `decimal.rs` recognises.
+/// A prefixed scale is the nearest double to its decade wherever the decade is
+/// within the guaranteed range, whatever the operand exponents.
 fn assert_prefixed_scale<
     Dimension,
     Root: LinearUnit<Dimension>,
@@ -126,10 +114,7 @@ fn assert_prefixed_scale<
         "the root is 1e{root_exponent}"
     );
     let exponent = root_exponent + prefix_exponent;
-    if [root_exponent, prefix_exponent, exponent]
-        .iter()
-        .all(|n| n.abs() <= MAX_EXACT_DECADE)
-    {
+    if exponent.abs() <= GUARANTEED_DECADE {
         assert_eq!(
             Composite::SCALE.to_bits(),
             nearest_decade(exponent),

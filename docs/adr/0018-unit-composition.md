@@ -4,10 +4,8 @@
 
 Accepted — 2026-09-21.
 
-Revised 2026-11-23: powers and prefixes of decade scales compose on their
-exponents and round once; every other power used squaring before. Repeated
-rounding left `Power<Prefixed<Micro, Bar>, P2>` one binary64 step below
-`1e-2`; scale tests compare against compiler-parsed decade literals.
+Revised 2026-11-23: decade-scale powers and prefixes round once, not per
+multiplication.
 
 ## Context
 
@@ -41,19 +39,19 @@ a conversion to a distinct semantic marker.
 Degree Celsius and Fahrenheit contribute temperature intervals, never offsets.
 Compound expressions cannot construct affine absolute temperatures. Integer
 powers use signed-32-bit-bounded Typenum exponents. A scale that is the
-nearest binary64 to a decade `10^n` (`0 < |n| <= 22`) is raised by exponent
+nearest binary64 to a decade `10^n` (`0 < |n| <= 30`) is raised by exponent
 addition and rounded once, `(10^n)^p = 10^(n·p)`, while `|n·p| <= 22`. A
-prefix on a decade root composes the same way, `10^a · 10^b = 10^(a+b)` for
-`0 < |a|, |b| <= 22` and `|a+b| <= 22`, so such a prefixed unit is itself a
+prefix on a decade root composes the same way, `10^a · 10^b = 10^(a+b)` for `0
+< |a|, |b| <= 30` and `|a+b| <= 22`, so such a prefixed unit is itself a
 decade base. Since `5^22 < 2^53`, `10^k` is exact for `0 <= k <= 22` and
 `10^-k` is one correctly rounded division. Every other scale is raised by
 const exponentiation by squaring and rounds at each multiplication, and other
-products, quotients and prefixed scales use one floating-point operation.
-The type bounds prevent truncated scale exponents. A composed scale outside
-the finite positive f64 metadata range fails const evaluation;
-the scalar conversion still executes through `UnitScalar` at its own precision.
-Inverse conversions use provider-owned native division, not multiplication by
-a reciprocal that could overflow before a representable result is calculated.
+products, quotients and prefixed scales use one floating-point operation. The
+type bounds prevent truncated scale exponents. A composed scale outside the
+finite positive f64 metadata range fails const evaluation; the scalar
+conversion still executes through `UnitScalar` at its own precision. Inverse
+conversions use provider-owned native division, not multiplication by a
+reciprocal that could overflow before a representable result is calculated.
 
 Equivalent expressions produce the same quantity type, not the same marker
 type. Formatting preserves the expression's grouping rather than looking up
@@ -66,14 +64,19 @@ not numerically interchangeable without conversion.
 - Replacing static named symbols with strings would impose allocation or a
   breaking metadata change on consumers and the generated Python inventory.
 - Unsealing units would move scale and semantic consistency outside the provider.
+- Recognising operands only for `|n| <= 22`, where `10^n` is computed exactly,
+  leaves Barn (`1e-28`) and the outer prefixes unrecognised, so their
+  compositions round twice. A table of float literals recognises `|n| <= 30`.
 - Selecting a named unit from a dimension loses scale information and is
   ambiguous where several units share the dimension.
 
 ## Verification
 
-Value tests compare named and composed units, positive/negative/zero powers,
-scaled denominators, nested expressions, unnamed dimensions and formatting.
-Compile-fail doctests reject dimension and semantic mismatches. Existing
-quantity and binding tests guard named-unit behavior. The no-default-features
-check guards no-std support; generated-surface freshness guards the unchanged
-Python catalog. No performance improvement is claimed.
+Decade-scale tests compare `SCALE` bits with float-parser results, an oracle
+independent of the scale arithmetic. Value tests compare named and composed
+units, positive/negative/zero powers, scaled denominators, nested expressions,
+unnamed dimensions and formatting. Compile-fail doctests reject dimension and
+semantic mismatches. Existing quantity and binding tests guard named-unit
+behavior. The no-default-features check guards no-std support;
+generated-surface freshness guards the unchanged Python catalog. No
+performance improvement is claimed.

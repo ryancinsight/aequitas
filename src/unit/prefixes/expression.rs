@@ -12,10 +12,10 @@ use super::{Prefix, symbol::Symbol};
 /// A single prefix `P` applied to an eligible unit token `U`.
 ///
 /// Scale is the prefix factor times the base unit's scale; when they are
-/// decades `10^a` and `10^b` with `0 < |a|, |b| <= 22` and `|a+b| <= 22` it is
-/// the nearest binary64 to `10^(a+b)`. In compound expressions the entire prefixed token is raised to
-/// a power. Celsius retains its affine origin when prefixed as an absolute
-/// temperature.
+/// decades `10^a` and `10^b` with `0 < |a|, |b| <= 30` and `|a+b| <= 22` it is
+/// the nearest binary64 to `10^(a+b)`. In compound expressions the entire
+/// prefixed token is raised to a power. Celsius retains its affine origin when
+/// prefixed as an absolute temperature.
 ///
 /// ```
 /// use aequitas::{systems::si::{quantities::Length, units::Meter},
