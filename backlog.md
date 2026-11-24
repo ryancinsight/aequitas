@@ -15,22 +15,21 @@
 - [minor] Runtime 0.1.0 is published. The [release record](gap_audit.md)
   identifies the checksummed archive and source tag.
 
-<a id="AEQ-PY-BINDING-001"></a>
-## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel
+<a id="AEQ-CONFORMANCE-GUARD-001"></a>
+## AEQ-CONFORMANCE-GUARD-001 — Fail a member PR that raises a conformance debt class
 
-- status: blocked; priority: feature; needs: none
-- basis: 64898d22720ad88437f464c82d6ef0a52e15a801
-- scope: `crates/aequitas-python/`, `.github/workflows/python-release.yml`
-- outcome: `aequitas-python` (import package `pyaequitas`) is on PyPI with every SI quantity and unit, usable from
-  `kwavers-python` ([ADR 0016](docs/adr/0016-python-quantity-binding.md)); the wheel pipeline is delivered (#72, `d81c9fb`).
-- acceptance: every exported dimension round-trips against `Quantity::in_unit`; semantic normalization
-  matches `MultiplyDimension`/`DivideDimension`; codegen regenerate-and-diff is clean; `pytest` is green
-  against the built wheel; the `published` job installs the released wheel back.
-- blocker: the PyPI trusted publisher is not registered (project `aequitas-python`, owner `ryancinsight`,
-  repo `aequitas`, workflow `python-release.yml`, environment `pypi`); `pypi.org/pypi/aequitas-python/json` was 404 on 2026-11-13.
-- re-open trigger: the publisher is registered.
-- next step: tag `aequitas-python-v0.1.0` under release authority.
-- milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
+- status: todo; priority: verification; needs: none
+- basis: a55971204a5c6e1fdd22de5636927272d6415c8e
+- scope: `.github/workflows/ci.yml`, the `main` required status checks
+- outcome: a PR that raises an `aequitas` debt class above its Atlas baseline row fails a required check; one that raises nothing passes.
+  `ci.yml:33-45` omits `conformance-guard.yml`; `missing_deny_docs` rose 0 to 1 until `0d0efbe91de676f991451de50e200984aaa46f65`.
+- acceptance: `ci.yml` calls `ryancinsight/atlas/.github/workflows/conformance-guard.yml@<full SHA>` with `atlas-ref` equal to it and `member: aequitas`; at the
+  delivering PR's head, after `git -C <atlas> fetch origin`, `<SHA>` equals `git -C <atlas> rev-parse origin/main` (pins `4cb1fe2f560c47aee89ab8a783a8d8c80a12ccd9`
+  and `3d480848872a` are rejected); `gh api repos/ryancinsight/aequitas/branches/main/protection --jq .required_status_checks.contexts` lists its context (today
+  `verify`, `Python bindings`, `supply-chain`, `Lockfile integrity / Lockfile integrity`, `Python bindings (free-threaded)`); probe branches that remove
+  `#![deny(missing_docs)]` from one crate or add a board item with status and priority but no `milestone:` fail it; an unmodified branch passes.
+- next step: add the job beside `lockfile` at the current Atlas `main` commit, then require its context.
+- milestone: M-1.0
 
 <a id="AEQ-LEAN-SPIKE-001"></a>
 ## AEQ-LEAN-SPIKE-001 — Decide a machine-checked proof tool for numeric laws
@@ -43,8 +42,23 @@
   system checks dimensional consistency (`src/dimension/`); value identities are only runtime-tested.
 - acceptance: the pilot states and proves one law in the chosen tool and records what it covers: the
   typenum projections, the external `FloatElement::powf`, and the `Quantity` wrappers.
-- blocker: either toolchain adds a proof dependency to dev hosts and CI; the owner approves before any
-  install.
+- blocker: either toolchain adds a proof dependency to dev hosts and CI; the owner approves before any install.
 - re-open trigger: the owner names a tool, or declines proof tooling and the gap is recorded as accepted.
 - next step: draft the Proposed ADR with the recommended tool once the owner answers.
+- milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
+
+<a id="AEQ-PY-BINDING-001"></a>
+## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel
+
+- status: blocked; priority: feature; needs: none
+- basis: 64898d22720ad88437f464c82d6ef0a52e15a801
+- scope: `crates/aequitas-python/`, `.github/workflows/python-release.yml`
+- outcome: `aequitas-python` (import package `pyaequitas`) is on PyPI with every SI quantity and unit, usable from
+  `kwavers-python` ([ADR 0016](docs/adr/0016-python-quantity-binding.md)); the wheel pipeline is delivered (#72, `d81c9fb`).
+- acceptance: every exported dimension round-trips against `Quantity::in_unit`; semantic normalization matches `MultiplyDimension`/`DivideDimension`;
+  codegen regenerate-and-diff is clean; `pytest` is green against the built wheel; the `published` job installs the released wheel back.
+- blocker: the PyPI trusted publisher is not registered (project `aequitas-python`, owner `ryancinsight`,
+  repo `aequitas`, workflow `python-release.yml`, environment `pypi`); `pypi.org/pypi/aequitas-python/json` was 404 on 2026-11-13.
+- re-open trigger: the publisher is registered.
+- next step: tag `aequitas-python-v0.1.0` under release authority.
 - milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
