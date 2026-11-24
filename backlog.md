@@ -15,22 +15,21 @@
 - [minor] Runtime 0.1.0 is published. The [release record](gap_audit.md)
   identifies the checksummed archive and source tag.
 
-<a id="AEQ-PY-BINDING-001"></a>
-## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel
+<a id="AEQ-CONFORMANCE-GUARD-001"></a>
+## AEQ-CONFORMANCE-GUARD-001 — Fail a member PR that raises a conformance debt class
 
-- status: blocked; priority: feature; needs: none
-- basis: 64898d22720ad88437f464c82d6ef0a52e15a801
-- scope: `crates/aequitas-python/`, `.github/workflows/python-release.yml`
-- outcome: `aequitas-python` (import package `pyaequitas`) is on PyPI with every SI quantity and unit, usable from
-  `kwavers-python` ([ADR 0016](docs/adr/0016-python-quantity-binding.md)); the wheel pipeline is delivered (#72, `d81c9fb`).
-- acceptance: every exported dimension round-trips against `Quantity::in_unit`; semantic normalization
-  matches `MultiplyDimension`/`DivideDimension`; codegen regenerate-and-diff is clean; `pytest` is green
-  against the built wheel; the `published` job installs the released wheel back.
-- blocker: the PyPI trusted publisher is not registered (project `aequitas-python`, owner `ryancinsight`,
-  repo `aequitas`, workflow `python-release.yml`, environment `pypi`); `pypi.org/pypi/aequitas-python/json` was 404 on 2026-11-13.
-- re-open trigger: the publisher is registered.
-- next step: tag `aequitas-python-v0.1.0` under release authority.
-- milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
+- status: todo; priority: verification; needs: none
+- basis: a55971204a5c6e1fdd22de5636927272d6415c8e
+- scope: `.github/workflows/ci.yml`, the `main` required status checks
+- outcome: a PR that raises an `aequitas` debt class above its Atlas baseline row fails a required check; one that raises nothing
+  passes. `ci.yml:33-45` omits `conformance-guard.yml`; `missing_deny_docs` rose 0 to 1 until `0d0efbe91de676f991451de50e200984aaa46f65`.
+- acceptance: `ci.yml` calls `ryancinsight/atlas/.github/workflows/conformance-guard.yml@<full SHA>` with `atlas-ref` equal
+  to it and `member: aequitas`; `git -C <atlas> merge-base --is-ancestor <SHA> origin/main` exits 0; `gh api
+  repos/ryancinsight/aequitas/branches/main/protection --jq .required_status_checks.contexts` lists its context (today
+  `verify`, `Python bindings`, `supply-chain`, `Lockfile integrity / Lockfile integrity`, `Python bindings (free-threaded)`);
+  a probe branch removing `#![deny(missing_docs)]` from one crate fails it and an unmodified branch passes it.
+- next step: add the job beside `lockfile` at the current Atlas `main` commit, then require its context.
+- milestone: M-1.0
 
 <a id="AEQ-LEAN-SPIKE-001"></a>
 ## AEQ-LEAN-SPIKE-001 — Decide a machine-checked proof tool for numeric laws
@@ -49,23 +48,6 @@
 - next step: draft the Proposed ADR with the recommended tool once the owner answers.
 - milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
 
-<a id="AEQ-CONFORMANCE-GUARD-001"></a>
-## AEQ-CONFORMANCE-GUARD-001 — Fail a member PR that raises a conformance debt class
-
-- status: todo; priority: verification; needs: none
-- basis: a55971204a5c6e1fdd22de5636927272d6415c8e
-- scope: `.github/workflows/ci.yml`, the `main` branch required status checks
-- outcome: a pull request that raises a debt class above the Atlas baseline row for `aequitas` fails a required check.
-  `.github/workflows/ci.yml:33-45` calls Atlas `lockfile-guard.yml` and `semver-gate.yml`, not `conformance-guard.yml`
-  (inputs `atlas-ref`, `member`); `missing_deny_docs` rose 0 to 1 on `main` until `0d0efbe91de676f991451de50e200984aaa46f65`.
-- acceptance: `ci.yml` calls `ryancinsight/atlas/.github/workflows/conformance-guard.yml@<full SHA>` with `atlas-ref`
-  equal to it and `member: aequitas`; its context is in `gh api repos/ryancinsight/aequitas/branches/main/protection
-  --jq .required_status_checks.contexts` (today `verify`, `Python bindings`, `supply-chain`,
-  `Lockfile integrity / Lockfile integrity`, `Python bindings (free-threaded)`); a probe branch removing
-  `#![deny(missing_docs)]` from one crate fails it.
-- next step: add the job beside `lockfile` at the current Atlas `main` commit, then require its context.
-- milestone: M-1.0
-
 <a id="AEQ-RUNTIME-FORBID-UNSAFE-001"></a>
 ## AEQ-RUNTIME-FORBID-UNSAFE-001 — Forbid unsafe code at the runtime crate root
 
@@ -75,8 +57,25 @@
 - outcome: the crate root carries `#![forbid(unsafe_code)]` as the root crate does (`src/lib.rs:12`). The crate has no
   `unsafe` (`git grep -n unsafe -- crates/aequitas-runtime` prints nothing) and inherits `unsafe_code = "forbid"` through
   `[lints] workspace = true`, so the attribute adds no new restriction; it keeps the guarantee visible in the source
-  and independent of the manifest, per the stack's crate-level convention.
-- acceptance: `git grep -n 'forbid(unsafe_code)' -- crates/aequitas-runtime/src/lib.rs` prints the attribute (empty today) and
-  the workspace format, clippy and test gate passes.
+  and independent of the manifest.
+- acceptance: `git grep -n -E '^#!\[forbid\(unsafe_code\)\]$' -- crates/aequitas-runtime/src/lib.rs` prints the attribute
+  line (no match today) and the workspace format, clippy and test gate passes.
 - next step: add the attribute after `#![no_std]`.
 - milestone: M-1.0
+
+<a id="AEQ-PY-BINDING-001"></a>
+## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel
+
+- status: blocked; priority: feature; needs: none
+- basis: 64898d22720ad88437f464c82d6ef0a52e15a801
+- scope: `crates/aequitas-python/`, `.github/workflows/python-release.yml`
+- outcome: `aequitas-python` (import package `pyaequitas`) is on PyPI with every SI quantity and unit, usable from
+  `kwavers-python` ([ADR 0016](docs/adr/0016-python-quantity-binding.md)); the wheel pipeline is delivered (#72, `d81c9fb`).
+- acceptance: every exported dimension round-trips against `Quantity::in_unit`; semantic normalization
+  matches `MultiplyDimension`/`DivideDimension`; codegen regenerate-and-diff is clean; `pytest` is green
+  against the built wheel; the `published` job installs the released wheel back.
+- blocker: the PyPI trusted publisher is not registered (project `aequitas-python`, owner `ryancinsight`,
+  repo `aequitas`, workflow `python-release.yml`, environment `pypi`); `pypi.org/pypi/aequitas-python/json` was 404 on 2026-11-13.
+- re-open trigger: the publisher is registered.
+- next step: tag `aequitas-python-v0.1.0` under release authority.
+- milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
