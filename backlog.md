@@ -1,5 +1,17 @@
 # Aequitas backlog
 
+<a id="aequitas-stable-qualification"></a>
+## AEQUITAS-STABLE-QUALIFICATION — aequitas stable-release qualification [patch] — todo
+- priority: verification; milestone: M-1.0; basis: `e28f4b022781`.
+- Outcome: Freeze the quantity and unit boundary on the published Eunomia line. Follow the [release scope](docs/adr/0020-release-scope-1-0.md) and [milestone exits](backlog/milestones.md). Planning targets for `aequitas` are 0.5.1, then 0.6.0 if the fractional-dimension proposal lands, then 1.0.0. Verification alone can advance the current version.
+- Representative manifest `aequitas 0.5.0`. Target 1.0.0.
+- [ ] [patch] Run dimension laws, affine-temperature, scalar arithmetic and conversion properties on the candidate. Compare composed dimensions and converted values to the independent unit oracle, including values adjacent to a rounding boundary.
+- [ ] [patch] Build fresh consumers with default features on and off and verify a single Eunomia type identity. Reconcile the fractional-dimension and Python spelling proposals ([#172](https://github.com/ryancinsight/aequitas/pull/172) and [#171](https://github.com/ryancinsight/aequitas/pull/171)) with the freeze before choosing the candidate.
+- [ ] [major] Apply ADR 0020 to the stable Rust surface. Keep the Python wheel and proof-tool decision in M-ecosystem with their existing owners.
+- [ ] [patch] **0.5.1.** Qualify the 0.5 API with an external Rust caller. For affine temperatures, subtract two absolute readings and check the interval in both units. Reject addition of two absolute readings at compile time. [Source and baseline](gap_audit.md#incremental-release-baseline).
+- [ ] [minor] **0.6.0 if the fractional-dimension proposal lands.** Resolve #172 before freeze. If admitted, compose fractional exponents and recover the original dimension after inversion. Otherwise carry the existing integer contract directly to beta.
+- [ ] [major] **1.0.0-beta.1 → 1.0.0-rc.1 → 1.0.0.** Freeze the supported surface at beta. A default-off quantity consumer resolves one Eunomia identity and reproduces the unit and dimension laws. Repeat the applicable exits on the exact RC before stable promotion. Attach exact-revision evidence for the local exits and this member’s [Atlas qualification criteria](https://github.com/ryancinsight/atlas/blob/17b0124a7548ad81e817284afc5cb115c1d1bc78/docs/parity/repositories.json).
+
 - [minor] Runtime 0.1.0 is published. The [release record](gap_audit.md)
   identifies the checksummed archive and source tag.
 

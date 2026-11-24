@@ -1,5 +1,11 @@
 # Aequitas gap audit
 
+## Incremental release baseline
+
+Reviewed [aequitas 0.5.0](Cargo.toml) at [e28f4b022781](https://github.com/ryancinsight/aequitas/tree/e28f4b0227811973b6d0d1723604da8ac563abb6). The exact version appears in the [registry](https://crates.io/crates/aequitas/0.5.0).
+
+The next [patch] checkpoint uses [dimension laws](tests/dimension_laws.rs). [Target version and acceptance criteria](backlog.md#aequitas-stable-qualification).
+
 ## Runtime 0.1.0 fractional SI exponents [minor]
 
 The local runtime crate reflects static powers into exact rationals and
