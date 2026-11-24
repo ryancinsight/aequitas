@@ -11,8 +11,9 @@ pub use electrical::{
     Ohm, PascalPerVolt, Siemens, SiemensPerMeter, Tesla, Volt, VoltPerPascal,
 };
 pub use geometry::{
-    CubicMeter, PerCubicMeter, PerMeter, SquareDecimeter, SquareKilometer, SquareMeter,
-    SquareMeterPerKilogram, SquareMillimeter,
+    CubicCentimeter, CubicDecimeter, CubicMeter, CubicMillimeter, PerCubicMeter, PerMeter,
+    SquareCentimeter, SquareDecameter, SquareDecimeter, SquareHectometer, SquareKilometer,
+    SquareMeter, SquareMeterPerKilogram, SquareMillimeter,
 };
 pub use kinematics::{
     Hertz, MeterPerSecond, MeterPerSecondKelvin, MeterPerSecondSquared, MolePerCubicMeter,

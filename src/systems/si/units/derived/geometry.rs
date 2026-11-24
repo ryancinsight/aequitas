@@ -1,18 +1,44 @@
 use crate::{
     systems::si::dimensions,
-    unit::{LinearUnit, Power, Prefixed, Unit, prefixes::Deci, private::Sealed},
+    unit::{
+        LinearUnit, Power, Prefixed, Unit,
+        prefixes::{Deca, Deci, Hecto},
+        private::Sealed,
+    },
 };
-use typenum::P2;
+use typenum::{P2, P3};
 
-use super::super::{Kilometer, Meter, Millimeter};
+use super::super::{Centimeter, Kilometer, Meter, Millimeter};
 
 linear_units! {
     /// Square millimetre, the area of a millimetre raised to the second power.
     SquareMillimeter, Area, "mm²", <Power<Millimeter, P2> as Unit<dimensions::Area>>::SCALE;
+    /// Square centimetre, the area of a centimetre raised to the second power.
+    SquareCentimeter, Area, "cm²", <Power<Centimeter, P2> as Unit<dimensions::Area>>::SCALE;
     /// Square decimetre, the area of a decimetre raised to the second power.
     SquareDecimeter, Area, "dm²", <Power<Prefixed<Deci, Meter>, P2> as Unit<dimensions::Area>>::SCALE;
+    /// Square decametre, the area of a decametre raised to the second power.
+    ///
+    /// The same area as the [are](super::super::Are), spelled with the metric
+    /// power notation.
+    SquareDecameter, Area, "dam²", <Power<Prefixed<Deca, Meter>, P2> as Unit<dimensions::Area>>::SCALE;
+    /// Square hectometre, the area of a hectometre raised to the second power.
+    ///
+    /// The same area as the [hectare](super::super::Hectare), spelled with the
+    /// metric power notation.
+    SquareHectometer, Area, "hm²", <Power<Prefixed<Hecto, Meter>, P2> as Unit<dimensions::Area>>::SCALE;
     /// Square kilometre, the area of a kilometre raised to the second power.
     SquareKilometer, Area, "km²", <Power<Kilometer, P2> as Unit<dimensions::Area>>::SCALE;
+    /// Cubic millimetre, the volume of a millimetre raised to the third power.
+    CubicMillimeter, Volume, "mm³", <Power<Millimeter, P3> as Unit<dimensions::Volume>>::SCALE;
+    /// Cubic centimetre, the volume of a centimetre raised to the third power.
+    ///
+    /// The same volume as the millilitre.
+    CubicCentimeter, Volume, "cm³", <Power<Centimeter, P3> as Unit<dimensions::Volume>>::SCALE;
+    /// Cubic decimetre, the volume of a decimetre raised to the third power.
+    ///
+    /// The same volume as the [litre](super::super::Liter).
+    CubicDecimeter, Volume, "dm³", <Power<Prefixed<Deci, Meter>, P3> as Unit<dimensions::Volume>>::SCALE;
 }
 
 /// Square metre, the coherent SI unit of area.

@@ -176,20 +176,6 @@ impl LinearUnit<dimensions::Mass> for Gram {
     const SCALE: f64 = 1.0e-3;
 }
 
-/// Square centimetre.
-#[derive(Clone, Copy, Debug, Default)]
-pub struct SquareCentimeter;
-impl Sealed for SquareCentimeter {}
-impl crate::unit::private::Named for SquareCentimeter {}
-impl crate::unit::UnitDimension for SquareCentimeter {
-    type Dimension = dimensions::Area;
-}
-
-impl LinearUnit<dimensions::Area> for SquareCentimeter {
-    const SYMBOL: &'static str = "cm²";
-    const SCALE: f64 = 1.0e-4;
-}
-
 /// Square centimetre per gram.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct SquareCentimeterPerGram;
@@ -202,20 +188,6 @@ impl crate::unit::UnitDimension for SquareCentimeterPerGram {
 impl LinearUnit<dimensions::AreaPerMass> for SquareCentimeterPerGram {
     const SYMBOL: &'static str = "cm²/g";
     const SCALE: f64 = 1.0e-1;
-}
-
-/// Cubic millimetre.
-#[derive(Clone, Copy, Debug, Default)]
-pub struct CubicMillimeter;
-impl Sealed for CubicMillimeter {}
-impl crate::unit::private::Named for CubicMillimeter {}
-impl crate::unit::UnitDimension for CubicMillimeter {
-    type Dimension = dimensions::Volume;
-}
-
-impl LinearUnit<dimensions::Volume> for CubicMillimeter {
-    const SYMBOL: &'static str = "mm³";
-    const SCALE: f64 = 1.0e-9;
 }
 
 /// Kilohertz.

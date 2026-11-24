@@ -1,6 +1,6 @@
 //! Zero-sized SI and non-SI unit markers.
 //!
-//! [`Celsius`], [`DegreeCelsius`] and [`DegreeFahrenheit`] use affine
+//! [`Celsius`], [`DegreeCelsius`], [`DegreeFahrenheit`] and [`Fahrenheit`] use affine
 //! conversions for absolute temperatures and linear conversions for intervals.
 
 #[macro_use]
@@ -16,15 +16,14 @@ mod temperature;
 
 pub use base::{Ampere, Candela, Kelvin, Kilogram, Meter, Mole, Radian, Second};
 pub use derived::*;
-pub use temperature::{Celsius, DegreeCelsius, DegreeFahrenheit, Rankine};
+pub use temperature::{Celsius, DegreeCelsius, DegreeFahrenheit, Fahrenheit, Rankine};
 
 pub use scaled::{
-    Bar, Centimeter, CubicMillimeter, Degree, ElectronVolt, FootPerSecond, Gram,
-    GramPerCubicCentimeter, JoulePerMilliliter, Kilohertz, Kilometer, KilometerPerHour, Kilopascal,
-    Knot, MegaElectronVolt, Megahertz, Megapascal, MicromolePerLiter, Microsecond, MilePerHour,
-    Millimeter, MillimeterOfMercury, MillipascalSecond, Millisecond, MolePerLiter, Nanometer,
-    PerCentimeter, PoundPerSquareInch, SquareCentimeter, SquareCentimeterPerGram,
-    StandardAtmosphere,
+    Bar, Centimeter, Degree, ElectronVolt, FootPerSecond, Gram, GramPerCubicCentimeter,
+    JoulePerMilliliter, Kilohertz, Kilometer, KilometerPerHour, Kilopascal, Knot, MegaElectronVolt,
+    Megahertz, Megapascal, MicromolePerLiter, Microsecond, MilePerHour, Millimeter,
+    MillimeterOfMercury, MillipascalSecond, Millisecond, MolePerLiter, Nanometer, PerCentimeter,
+    PoundPerSquareInch, SquareCentimeterPerGram, StandardAtmosphere,
 };
 
 mod physical_constants;

@@ -86,6 +86,19 @@ impl LinearUnit<dimensions::TemperatureDifference> for DegreeFahrenheit {
     const SCALE: f64 = 5.0 / 9.0;
 }
 
+linear_units! {
+    /// Degree Fahrenheit with the symbol `°F`. An interval equals a `degF` interval.
+    Fahrenheit, TemperatureDifference, "°F",
+        <DegreeFahrenheit as LinearUnit<dimensions::TemperatureDifference>>::SCALE;
+}
+
+impl AffineUnit<dimensions::ThermodynamicTemperature> for Fahrenheit {
+    const SYMBOL: &'static str = <Self as LinearUnit<dimensions::TemperatureDifference>>::SYMBOL;
+    const SCALE: f64 =
+        <DegreeFahrenheit as AffineUnit<dimensions::ThermodynamicTemperature>>::SCALE;
+    const OFFSET: f64 = DegreeFahrenheit::OFFSET;
+}
+
 /// Degree Rankine: the absolute Fahrenheit-scale degree. Like the kelvin it
 /// has no offset — 0 °R is absolute zero — and one degree is 5/9 kelvin, the
 /// same size as the Fahrenheit degree.
