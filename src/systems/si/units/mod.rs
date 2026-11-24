@@ -1,6 +1,6 @@
 //! Zero-sized SI and non-SI unit markers.
 //!
-//! [`Celsius`], [`DegreeCelsius`] and [`DegreeFahrenheit`] use affine
+//! [`Celsius`], [`DegreeCelsius`], [`DegreeFahrenheit`] and [`Fahrenheit`] use affine
 //! conversions for absolute temperatures and linear conversions for intervals.
 
 #[macro_use]
@@ -16,7 +16,7 @@ mod temperature;
 
 pub use base::{Ampere, Candela, Kelvin, Kilogram, Meter, Mole, Radian, Second};
 pub use derived::*;
-pub use temperature::{Celsius, DegreeCelsius, DegreeFahrenheit, Rankine};
+pub use temperature::{Celsius, DegreeCelsius, DegreeFahrenheit, Fahrenheit, Rankine};
 
 pub use scaled::{
     Bar, Centimeter, Degree, ElectronVolt, FootPerSecond, Gram, GramPerCubicCentimeter,

@@ -86,7 +86,7 @@ pub struct Quantity {
     pub alias: &'static str,
     /// Runtime image of the quantity's dimension.
     pub tag: DimensionTag,
-    /// Units implementing `LinearUnit` for this dimension.
+    /// Linear units, then affine units, of this dimension in inventory order.
     pub units: &'static [Unit],
 }
 

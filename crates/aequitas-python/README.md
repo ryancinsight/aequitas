@@ -126,11 +126,20 @@ wheel built for its version; the abi3 wheel serves every GIL build from 3.10.
 units one accepts. Both come from the Rust inventory, not a copy of it.
 
 A symbol resolves within the quantity it is given to, and that is what makes
-temperature work. `degC` and `degF` are affine for `thermodynamic_temperature`,
-so `aq.thermodynamic_temperature(0.0, "degC").base` is `273.15`, and linear for
+temperature work. `degC` and `degF`, and their symbol spellings `°C` and `°F`,
+are affine for `thermodynamic_temperature`, so
+`aq.thermodynamic_temperature(0.0, "degC").base` is `273.15`, and linear for
 `temperature_difference`, where ten degrees Celsius is ten kelvin. The offset
 is the law crate's `AffineUnit::OFFSET`, read at build time, never a copy
 maintained here.
+
+Metric powers of the metre are accepted for the dimension they measure:
+`mm²`, `cm²`, `dm²`, `dam²`, `hm²` and `km²` for `area`, and `mm³`, `cm³`
+and `dm³` for `volume`. `dam²` and `hm²` are the are (`a`) and the hectare
+(`ha`); `cm³` and `dm³` are the millilitre and the litre. Every spelling is a
+unit marker of the law crate, so a Rust caller has the same set. Cubic
+decametres, hectometres and kilometres, the Unicode character `℉` (U+2109) and
+the Greek letter mu (U+03BC) as a micro prefix are not accepted.
 
 ## Licence
 

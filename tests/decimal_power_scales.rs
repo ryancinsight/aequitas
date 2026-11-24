@@ -5,15 +5,20 @@
 
 use aequitas::{
     systems::si::{
-        dimensions::{Acceleration, Angle, Area, Mass, Pressure, Volume},
+        dimensions::{
+            Acceleration, Angle, Area, Mass, Pressure, TemperatureDifference,
+            ThermodynamicTemperature, Volume,
+        },
         units::{
-            Bar, Barn, Centimeter, Degree, Gal, Gram, Kilometer, Liter, LiterLowercase, Meter,
-            Millimeter, Tonne,
+            Are, Bar, Barn, Centimeter, CubicCentimeter, CubicDecimeter, CubicMillimeter, Degree,
+            DegreeFahrenheit, Fahrenheit, Gal, Gram, Hectare, Kilometer, Liter, LiterLowercase,
+            Meter, Millimeter, SquareCentimeter, SquareDecameter, SquareDecimeter,
+            SquareHectometer, SquareKilometer, SquareMillimeter, Tonne,
         },
     },
     unit::{
-        LinearUnit, Power, Prefixed, Unit,
-        prefixes::{Deci, Micro, Nano},
+        AffineUnit, LinearUnit, Power, Prefixed, Unit,
+        prefixes::{Deci, Micro, Milli, Nano},
     },
 };
 use typenum::{N1, N2, N3, P2, P3, P4};
@@ -23,6 +28,45 @@ fn nearest(decimal: &str) -> u64 {
         .parse::<f64>()
         .expect("invariant: the literal is a valid float")
         .to_bits()
+}
+
+fn scale<U: LinearUnit<D>, D>() -> u64 {
+    U::SCALE.to_bits()
+}
+
+#[test]
+fn every_decimal_power_unit_is_the_nearest_double_to_its_decimal_value() {
+    let cases = [
+        (scale::<SquareMillimeter, Area>(), "1e-6", "mm²"),
+        (scale::<SquareCentimeter, Area>(), "1e-4", "cm²"),
+        (scale::<SquareDecimeter, Area>(), "1e-2", "dm²"),
+        (scale::<SquareDecameter, Area>(), "1e2", "dam²"),
+        (scale::<SquareHectometer, Area>(), "1e4", "hm²"),
+        (scale::<SquareKilometer, Area>(), "1e6", "km²"),
+        (scale::<CubicMillimeter, Volume>(), "1e-9", "mm³"),
+        (scale::<CubicCentimeter, Volume>(), "1e-6", "cm³"),
+        (scale::<CubicDecimeter, Volume>(), "1e-3", "dm³"),
+    ];
+    for (observed, decimal, symbol) in cases {
+        assert_eq!(observed, nearest(decimal), "{symbol}");
+    }
+}
+
+#[test]
+fn units_that_predate_the_shared_mechanism_keep_their_literal_values() {
+    assert_eq!(scale::<SquareCentimeter, Area>(), 1.0e-4_f64.to_bits());
+    assert_eq!(scale::<CubicMillimeter, Volume>(), 1.0e-9_f64.to_bits());
+}
+
+#[test]
+fn metric_power_spellings_denote_the_unit_they_alias() {
+    assert_eq!(scale::<SquareDecameter, Area>(), scale::<Are, Area>());
+    assert_eq!(scale::<SquareHectometer, Area>(), scale::<Hectare, Area>());
+    assert_eq!(scale::<CubicDecimeter, Volume>(), scale::<Liter, Volume>());
+    assert_eq!(
+        scale::<CubicCentimeter, Volume>(),
+        scale::<Prefixed<Milli, Liter>, Volume>()
+    );
 }
 
 /// The result range the `Prefixed` and `Power` rustdoc guarantees.
@@ -150,4 +194,28 @@ fn every_prefix_of_a_decimal_root_is_the_nearest_double_to_its_decade() {
     assert_every_decimal_prefix!(Pressure, Bar, 5);
     assert_every_decimal_prefix!(Acceleration, Gal, -2);
     assert_every_decimal_prefix!(Area, Barn, -28);
+}
+
+#[test]
+fn the_unicode_fahrenheit_marker_is_the_ascii_marker_under_another_symbol() {
+    assert_eq!(
+        <Fahrenheit as LinearUnit<TemperatureDifference>>::SYMBOL,
+        "°F"
+    );
+    assert_eq!(
+        scale::<Fahrenheit, TemperatureDifference>(),
+        scale::<DegreeFahrenheit, TemperatureDifference>()
+    );
+    assert_eq!(
+        <Fahrenheit as AffineUnit<ThermodynamicTemperature>>::SYMBOL,
+        "°F"
+    );
+    assert_eq!(
+        <Fahrenheit as AffineUnit<ThermodynamicTemperature>>::SCALE.to_bits(),
+        <DegreeFahrenheit as AffineUnit<ThermodynamicTemperature>>::SCALE.to_bits()
+    );
+    assert_eq!(
+        <Fahrenheit as AffineUnit<ThermodynamicTemperature>>::OFFSET.to_bits(),
+        <DegreeFahrenheit as AffineUnit<ThermodynamicTemperature>>::OFFSET.to_bits()
+    );
 }

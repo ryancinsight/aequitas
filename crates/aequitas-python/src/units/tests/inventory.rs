@@ -9,6 +9,7 @@
 use aequitas::systems::si::dimensions;
 
 use crate::tag::TaggedDimension;
+use crate::units::registry::{Quantity, Unit};
 use crate::units::{all, by_name};
 
 #[test]
@@ -61,17 +62,47 @@ fn registry_tags_match_the_type_level_dimensions() {
     );
 }
 
+/// A symbol carried by two units of one quantity, which no lookup can resolve.
+fn duplicated_symbol(quantity: &Quantity) -> Option<&'static str> {
+    let mut symbols = std::collections::HashSet::new();
+    quantity.symbols().find(|symbol| !symbols.insert(*symbol))
+}
+
 #[test]
 fn every_symbol_resolves_once_per_named_quantity() {
     for quantity in all() {
-        let mut symbols = std::collections::HashSet::new();
+        assert_eq!(
+            duplicated_symbol(quantity),
+            None,
+            "{} has a duplicate symbol",
+            quantity.name
+        );
         for symbol in quantity.symbols() {
-            assert!(
-                symbols.insert(symbol),
-                "{} has duplicate {symbol}",
-                quantity.name
-            );
             assert!(quantity.unit(symbol).is_some());
         }
     }
+}
+
+#[test]
+fn a_symbol_shared_by_two_units_is_detected() {
+    const CONFLICTING: Quantity = Quantity {
+        name: "area",
+        alias: "Area",
+        tag: <dimensions::Area as TaggedDimension>::TAG,
+        units: &[
+            Unit {
+                name: "Are",
+                symbol: "a",
+                scale: 1.0e2,
+                offset: None,
+            },
+            Unit {
+                name: "Year",
+                symbol: "a",
+                scale: 3.15e7,
+                offset: None,
+            },
+        ],
+    };
+    assert_eq!(duplicated_symbol(&CONFLICTING), Some("a"));
 }
