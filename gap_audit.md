@@ -1,5 +1,27 @@
 # Aequitas gap audit
 
+## Incremental release baseline
+
+Reviewed [aequitas 0.5.0](Cargo.toml) at [e28f4b022781](https://github.com/ryancinsight/aequitas/tree/e28f4b0227811973b6d0d1723604da8ac563abb6). The exact version appears in the [registry](https://crates.io/crates/aequitas/0.5.0).
+
+The next [patch] checkpoint uses [dimension laws](tests/dimension_laws.rs). [Target version and acceptance criteria](backlog.md#aequitas-stable-qualification).
+
+## Runtime 0.1.0 fractional SI exponents [minor]
+
+The local runtime crate reflects static powers into exact rationals and
+shares one dimension per buffer. Property tests compare finite binary
+orders with independent rational decoding and verify cancellation, with
+explicit subnormal, maximum-finite and one-third cases. The all-feature
+workspace passes 289 tests. The normalized runtime package builds against
+published Aequitas 0.5.0, and the no-default-features build passes.
+crates.io published runtime 0.1.0 on 2026-11-22. The active sparse-index
+entry and the downloaded archive both have SHA-256
+`86ce35356a62344c3fc70d6ea278d6595b5af24285c8b6eb3b7148fe32b38116`.
+The archive records source `1ee67958fa4fc456c86f37ec72d31efce7dab2b0`,
+the revision named by `crate-aequitas-runtime-v0.1.0`. Kwavers resolves
+the registry package in a clean checkout without an adjacent provider.
+[Registry record](https://crates.io/crates/aequitas-runtime/0.1.0)
+
 ## AEQ-PY-RUST-REGISTRY [minor] — published and verified 2026-11-21
 
 [aequitas-python 0.1.0](https://crates.io/crates/aequitas-python/0.1.0)
