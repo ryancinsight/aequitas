@@ -4,7 +4,9 @@ use typenum::{B1, Integer, IsGreaterOrEqual, IsLessOrEqual, N2147483648, P214748
 
 use crate::dimension::PowDimension;
 
-use super::{Unit, UnitDimension, expression::checked_scale, private::Sealed};
+use super::{
+    Unit, UnitDimension, decimal::decade_power, expression::checked_scale, private::Sealed,
+};
 
 /// Integer power of a linear unit, using a Typenum integer exponent.
 /// The exponent must fit a signed 32-bit integer; larger type-level values
@@ -12,6 +14,12 @@ use super::{Unit, UnitDimension, expression::checked_scale, private::Sealed};
 ///
 /// `Power<Meter, typenum::P2>` is compatible with square metres;
 /// `Power<Second, typenum::N1>` is compatible with hertz.
+///
+/// A base whose scale is the nearest binary64 to `10^n` (`0 < |n| <= 22`) has
+/// the nearest binary64 to `10^(n·p)` as its `p`-th power scale while
+/// `|n·p| <= 22`. A prefixed unit is such a base only when its own
+/// floating-point scale is that double. Other scales are raised by squaring and
+/// round at each multiplication.
 ///
 /// Normalized exponents do not bypass semantic distinctions:
 ///
@@ -72,9 +80,14 @@ where
     }
 }
 
-// Exponentiation by squaring takes logarithmic const-evaluation work. Invert
-// first for negative powers so a representable reciprocal does not overflow.
+// A decimal base keeps its exponent exact (`decimal.rs`) and is rounded once.
+// Any other base uses exponentiation by squaring, which takes logarithmic
+// const-evaluation work and rounds at every multiplication. Invert first for
+// negative powers so a representable reciprocal does not overflow.
 const fn scale_power(mut base: f64, exponent: i32) -> f64 {
+    if let Some(scale) = decade_power(base, exponent) {
+        return checked_scale(scale);
+    }
     let mut remaining = exponent.unsigned_abs();
     if exponent < 0 {
         base = checked_scale(1.0 / base);

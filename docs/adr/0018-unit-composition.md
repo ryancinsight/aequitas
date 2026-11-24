@@ -4,6 +4,8 @@
 
 Accepted — 2026-09-21.
 
+Revised 2026-11-23: decade-scale powers round once, not per squaring.
+
 ## Context
 
 AEQ-UNIT-COMPOSITION (delivered in [#78](https://github.com/ryancinsight/aequitas/pull/78)) requires users
@@ -35,12 +37,17 @@ a conversion to a distinct semantic marker.
 
 Degree Celsius and Fahrenheit contribute temperature intervals, never offsets.
 Compound expressions cannot construct affine absolute temperatures. Integer
-powers use signed-32-bit-bounded Typenum exponents and const exponentiation by
-squaring. The type bounds prevent truncated scale exponents. A composed
-scale outside the finite positive f64 metadata range fails const evaluation;
-the scalar conversion still executes through `UnitScalar` at its own precision.
-Inverse conversions use provider-owned native division, not multiplication by
-a reciprocal that could overflow before a representable result is calculated.
+powers use signed-32-bit-bounded Typenum exponents. A scale that is the
+nearest binary64 to a decade `10^n` (`0 < |n| <= 22`) is raised by exponent
+addition and rounded once, `(10^n)^p = 10^(n·p)`, while `|n·p| <= 22`. Since
+`5^22 < 2^53`, `10^k` is exact for `0 <= k <= 22` and `10^-k` is one correctly
+rounded division. Every other scale uses const exponentiation by squaring and
+rounds at each multiplication. The type bounds prevent truncated scale
+exponents. A composed scale outside the finite positive f64 metadata range
+fails const evaluation; the scalar conversion still executes through
+`UnitScalar` at its own precision. Inverse conversions use provider-owned
+native division, not multiplication by a reciprocal that could overflow before
+a representable result is calculated.
 
 Equivalent expressions produce the same quantity type, not the same marker
 type. Formatting preserves the expression's grouping rather than looking up
@@ -58,9 +65,11 @@ not numerically interchangeable without conversion.
 
 ## Verification
 
-Value tests compare named and composed units, positive/negative/zero powers,
-scaled denominators, nested expressions, unnamed dimensions and formatting.
-Compile-fail doctests reject dimension and semantic mismatches. Existing
-quantity and binding tests guard named-unit behavior. The no-default-features
-check guards no-std support; generated-surface freshness guards the unchanged
-Python catalog. No performance improvement is claimed.
+Decade-scale tests compare `SCALE` bits with float-parser results, an oracle
+independent of the scale arithmetic. Value tests compare named and composed
+units, positive/negative/zero powers, scaled denominators, nested expressions,
+unnamed dimensions and formatting. Compile-fail doctests reject dimension and
+semantic mismatches. Existing quantity and binding tests guard named-unit
+behavior. The no-default-features check guards no-std support;
+generated-surface freshness guards the unchanged Python catalog. No
+performance improvement is claimed.

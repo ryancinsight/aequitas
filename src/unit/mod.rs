@@ -1,6 +1,7 @@
 //! Unit contracts.
 
 mod affine;
+mod decimal;
 mod expression;
 mod linear;
 mod power;
