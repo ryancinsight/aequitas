@@ -2,6 +2,7 @@ use core::marker::PhantomData;
 
 use crate::unit::{
     AffineUnit, LinearUnit, UnitDimension,
+    decimal::product_scale,
     expression::checked_scale,
     private::{Named, Sealed},
 };
@@ -10,9 +11,11 @@ use super::{Prefix, symbol::Symbol};
 
 /// A single prefix `P` applied to an eligible unit token `U`.
 ///
-/// Scale is the prefix factor times the base unit's scale. In compound
-/// expressions the entire prefixed token is raised to a power. Celsius
-/// retains its affine origin when prefixed as an absolute temperature.
+/// Scale is the prefix factor times the base unit's scale; when they are
+/// decades `10^a` and `10^b` with `0 < |a|, |b| <= 30` and `|a+b| <= 22` it is
+/// the nearest binary64 to `10^(a+b)`. In compound expressions the entire
+/// prefixed token is raised to a power. Celsius retains its affine origin when
+/// prefixed as an absolute temperature.
 ///
 /// ```
 /// use aequitas::{systems::si::{quantities::Length, units::Meter},
@@ -66,11 +69,11 @@ impl<P: Prefix<U>, U: Named> UnitDimension for Prefixed<P, U> {
 
 impl<D, P: Prefix<U>, U: LinearUnit<D>> LinearUnit<D> for Prefixed<P, U> {
     const SYMBOL: &'static str = Self::SYMBOL.as_str();
-    const SCALE: f64 = checked_scale(U::SCALE * P::FACTOR);
+    const SCALE: f64 = checked_scale(product_scale(U::SCALE, P::FACTOR));
 }
 
 impl<D, P: Prefix<U>, U: Named + AffineUnit<D>> AffineUnit<D> for Prefixed<P, U> {
     const SYMBOL: &'static str = Self::SYMBOL.as_str();
-    const SCALE: f64 = checked_scale(U::SCALE * P::FACTOR);
+    const SCALE: f64 = checked_scale(product_scale(U::SCALE, P::FACTOR));
     const OFFSET: f64 = U::OFFSET;
 }
