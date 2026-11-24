@@ -48,3 +48,36 @@
 - re-open trigger: the owner names a tool, or declines proof tooling and the gap is recorded as accepted.
 - next step: draft the Proposed ADR with the recommended tool once the owner answers.
 - milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
+
+<a id="AEQ-CONFORMANCE-GUARD-001"></a>
+## AEQ-CONFORMANCE-GUARD-001 — Fail a member PR that raises a conformance debt class
+
+- status: todo; priority: verification; needs: none
+- basis: a55971204a5c6e1fdd22de5636927272d6415c8e
+- scope: `.github/workflows/ci.yml`, the `main` branch required status checks
+- outcome: a pull request that raises a debt class above the Atlas baseline row for `aequitas` fails a required check.
+  `.github/workflows/ci.yml:33-45` calls `lockfile-guard.yml` and `semver-gate.yml` from Atlas and not
+  `conformance-guard.yml` (inputs `atlas-ref`, `member`). The runtime crate reached `main` without
+  `#![deny(missing_docs)]`, raising `missing_deny_docs` 0 to 1 until `0d0efbe91de676f991451de50e200984aaa46f65`.
+- acceptance: `ci.yml` calls `ryancinsight/atlas/.github/workflows/conformance-guard.yml@<full SHA>` with `atlas-ref`
+  equal to it and `member: aequitas`; its context is in `gh api repos/ryancinsight/aequitas/branches/main/protection
+  --jq .required_status_checks.contexts` (today `verify`, `Python bindings`, `supply-chain`,
+  `Lockfile integrity / Lockfile integrity`, `Python bindings (free-threaded)`); a probe branch removing
+  `#![deny(missing_docs)]` from one crate fails it.
+- next step: add the job beside `lockfile` at the current Atlas `main` commit, then require its context.
+- milestone: M-1.0
+
+<a id="AEQ-RUNTIME-FORBID-UNSAFE-001"></a>
+## AEQ-RUNTIME-FORBID-UNSAFE-001 — Forbid unsafe code at the runtime crate root
+
+- status: todo; priority: tightening; needs: none
+- basis: a55971204a5c6e1fdd22de5636927272d6415c8e
+- scope: `crates/aequitas-runtime/src/lib.rs`
+- outcome: the crate root carries `#![forbid(unsafe_code)]` as the root crate does (`src/lib.rs:12`). The crate has no
+  `unsafe` (`git grep -n unsafe -- crates/aequitas-runtime` prints nothing) and inherits `unsafe_code = "forbid"` through
+  `[lints] workspace = true`, so the attribute adds no new restriction; it keeps the guarantee visible in the source
+  and independent of the manifest, per the stack's crate-level convention.
+- acceptance: `git grep -n 'forbid(unsafe_code)' -- crates/aequitas-runtime/src/lib.rs` prints the attribute (empty today) and
+  the workspace format, clippy and test gate passes.
+- next step: add the attribute after `#![no_std]`.
+- milestone: M-1.0
