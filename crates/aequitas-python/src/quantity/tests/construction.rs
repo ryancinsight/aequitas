@@ -89,35 +89,71 @@ fn metric_power_notation_resolves_in_both_directions() {
     for (quantity_name, symbol, reference, expected) in cases {
         let q = PyQuantity::from_unit(1.0, symbol, quantity_name)
             .unwrap_or_else(|error| panic!("{quantity_name}/{symbol} must construct: {error}"));
-        let observed = q.in_unit(reference).expect("reference unit resolves");
-        assert!(
-            (observed - expected).abs() <= f64::EPSILON * expected,
-            "{symbol} in {reference}: {observed} != {expected}"
+        assert_exact(
+            q.in_unit(reference).expect("reference unit resolves"),
+            expected,
         );
         let q = PyQuantity::from_unit(expected, reference, quantity_name)
             .expect("reference unit constructs");
-        let observed = q.in_unit(symbol).expect("metric power symbol reads back");
-        assert!(
-            (observed - 1.0).abs() <= f64::EPSILON,
-            "{symbol}: {observed}"
+        assert_exact(
+            q.in_unit(symbol).expect("metric power symbol reads back"),
+            1.0,
         );
     }
-    assert!(PyQuantity::from_unit(1.0, "cm³", "area").is_err());
-    assert!(PyQuantity::from_unit(1.0, "dm²", "volume").is_err());
 }
+
+/// Assert `symbol` is refused for `quantity` with a `ValueError` naming both.
+#[track_caller]
+fn assert_unknown_unit(symbol: &str, quantity: &str) {
+    let error = PyQuantity::from_unit(1.0, symbol, quantity).expect_err("spelling is refused");
+    Python::attach(|py| {
+        assert!(error.is_instance_of::<pyo3::exceptions::PyValueError>(py));
+    });
+    let message = error.to_string();
+    let prefix = format!("ValueError: unknown unit '{symbol}' for {quantity};");
+    assert!(message.starts_with(&prefix), "{message}");
+}
+
+#[test]
+fn metric_power_symbols_belong_only_to_their_dimension() {
+    assert_unknown_unit("cm³", "area");
+    assert_unknown_unit("dm²", "volume");
+}
+
+#[test]
+fn spellings_outside_the_accepted_set_are_refused() {
+    assert_unknown_unit("km³", "volume");
+    assert_unknown_unit("dam³", "volume");
+    assert_unknown_unit("hm³", "volume");
+    assert_unknown_unit("cc", "volume");
+    assert_unknown_unit("\u{2109}", "thermodynamic_temperature");
+    assert_unknown_unit("\u{3bc}m", "length");
+}
+
+/// Absolute error bound for reading a temperature back through kelvin.
+///
+/// Reading `v` degrees Fahrenheit computes `base = fl(fl(v·s) + o)` and
+/// `v' = fl(fl(base − o) / s)` with the stored scale `s = 5/9` and offset
+/// `o`, the same stored values in both directions, so their representation
+/// errors cancel. To first order in `ε = f64::EPSILON`, for `v = 32`:
+/// `v·s ≈ 17.8` lies in `[16, 32)`, whose half-ulp is `8ε`; `base ≈ 273.15`
+/// lies in `[256, 512)`, whose half-ulp is `128ε`; `base − o ≈ 17.8` is exact
+/// by Sterbenz's lemma, since `o ≈ 255.4` is within a factor of two of `base`.
+/// Division by `s` amplifies the base-side error by `1/s = 9/5`, and the
+/// result `≈ 32` lies in `[32, 64)`, whose half-ulp is `16ε`.
+const FAHRENHEIT_ROUND_TRIP_BOUND: f64 = ((128.0 + 8.0) * (9.0 / 5.0) + 16.0) * f64::EPSILON;
 
 #[test]
 fn unicode_fahrenheit_retains_absolute_and_interval_behavior() {
     let freezing = PyQuantity::from_unit(32.0, "°F", "thermodynamic_temperature")
         .expect("Unicode Fahrenheit resolves for an absolute temperature");
     assert_exact(freezing.in_unit("°C").expect("Celsius reads back"), 0.0);
+    let read_back = freezing
+        .in_unit("°F")
+        .expect("Unicode Fahrenheit reads back");
     assert!(
-        (freezing
-            .in_unit("°F")
-            .expect("Unicode Fahrenheit reads back")
-            - 32.0)
-            .abs()
-            < 1e-12
+        (read_back - 32.0).abs() <= FAHRENHEIT_ROUND_TRIP_BOUND,
+        "{read_back}"
     );
     let interval = PyQuantity::from_unit(18.0, "°F", "temperature_difference")
         .expect("Unicode Fahrenheit resolves for an interval");

@@ -47,14 +47,14 @@ def test_logarithmic_levels_use_an_explicit_reference_and_kind() -> None:
 
 
 def test_metric_power_and_temperature_aliases() -> None:
-    assert aq.area(1.0, "mm²").in_unit("m²") == pytest.approx(1e-6, rel=1e-15)
-    assert aq.area(1.0, "dm²").in_unit("m²") == pytest.approx(0.01)
+    assert aq.area(1.0, "mm²").in_unit("m²") == 1e-6
+    assert aq.area(1.0, "dm²").in_unit("m²") == 0.01
     assert aq.area(1.0, "km²").in_unit("m²") == 1e6
     assert aq.area(1.0, "a").in_unit("dam²") == 1.0
     assert aq.area(1.0, "hm²").in_unit("ha") == 1.0
     assert aq.volume(1.0, "cm³").in_unit("mL") == 1.0
     assert aq.volume(1.0, "L").in_unit("dm³") == 1.0
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"unknown unit 'dm³' for area"):
         aq.area(1.0, "dm³")
 
     assert aq.thermodynamic_temperature(32.0, "°F").in_unit("°C") == 0.0
