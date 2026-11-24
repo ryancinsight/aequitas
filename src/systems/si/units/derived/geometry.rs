@@ -1,7 +1,17 @@
 use crate::{
     systems::si::dimensions,
-    unit::{LinearUnit, private::Sealed},
+    unit::{LinearUnit, Power, Unit, private::Sealed},
 };
+use typenum::{P2, P3};
+
+use super::super::{Centimeter, Millimeter};
+
+linear_units! {
+    /// Square centimetre, the area of a centimetre raised to the second power.
+    SquareCentimeter, Area, "cm²", <Power<Centimeter, P2> as Unit<dimensions::Area>>::SCALE;
+    /// Cubic millimetre, the volume of a millimetre raised to the third power.
+    CubicMillimeter, Volume, "mm³", <Power<Millimeter, P3> as Unit<dimensions::Volume>>::SCALE;
+}
 
 /// Square metre, the coherent SI unit of area.
 #[derive(Clone, Copy, Debug, Default)]
