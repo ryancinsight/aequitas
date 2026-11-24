@@ -15,9 +15,11 @@ use super::{
 /// `Power<Meter, typenum::P2>` is compatible with square metres;
 /// `Power<Second, typenum::N1>` is compatible with hertz.
 ///
-/// The scale of a decimal unit `10^n` (`|n| <= 22`) raised to `p` is the nearest
-/// binary64 to `10^(n·p)` while `|n·p| <= 22`. Other scales are raised by
-/// repeated multiplication and round at each step.
+/// A base whose scale is the nearest binary64 to `10^n` (`0 < |n| <= 22`) has
+/// the nearest binary64 to `10^(n·p)` as its `p`-th power scale while
+/// `|n·p| <= 22`. A prefixed unit is such a base when its root and prefix are
+/// decades and their summed exponent is within range. Other scales are raised
+/// by squaring and round at each multiplication.
 ///
 /// Normalized exponents do not bypass semantic distinctions:
 ///

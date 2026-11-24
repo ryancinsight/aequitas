@@ -4,6 +4,11 @@
 
 Accepted — 2026-09-21.
 
+Revised 2026-11-23: powers and prefixes of decade scales compose on their
+exponents and round once; every other power used squaring before. Repeated
+rounding left `Power<Prefixed<Micro, Bar>, P2>` one binary64 step below
+`1e-2`; scale tests compare against compiler-parsed decade literals.
+
 ## Context
 
 AEQ-UNIT-COMPOSITION (delivered in [#78](https://github.com/ryancinsight/aequitas/pull/78)) requires users
@@ -35,9 +40,17 @@ a conversion to a distinct semantic marker.
 
 Degree Celsius and Fahrenheit contribute temperature intervals, never offsets.
 Compound expressions cannot construct affine absolute temperatures. Integer
-powers use signed-32-bit-bounded Typenum exponents and const exponentiation by
-squaring. The type bounds prevent truncated scale exponents. A composed
-scale outside the finite positive f64 metadata range fails const evaluation;
+powers use signed-32-bit-bounded Typenum exponents. A scale that is the
+nearest binary64 to a decade `10^n` (`0 < |n| <= 22`) is raised by exponent
+addition and rounded once, `(10^n)^p = 10^(n·p)`, while `|n·p| <= 22`. A
+prefix on a decade root composes the same way, `10^a · 10^b = 10^(a+b)` for
+`0 < |a|, |b| <= 22` and `|a+b| <= 22`, so such a prefixed unit is itself a
+decade base. Since `5^22 < 2^53`, `10^k` is exact for `0 <= k <= 22` and
+`10^-k` is one correctly rounded division. Every other scale is raised by
+const exponentiation by squaring and rounds at each multiplication, and other
+products, quotients and prefixed scales use one floating-point operation.
+The type bounds prevent truncated scale exponents. A composed scale outside
+the finite positive f64 metadata range fails const evaluation;
 the scalar conversion still executes through `UnitScalar` at its own precision.
 Inverse conversions use provider-owned native division, not multiplication by
 a reciprocal that could overflow before a representable result is calculated.

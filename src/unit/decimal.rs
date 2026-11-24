@@ -5,7 +5,9 @@
 //! multiplication rounds again at every step: `0.1 * 0.1` is one binary64 step
 //! above the nearest double to `0.01`. A scale that is itself `10^n` is
 //! instead raised by exponent addition, `(10^n)^p = 10^(n·p)`, and rounded
-//! once.
+//! once. A prefix applied to a decade root composes the same way, as
+//! `10^a · 10^b = 10^(a+b)`; only operands with `0 < |n| <= 22` are
+//! recognised, and the composed exponent must also stay within that range.
 
 /// Largest `n` for which `10^n` is exactly representable in binary64.
 ///
@@ -60,12 +62,26 @@ pub(super) const fn decade_power(scale: f64, exponent: i32) -> Option<f64> {
     }
 }
 
+/// `left · right`, the nearest binary64 to `10^(a+b)` when `left` is `10^a`
+/// and `right` is `10^b` with `0 < |a|, |b| <= 22` and `|a+b| <= 22`, and the
+/// floating-point product otherwise.
+pub(super) const fn product_scale(left: f64, right: f64) -> f64 {
+    if let Some(left_decade) = decade_of(left)
+        && let Some(right_decade) = decade_of(right)
+        && let Some(sum) = left_decade.checked_add(right_decade)
+        && let Some(scale) = power_of_ten(sum)
+    {
+        return scale;
+    }
+    left * right
+}
+
 #[cfg(test)]
 mod tests {
     extern crate std;
     use std::format;
 
-    use super::{MAX_EXACT_DECADE, decade_of, decade_power, power_of_ten};
+    use super::{MAX_EXACT_DECADE, decade_of, decade_power, power_of_ten, product_scale};
 
     /// Rust's float parser rounds to nearest, independent of the multiply and
     /// divide used by [`power_of_ten`].
@@ -129,6 +145,25 @@ mod tests {
             1.0e-3 * 1.0e-3 * 1.5,
         ] {
             assert_eq!(decade_of(scale), None, "{scale}");
+        }
+    }
+
+    #[test]
+    fn a_decade_product_is_one_rounding_of_the_summed_exponent() {
+        for left in (-MAX_EXACT_DECADE..=MAX_EXACT_DECADE).filter(|n| *n != 0) {
+            for right in (-MAX_EXACT_DECADE..=MAX_EXACT_DECADE).filter(|n| *n != 0) {
+                let (a, b) = (nearest(left), nearest(right));
+                let expected = if (left + right).abs() <= MAX_EXACT_DECADE {
+                    nearest(left + right)
+                } else {
+                    a * b
+                };
+                assert_eq!(
+                    product_scale(a, b).to_bits(),
+                    expected.to_bits(),
+                    "1e{left} * 1e{right}"
+                );
+            }
         }
     }
 }
