@@ -21,13 +21,13 @@
 - status: todo; priority: verification; needs: none
 - basis: a55971204a5c6e1fdd22de5636927272d6415c8e
 - scope: `.github/workflows/ci.yml`, the `main` required status checks
-- outcome: a PR that raises an `aequitas` debt class above its Atlas baseline row fails a required check; one that raises nothing
-  passes. `ci.yml:33-45` omits `conformance-guard.yml`; `missing_deny_docs` rose 0 to 1 until `0d0efbe91de676f991451de50e200984aaa46f65`.
-- acceptance: `ci.yml` calls `ryancinsight/atlas/.github/workflows/conformance-guard.yml@<full SHA>` with `atlas-ref` equal
-  to it and `member: aequitas`; `git -C <atlas> merge-base --is-ancestor <SHA> origin/main` exits 0; `gh api
-  repos/ryancinsight/aequitas/branches/main/protection --jq .required_status_checks.contexts` lists its context (today
-  `verify`, `Python bindings`, `supply-chain`, `Lockfile integrity / Lockfile integrity`, `Python bindings (free-threaded)`);
-  a probe branch removing `#![deny(missing_docs)]` from one crate fails it and an unmodified branch passes it.
+- outcome: a PR that raises an `aequitas` debt class above its Atlas baseline row fails a required check; one that raises nothing passes.
+  `ci.yml:33-45` omits `conformance-guard.yml`; `missing_deny_docs` rose 0 to 1 until `0d0efbe91de676f991451de50e200984aaa46f65`.
+- acceptance: `ci.yml` calls `ryancinsight/atlas/.github/workflows/conformance-guard.yml@<full SHA>` with `atlas-ref` equal to it and `member: aequitas`; at the
+  delivering PR's head, after `git -C <atlas> fetch origin`, `<SHA>` equals `git -C <atlas> rev-parse origin/main` (pins `4cb1fe2f560c47aee89ab8a783a8d8c80a12ccd9`
+  and `3d480848872a` are rejected); `gh api repos/ryancinsight/aequitas/branches/main/protection --jq .required_status_checks.contexts` lists its context (today
+  `verify`, `Python bindings`, `supply-chain`, `Lockfile integrity / Lockfile integrity`, `Python bindings (free-threaded)`); probe branches that remove
+  `#![deny(missing_docs)]` from one crate or add a board item with status and priority but no `milestone:` fail it; an unmodified branch passes.
 - next step: add the job beside `lockfile` at the current Atlas `main` commit, then require its context.
 - milestone: M-1.0
 
@@ -42,8 +42,7 @@
   system checks dimensional consistency (`src/dimension/`); value identities are only runtime-tested.
 - acceptance: the pilot states and proves one law in the chosen tool and records what it covers: the
   typenum projections, the external `FloatElement::powf`, and the `Quantity` wrappers.
-- blocker: either toolchain adds a proof dependency to dev hosts and CI; the owner approves before any
-  install.
+- blocker: either toolchain adds a proof dependency to dev hosts and CI; the owner approves before any install.
 - re-open trigger: the owner names a tool, or declines proof tooling and the gap is recorded as accepted.
 - next step: draft the Proposed ADR with the recommended tool once the owner answers.
 - milestone: M-ecosystem (owner-gated; does not gate 1.0 per ADR 0020).
@@ -54,12 +53,13 @@
 - status: todo; priority: tightening; needs: none
 - basis: a55971204a5c6e1fdd22de5636927272d6415c8e
 - scope: `crates/aequitas-runtime/src/lib.rs`
-- outcome: the crate root carries `#![forbid(unsafe_code)]` as the root crate does (`src/lib.rs:12`). The crate has no
-  `unsafe` (`git grep -n unsafe -- crates/aequitas-runtime` prints nothing) and inherits `unsafe_code = "forbid"` through
-  `[lints] workspace = true`, so the attribute adds no new restriction; it keeps the guarantee visible in the source
-  and independent of the manifest.
-- acceptance: `git grep -n -E '^#!\[forbid\(unsafe_code\)\]$' -- crates/aequitas-runtime/src/lib.rs` prints the attribute
-  line (no match today) and the workspace format, clippy and test gate passes.
+- outcome: the crate root carries `#![forbid(unsafe_code)]` as the root crate does (`src/lib.rs:12`). The crate has no `unsafe`
+  (`git grep -n unsafe -- crates/aequitas-runtime` prints nothing) and inherits `unsafe_code = "forbid"` through `[lints] workspace = true`, so the
+  attribute adds no new restriction; it keeps the guarantee visible in the source and independent of the manifest.
+- acceptance: `git grep -n -E '^#!\[forbid\(unsafe_code\)\]$' -- crates/aequitas-runtime/src/lib.rs` prints the attribute line (no match today) but
+  also matches a block-commented attribute, so the delivering PR shows the forbid is active without the manifest: a probe removing
+  `[lints] workspace = true` from `crates/aequitas-runtime/Cargo.toml` and adding an `unsafe` block fails to compile with an error naming
+  `unsafe_code` (a block-commented attribute compiles, so fails this acceptance); the workspace format, clippy and test gate passes.
 - next step: add the attribute after `#![no_std]`.
 - milestone: M-1.0
 
@@ -71,9 +71,8 @@
 - scope: `crates/aequitas-python/`, `.github/workflows/python-release.yml`
 - outcome: `aequitas-python` (import package `pyaequitas`) is on PyPI with every SI quantity and unit, usable from
   `kwavers-python` ([ADR 0016](docs/adr/0016-python-quantity-binding.md)); the wheel pipeline is delivered (#72, `d81c9fb`).
-- acceptance: every exported dimension round-trips against `Quantity::in_unit`; semantic normalization
-  matches `MultiplyDimension`/`DivideDimension`; codegen regenerate-and-diff is clean; `pytest` is green
-  against the built wheel; the `published` job installs the released wheel back.
+- acceptance: every exported dimension round-trips against `Quantity::in_unit`; semantic normalization matches `MultiplyDimension`/`DivideDimension`;
+  codegen regenerate-and-diff is clean; `pytest` is green against the built wheel; the `published` job installs the released wheel back.
 - blocker: the PyPI trusted publisher is not registered (project `aequitas-python`, owner `ryancinsight`,
   repo `aequitas`, workflow `python-release.yml`, environment `pypi`); `pypi.org/pypi/aequitas-python/json` was 404 on 2026-11-13.
 - re-open trigger: the publisher is registered.
