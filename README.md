@@ -24,6 +24,15 @@ conversion factors, including expressions without catalog names. Compound
 formatting preserves the expression; it does not select a named-unit spelling.
 See [linear units](docs/book/linear_units.md) and [the composition decision](docs/adr/0018-unit-composition.md).
 
+## Runtime fractional dimensions
+
+Use the companion `aequitas-runtime` crate when the exponent is selected
+at runtime. One `RuntimeDimension` carries seven exact rational SI powers
+for a scalar or an entire homogeneous buffer. `RuntimeQuantity::from`
+reflects the axes of a static quantity in coherent SI units. For example,
+the time half derivative of pressure carries exponents (−1, 1, −5/2, 0,
+0, 0, 0). [Design and verification](docs/adr/0023-runtime-fractional-dimensions.md)
+
 ## SI Brochure coverage
 
 Aequitas covers the seven SI base units, 22 specially named SI derived

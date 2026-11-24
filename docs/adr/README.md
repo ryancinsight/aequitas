@@ -30,3 +30,4 @@
 | [0019](0019-eunomia-010-cohort.md) | Adopt the Eunomia 0.10 datatype contract | Accepted |
 | [0020](0020-release-scope-1-0.md) | Aequitas release scope for 1.0 | Accepted |
 | [0022](0022-si-brochure-units.md) | Complete the SI Brochure unit catalog | Proposed |
+| [0023](0023-runtime-fractional-dimensions.md) | Represent fractional SI dimensions at runtime | Accepted |

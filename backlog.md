@@ -12,6 +12,9 @@
 - [ ] [minor] **0.6.0 if the fractional-dimension proposal lands.** Resolve #172 before freeze. If admitted, compose fractional exponents and recover the original dimension after inversion. Otherwise carry the existing integer contract directly to beta.
 - [ ] [major] **1.0.0-beta.1 → 1.0.0-rc.1 → 1.0.0.** Freeze the supported surface at beta. A default-off quantity consumer resolves one Eunomia identity and reproduces the unit and dimension laws. Repeat the applicable exits on the exact RC before stable promotion. Attach exact-revision evidence for the local exits and this member’s [Atlas qualification criteria](https://github.com/ryancinsight/atlas/blob/17b0124a7548ad81e817284afc5cb115c1d1bc78/docs/parity/repositories.json).
 
+- [minor] Runtime 0.1.0 is published. The [release record](gap_audit.md)
+  identifies the checksummed archive and source tag.
+
 <a id="AEQ-PY-BINDING-001"></a>
 ## AEQ-PY-BINDING-001 — Publish the quantity surface as a Python wheel
 
