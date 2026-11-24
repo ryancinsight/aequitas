@@ -56,9 +56,8 @@
 - basis: a55971204a5c6e1fdd22de5636927272d6415c8e
 - scope: `.github/workflows/ci.yml`, the `main` branch required status checks
 - outcome: a pull request that raises a debt class above the Atlas baseline row for `aequitas` fails a required check.
-  `.github/workflows/ci.yml:33-45` calls `lockfile-guard.yml` and `semver-gate.yml` from Atlas and not
-  `conformance-guard.yml` (inputs `atlas-ref`, `member`). The runtime crate reached `main` without
-  `#![deny(missing_docs)]`, raising `missing_deny_docs` 0 to 1 until `0d0efbe91de676f991451de50e200984aaa46f65`.
+  `.github/workflows/ci.yml:33-45` calls Atlas `lockfile-guard.yml` and `semver-gate.yml`, not `conformance-guard.yml`
+  (inputs `atlas-ref`, `member`); `missing_deny_docs` rose 0 to 1 on `main` until `0d0efbe91de676f991451de50e200984aaa46f65`.
 - acceptance: `ci.yml` calls `ryancinsight/atlas/.github/workflows/conformance-guard.yml@<full SHA>` with `atlas-ref`
   equal to it and `member: aequitas`; its context is in `gh api repos/ryancinsight/aequitas/branches/main/protection
   --jq .required_status_checks.contexts` (today `verify`, `Python bindings`, `supply-chain`,
