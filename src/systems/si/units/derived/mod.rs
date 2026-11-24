@@ -10,7 +10,10 @@ pub use electrical::{
     Coulomb, CoulombPerCubicMeter, CoulombPerSquareMeter, Farad, FaradSquareMeter, MeterPerVolt,
     Ohm, PascalPerVolt, Siemens, SiemensPerMeter, Tesla, Volt, VoltPerPascal,
 };
-pub use geometry::{CubicMeter, PerCubicMeter, PerMeter, SquareMeter, SquareMeterPerKilogram};
+pub use geometry::{
+    CubicMeter, CubicMillimeter, PerCubicMeter, PerMeter, SquareCentimeter, SquareMeter,
+    SquareMeterPerKilogram,
+};
 pub use kinematics::{
     Hertz, MeterPerSecond, MeterPerSecondKelvin, MeterPerSecondSquared, MolePerCubicMeter,
     MolePerCubicMeterSecond, MolePerSquareMeterSecond, PerSecond,

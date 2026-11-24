@@ -7,13 +7,14 @@ use aequitas::{
     dimension::Dimension,
     quantity::UnitDisplay,
     systems::si::{
+        dimensions,
         quantities::{Area, Dimensionless, Intensity},
         units::{
-            Centimeter, DegreeCelsius, Kelvin, Meter, Nanometer, Second, SquareCentimeter, Watt,
-            WattPerSquareMeter,
+            Centimeter, CubicMillimeter, DegreeCelsius, Kelvin, Meter, Nanometer, Second,
+            SquareCentimeter, Watt, WattPerSquareMeter,
         },
     },
-    unit::{Power as UnitPower, Product, Quotient},
+    unit::{LinearUnit, Power as UnitPower, Product, Quotient},
 };
 use eunomia::{Complex32, Complex64, UnitScalar};
 use typenum::{N1, N2147483648, P1, P2, P20, P35, P2147483647, Z0};
@@ -205,4 +206,16 @@ fn composed_unit_display_renders_the_expression() {
     let rendered = format!("{}", UnitDisplay::new(&intensity, Composed::default()));
 
     assert_eq!(rendered, "12 (W/(m*m))");
+}
+
+#[test]
+fn units_defined_through_power_keep_their_literal_scales() {
+    assert_eq!(
+        <SquareCentimeter as LinearUnit<dimensions::Area>>::SCALE.to_bits(),
+        1.0e-4_f64.to_bits()
+    );
+    assert_eq!(
+        <CubicMillimeter as LinearUnit<dimensions::Volume>>::SCALE.to_bits(),
+        1.0e-9_f64.to_bits()
+    );
 }
