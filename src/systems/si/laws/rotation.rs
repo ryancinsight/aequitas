@@ -1,8 +1,15 @@
-//! Quantity identities that require more information than a common dimension.
+//! Rotation kinematics: the cycle/phase-rate bridge.
+//!
+//! One cycle advances the phase by exactly 2π radians (SI Brochure §2.3.4),
+//! so [`AngularVelocity::from_frequency`] multiplies by τ and
+//! [`AngularVelocity::frequency`] divides by it. The cycle frequency
+//! (`Frequency`, Hz) and the phase rate (`AngularVelocity`, rad/s) are
+//! distinct semantic dimensions; this bridge is the only typed conversion
+//! between them.
 
 use eunomia::UnitScalar;
 
-use super::quantities::{AbsorbedDose, AngularVelocity, Dimensionless, DoseEquivalent, Frequency};
+use super::super::quantities::{AngularVelocity, Frequency};
 
 impl<T: UnitScalar> AngularVelocity<T> {
     /// Angular frequency of a periodic phenomenon. One cycle advances its
@@ -27,15 +34,5 @@ impl<T: UnitScalar> AngularVelocity<T> {
     #[must_use]
     pub fn frequency(self) -> Frequency<T> {
         Frequency::from_base(self.into_base().divide_by_factor(core::f64::consts::TAU))
-    }
-}
-
-impl<T: core::ops::Mul<Output = T>> DoseEquivalent<T> {
-    /// Dose equivalent `H = Q D` for a specified dimensionless quality factor
-    /// `Q` and absorbed dose `D` (SI Brochure §2.3.5).
-    #[inline]
-    #[must_use]
-    pub fn from_absorbed_dose(dose: AbsorbedDose<T>, quality_factor: Dimensionless<T>) -> Self {
-        Self::from_base(dose.into_base() * quality_factor.into_base())
     }
 }

@@ -4,11 +4,11 @@ use aequitas::dimension::{
     AbsoluteTemperatureSemantics, ActivityConcentrationSemantics, ActivitySemantics,
     AngleSemantics, AngularAccelerationSemantics, AngularVelocitySemantics, BaseSemantics,
     DoseEquivalentRateSemantics, DoseEquivalentSemantics, FlexuralRigiditySemantics,
-    InformationSemantics, LuminanceSemantics, LuminousFluxSemantics, MechanicalImpedanceSemantics,
-    MolarConcentrationSemantics, RadianceSemantics, RadiantIntensitySemantics,
-    RadiationExposureSemantics, ReactivePowerSemantics, ReciprocalVolumeSemantics,
-    SolidAngleSemantics, SpringStiffnessSemantics, StressSemantics, SurfaceTensionSemantics,
-    TemperatureDifferenceSemantics, TorqueSemantics,
+    InformationSemantics, LuminanceSemantics, LuminousFluxSemantics, MassDiffusivitySemantics,
+    MechanicalImpedanceSemantics, MolarConcentrationSemantics, RadianceSemantics,
+    RadiantIntensitySemantics, RadiationExposureSemantics, ReactivePowerSemantics,
+    ReciprocalVolumeSemantics, SolidAngleSemantics, SpringStiffnessSemantics, StressSemantics,
+    SurfaceTensionSemantics, TemperatureDifferenceSemantics, TorqueSemantics,
 };
 
 /// Runtime image of a type-level semantic marker.
@@ -73,6 +73,8 @@ pub enum SemanticTag {
     SolidAngle,
     /// Moment of force.
     Torque,
+    /// Mass diffusivity.
+    MassDiffusivity,
 }
 
 impl SemanticTag {
@@ -110,6 +112,7 @@ impl SemanticTag {
             Self::ReactivePower => "reactive_power",
             Self::SolidAngle => "solid_angle",
             Self::Torque => "torque",
+            Self::MassDiffusivity => "mass_diffusivity",
         }
     }
 
@@ -151,6 +154,7 @@ impl SemanticTag {
             "reactive_power" => Some(Self::ReactivePower),
             "solid_angle" => Some(Self::SolidAngle),
             "torque" => Some(Self::Torque),
+            "mass_diffusivity" => Some(Self::MassDiffusivity),
             _ => None,
         }
     }
@@ -168,7 +172,7 @@ impl SemanticTag {
     ///
     /// Exhaustive by construction: adding a variant without extending this
     /// array fails the round-trip test in this module's test module.
-    pub const ALL: [Self; 26] = [
+    pub const ALL: [Self; 27] = [
         Self::Base,
         Self::AbsoluteTemperature,
         Self::TemperatureDifference,
@@ -195,6 +199,7 @@ impl SemanticTag {
         Self::ReactivePower,
         Self::SolidAngle,
         Self::Torque,
+        Self::MassDiffusivity,
     ];
 }
 
@@ -241,6 +246,7 @@ tagged_semantics! {
     InformationSemantics => Information,
     LuminanceSemantics => Luminance,
     LuminousFluxSemantics => LuminousFlux,
+    MassDiffusivitySemantics => MassDiffusivity,
     RadianceSemantics => Radiance,
     RadiantIntensitySemantics => RadiantIntensity,
     ReactivePowerSemantics => ReactivePower,

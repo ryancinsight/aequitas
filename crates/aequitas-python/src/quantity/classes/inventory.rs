@@ -108,6 +108,7 @@ crate::quantity_classes! {
     MassDensityPerTemperature: dimensions::MassDensityPerTemperature,
     MassDensityRate: dimensions::MassDensityRate,
     DynamicViscosity: dimensions::DynamicViscosity,
+    MassDiffusivity: dimensions::MassDiffusivity,
     VolumetricFlowRate: dimensions::VolumetricFlowRate,
     AcousticImpedance: dimensions::AcousticImpedance,
     Intensity: dimensions::Intensity {

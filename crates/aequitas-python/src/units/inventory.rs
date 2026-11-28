@@ -328,6 +328,9 @@ crate::quantity_inventory! {
     },
     kinematic_viscosity => KinematicViscosity, dimensions::KinematicViscosity {
     },
+    mass_diffusivity => MassDiffusivity, dimensions::MassDiffusivity {
+        SquareMeterPerSecond: units::SquareMeterPerSecond,
+    },
     volumetric_flow_rate => VolumetricFlowRate, dimensions::VolumetricFlowRate {
         CubicMeterPerSecond: units::CubicMeterPerSecond,
     },

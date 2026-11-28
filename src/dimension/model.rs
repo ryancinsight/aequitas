@@ -20,6 +20,13 @@ pub struct SurfaceTensionSemantics;
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct SpringStiffnessSemantics;
 
+/// Semantic marker for mass diffusivity.
+///
+/// Fickian mass diffusion and Fourier heat conduction share the `m²/s` SI
+/// exponents; the marker keeps a mass-diffusion coefficient from being
+/// substituted for a thermal diffusivity at public boundaries.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+pub struct MassDiffusivitySemantics;
 /// Semantic marker for force-per-velocity mechanical impedance.
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct MechanicalImpedanceSemantics;

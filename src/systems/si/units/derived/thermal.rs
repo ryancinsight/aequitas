@@ -115,6 +115,11 @@ impl LinearUnit<dimensions::ThermalDiffusivity> for SquareMeterPerSecond {
     const SCALE: f64 = 1.0;
 }
 
+impl LinearUnit<dimensions::MassDiffusivity> for SquareMeterPerSecond {
+    const SYMBOL: &'static str = "m²/s";
+    const SCALE: f64 = 1.0;
+}
+
 /// Kilogram per cubic metre, the coherent SI unit of mass density.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct KilogramPerCubicMeter;

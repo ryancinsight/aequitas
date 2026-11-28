@@ -292,6 +292,21 @@ nextest `252/252`, doctests, `cargo doc -D warnings`,
 performance improvement is claimed, and the 208 lines of value tests are the
 ones that came with the change.
 
+**`MassDiffusivity` is not a gap being closed but a capability added to a
+boundary that was already dimension-complete:** the `m²/s` exponents already
+existed three times over (`ThermalDiffusivity`, `KinematicViscosity`,
+`AreaPerTime`) with no semantic distinction between mass diffusion and heat
+conduction. The addition is one marker (`MassDiffusivitySemantics`), one
+dimension alias, one quantity alias, and a second `LinearUnit` reading on
+`SquareMeterPerSecond` — the Pascal/Stress precedent for one marker serving
+two readings. It groups as a new Python class through the generator's
+existing dimension grouping (regenerated artifacts committed, `check` green),
+registers in the binding's `SemanticTag` vocabulary beside the other
+markers, and is consumed immediately by the Fick law it was added for
+(`quantity_laws/chemistry.rs`, 1 test). No existing dimension changed
+meaning; `ThermalDiffusivity` and `KinematicViscosity` keep their aliases
+and their classes.
+
 ## Deferred (documented boundary)
 
 - Affine unit kinds and quantity kinds beyond the linear-unit slice.

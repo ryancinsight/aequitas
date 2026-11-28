@@ -5,9 +5,10 @@ use typenum::{N1, N2, N3, N4, N7, P1, P2, P3, P4, Z0};
 use crate::dimension::{
     AbsoluteTemperatureSemantics, ActivityConcentrationSemantics, ActivitySemantics,
     AngleSemantics, Dimension, DoseEquivalentRateSemantics, DoseEquivalentSemantics,
-    FlexuralRigiditySemantics, MechanicalImpedanceSemantics, MolarConcentrationSemantics,
-    RadiationExposureSemantics, ReciprocalVolumeSemantics, SpringStiffnessSemantics,
-    StressSemantics, SurfaceTensionSemantics, TemperatureDifferenceSemantics,
+    FlexuralRigiditySemantics, MassDiffusivitySemantics, MechanicalImpedanceSemantics,
+    MolarConcentrationSemantics, RadiationExposureSemantics, ReciprocalVolumeSemantics,
+    SpringStiffnessSemantics, StressSemantics, SurfaceTensionSemantics,
+    TemperatureDifferenceSemantics,
 };
 
 use crate::dimension::{
@@ -186,6 +187,9 @@ pub type MassDensityRate = Dimension<N3, P1, N1, Z0, Z0, Z0, Z0>;
 pub type DynamicViscosity = Dimension<N1, P1, N1, Z0, Z0, Z0, Z0>;
 /// Kinematic viscosity, dimensionally identical to thermal diffusivity.
 pub type KinematicViscosity = ThermalDiffusivity;
+/// Mass diffusivity, sharing the `m²/s` exponents with thermal diffusivity
+/// under a distinct semantic marker.
+pub type MassDiffusivity = Dimension<P2, Z0, N1, Z0, Z0, Z0, Z0, MassDiffusivitySemantics>;
 /// Volumetric flow rate.
 pub type VolumetricFlowRate = Dimension<P3, Z0, N1, Z0, Z0, Z0, Z0>;
 /// Acoustic impedance.

@@ -9,9 +9,10 @@ pub use algebra::{DivideDimension, MultiplyDimension};
 pub use model::{
     AbsoluteTemperatureSemantics, ActivityConcentrationSemantics, ActivitySemantics,
     AngleSemantics, BaseSemantics, Dimension, DoseEquivalentRateSemantics, DoseEquivalentSemantics,
-    FlexuralRigiditySemantics, MechanicalImpedanceSemantics, MolarConcentrationSemantics,
-    RadiationExposureSemantics, ReciprocalVolumeSemantics, SpringStiffnessSemantics,
-    StressSemantics, SurfaceTensionSemantics, TemperatureDifferenceSemantics,
+    FlexuralRigiditySemantics, MassDiffusivitySemantics, MechanicalImpedanceSemantics,
+    MolarConcentrationSemantics, RadiationExposureSemantics, ReciprocalVolumeSemantics,
+    SpringStiffnessSemantics, StressSemantics, SurfaceTensionSemantics,
+    TemperatureDifferenceSemantics,
 };
 pub use model::{
     AngularAccelerationSemantics, AngularVelocitySemantics, InformationSemantics,

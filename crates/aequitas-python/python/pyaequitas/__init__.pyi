@@ -94,6 +94,7 @@ from ._pyaequitas import (
     MassDensityRate as MassDensityRate,
     DynamicViscosity as DynamicViscosity,
     KinematicViscosity as KinematicViscosity,
+    MassDiffusivity as MassDiffusivity,
     VolumetricFlowRate as VolumetricFlowRate,
     AcousticImpedance as AcousticImpedance,
     Intensity as Intensity,
@@ -295,6 +296,8 @@ def mass_density_rate(value: float, unit: Optional[str] = ...) -> MassDensityRat
 def dynamic_viscosity(value: float, unit: Optional[str] = ...) -> DynamicViscosity: ...
 # KinematicViscosity: base units only
 def kinematic_viscosity(value: float, unit: Optional[str] = ...) -> KinematicViscosity: ...
+# MassDiffusivity: SquareMeterPerSecond
+def mass_diffusivity(value: float, unit: Optional[str] = ...) -> MassDiffusivity: ...
 # VolumetricFlowRate: CubicMeterPerSecond
 def volumetric_flow_rate(value: float, unit: Optional[str] = ...) -> VolumetricFlowRate: ...
 # AcousticImpedance: Rayl

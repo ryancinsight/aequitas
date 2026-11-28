@@ -159,6 +159,8 @@ pub type MassDensityRate<T = f64> = Quantity<T, dimensions::MassDensityRate>;
 pub type DynamicViscosity<T = f64> = Quantity<T, dimensions::DynamicViscosity>;
 /// Kinematic-viscosity quantity.
 pub type KinematicViscosity<T = f64> = Quantity<T, dimensions::KinematicViscosity>;
+/// Mass-diffusivity quantity, the Fick-law coefficient.
+pub type MassDiffusivity<T = f64> = Quantity<T, dimensions::MassDiffusivity>;
 /// Volumetric-flow-rate quantity.
 pub type VolumetricFlowRate<T = f64> = Quantity<T, dimensions::VolumetricFlowRate>;
 /// Acoustic-impedance quantity.
